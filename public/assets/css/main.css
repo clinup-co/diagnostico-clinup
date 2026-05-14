@@ -141,7 +141,7 @@ main {
   background: transparent; border: 1.5px solid rgba(91,196,240,0.2);
   color: var(--sub); font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 14px; font-weight: 600; border-radius: 10px;
-  padding: 13px 20px; cursor: pointer;
+  padding: 15px 20px; cursor: pointer;
   transition: border-color 0.2s, color 0.2s;
 }
 .btn-back:hover { border-color: rgba(91,196,240,0.45); color: var(--blue); }
@@ -259,7 +259,7 @@ main {
   background: transparent; border: 1.5px solid rgba(91,196,240,0.15);
   color: var(--sub); font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 13px; font-weight: 600; border-radius: 10px;
-  padding: 12px 20px; cursor: pointer; width: 100%; margin-top: 14px;
+  padding: 16px 20px; cursor: pointer; width: 100%; margin-top: 14px;
   transition: border-color 0.2s, color 0.2s;
 }
 .btn-restart:hover { border-color: rgba(91,196,240,0.45); color: var(--blue); }
@@ -272,7 +272,7 @@ main {
 @media (max-width: 480px) {
   .q-card { padding: 28px 22px; }
   .opt { padding: 14px 16px; font-size: 15px; }
-  .cta-section { padding: 32px 22px; }
+  .cta-section { padding: 32px 22px; padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
   .score-card { padding: 28px 22px; }
 }
 
@@ -373,3 +373,9 @@ main {
 
 
 .chart-bg-mobile { display: block; }
+
+@media (max-width: 768px) {
+  .btn-start { width: 100%; }
+  .btn-next  { padding: 15px 24px; }
+  .opt       { padding: 15px 16px; }
+}
