@@ -78,6 +78,15 @@ function buildWhatsAppMessage(level, insights) {
   ].join('\n'));
 }
 
+function personalizeTitle(title) {
+  const fullName = (quizLeadData.nome || '').trim();
+  if (!fullName) return title;
+  const firstRaw = fullName.split(/\s+/)[0];
+  if (!firstRaw) return title;
+  const first = firstRaw.charAt(0).toUpperCase() + firstRaw.slice(1).toLowerCase();
+  return first + ', ' + title.charAt(0).toLowerCase() + title.slice(1);
+}
+
 function buildPresentationModel() {
   const a     = answers;
   const total = getTotal();
@@ -130,6 +139,7 @@ function buildPresentationModel() {
   }
 
   const insights = selectInsights(level);
+  title = personalizeTitle(title);
   return {
     level, badge, title, subtitle,
     thesis:          buildThesis(),
