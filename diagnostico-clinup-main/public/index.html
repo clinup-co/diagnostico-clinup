@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Diagnóstico Gratuito — CLINUP</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+</head>
+
+<body>
+
+<div class="top-stripe"></div>
+
+<header>
+  <img src="assets/images/logo.png" alt="CLINUP" style="width:40px;height:40px;border-radius:50%;object-fit:contain;border:1.5px solid rgba(91,196,240,0.35);background:#0A1E30;padding:2px;">
+  <div class="logo-text">CLIN<em>UP</em></div>
+</header>
+
+<main>
+
+  <!-- LEAD FORM -->
+  <div class="lead-screen" id="leadScreen">
+
+    <!-- Mobile background chart -->
+    <div class="chart-bg-mobile" style="position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);width:115%;max-width:640px;opacity:0.07;pointer-events:none;z-index:0;">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <defs>
+          <linearGradient id="mGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5BC4F0" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#5BC4F0" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <line x1="0" y1="210" x2="640" y2="210" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="160" x2="640" y2="160" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="110" x2="640" y2="110" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="60"  x2="640" y2="60"  stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <path d="M0 215 C50 205 90 190 130 195 C170 200 195 178 235 170 C275 162 305 182 345 173 C385 164 415 143 455 136 C495 129 525 148 565 139 C605 130 635 108 640 100 L640 250 L0 250 Z" fill="url(#mGrad)"/>
+        <path d="M0 215 C50 205 90 190 130 195 C170 200 195 178 235 170 C275 162 305 182 345 173 C385 164 415 143 455 136 C495 129 525 148 565 139 C605 130 635 108 640 100" fill="none" stroke="#5BC4F0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="130" cy="195" r="3.5" fill="#5BC4F0"/>
+        <circle cx="235" cy="170" r="3.5" fill="#5BC4F0"/>
+        <circle cx="345" cy="173" r="3"   fill="#5BC4F0" opacity="0.7"/>
+        <circle cx="455" cy="136" r="4"   fill="#5BC4F0"/>
+        <circle cx="565" cy="139" r="3.5" fill="#5BC4F0" opacity="0.7"/>
+        <circle cx="640" cy="100" r="4.5" fill="#5BC4F0"/>
+      </svg>
+    </div>
+
+    <div style="position:relative;z-index:1;text-align:center;">
+      <div class="badge" style="margin-bottom:24px;">Diagnóstico gratuito</div>
+      <h1 class="lead-headline">Descubra onde sua clínica pode estar perdendo <em>pacientes</em> antes do agendamento</h1>
+      <p class="lead-sub">Em menos de 2 minutos, veja se o gargalo está na presença digital, nos canais de atração, no WhatsApp ou na estrutura até o agendamento.</p>
+    </div>
+
+    <div style="position:relative;z-index:1;">
+      <div class="lead-form">
+        <div class="field-wrap">
+          <label class="field-label" for="leadName">Seu nome</label>
+          <input class="field-input" id="leadName" type="text" placeholder="Ex: Ana Beatriz" autocomplete="given-name" oninput="validateName(this)"/>
+          <span class="field-error" id="errName"></span>
+        </div>
+        <div class="field-wrap">
+          <label class="field-label" for="leadPhone">WhatsApp</label>
+          <input class="field-input" id="leadPhone" type="tel" placeholder="(11) 99999-9999" autocomplete="tel" oninput="maskPhone(this)" maxlength="15"/>
+          <span class="field-error" id="errPhone"></span>
+        </div>
+        <div class="field-wrap">
+          <label class="field-label" for="leadEmail">E-mail <span style="font-weight:400;opacity:0.6;">(opcional)</span></label>
+          <input class="field-input" id="leadEmail" type="email" placeholder="seuemail@exemplo.com" autocomplete="email" oninput="validateEmail(this)"/>
+          <span class="field-error" id="errEmail"></span>
+        </div>
+      </div>
+
+      <!-- Honeypot: campo invisível — bots preenchem, humanos não -->
+      <input type="text" id="hp_field" name="website"
+        style="position:absolute;left:-9999px;opacity:0;height:0;width:0;"
+        tabindex="-1" autocomplete="off"/>
+
+      <button class="btn-continue" id="btnContinue" onclick="goToIntro()">
+        Fazer o meu diagnóstico →
+      </button>
+      <p class="lead-privacy">🔒 Seus dados não serão compartilhados com terceiros.</p>
+    </div>
+  </div>
+
+  <!-- INTRO -->
+  <div class="intro hidden" id="intro" style="position:relative;overflow:visible;display:none;">
+
+    <!-- Subtle background chart -->
+    <div style="position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);width:115%;max-width:640px;opacity:0.07;pointer-events:none;z-index:0;">
+      <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
+        <defs>
+          <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5BC4F0" stop-opacity="0.55"/>
+            <stop offset="85%" stop-color="#5BC4F0" stop-opacity="0"/>
+          </linearGradient>
+          <linearGradient id="chartGrad2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2D9EC9" stop-opacity="0.3"/>
+            <stop offset="100%" stop-color="#2D9EC9" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <line x1="0" y1="210" x2="640" y2="210" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="160" x2="640" y2="160" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="110" x2="640" y2="110" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="60" x2="640" y2="60" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="106" y1="20" x2="106" y2="230" stroke="#5BC4F0" stroke-width="0.6" stroke-dasharray="2 10"/>
+        <line x1="213" y1="20" x2="213" y2="230" stroke="#5BC4F0" stroke-width="0.6" stroke-dasharray="2 10"/>
+        <line x1="320" y1="20" x2="320" y2="230" stroke="#5BC4F0" stroke-width="0.6" stroke-dasharray="2 10"/>
+        <line x1="426" y1="20" x2="426" y2="230" stroke="#5BC4F0" stroke-width="0.6" stroke-dasharray="2 10"/>
+        <line x1="533" y1="20" x2="533" y2="230" stroke="#5BC4F0" stroke-width="0.6" stroke-dasharray="2 10"/>
+        <path d="M0 200 C20 195 35 185 50 188 C65 192 75 175 90 170 C105 165 115 178 130 172
+                 C145 166 155 148 170 152 C185 156 195 140 210 132 C225 124 235 142 250 135
+                 C265 128 275 112 290 108 C305 104 315 118 330 110 C345 102 355 88 370 82
+                 C385 76 395 90 410 84 C425 78 435 62 450 58 C465 54 475 68 490 60
+                 C505 52 515 38 530 34 C545 30 558 44 575 36 L640 28"
+          fill="none" stroke="#2D9EC9" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+        <path d="M0 215 C15 210 28 195 45 198 C62 202 72 182 88 175 C104 168 118 185 134 177
+                 C150 169 162 150 178 155 C194 160 205 143 220 134 C235 125 248 145 263 136
+                 C278 127 290 108 305 104 C320 100 333 116 348 107 C363 98 375 80 390 73
+                 C405 66 418 82 433 75 C448 68 460 50 476 45 C492 40 504 56 520 47
+                 C536 38 548 22 564 16 C572 13 584 20 600 12 L640 8
+                 L640 240 L0 240 Z"
+          fill="url(#chartGrad)"/>
+        <path d="M0 215 C15 210 28 195 45 198 C62 202 72 182 88 175 C104 168 118 185 134 177
+                 C150 169 162 150 178 155 C194 160 205 143 220 134 C235 125 248 145 263 136
+                 C278 127 290 108 305 104 C320 100 333 116 348 107 C363 98 375 80 390 73
+                 C405 66 418 82 433 75 C448 68 460 50 476 45 C492 40 504 56 520 47
+                 C536 38 548 22 564 16 C572 13 584 20 600 12 L640 8"
+          fill="none" stroke="#5BC4F0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="45" cy="198" r="3.5" fill="#5BC4F0"/>
+        <circle cx="88" cy="175" r="3.5" fill="#5BC4F0"/>
+        <circle cx="134" cy="177" r="3" fill="#5BC4F0" opacity="0.7"/>
+        <circle cx="178" cy="155" r="3.5" fill="#5BC4F0"/>
+        <circle cx="220" cy="134" r="3.5" fill="#5BC4F0"/>
+        <circle cx="263" cy="136" r="3" fill="#5BC4F0" opacity="0.7"/>
+        <circle cx="305" cy="104" r="3.5" fill="#5BC4F0"/>
+        <circle cx="348" cy="107" r="3" fill="#5BC4F0" opacity="0.7"/>
+        <circle cx="390" cy="73" r="4" fill="#5BC4F0"/>
+        <circle cx="433" cy="75" r="3" fill="#5BC4F0" opacity="0.7"/>
+        <circle cx="476" cy="45" r="4" fill="#5BC4F0"/>
+        <circle cx="520" cy="47" r="3" fill="#5BC4F0" opacity="0.7"/>
+        <circle cx="564" cy="16" r="4.5" fill="#5BC4F0"/>
+        <rect x="60" y="195" width="12" height="15" fill="#5BC4F0" opacity="0.3" rx="2"/>
+        <rect x="166" y="178" width="12" height="32" fill="#5BC4F0" opacity="0.3" rx="2"/>
+        <rect x="272" y="155" width="12" height="55" fill="#5BC4F0" opacity="0.3" rx="2"/>
+        <rect x="378" y="128" width="12" height="82" fill="#5BC4F0" opacity="0.3" rx="2"/>
+        <rect x="484" y="98" width="12" height="112" fill="#5BC4F0" opacity="0.3" rx="2"/>
+        <rect x="590" y="60" width="12" height="150" fill="#5BC4F0" opacity="0.3" rx="2"/>
+      </svg>
+    </div>
+
+    <div style="position:relative;z-index:1;">
+    <div class="badge">Diagnóstico gratuito</div>
+    <h1>Pronto. Agora responda 5 perguntas rápidas para revelar <em>seu diagnóstico</em>.</h1>
+    <p>Responda com sinceridade. Quanto mais preciso, mais útil será o resultado. <strong>Leva menos de 2 minutos.</strong></p>
+    <div class="intro-meta">
+      <div class="meta-item"><span class="dot"></span>Menos de 2 minutos</div>
+      <div class="meta-item"><span class="dot"></span>100% gratuito</div>
+      <div class="meta-item"><span class="dot"></span>Resultado na hora</div>
+    </div>
+    <button class="btn-start" onclick="startQuiz()">Começar diagnóstico →</button>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-wrap" id="progressWrap">
+    <div class="progress-label">
+      <span>Pergunta <span id="progressNum">1</span> de <span id="progressTotal">5</span></span>
+      <span id="progressPct">0%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+  </div>
+
+  <!-- Q1 -->
+  <div class="question-screen" id="q1">
+    <div class="q-card">
+      <div class="q-number">Pergunta 01 / 05</div>
+      <div class="q-text">A clínica tem site ou página de apresentação hoje?</div>
+      <div class="q-hint">Não conta só ter perfil no Instagram.</div>
+      <div class="options" id="opts1">
+        <button class="opt" data-score="0" onclick="selectOpt(1, 0, this)"><div class="opt-icon">✅</div>Sim, temos um site</button>
+        <button class="opt" data-score="2" onclick="selectOpt(1, 2, this)"><div class="opt-icon">⚠️</div>Temos, mas é fraco ou desatualizado</button>
+        <button class="opt" data-score="3" onclick="selectOpt(1, 3, this)"><div class="opt-icon">❌</div>Não temos nada</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-next" id="next1" onclick="goNext(1)">Próxima →</button>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="question-screen" id="q2">
+    <div class="q-card">
+      <div class="q-number">Pergunta 02 / 05</div>
+      <div class="q-text">Como a maioria dos pacientes novos chega até a clínica hoje?</div>
+      <div class="q-hint">Escolhe o canal que mais traz resultado hoje.</div>
+      <div class="options" id="opts2">
+        <button class="opt" data-score="2" onclick="selectOpt(2, 2, this)"><div class="opt-icon">🗣️</div>Indicação de outros pacientes</button>
+        <button class="opt" data-score="1" onclick="selectOpt(2, 1, this)"><div class="opt-icon">📱</div>Redes sociais (Instagram, TikTok)</button>
+        <button class="opt" data-score="1" onclick="selectOpt(2, 1, this)"><div class="opt-icon">🔍</div>Google (busca orgânica ou Maps)</button>
+        <button class="opt" data-score="1" onclick="selectOpt(2, 1, this)"><div class="opt-icon">🎯</div>Anúncios pagos (Meta ou Google Ads)</button>
+        <button class="opt" data-score="0" onclick="selectOpt(2, 0, this)"><div class="opt-icon">🔀</div>Chegam por vários canais</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goBack(2)">← Voltar</button>
+      <button class="btn-next" id="next2" onclick="goNext(2)">Próxima →</button>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="question-screen" id="q3">
+    <div class="q-card">
+      <div class="q-number">Pergunta 03 / 05</div>
+      <div class="q-text">Quando alguém pergunta sobre um procedimento no WhatsApp, costuma agendar ou sumir?</div>
+      <div class="q-hint">Seja honesto, isso é importante pro diagnóstico.</div>
+      <div class="options" id="opts3">
+        <button class="opt" data-score="0" onclick="selectOpt(3, 0, this)"><div class="opt-icon">💪</div>A maioria agenda</button>
+        <button class="opt" data-score="2" onclick="selectOpt(3, 2, this)"><div class="opt-icon">👻</div>Muita gente some sem responder</button>
+        <button class="opt" data-score="1" onclick="selectOpt(3, 1, this)"><div class="opt-icon">🤷</div>Mais ou menos metade</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goBack(3)">← Voltar</button>
+      <button class="btn-next" id="next3" onclick="goNext(3)">Próxima →</button>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="question-screen" id="q4">
+    <div class="q-card">
+      <div class="q-number">Pergunta 04 / 05</div>
+      <div class="q-text">Quando você pensa em melhorar a estrutura da clínica, qual é o seu momento?</div>
+      <div class="q-hint">Isso ajuda a entender o tipo de apoio que faz mais sentido pra você agora.</div>
+      <div class="options" id="opts4">
+        <button class="opt" data-score="0" onclick="selectOpt(4, 0, this)"><div class="opt-icon">⚡</div>Preciso resolver logo — estou perdendo pacientes</button>
+        <button class="opt" data-score="1" onclick="selectOpt(4, 1, this)"><div class="opt-icon">📅</div>Quero melhorar nos próximos 2 a 3 meses</button>
+        <button class="opt" data-score="2" onclick="selectOpt(4, 2, this)"><div class="opt-icon">🔍</div>Ainda estou avaliando se preciso de ajuda</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goBack(4)">← Voltar</button>
+      <button class="btn-next" id="next4" onclick="goNext(4)">Próxima →</button>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="question-screen" id="q5">
+    <div class="q-card">
+      <div class="q-number">Pergunta 05 / 05</div>
+      <div class="q-text">Qual é o faturamento mensal aproximado da clínica hoje?</div>
+      <div class="q-hint">Não precisa ser exato. Isso ajuda a adaptar melhor a recomendação.</div>
+      <div class="options" id="opts5">
+        <button class="opt" data-score="3" onclick="selectOpt(5, 3, this)"><div class="opt-icon">🌱</div>Até R$ 5.000</button>
+        <button class="opt" data-score="2" onclick="selectOpt(5, 2, this)"><div class="opt-icon">📈</div>Entre R$ 5.000 e R$ 15.000</button>
+        <button class="opt" data-score="1" onclick="selectOpt(5, 1, this)"><div class="opt-icon">💰</div>Entre R$ 15.000 e R$ 40.000</button>
+        <button class="opt" data-score="0" onclick="selectOpt(5, 0, this)"><div class="opt-icon">🏆</div>Acima de R$ 40.000</button>
+        <button class="opt" data-score="0" onclick="selectOpt(5, 0, this)"><div class="opt-icon">🤐</div>Prefiro não informar</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goBack(5)">← Voltar</button>
+      <button class="btn-next" id="next5" onclick="showResult()">Ver meu diagnóstico →</button>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div class="result-screen" id="result"></div>
+
+</main>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/utils.js"></script>
+<script src="assets/js/api.js"></script>
+<script src="assets/js/state.js"></script>
+<script src="assets/js/form.js"></script>
+<script src="assets/js/quiz.js"></script>
+<script src="assets/js/results.js"></script>
+<script src="assets/js/main.js"></script>
+
+</body>
+</html>

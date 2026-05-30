@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Planos CLINUP — Estrutura digital-comercial para clínicas</title>
+<meta name="description" content="Conheça os planos da CLINUP e escolha o caminho ideal para sua clínica.">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+/* ── Layout da página de planos ── */
+header.plans-header {
+  justify-content: center;
+  text-align: center;
+}
+
+.plans-page {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* ── Fundo de topo — imagem de clínica ── */
+.plans-top-bg {
+  width: 100%;
+  overflow: hidden;
+  background-image:
+    linear-gradient(to bottom,
+      rgba(6,13,21,0.76) 0%,
+      rgba(6,13,21,0.76) 80%,
+      rgba(6,13,21,1) 100%
+    ),
+    radial-gradient(ellipse at center, rgba(6,13,21,0) 10%, rgba(6,13,21,0.45) 100%),
+    url('assets/images/fundo-top-para-site-da-clinup.jpeg');
+  background-size: auto, auto, cover;
+  background-position: 0 0, 0 0, center center;
+  background-repeat: no-repeat;
+  background-color: #060D15;
+}
+.plans-top-inner {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── Hero ── */
+.plans-hero {
+  text-align: center;
+  padding: 56px 0 48px;
+}
+.plans-hero h1 {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(26px, 5vw, 40px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 14px;
+}
+.plans-hero p {
+  font-size: 18px;
+  color: var(--body);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ── O que a CLINUP faz ── */
+.plans-section-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sub);
+  margin-bottom: 20px;
+}
+.plans-features {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-bottom: 48px;
+}
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+}
+.feature-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.feature-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+.feature-desc {
+  font-size: 13px;
+  color: var(--body);
+  line-height: 1.45;
+}
+
+/* ── Grid de planos ── */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-bottom: 32px;
+  align-items: start;
+}
+.plan-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.plan-card.plan-featured {
+  border-color: var(--blue);
+  box-shadow: 0 0 32px rgba(91,196,240,0.15);
+}
+.plan-badge {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  background: var(--blue);
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #060D15;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+.plan-name {
+  font-family: 'Sora', sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 2px;
+}
+.plan-price {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(26px, 3.5vw, 34px);
+  font-weight: 800;
+  color: var(--blue);
+  margin: 14px 0 2px;
+  line-height: 1;
+}
+.plan-price-consult {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(22px, 3vw, 28px);
+  font-weight: 800;
+  color: var(--blue);
+  margin: 14px 0 2px;
+}
+.plan-subtitle {
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+.plan-bullets {
+  list-style: none;
+  flex: 1;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.plan-bullets li {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.45;
+}
+.plan-bullets li::before {
+  content: '✓';
+  color: var(--green);
+  font-weight: 700;
+  flex-shrink: 0;
+  font-size: 13px;
+  margin-top: 1px;
+}
+.plan-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border-radius: 10px;
+  padding: 14px 20px;
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, background 0.15s;
+  letter-spacing: 0.3px;
+  text-align: center;
+  width: 100%;
+}
+.plan-btn-primary {
+  background: var(--green);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+}
+.plan-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(37,211,102,0.45);
+}
+.plan-btn-secondary {
+  background: transparent;
+  border: 1.5px solid rgba(91,196,240,0.25);
+  color: var(--blue);
+}
+.plan-btn-secondary:hover {
+  border-color: var(--blue);
+  background: rgba(91,196,240,0.06);
+}
+
+/* ── Garantia ── */
+.plans-guarantee {
+  text-align: center;
+  padding: 24px 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 32px;
+}
+.plans-guarantee p {
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.65;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Linha de honestidade ── */
+.plans-honesty {
+  text-align: center;
+  font-size: 14px;
+  color: var(--sub);
+  line-height: 1.65;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+/* ── Quem está por trás da CLINUP ── */
+.plans-team {
+  max-width: 600px;
+  margin: 0 auto 40px;
+  padding: 28px 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  text-align: center;
+}
+.plans-team-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sub);
+  margin-bottom: 14px;
+}
+.plans-team-text {
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.65;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ── Footer ── */
+.plans-footer {
+  text-align: center;
+  padding: 24px 24px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.plans-footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.plans-footer p {
+  font-size: 12px;
+  color: var(--sub);
+}
+
+/* ── Classes utilitárias (extraídas de inline) ── */
+.brand-logo {
+  border-radius: 50%;
+  object-fit: contain;
+  border: 1.5px solid rgba(91,196,240,0.35);
+  background: #0A1E30;
+  padding: 2px;
+}
+.brand-logo--header { width: 40px; height: 40px; }
+.brand-logo--footer { width: 32px; height: 32px; }
+
+.logo-text--sm { font-size: 15px; }
+
+.plan-price-unit {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--sub);
+}
+
+.plans-tagline {
+  text-align: center;
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 0 auto;
+  padding-bottom: 48px;
+}
+
+.plans-closing {
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--off);
+  line-height: 1.5;
+  max-width: 400px;
+  margin: 0 auto 32px;
+}
+
+/* ── Responsivo ── */
+@media (max-width: 768px) {
+  .plans-grid {
+    grid-template-columns: 1fr;
+  }
+  .plans-features {
+    grid-template-columns: 1fr;
+  }
+  .plans-page { padding-top: 40px; }
+  .plan-btn   { padding: 15px 20px; }
+  .plan-badge { font-size: 12px; letter-spacing: 1.5px; }
+  .feature-title { font-size: 16px; }
+  .feature-desc  { font-size: 14px; line-height: 1.5; }
+  .plan-price-unit { font-size: 14px; }
+  .plans-closing   { font-size: 15px; }
+}
+@media (max-width: 480px) {
+  .plan-card {
+    padding: 28px 22px;
+  }
+  .plans-hero {
+    padding: 40px 0 36px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="plans-top-bg">
+<div class="top-stripe"></div>
+
+<header class="plans-header">
+  <img src="assets/images/logo.png" alt="CLINUP" class="brand-logo brand-logo--header">
+  <div class="logo-text">CLIN<em>UP</em></div>
+</header>
+
+<div class="plans-top-inner">
+
+  <!-- Seção 1 — Hero personalizado -->
+  <section class="plans-hero">
+    <h1 id="plans-h"></h1>
+    <p id="plans-sub"></p>
+  </section>
+
+  <!-- Seção 2 — O que a CLINUP faz -->
+  <p class="plans-section-label">Como a CLINUP ajuda sua clínica</p>
+  <div class="plans-features">
+    <div class="feature-item">
+      <span class="feature-icon">🌐</span>
+      <div>
+        <div class="feature-title">Presença profissional online</div>
+        <div class="feature-desc">Site da clínica que transmite confiança e leva o paciente direto pro WhatsApp</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">💬</span>
+      <div>
+        <div class="feature-title">WhatsApp organizado e automatizado</div>
+        <div class="feature-desc">Atendimento revisado e plataforma que responde rápido pra nenhum interessado se perder</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">🎬</span>
+      <div>
+        <div class="feature-title">Vídeos prontos pra postar</div>
+        <div class="feature-desc">2 vídeos profissionais por mês no estilo publicidade, sem precisar improvisar conteúdo</div>
+      </div>
+    </div>
+    <div class="feature-item">
+      <span class="feature-icon">⚡</span>
+      <div>
+        <div class="feature-title">Perfil revisado pra converter</div>
+        <div class="feature-desc">Revisão geral da apresentação da clínica pra passar mais confiança no primeiro contato</div>
+      </div>
+    </div>
+  </div>
+
+  <p class="plans-tagline">A CLINUP não é agência de tráfego nem social media. Trabalhamos como facilitadores: rápido, eficaz, sem enrolação.</p>
+
+</div><!-- /.plans-top-inner -->
+</div><!-- /.plans-top-bg -->
+
+<main class="plans-page">
+
+  <!-- Seção 3 — Cards de planos -->
+  <p class="plans-section-label">Conheça os planos</p>
+  <div class="plans-grid">
+
+    <!-- Plano Essencial -->
+    <div class="plan-card" id="card-essencial">
+      <div class="plan-badge" id="badge-essencial">⭐ Mais escolhido</div>
+      <div class="plan-name">Essencial</div>
+      <div class="plan-price">R$ 297<span class="plan-price-unit">/mês</span></div>
+      <div class="plan-subtitle">Pra clínica que precisa de presença profissional</div>
+      <ul class="plan-bullets">
+        <li>Página profissional da clínica com botão direto pro WhatsApp</li>
+        <li>Visual adaptado pra celular</li>
+        <li>Apresentação clara dos serviços</li>
+        <li>1 rodada de ajuste</li>
+      </ul>
+      <a class="plan-btn plan-btn-secondary"
+         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20escolho%20o%20Plano%20Essencial%20(R%24297%2Fm%C3%AAs)."
+         target="_blank" rel="noopener noreferrer"
+         aria-label="Contratar o Plano Essencial por R$ 297 por mês">
+        Quero o Essencial
+      </a>
+    </div>
+
+    <!-- Plano Profissional -->
+    <div class="plan-card" id="card-profissional">
+      <div class="plan-badge" id="badge-profissional">⭐ Mais escolhido</div>
+      <div class="plan-name">Profissional</div>
+      <div class="plan-price">R$ 997<span class="plan-price-unit">/mês</span></div>
+      <div class="plan-subtitle">Pra clínica que quer atender e converter melhor</div>
+      <ul class="plan-bullets">
+        <li>Tudo do Essencial</li>
+        <li>Revisão geral do perfil da clínica</li>
+        <li>Plataforma de automação do WhatsApp — <em>grátis nos primeiros 7 dias, R$59,90/mês depois</em></li>
+        <li>2 vídeos profissionais de publicidade por mês</li>
+        <li>1 rodada de ajuste</li>
+      </ul>
+      <a class="plan-btn plan-btn-secondary"
+         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20escolho%20o%20Plano%20Profissional%20(R%24997%2Fm%C3%AAs)."
+         target="_blank" rel="noopener noreferrer"
+         aria-label="Contratar o Plano Profissional por R$ 997 por mês">
+        Quero o Profissional
+      </a>
+    </div>
+
+    <!-- Plano Escala -->
+    <div class="plan-card" id="card-escala">
+      <div class="plan-badge" id="badge-escala">⭐ Mais escolhido</div>
+      <div class="plan-name">Escala</div>
+      <div class="plan-price-consult">Sob consulta</div>
+      <div class="plan-subtitle">Pra clínica com necessidades específicas</div>
+      <ul class="plan-bullets">
+        <li>Tudo do Profissional</li>
+        <li>Estratégia avançada</li>
+        <li>Integrações específicas</li>
+        <li>Acompanhamento premium</li>
+      </ul>
+      <a class="plan-btn plan-btn-secondary"
+         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20saber%20mais%20sobre%20o%20Plano%20Escala."
+         target="_blank" rel="noopener noreferrer"
+         aria-label="Falar com especialista sobre o Plano Escala">
+        Falar com especialista
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Linha de honestidade -->
+  <p class="plans-honesty">A CLINUP não promete milagre nem agenda lotada da noite pro dia. O que entregamos é estrutura, organização e uma apresentação profissional — o que, no dia a dia, faz a clínica converter melhor o interesse que já existe.</p>
+
+  <!-- Seção 4 — Garantia -->
+  <div class="plans-guarantee">
+    <p>Entrega no prazo combinado, com prévia antes da publicação e 1 rodada de ajuste incluída. Se não fizer sentido, devolvemos o valor.</p>
+  </div>
+
+  <p class="plans-closing">Pronto pra começar? Escolha um plano acima.</p>
+
+  <!-- Quem está por trás da CLINUP -->
+  <section class="plans-team">
+    <p class="plans-team-label">Quem está por trás da CLINUP</p>
+    <p class="plans-team-text">A CLINUP não é uma logo sem rosto. Tem uma pessoa real acompanhando cada projeto de perto, do primeiro contato à entrega. Você fala direto com quem executa — sem camada de atendimento genérico.</p>
+  </section>
+
+</main>
+
+<footer class="plans-footer">
+  <div class="plans-footer-brand">
+    <img src="assets/images/logo.png" alt="CLINUP" class="brand-logo brand-logo--footer">
+    <div class="logo-text logo-text--sm">CLIN<em>UP</em></div>
+  </div>
+  <p>© 2026 CLINUP. Todos os direitos reservados.</p>
+</footer>
+
+<script>
+(function () {
+  function getResultado() {
+    var p = new URLSearchParams(window.location.search);
+    var qs = p.get('resultado');
+    if (qs === 'bom' || qs === 'mediano' || qs === 'critico') return qs;
+    try {
+      var saved = localStorage.getItem('clinup_lead');
+      if (saved) {
+        var map = { good: 'bom', moderate: 'mediano', critical: 'critico' };
+        var mapped = map[JSON.parse(saved).resultado];
+        if (mapped) return mapped;
+      }
+    } catch (e) {}
+    return 'mediano';
+  }
+
+  var COPY = {
+    bom: {
+      h:     'Sua clínica já tem uma boa base. A CLINUP refina a apresentação e o atendimento pra você converter mais.',
+      sub:   'Veja os planos abaixo.',
+      badge: 'essencial'
+    },
+    mediano: {
+      h:     'Sua clínica atrai interesse, mas perde paciente no atendimento.',
+      sub:   'A CLINUP organiza o WhatsApp, melhora a apresentação e ajuda a fechar mais.',
+      badge: 'profissional'
+    },
+    critico: {
+      h:     'Sua clínica tem potencial, mas falta organização. A CLINUP cuida da apresentação, do WhatsApp e do atendimento pra você fechar mais.',
+      sub:   'Veja os planos abaixo.',
+      badge: 'profissional'
+    }
+  };
+
+  var r = getResultado();
+  var c = COPY[r];
+
+  document.getElementById('plans-h').textContent   = c.h;
+  document.getElementById('plans-sub').textContent = c.sub;
+
+  // Esconde todos os badges, mostra o correto
+  document.querySelectorAll('.plan-badge').forEach(function (b) {
+    b.style.display = 'none';
+  });
+  document.getElementById('badge-' + c.badge).style.display = 'inline-flex';
+
+  // Remove destaque de todos, aplica no correto
+  document.querySelectorAll('.plan-card').forEach(function (card) {
+    card.classList.remove('plan-featured');
+    // botão do card sem destaque → secondary
+    var btn = card.querySelector('.plan-btn');
+    if (btn) {
+      btn.classList.remove('plan-btn-primary');
+      btn.classList.add('plan-btn-secondary');
+    }
+  });
+
+  var featuredCard = document.getElementById('card-' + c.badge);
+  featuredCard.classList.add('plan-featured');
+  var featuredBtn = featuredCard.querySelector('.plan-btn');
+  if (featuredBtn) {
+    featuredBtn.classList.remove('plan-btn-secondary');
+    featuredBtn.classList.add('plan-btn-primary');
+  }
+}());
+</script>
+
+</body>
+</html>
