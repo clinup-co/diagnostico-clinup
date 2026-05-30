@@ -36,6 +36,17 @@ function showResult() {
     </div>
     <p class="section-label">${model.sectionLabel}</p>
     <div class="findings">${insightsHTML}</div>
+    <p class="section-label">Daqui, são dois caminhos</p>
+    <div class="result-paths">
+      <div class="result-path">
+        <div class="result-path-title">Continuar como está</div>
+        <div class="result-path-desc">Seguir perdendo parte dos interessados no meio do caminho, na base da tentativa e erro.</div>
+      </div>
+      <div class="result-path result-path--accent">
+        <div class="result-path-title">Organizar a estrutura</div>
+        <div class="result-path-desc">Presença, WhatsApp e atendimento conectados, pra transformar mais interesse em agendamento.</div>
+      </div>
+    </div>
     <div class="cta-section">
       <div class="cta-eyebrow">Próximo passo</div>
       <h3 class="cta-title">${model.ctaTitle}</h3>

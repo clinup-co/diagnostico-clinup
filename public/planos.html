@@ -27,16 +27,16 @@ header.plans-header {
   overflow: hidden;
   background-image:
     linear-gradient(to bottom,
-      rgba(6,13,21,0.76) 0%,
-      rgba(6,13,21,0.76) 80%,
-      rgba(6,13,21,1) 100%
+      rgba(242,247,251,0.90) 0%,
+      rgba(242,247,251,0.93) 75%,
+      rgba(242,247,251,1) 100%
     ),
-    radial-gradient(ellipse at center, rgba(6,13,21,0) 10%, rgba(6,13,21,0.45) 100%),
+    radial-gradient(ellipse at center, rgba(242,247,251,0.55) 10%, rgba(242,247,251,0.88) 100%),
     url('assets/images/fundo-top-para-site-da-clinup.jpeg');
   background-size: auto, auto, cover;
   background-position: 0 0, 0 0, center center;
   background-repeat: no-repeat;
-  background-color: #060D15;
+  background-color: #F2F7FB;
 }
 .plans-top-inner {
   width: 100%;
@@ -89,6 +89,7 @@ header.plans-header {
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 20px;
+  box-shadow: var(--shadow-sm);
 }
 .feature-icon {
   font-size: 22px;
@@ -125,10 +126,11 @@ header.plans-header {
   flex-direction: column;
   position: relative;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 .plan-card.plan-featured {
   border-color: var(--blue);
-  box-shadow: 0 0 32px rgba(91,196,240,0.15);
+  box-shadow: var(--shadow-md);
 }
 .plan-badge {
   display: none;
@@ -141,7 +143,7 @@ header.plans-header {
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: #060D15;
+  color: #fff;
   margin-bottom: 18px;
   width: fit-content;
 }
@@ -216,11 +218,11 @@ header.plans-header {
 .plan-btn-primary {
   background: var(--green);
   color: #fff;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.3);
+  box-shadow: 0 4px 16px rgba(14,122,72,0.28);
 }
 .plan-btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 28px rgba(37,211,102,0.45);
+  box-shadow: 0 8px 24px rgba(14,122,72,0.38);
 }
 .plan-btn-secondary {
   background: transparent;
@@ -240,12 +242,50 @@ header.plans-header {
   border: 1px solid var(--border);
   border-radius: 14px;
   margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
 }
 .plans-guarantee p {
   font-size: 14px;
   color: var(--body);
   line-height: 1.65;
   max-width: 600px;
+  margin: 0 auto;
+}
+
+/* ── Linha de honestidade ── */
+.plans-honesty {
+  text-align: center;
+  font-size: 14px;
+  color: var(--sub);
+  line-height: 1.65;
+  max-width: 600px;
+  margin: 0 auto 20px;
+}
+
+/* ── Quem está por trás da CLINUP ── */
+.plans-team {
+  max-width: 600px;
+  margin: 0 auto 40px;
+  padding: 28px 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+}
+.plans-team-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--sub);
+  margin-bottom: 14px;
+}
+.plans-team-text {
+  font-size: 14px;
+  color: var(--body);
+  line-height: 1.65;
+  max-width: 520px;
   margin: 0 auto;
 }
 
@@ -460,12 +500,21 @@ header.plans-header {
 
   </div>
 
+  <!-- Linha de honestidade -->
+  <p class="plans-honesty">A CLINUP não promete milagre nem agenda lotada da noite pro dia. O que entregamos é estrutura, organização e uma apresentação profissional — o que, no dia a dia, faz a clínica converter melhor o interesse que já existe.</p>
+
   <!-- Seção 4 — Garantia -->
   <div class="plans-guarantee">
     <p>Entrega no prazo combinado, com prévia antes da publicação e 1 rodada de ajuste incluída. Se não fizer sentido, devolvemos o valor.</p>
   </div>
 
   <p class="plans-closing">Pronto pra começar? Escolha um plano acima.</p>
+
+  <!-- Quem está por trás da CLINUP -->
+  <section class="plans-team">
+    <p class="plans-team-label">Quem está por trás da CLINUP</p>
+    <p class="plans-team-text">A CLINUP não é uma logo sem rosto. Tem uma pessoa real acompanhando cada projeto de perto, do primeiro contato à entrega. Você fala direto com quem executa — sem camada de atendimento genérico.</p>
+  </section>
 
 </main>
 
