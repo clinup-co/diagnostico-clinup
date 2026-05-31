@@ -12,21 +12,22 @@
 body { position: relative; }
 .site-bg {
   position: absolute;    /* rola junto com a página (não fica fixa na tela) */
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;             /* cobre a página inteira → sem faixa branca embaixo */
+  top: -20px;
+  left: -20px;
+  right: -20px;
+  bottom: -20px;         /* cobre a página inteira, com folga p/ o blur não vazar borda */
   z-index: 0;            /* atrás do conteúdo (header/main têm z-index 10) */
   pointer-events: none;
   background-image: url('assets/images/fundo-ondas-azuis.jpg');
   background-repeat: no-repeat;
   background-position: top right;
   background-size: cover;
-  opacity: 0.35;         /* ondas bem discretas sobre o off-white */
+  filter: blur(8px);     /* embaçado → fundo mais suave/difuso */
+  opacity: 0.22;         /* bem sutil sobre o off-white */
 }
 @media (max-width: 768px) {
   /* no mobile o conteúdo ocupa a largura toda → deixa ainda mais sutil */
-  .site-bg { opacity: 0.18; background-size: cover; background-position: top right; }
+  .site-bg { opacity: 0.12; background-size: cover; background-position: top right; }
 }
 </style>
 </head>
