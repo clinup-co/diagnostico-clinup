@@ -6,10 +6,29 @@
 <title>Diagnóstico Gratuito — CLINUP</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
+<style>
+/* ── Fundo decorativo (ondas azuis) — só nesta página, sutil e elegante ── */
+.site-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;            /* atrás do conteúdo (header/main têm z-index 10) */
+  pointer-events: none;
+  background-image: url('assets/images/fundo-ondas-azuis.png');
+  background-repeat: no-repeat;
+  background-position: top right;
+  background-size: cover;
+  opacity: 0.6;          /* mantém as ondas discretas sobre o off-white */
+}
+@media (max-width: 768px) {
+  /* no mobile o conteúdo ocupa a largura toda → deixa ainda mais sutil */
+  .site-bg { opacity: 0.3; background-size: 150% auto; background-position: top right; }
+}
+</style>
 </head>
 
 <body>
 
+<div class="site-bg" aria-hidden="true"></div>
 <div class="top-stripe"></div>
 
 <header>
