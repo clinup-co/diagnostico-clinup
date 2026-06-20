@@ -92,9 +92,20 @@ header.plans-header {
   box-shadow: var(--shadow-sm);
 }
 .feature-icon {
-  font-size: 22px;
+  color: var(--blue);
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 1px;
+  line-height: 0;
+}
+.feature-icon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .feature-title {
   font-family: 'Sora', sans-serif;
@@ -146,6 +157,16 @@ header.plans-header {
   color: #fff;
   margin-bottom: 18px;
   width: fit-content;
+}
+.plan-badge svg {
+  width: 12px;
+  height: 12px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .plan-name {
   font-family: 'Sora', sans-serif;
@@ -397,28 +418,36 @@ header.plans-header {
   <p class="plans-section-label">Como a CLINUP ajuda sua clínica</p>
   <div class="plans-features">
     <div class="feature-item">
-      <span class="feature-icon">🌐</span>
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
       <div>
         <div class="feature-title">Presença profissional online</div>
         <div class="feature-desc">Site da clínica que transmite confiança e leva o paciente direto pro WhatsApp</div>
       </div>
     </div>
     <div class="feature-item">
-      <span class="feature-icon">💬</span>
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+      </span>
       <div>
         <div class="feature-title">WhatsApp organizado e automatizado</div>
         <div class="feature-desc">Atendimento revisado e plataforma que responde rápido pra nenhum interessado se perder</div>
       </div>
     </div>
     <div class="feature-item">
-      <span class="feature-icon">📸</span>
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+      </span>
       <div>
         <div class="feature-title">Posts prontos pra postar</div>
         <div class="feature-desc">10 posts profissionais por mês, sem precisar improvisar conteúdo</div>
       </div>
     </div>
     <div class="feature-item">
-      <span class="feature-icon">⚡</span>
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+      </span>
       <div>
         <div class="feature-title">Perfil revisado pra converter</div>
         <div class="feature-desc">Revisão geral da apresentação da clínica pra passar mais confiança no primeiro contato</div>
@@ -439,7 +468,7 @@ header.plans-header {
 
     <!-- Plano Essencial -->
     <div class="plan-card" id="card-essencial">
-      <div class="plan-badge" id="badge-essencial">⭐ Mais escolhido</div>
+      <div class="plan-badge" id="badge-essencial"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
       <div class="plan-name">Essencial</div>
       <div class="plan-price">R$ 297<span class="plan-price-unit">/mês</span></div>
       <div class="plan-subtitle">Pra clínica que precisa de presença profissional</div>
@@ -459,15 +488,15 @@ header.plans-header {
 
     <!-- Plano Profissional -->
     <div class="plan-card" id="card-profissional">
-      <div class="plan-badge" id="badge-profissional">⭐ Mais escolhido</div>
+      <div class="plan-badge" id="badge-profissional"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
       <div class="plan-name">Profissional</div>
       <div class="plan-price">R$ 997<span class="plan-price-unit">/mês</span></div>
       <div class="plan-subtitle">Pra clínica que quer atender e converter melhor</div>
       <ul class="plan-bullets">
         <li>Tudo do Essencial</li>
         <li>Revisão geral do perfil da clínica</li>
-        <li>Plataforma de automação do WhatsApp — <em>grátis nos primeiros 7 dias, R$59,90/mês depois</em></li>
-        <li>10 posts profissionais por mês — <em>prontos pra publicar, sem precisar improvisar conteúdo</em></li>
+        <li><span>Plataforma de automação do WhatsApp — <em>grátis nos primeiros 7 dias, R$59,90/mês depois</em></span></li>
+        <li><span>10 posts profissionais por mês — <em>prontos pra publicar, sem precisar improvisar conteúdo</em></span></li>
         <li>1 rodada de ajuste</li>
       </ul>
       <a class="plan-btn plan-btn-secondary"
@@ -480,7 +509,7 @@ header.plans-header {
 
     <!-- Plano Escala -->
     <div class="plan-card" id="card-escala">
-      <div class="plan-badge" id="badge-escala">⭐ Mais escolhido</div>
+      <div class="plan-badge" id="badge-escala"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
       <div class="plan-name">Escala</div>
       <div class="plan-price-consult">Sob consulta</div>
       <div class="plan-subtitle">Pra clínica com necessidades específicas</div>
