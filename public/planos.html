@@ -142,7 +142,7 @@ header.plans-header {
 }
 .plan-card.plan-featured {
   border-color: var(--blue);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 8px 26px rgba(16,40,60,0.10), 0 18px 46px rgba(16,40,60,0.07);
 }
 .plan-badge {
   display: none;
@@ -232,7 +232,7 @@ header.plans-header {
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s, background 0.15s;
+  transition: transform 0.22s, box-shadow 0.22s, border-color 0.22s, background 0.22s;
   letter-spacing: 0.3px;
   text-align: center;
   width: 100%;
@@ -394,7 +394,39 @@ header.plans-header {
     padding: 40px 0 36px;
   }
 }
+
+/* ── Animações de entrada (reveal no scroll) + stagger ── */
+/* Estado oculto só com JS ativo (.js-anim) e sem reduced-motion → fallback sempre visível */
+@media (prefers-reduced-motion: no-preference) {
+  .js-anim .reveal { opacity: 0; }
+  .js-anim .reveal.is-visible { opacity: 1; animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+
+  .js-anim .reveal-group > * { opacity: 0; }
+  .js-anim .reveal-group.is-visible > * { opacity: 1; animation: revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  .js-anim .reveal-group.is-visible > *:nth-child(2) { animation-delay: 0.09s; }
+  .js-anim .reveal-group.is-visible > *:nth-child(3) { animation-delay: 0.18s; }
+  .js-anim .reveal-group.is-visible > *:nth-child(4) { animation-delay: 0.27s; }
+}
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Micro-hover (só ponteiro fino/desktop, sem reduced-motion) → nada no touch ── */
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .plan-card { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease; }
+  .plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(16,40,60,0.10), 0 22px 50px rgba(16,40,60,0.07);
+  }
+  .feature-item { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+  .feature-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(16,40,60,0.09), 0 16px 40px rgba(16,40,60,0.06);
+  }
+}
 </style>
+<script>document.documentElement.classList.add('js-anim');</script>
 </head>
 
 <body>
@@ -416,8 +448,8 @@ header.plans-header {
   </section>
 
   <!-- Seção 2 — O que a CLINUP faz -->
-  <p class="plans-section-label">Como a CLINUP ajuda sua clínica</p>
-  <div class="plans-features">
+  <p class="plans-section-label reveal">Como a CLINUP ajuda sua clínica</p>
+  <div class="plans-features reveal-group">
     <div class="feature-item">
       <span class="feature-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
@@ -456,7 +488,7 @@ header.plans-header {
     </div>
   </div>
 
-  <p class="plans-tagline">A CLINUP não é agência de tráfego nem social media. Trabalhamos como facilitadores: rápido, eficaz, sem enrolação.</p>
+  <p class="plans-tagline reveal">A CLINUP não é agência de tráfego nem social media. Trabalhamos como facilitadores: rápido, eficaz, sem enrolação.</p>
 
 </div><!-- /.plans-top-inner -->
 </div><!-- /.plans-top-bg -->
@@ -464,8 +496,8 @@ header.plans-header {
 <main class="plans-page">
 
   <!-- Seção 3 — Cards de planos -->
-  <p class="plans-section-label">Conheça os planos</p>
-  <div class="plans-grid">
+  <p class="plans-section-label reveal">Conheça os planos</p>
+  <div class="plans-grid reveal-group">
 
     <!-- Plano Essencial -->
     <div class="plan-card" id="card-essencial">
@@ -531,17 +563,17 @@ header.plans-header {
   </div>
 
   <!-- Linha de honestidade -->
-  <p class="plans-honesty">A CLINUP não promete milagre nem agenda lotada da noite pro dia. O que entregamos é estrutura, organização e uma apresentação profissional — o que, no dia a dia, faz a clínica converter melhor o interesse que já existe.</p>
+  <p class="plans-honesty reveal">A CLINUP não promete milagre nem agenda lotada da noite pro dia. O que entregamos é estrutura, organização e uma apresentação profissional — o que, no dia a dia, faz a clínica converter melhor o interesse que já existe.</p>
 
   <!-- Seção 4 — Garantia -->
-  <div class="plans-guarantee">
+  <div class="plans-guarantee reveal">
     <p>Entrega no prazo combinado, com prévia antes da publicação e 1 rodada de ajuste incluída. Se não fizer sentido, devolvemos o valor.</p>
   </div>
 
-  <p class="plans-closing">Pronto pra começar? Escolha um plano acima.</p>
+  <p class="plans-closing reveal">Pronto pra começar? Escolha um plano acima.</p>
 
   <!-- Quem está por trás da CLINUP -->
-  <section class="plans-team">
+  <section class="plans-team reveal">
     <p class="plans-team-label">Quem está por trás da CLINUP</p>
     <p class="plans-team-text">A CLINUP não é uma logo sem rosto. Tem uma pessoa real acompanhando cada projeto de perto, do primeiro contato à entrega. Você fala direto com quem executa — sem camada de atendimento genérico.</p>
   </section>
@@ -621,6 +653,26 @@ header.plans-header {
     featuredBtn.classList.remove('plan-btn-secondary');
     featuredBtn.classList.add('plan-btn-primary');
   }
+}());
+</script>
+
+<script>
+// Reveal no scroll — IntersectionObserver nativo, dispara uma vez por elemento
+(function () {
+  var els = document.querySelectorAll('.reveal, .reveal-group');
+  if (!('IntersectionObserver' in window) || !document.documentElement.classList.contains('js-anim')) {
+    els.forEach(function (el) { el.classList.add('is-visible'); }); // fallback: revela tudo
+    return;
+  }
+  var io = new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) {
+        e.target.classList.add('is-visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  els.forEach(function (el) { io.observe(el); });
 }());
 </script>
 
