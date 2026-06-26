@@ -47,6 +47,10 @@ function selectOpt(qNum, score, btn) {
   btn.dataset.selected = 'true';
   answers[qNum] = score;
 
+  // Pontos do score 0–100 (independente do data-score de severidade)
+  if (!quizLeadData.pontos) quizLeadData.pontos = {};
+  quizLeadData.pontos[qNum] = parseInt(btn.dataset.points, 10) || 0;
+
   const labelKey  = PERGUNTA_LABELS[qNum] || ('pergunta_' + qNum);
   quizLeadData.respostas[labelKey] = sanitize(getOptText(btn));
   persistState();
@@ -71,4 +75,10 @@ function goBack(qNum) {
 
 function getTotal() {
   return Object.values(answers).reduce((a, b) => a + b, 0);
+}
+
+// Score 0–100 = soma dos pontos das 5 respostas (piso prático ~18, sem normalizar)
+function getScore() {
+  const p = quizLeadData.pontos || {};
+  return Object.keys(p).reduce((sum, k) => sum + (parseInt(p[k], 10) || 0), 0);
 }

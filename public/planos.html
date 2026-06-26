@@ -169,6 +169,48 @@ header.plans-header {
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* ── Recomendação dinâmica ── */
+/* Tag "Recomendado pro seu caso" no plano recomendado (mesmo estilo do badge) */
+.plan-rectag {
+  display: none;
+  align-items: center;
+  padding: 5px 14px;
+  background: var(--blue);
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #fff;
+  margin-bottom: 18px;
+  width: fit-content;
+}
+/* Card de feature recomendado: realce + etiqueta */
+.feature-item.is-rec {
+  position: relative;
+  border-color: rgba(12,111,152,0.45);
+  box-shadow: 0 0 0 1px rgba(12,111,152,0.22), var(--shadow-sm);
+}
+.feature-item.is-rec::after {
+  content: "Recomendado";
+  position: absolute;
+  top: -9px;
+  right: 14px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+/* Card apagado: menos prioritário (via filter, p/ não brigar com a opacity do reveal) */
+.feature-item.is-dim {
+  filter: opacity(0.58) saturate(0.85);
+}
 .plan-name {
   font-family: 'Sora', sans-serif;
   font-size: 17px;
@@ -450,7 +492,7 @@ header.plans-header {
   <!-- Seção 2 — O que a CLINUP faz -->
   <p class="plans-section-label reveal">Como a CLINUP ajuda sua clínica</p>
   <div class="plans-features reveal-group">
-    <div class="feature-item">
+    <div class="feature-item" data-card="site">
       <span class="feature-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
       </span>
@@ -459,7 +501,7 @@ header.plans-header {
         <div class="feature-desc">Site da clínica que transmite confiança e leva o paciente direto pro WhatsApp</div>
       </div>
     </div>
-    <div class="feature-item">
+    <div class="feature-item" data-card="whatsapp">
       <span class="feature-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
       </span>
@@ -468,7 +510,7 @@ header.plans-header {
         <div class="feature-desc">Atendimento revisado e plataforma que responde rápido pra nenhum interessado se perder</div>
       </div>
     </div>
-    <div class="feature-item">
+    <div class="feature-item" data-card="posts">
       <span class="feature-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
       </span>
@@ -477,7 +519,7 @@ header.plans-header {
         <div class="feature-desc">10 posts profissionais por mês, sem precisar improvisar conteúdo</div>
       </div>
     </div>
-    <div class="feature-item">
+    <div class="feature-item" data-card="perfil">
       <span class="feature-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
       </span>
@@ -502,6 +544,7 @@ header.plans-header {
     <!-- Plano Essencial -->
     <div class="plan-card" id="card-essencial">
       <div class="plan-badge" id="badge-essencial"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
+      <div class="plan-rectag" id="rectag-essencial">Recomendado pro seu caso</div>
       <div class="plan-name">Essencial</div>
       <div class="plan-price">R$ 297<span class="plan-price-unit">/mês</span></div>
       <div class="plan-subtitle">Pra clínica que precisa de presença profissional</div>
@@ -522,6 +565,7 @@ header.plans-header {
     <!-- Plano Profissional -->
     <div class="plan-card" id="card-profissional">
       <div class="plan-badge" id="badge-profissional"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
+      <div class="plan-rectag" id="rectag-profissional">Recomendado pro seu caso</div>
       <div class="plan-name">Profissional</div>
       <div class="plan-price">R$ 997<span class="plan-price-unit">/mês</span></div>
       <div class="plan-subtitle">Pra clínica que quer atender e converter melhor</div>
@@ -543,6 +587,7 @@ header.plans-header {
     <!-- Plano Escala -->
     <div class="plan-card" id="card-escala">
       <div class="plan-badge" id="badge-escala"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
+      <div class="plan-rectag" id="rectag-escala">Recomendado pro seu caso</div>
       <div class="plan-name">Escala</div>
       <div class="plan-price-consult">Sob consulta</div>
       <div class="plan-subtitle">Pra clínica com necessidades específicas</div>
@@ -590,9 +635,9 @@ header.plans-header {
 
 <script>
 (function () {
-  function getResultado() {
-    var p = new URLSearchParams(window.location.search);
-    var qs = p.get('resultado');
+  // resultado: ?resultado= OU clinup_lead.resultado; null se ausente (acesso direto)
+  function getRawResultado() {
+    var qs = new URLSearchParams(window.location.search).get('resultado');
     if (qs === 'bom' || qs === 'mediano' || qs === 'critico') return qs;
     try {
       var saved = localStorage.getItem('clinup_lead');
@@ -602,7 +647,18 @@ header.plans-header {
         if (mapped) return mapped;
       }
     } catch (e) {}
-    return 'mediano';
+    return null;
+  }
+  // pontos por pergunta (do diagnóstico) p/ os estados dos cards; null se ausente
+  function getPontos() {
+    try {
+      var saved = localStorage.getItem('clinup_lead');
+      if (saved) {
+        var p = JSON.parse(saved).pontos;
+        if (p && p[1] !== undefined && p[2] !== undefined && p[3] !== undefined) return p;
+      }
+    } catch (e) {}
+    return null;
   }
 
   var COPY = {
@@ -623,36 +679,65 @@ header.plans-header {
     }
   };
 
-  var r = getResultado();
-  var c = COPY[r];
+  var raw       = getRawResultado();
+  var hasResult = !!raw;
+  var level     = raw || 'mediano';   // headline usa default mediano (como hoje)
+  var c         = COPY[level];
 
   document.getElementById('plans-h').textContent   = c.h;
   document.getElementById('plans-sub').textContent = c.sub;
 
-  // Esconde todos os badges, mostra o correto
-  document.querySelectorAll('.plan-badge').forEach(function (b) {
-    b.style.display = 'none';
-  });
-  document.getElementById('badge-' + c.badge).style.display = 'inline-flex';
+  function show(id) { var el = document.getElementById(id); if (el) el.style.display = 'inline-flex'; }
+  function featurePlan(id) {
+    var card = document.getElementById('card-' + id);
+    if (!card) return;
+    card.classList.add('plan-featured');
+    var btn = card.querySelector('.plan-btn');
+    if (btn) { btn.classList.remove('plan-btn-secondary'); btn.classList.add('plan-btn-primary'); }
+  }
 
-  // Remove destaque de todos, aplica no correto
+  // ── reset: sem destaque, botões secondary, badges/rectags escondidos ──
+  document.querySelectorAll('.plan-badge, .plan-rectag').forEach(function (b) { b.style.display = 'none'; });
   document.querySelectorAll('.plan-card').forEach(function (card) {
     card.classList.remove('plan-featured');
-    // botão do card sem destaque → secondary
     var btn = card.querySelector('.plan-btn');
-    if (btn) {
-      btn.classList.remove('plan-btn-primary');
-      btn.classList.add('plan-btn-secondary');
-    }
+    if (btn) { btn.classList.remove('plan-btn-primary'); btn.classList.add('plan-btn-secondary'); }
   });
 
-  var featuredCard = document.getElementById('card-' + c.badge);
-  featuredCard.classList.add('plan-featured');
-  var featuredBtn = featuredCard.querySelector('.plan-btn');
-  if (featuredBtn) {
-    featuredBtn.classList.remove('plan-btn-secondary');
-    featuredBtn.classList.add('plan-btn-primary');
+  // ── selo dos planos (nunca dois selos no mesmo card) ──
+  if (!hasResult) {
+    // acesso direto: neutro padrão — "Mais escolhido" no Profissional (como hoje)
+    show('badge-profissional');
+    featurePlan('profissional');
+  } else {
+    var recommended = (level === 'bom') ? 'essencial' : 'profissional';
+    // Profissional mantém "Mais escolhido" só quando NÃO é ele o recomendado (caso bom)
+    if (recommended !== 'profissional') show('badge-profissional');
+    // recomendado: tag "Recomendado pro seu caso" (substitui "Mais escolhido" se for o Profissional) + borda
+    show('rectag-' + recommended);
+    featurePlan(recommended);
   }
+
+  // ── estados dos cards "Como a CLINUP ajuda" ──
+  var pts = hasResult ? getPontos() : null;
+  function cardState(card) {
+    if (!pts) return 'neutro';
+    if (level === 'critico') return 'rec';          // regra de segurança: todos recomendados
+    var p1 = pts[1], p2 = pts[2], p3 = pts[3];      // "recomendado" tem prioridade sobre "apagado"
+    switch (card) {
+      case 'site':     if (p1 === 0 || p1 === 8)  return 'rec'; if (p1 === 20) return 'dim'; return 'neutro';
+      case 'whatsapp': if (p3 === 0 || p3 === 12) return 'rec'; if (p3 === 25) return 'dim'; return 'neutro';
+      case 'posts':    if (p2 === 5 || p2 === 10) return 'rec'; return 'neutro';
+      case 'perfil':   if (p1 === 8 || p3 === 0 || p3 === 12) return 'rec'; if (p1 === 20 && p3 === 25) return 'dim'; return 'neutro';
+    }
+    return 'neutro';
+  }
+  document.querySelectorAll('.feature-item[data-card]').forEach(function (el) {
+    el.classList.remove('is-rec', 'is-dim');
+    var st = cardState(el.getAttribute('data-card'));
+    if (st === 'rec') el.classList.add('is-rec');
+    else if (st === 'dim') el.classList.add('is-dim');
+  });
 }());
 </script>
 

@@ -8,6 +8,7 @@ const quizLeadData = {
   email:           '',
   telefone:        '',
   respostas:       {},
+  pontos:          {},
   resultado:       '',
   etapaAtual:      'formulario',
   quizConcluido:   false,
@@ -24,7 +25,7 @@ const PERGUNTA_LABELS = {
   5: 'faturamento_mensal'
 };
 
-const STATE_VERSION = '2';
+const STATE_VERSION = '3';
 
 const answers = {};
 

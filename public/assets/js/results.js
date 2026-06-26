@@ -29,6 +29,13 @@ function showResult() {
 
   result.innerHTML = `
     <div class="score-card ${model.level}">
+      <div class="score-ring" id="scoreRing">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="score-ring-track" cx="60" cy="60" r="52"></circle>
+          <circle class="score-ring-fill" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="score-ring-num"><span id="scoreNum">0</span>%</div>
+      </div>
       ${model.badge}
       <h2 class="result-title">${model.title}</h2>
       <p class="result-sub">${model.subtitle}</p>
@@ -58,6 +65,56 @@ function showResult() {
       <button class="btn-restart" onclick="restartQuiz()">↩ Refazer o diagnóstico</button>
     </div>
   `;
+
+  animateScoreRing(model.score);
+}
+
+// ── Círculo de score (donut SVG) — cor interpolada + preenchimento animado ──
+function scoreColor(score) {
+  // Vermelho → âmbar → verde por interpolação RGB: progressão contínua, bonita e
+  // visível sobre o card branco (evita o amarelo "barrento"/olive do HSL puro a 42%).
+  const v = Math.max(0, Math.min(100, score)) / 100;
+  const red = [211, 58, 44], amber = [224, 138, 30], green = [27, 158, 75];
+  let c1, c2, t;
+  if (v < 0.5) { c1 = red;   c2 = amber; t = v / 0.5; }
+  else         { c1 = amber; c2 = green; t = (v - 0.5) / 0.5; }
+  const rgb = c1.map((a, i) => Math.round(a + (c2[i] - a) * t));
+  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+}
+
+function animateScoreRing(score) {
+  const CIRC = 2 * Math.PI * 52; // ≈ 326.726
+  const fill = document.querySelector('#scoreRing .score-ring-fill');
+  const num  = document.getElementById('scoreNum');
+  if (!fill || !num) return;
+
+  const target  = Math.max(0, Math.min(100, Math.round(score)));
+  const color   = scoreColor(target);
+  const offset  = CIRC * (1 - target / 100);
+  fill.style.stroke = color;
+  num.style.color   = 'var(--white)';
+
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    fill.style.strokeDashoffset = offset;
+    num.textContent = target;
+    return;
+  }
+
+  // anel: dispara a transição CSS (de cheio → alvo) no próximo frame
+  fill.style.strokeDashoffset = CIRC;
+  requestAnimationFrame(() => { fill.style.strokeDashoffset = offset; });
+
+  // número: conta de 0 → target em ~1.2s
+  const DURATION = 1200;
+  const start = performance.now();
+  (function tick(now) {
+    const t = Math.min(1, (now - start) / DURATION);
+    const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+    num.textContent = Math.round(eased * target);
+    if (t < 1) requestAnimationFrame(tick);
+    else num.textContent = target;
+  })(start);
 }
 
 function onWhatsappClick() {
@@ -99,28 +156,13 @@ function personalizeTitle(title) {
 }
 
 function buildPresentationModel() {
-  const a     = answers;
-  const total = getTotal();
-
-  const pillars = {
-    previsibilidade: a[2],
-    apresentacao:    a[1],
-    conversao:       a[3],
-    prontidao:       a[4]
-  };
+  // Score 0–100 das respostas; o nível (e toda a copy dinâmica) deriva das faixas do score.
+  const score = getScore();
 
   let level;
-  if (total <= 3)      level = 'good';
-  else if (total <= 7) level = 'moderate';
-  else                 level = 'critical';
-
-  if (level === 'critical' && pillars.apresentacao === 0 && pillars.conversao === 0 && pillars.prontidao === 0) {
-    level = 'moderate';
-  }
-  const criticalCount = Object.values(pillars).filter(v => v >= 2).length;
-  if (level === 'good' && criticalCount >= 2) {
-    level = 'moderate';
-  }
+  if (score >= 71)      level = 'good';
+  else if (score >= 46) level = 'moderate';
+  else                  level = 'critical';
 
   let badge, title, subtitle, ctaTitle, ctaDesc, ctaLabel, sectionLabel;
   if (level === 'good') {
@@ -152,7 +194,7 @@ function buildPresentationModel() {
   const insights = selectInsights(level);
   title = personalizeTitle(title);
   return {
-    level, badge, title, subtitle,
+    level, score, badge, title, subtitle,
     thesis:          buildThesis(),
     insights,
     ctaTitle, ctaDesc, ctaLabel, sectionLabel,
@@ -318,7 +360,7 @@ function selectInsights(level) {
 function restartQuiz() {
   Object.keys(answers).forEach(k => delete answers[k]);
   Object.assign(quizLeadData, {
-    respostas: {}, resultado: '', etapaAtual: 'formulario',
+    respostas: {}, pontos: {}, resultado: '', etapaAtual: 'formulario',
     quizConcluido: false, whatsappClicado: false
   });
   _leadSaved = false;
