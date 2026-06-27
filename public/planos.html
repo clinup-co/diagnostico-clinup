@@ -326,7 +326,7 @@ header.plans-header {
   margin: 0 auto 14px;
 }
 
-/* ── Quem está por trás da CLINUP ── */
+/* ── Por trás da CLINUP ── */
 .plans-team {
   max-width: 600px;
   margin: 0 auto 40px;
@@ -503,78 +503,15 @@ header.plans-header {
 }
 .step-desc { font-size: 13.5px; color: var(--body); line-height: 1.55; }
 
-/* ── Placeholders de mídia (premium) — trocar pelo <img>/<video> real ── */
-.media-ph {
-  position: relative;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 12px; text-align: center;
-  min-height: 150px; padding: 24px;
-  border: 1px solid var(--border); border-radius: 16px;
-  overflow: hidden; color: var(--sub);
-  background:
-    radial-gradient(130% 120% at 50% 0%, rgba(91,196,240,0.16), rgba(91,196,240,0) 62%),
-    linear-gradient(160deg, #EAF3FB 0%, #F5FAFD 100%);
-}
-.media-ph-label {
-  position: relative; z-index: 1;
-  font-size: 12px; font-weight: 600; letter-spacing: 0.2px;
-  color: var(--sub); max-width: 340px; line-height: 1.4;
-}
-.media-ph-icon { position: relative; z-index: 1; color: var(--blue); line-height: 0; }
-.media-ph-icon svg {
-  width: 28px; height: 28px; fill: none; stroke: currentColor;
-  stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round;
-}
-.media-ph-play {
-  position: relative; z-index: 1;
-  width: 54px; height: 54px; border-radius: 50%;
-  background: #fff; box-shadow: 0 6px 18px rgba(16,40,60,0.16);
-  display: flex; align-items: center; justify-content: center;
-}
-.media-ph-play::before {
-  content: ''; width: 0; height: 0;
-  border-left: 16px solid var(--blue);
-  border-top: 10px solid transparent; border-bottom: 10px solid transparent;
-  margin-left: 4px;
-}
-.media-ph--hero { aspect-ratio: 16 / 8; min-height: 0; border-radius: 20px; margin: 0 0 28px; }
-.media-ph--portrait { width: 150px; height: 150px; min-height: 0; border-radius: 18px; flex-shrink: 0; padding: 0; }
-/* mídia real depois da troca (mantém a classe e fica perfeita) */
-.media-real { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; display: block; }
-
-/* Moldura de "device" (F — vídeo da plataforma) */
-.media-frame {
-  max-width: 560px; margin: 0 auto 40px;
-  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-  box-shadow: var(--shadow-md); overflow: hidden;
-}
-.media-frame-bar {
-  display: flex; align-items: center; gap: 6px;
-  padding: 11px 14px; border-bottom: 1px solid var(--border); background: #F1F8FD;
-}
-.media-frame-bar span { width: 9px; height: 9px; border-radius: 50%; background: rgba(12,111,152,0.22); }
-.media-frame .media-ph { border: none; border-radius: 0; min-height: 220px; }
-
-/* Card de feature com mídia (B, C): vira vertical, mídia no topo */
-.feature-item--media { flex-direction: column; align-items: stretch; gap: 0; padding: 0; overflow: hidden; }
-.feature-item--media .feature-media { border: none; border-radius: 0; min-height: 138px; }
-.feature-item--media .feature-body { display: flex; align-items: flex-start; gap: 14px; padding: 18px 20px 20px; }
-/* a etiqueta "Recomendado" não pode ser cortada pelo overflow → fica sobre o banner */
-.feature-item--media.is-rec::after { top: 10px; right: 10px; }
-
-/* Quem está por trás — retrato + texto */
-.plans-team-inner {
-  display: flex; align-items: center; gap: 24px;
-  max-width: 600px; margin: 0 auto; text-align: left;
-}
-.plans-team-photo { display: flex; flex-direction: column; align-items: center; gap: 8px; flex-shrink: 0; }
-.plans-team-text-wrap { flex: 1; }
+/* ── Legibilidade: secundários mais escuros + corpo um pouco mais forte ──
+   Sobrescreve os tokens SÓ nesta página (não toca main.css/diagnóstico). */
+body { --body: #2F4356; --sub: #455769; }
+.plans-hero p, .feature-desc, .step-desc, .plan-subtitle, .plan-bullets li,
+.plans-tagline, .plans-guarantee p, .plans-honesty, .plans-team-text,
+.plans-howto-sub { font-weight: 500; }
 
 @media (max-width: 768px) {
   .plans-steps { grid-template-columns: 1fr; }
-}
-@media (max-width: 560px) {
-  .plans-team-inner { flex-direction: column; text-align: center; gap: 16px; }
 }
 </style>
 <script>document.documentElement.classList.add('js-anim');</script>
@@ -598,30 +535,16 @@ header.plans-header {
     <p id="plans-sub"></p>
   </section>
 
-  <!-- MÍDIA (A) — vídeo de apresentação. Trocar o miolo do .media-ph por
-       <video class="media-real" controls poster="..."> ... </video>  ou  <img class="media-real" src="..."> -->
-  <div class="media-ph media-ph--hero media-ph--video reveal" data-ph="video-apresentacao">
-    <div class="media-ph-play"></div>
-    <span class="media-ph-label">Aqui vai um vídeo de apresentação da CLINUP</span>
-  </div>
-
   <!-- Seção 2 — O que a CLINUP faz -->
   <p class="plans-section-label reveal">Como a CLINUP ajuda sua clínica</p>
   <div class="plans-features reveal-group">
-    <div class="feature-item feature-item--media" data-card="site">
-      <!-- MÍDIA (B) — mockup/imagem de site. Trocar o miolo do .feature-media por <img class="media-real" src="..."> -->
-      <div class="feature-media media-ph media-ph--image" data-ph="mockup-site">
-        <span class="media-ph-icon"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></span>
-        <span class="media-ph-label">Aqui vai uma imagem de um site de clínica que você fez</span>
-      </div>
-      <div class="feature-body">
-        <span class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-        </span>
-        <div>
-          <div class="feature-title">Presença profissional online</div>
-          <div class="feature-desc">Site da clínica que transmite confiança e leva o paciente direto pro WhatsApp</div>
-        </div>
+    <div class="feature-item" data-card="site">
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <div>
+        <div class="feature-title">Presença profissional online</div>
+        <div class="feature-desc">Site da clínica que transmite confiança e leva o paciente direto pro WhatsApp</div>
       </div>
     </div>
     <div class="feature-item" data-card="whatsapp">
@@ -633,20 +556,13 @@ header.plans-header {
         <div class="feature-desc">Atendimento revisado e plataforma que responde rápido pra nenhum interessado se perder</div>
       </div>
     </div>
-    <div class="feature-item feature-item--media" data-card="posts">
-      <!-- MÍDIA (C) — exemplo de post. Trocar o miolo do .feature-media por <img class="media-real" src="..."> -->
-      <div class="feature-media media-ph media-ph--image" data-ph="exemplo-post">
-        <span class="media-ph-icon"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg></span>
-        <span class="media-ph-label">Aqui vai um exemplo de post que você cria</span>
-      </div>
-      <div class="feature-body">
-        <span class="feature-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-        </span>
-        <div>
-          <div class="feature-title">Posts prontos pra postar</div>
-          <div class="feature-desc">10 posts profissionais por mês, sem precisar improvisar conteúdo</div>
-        </div>
+    <div class="feature-item" data-card="posts">
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+      </span>
+      <div>
+        <div class="feature-title">Posts prontos pra postar</div>
+        <div class="feature-desc">10 posts profissionais por mês, sem precisar improvisar conteúdo</div>
       </div>
     </div>
     <div class="feature-item" data-card="perfil">
@@ -676,27 +592,12 @@ header.plans-header {
     <div class="step-item"><div class="step-num">3</div><div class="step-title">Mais pacientes, menos esforço</div><div class="step-desc">Sua clínica para de perder quem já tava interessado. A estrutura trabalha por você todos os dias, enquanto você foca no atendimento.</div></div>
   </div>
 
-  <!-- MÍDIA (D) — imagem/vídeo do processo. Trocar o miolo do .media-ph por <video class="media-real" ...> ou <img class="media-real" src="..."> -->
-  <div class="media-ph media-ph--hero media-ph--video reveal" data-ph="processo">
-    <div class="media-ph-play"></div>
-    <span class="media-ph-label">Aqui vai uma imagem ou vídeo mostrando o processo</span>
-  </div>
-
   <!-- Linha de honestidade -->
   <p class="plans-honesty reveal">A CLINUP não promete milagre nem agenda lotada da noite pro dia. O que entregamos é estrutura, organização e uma apresentação profissional — o que, no dia a dia, faz a clínica converter melhor o interesse que já existe.</p>
 
   <!-- Garantia — reversão de risco ANTES do preço -->
   <div class="plans-guarantee reveal">
     <p>Entrega no prazo combinado, com prévia antes da publicação e 1 rodada de ajuste incluída. Se não fizer sentido, devolvemos o valor.</p>
-  </div>
-
-  <!-- MÍDIA (F) — vídeo da plataforma de automação. Trocar o miolo do .media-ph por <video class="media-real" controls ...> -->
-  <div class="media-frame reveal" data-ph="video-plataforma">
-    <div class="media-frame-bar"><span></span><span></span><span></span></div>
-    <div class="media-ph media-ph--video">
-      <div class="media-ph-play"></div>
-      <span class="media-ph-label">Aqui vai um vídeo da plataforma de automação funcionando</span>
-    </div>
   </div>
 
   <!-- Seção 3 — Cards de planos -->
@@ -771,21 +672,10 @@ header.plans-header {
 
   <p class="plans-closing reveal">Pronto pra começar? Escolha um plano acima.</p>
 
-  <!-- Quem está por trás da CLINUP -->
+  <!-- Por trás da CLINUP -->
   <section class="plans-team reveal">
-    <div class="plans-team-inner">
-      <div class="plans-team-photo">
-        <!-- MÍDIA (E) — sua foto. Trocar o miolo do .media-ph por <img class="media-real" src="..."> -->
-        <div class="media-ph media-ph--portrait" data-ph="foto-responsavel">
-          <span class="media-ph-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg></span>
-        </div>
-        <span class="media-ph-label">Aqui vai a sua foto</span>
-      </div>
-      <div class="plans-team-text-wrap">
-        <p class="plans-team-label">Quem está por trás da CLINUP</p>
-        <p class="plans-team-text">A CLINUP não é uma logo sem rosto. Tem uma pessoa real acompanhando cada projeto de perto, do primeiro contato à entrega. Você fala direto com quem executa — sem camada de atendimento genérico.</p>
-      </div>
-    </div>
+    <p class="plans-team-label">Por trás da CLINUP</p>
+    <p class="plans-team-text">Uma estrutura focada em clínicas: estratégia, tecnologia e execução trabalhando juntas pra sua clínica converter mais. Sem terceirizar o que importa, sem enrolação.</p>
   </section>
 
 </main>
