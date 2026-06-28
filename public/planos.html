@@ -49,15 +49,33 @@ header.plans-header {
 /* ── Hero ── */
 .plans-hero {
   text-align: center;
-  padding: 56px 0 48px;
+  padding: 52px 0 48px;
+  position: relative;
+  overflow: hidden;           /* contém os orbs → sem bleed/scroll horizontal */
 }
+/* Orbs decorativos (CSS puro, atrás do texto) */
+.plans-hero::before, .plans-hero::after {
+  content: ''; position: absolute; z-index: 0; pointer-events: none;
+  border-radius: 50%; filter: blur(44px);
+}
+.plans-hero::before {            /* glow da marca atrás da headline */
+  width: 360px; height: 360px; top: -70px; left: 50%; margin-left: -180px;
+  background: radial-gradient(circle, rgba(91,196,240,0.18) 0%, transparent 70%);
+}
+.plans-hero::after {             /* acento azul profundo no canto inferior-direito */
+  width: 240px; height: 240px; right: -50px; bottom: -40px;
+  background: radial-gradient(circle, rgba(12,111,152,0.12) 0%, transparent 70%);
+}
+.plans-hero h1, .plans-hero p { position: relative; z-index: 1; }
+/* Destaque de cor na headline (só cor, mesmo peso/tamanho) */
+.hl-accent { color: var(--blue); }
 .plans-hero h1 {
   font-family: 'Sora', sans-serif;
   font-size: clamp(26px, 5vw, 40px);
   font-weight: 800;
   line-height: 1.1;
   letter-spacing: -1px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 .plans-hero p {
   font-size: 18px;
@@ -66,6 +84,12 @@ header.plans-header {
   margin: 0 auto;
   line-height: 1.6;
 }
+/* Float muito sutil dos orbs — parado em reduced-motion */
+@media (prefers-reduced-motion: no-preference) {
+  .plans-hero::before { animation: heroFloat 18s ease-in-out infinite; }
+  .plans-hero::after  { animation: heroFloat 22s ease-in-out infinite reverse; }
+}
+@keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(14px); } }
 
 /* ── O que a CLINUP faz ── */
 .plans-section-label {
@@ -716,17 +740,17 @@ header.plans-header {
 
   var COPY = {
     bom: {
-      h:     'Sua clínica já tem uma boa base. A CLINUP refina a apresentação e o atendimento pra você converter mais.',
+      h:     'Sua clínica já tem uma boa base. A CLINUP refina a apresentação e o atendimento pra você <span class="hl-accent">converter mais</span>.',
       sub:   'Veja os planos abaixo.',
       badge: 'essencial'
     },
     mediano: {
-      h:     'Sua clínica atrai interesse, mas perde paciente no atendimento.',
+      h:     'Sua clínica atrai interesse, mas <span class="hl-accent">perde paciente</span> no atendimento.',
       sub:   'A CLINUP organiza o WhatsApp, melhora a apresentação e ajuda a fechar mais.',
       badge: 'profissional'
     },
     critico: {
-      h:     'Sua clínica tem potencial, mas falta organização. A CLINUP cuida da apresentação, do WhatsApp e do atendimento pra você fechar mais.',
+      h:     'Sua clínica tem potencial, mas <span class="hl-accent">falta organização</span>. A CLINUP cuida da apresentação, do WhatsApp e do atendimento pra você fechar mais.',
       sub:   'Veja os planos abaixo.',
       badge: 'profissional'
     }
@@ -737,7 +761,7 @@ header.plans-header {
   var level     = raw || 'mediano';   // headline usa default mediano (como hoje)
   var c         = COPY[level];
 
-  document.getElementById('plans-h').textContent   = c.h;
+  document.getElementById('plans-h').innerHTML     = c.h;
   document.getElementById('plans-sub').textContent = c.sub;
 
   function show(id) { var el = document.getElementById(id); if (el) el.style.display = 'inline-flex'; }

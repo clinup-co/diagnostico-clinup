@@ -50,6 +50,8 @@ Cores fora do `:root` (literais no código, registrar aqui):
 - **Chip do logo:** `background #0A1E30` (navy escuro, intencional — a arte do logo é clara).
 - **Linha-topo do score-card por estado:** good `var(--blue-soft)`, moderate `#C9791C`, critical `#C24233`.
 - **Ring do score (interpolado em JS, `results.js#scoreColor`):** vermelho `rgb(211,58,44)` → âmbar `rgb(224,138,30)` → verde `rgb(27,158,75)` (lerp RGB por faixa do score).
+- **Orbs decorativos da hero (planos):** `.plans-hero::before/::after` — radiais `rgba(91,196,240,0.18)` (blue-soft) e `rgba(12,111,152,0.12)` (blue), `blur(44px)`, `pointer-events:none`, atrás do texto (`z-index:0`; o texto vai a `z-index:1`). A `.plans-hero` é `position:relative; overflow:hidden`. Ambiente sutil — não compete com a leitura.
+- **Destaque na headline (`.hl-accent`):** `color: var(--blue)` — **só cor** (mesmo peso/tamanho da headline), aplicado na expressão-chave da headline dinâmica da planos. AA folgado (título grande).
 
 ### Regras de cor (decididas, obrigatórias)
 - 🟢 **Verde (`--green`) é EXCLUSIVO de botão que abre o WhatsApp** (e dos checks ✓). Nunca usar
@@ -188,6 +190,8 @@ não verde. Verde só no `.plan-btn-primary` (que abre o wa.me).
   conta via `requestAnimationFrame` (~1.2s, easeOutCubic).
 - **Progress bar:** `width` **0.5s** `cubic-bezier(0.4,0,0.2,1)`.
 - **Hover:** `transform/box-shadow` **0.15s–0.25s ease**; lift `translateY(-2px a -5px)`.
+- **Orbs da hero (planos):** float vertical muito lento (`@keyframes heroFloat`, **18–22s** ease-in-out
+  infinite, ±14px), **gated** por `@media (prefers-reduced-motion: no-preference)` → estático se reduzido.
 - **Easings padrão:** premium/entrada = `cubic-bezier(0.16,1,0.3,1)`; UI/progress = `cubic-bezier(0.4,0,0.2,1)`.
 - **Movimento = aceno gentil, não fogos.** Sutil, rápido, com propósito.
 - **`prefers-reduced-motion` (obrigatório):**
