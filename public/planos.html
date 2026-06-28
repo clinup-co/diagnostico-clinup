@@ -459,7 +459,7 @@ header.plans-header {
   .plan-card { transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.2s ease; }
   .plan-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 12px 30px rgba(16,40,60,0.10), 0 22px 50px rgba(16,40,60,0.07);
+    box-shadow: var(--shadow-lg);
   }
   .feature-item { transition: transform 0.25s ease, box-shadow 0.25s ease; }
   .feature-item:hover {
@@ -486,7 +486,7 @@ header.plans-header {
 .step-item {
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
   padding: 24px 22px;
   box-shadow: var(--shadow-sm);
 }
@@ -503,9 +503,7 @@ header.plans-header {
 }
 .step-desc { font-size: 13.5px; color: var(--body); line-height: 1.55; }
 
-/* ── Legibilidade: secundários mais escuros + corpo um pouco mais forte ──
-   Sobrescreve os tokens SÓ nesta página (não toca main.css/diagnóstico). */
-body { --body: #2F4356; --sub: #455769; }
+/* ── Legibilidade: corpo um pouco mais forte (cores escuras vêm do :root global) ── */
 .plans-hero p, .feature-desc, .step-desc, .plan-subtitle, .plan-bullets li,
 .plans-tagline, .plans-guarantee p, .plans-honesty, .plans-team-text,
 .plans-howto-sub { font-weight: 500; }
