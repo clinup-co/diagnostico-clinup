@@ -154,6 +154,16 @@ header.plans-header {
   grid-template-columns: 1fr;
   gap: 16px;
 }
+@media (min-width: 768px) {
+  .plans-proof-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.proof-card-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
 .proof-card {
   background: var(--card);
   border: 1px solid var(--border);
@@ -809,19 +819,23 @@ header.plans-header {
 
 <main class="plans-page">
 
-  <!-- Seção 4 — Prova social -->
+  <!-- Seção 4 — Por que entrar agora (vantagem de quem começa) -->
   <section class="plans-proof reveal">
-    <p class="plans-section-label">Quem já confia na CLINUP</p>
-    <p class="plans-proof-anchor"><span>[XX]</span> clínicas atendidas</p>
-    <p class="plans-proof-caption">Consultórios e clínicas de várias especialidades já organizaram presença, WhatsApp e apresentação com a gente.</p>
+    <p class="plans-section-label">Por que entrar agora</p>
+    <p class="plans-proof-anchor">Você entra como uma das <span>primeiras clínicas</span></p>
+    <p class="plans-proof-caption">A CLINUP está começando — e isso joga a seu favor: atenção total, execução rápida e a chance de sair na frente da concorrência.</p>
     <div class="plans-proof-grid reveal-group">
       <div class="proof-card">
-        <p class="proof-quote">"Depois que organizaram meu WhatsApp e a apresentação da clínica, parei de perder quem chamava e ficava sem resposta. O paciente chega e já encontra tudo claro."</p>
-        <p class="proof-author">Dra. [Nome]<span>Dermatologista — [Cidade]</span></p>
+        <p class="proof-card-title">Atenção dedicada</p>
+        <p class="proof-quote">Pegamos poucas clínicas por vez pra cuidar de cada uma de perto. Você fala direto com quem executa — sem call center, sem fila.</p>
       </div>
       <div class="proof-card">
-        <p class="proof-quote">"O site novo passou a confiança que faltava. Quem entra entende o que eu ofereço e chama direto no WhatsApp, sem ficar em dúvida."</p>
-        <p class="proof-author">Dr. [Nome]<span>Ortopedista — [Cidade]</span></p>
+        <p class="proof-card-title">Começa rápido</p>
+        <p class="proof-quote">Sua estrutura sai do papel em poucos dias, com prévia antes de publicar. Enquanto outros enrolam, sua clínica já começa a converter.</p>
+      </div>
+      <div class="proof-card">
+        <p class="proof-card-title">Saia na frente</p>
+        <p class="proof-quote">A maioria das clínicas ainda perde paciente num WhatsApp bagunçado e numa apresentação amadora. Organizando isso agora, você larga na frente da sua região.</p>
       </div>
     </div>
   </section>
@@ -889,7 +903,7 @@ header.plans-header {
   </div>
 
   <!-- Seção 8 — Âncora de valor -->
-  <p class="plans-anchor-value reveal">Equivale a recuperar [N] pacientes por mês que hoje saem sem agendar.</p>
+  <p class="plans-anchor-value reveal">Pense em quantos pacientes entram em contato e não agendam hoje. Recuperar só uma parte já paga a estrutura.</p>
 
   <!-- Seção 9 — Cards de planos -->
   <p class="plans-section-label reveal">Conheça os planos</p>
@@ -920,7 +934,7 @@ header.plans-header {
     <div class="plan-card" id="card-profissional">
       <div class="plan-badge" id="badge-profissional"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
       <div class="plan-rectag" id="rectag-profissional">Recomendado pro seu caso</div>
-      <p class="plan-availability">● [N] vagas disponíveis este mês</p>
+      <p class="plan-availability">● Poucas vagas por mês — atenção dedicada</p>
       <div class="plan-name">Profissional</div>
       <div class="plan-price">R$ 997<span class="plan-price-unit">/mês</span></div>
       <div class="plan-subtitle">Pra clínica que quer atender e converter melhor</div>
@@ -947,7 +961,7 @@ header.plans-header {
       <div class="plan-name">Escala</div>
       <div class="plan-price-consult">Sob consulta</div>
       <div class="plan-subtitle">Pra clínica com necessidades específicas</div>
-      <p class="plan-profile">Indicado para clínicas com mais de [X] atendimentos/mês</p>
+      <p class="plan-profile">Indicado para redes e clínicas de alto volume</p>
       <ul class="plan-bullets">
         <li>Gestão multi-unidade</li>
         <li>Estratégia de funil completo</li>
