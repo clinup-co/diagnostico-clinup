@@ -1,0 +1,20 @@
+# Dependencies
+node_modules/
+
+# Environment / secrets (chaves do Supabase vivem em env vars do Netlify/Vercel)
+.env
+.env.*
+!.env.example
+
+# Deploy / build output
+.netlify/
+.vercel/
+dist/
+
+# OS / editor cruft
+.DS_Store
+Thumbs.db
+*.log
+
+# Asset de 9 MB não referenciado pelo site. Remova esta linha para versioná-lo.
+/abstract-elegant-blue-background-with-text-space.jpg

@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Planos CLINUP — Estrutura digital-comercial para clínicas</title>
 <meta name="description" content="Conheça os planos da CLINUP e escolha o caminho ideal para sua clínica.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
 <style>
@@ -91,7 +93,90 @@ header.plans-header {
 }
 @keyframes heroFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(14px); } }
 
-/* ── O que a CLINUP faz ── */
+/* ── Qualificador do hero (perfil ideal / não ideal) ── */
+.hero-qualifier {
+  position: relative; z-index: 1;       /* acima dos orbs */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  max-width: 760px;
+  margin: 32px auto 0;
+  text-align: left;
+}
+.qualifier-col {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 22px;
+  box-shadow: var(--shadow-sm);
+}
+.qualifier-col.is-yes { border-left: 3px solid var(--green); }
+.qualifier-col.is-no  { border-left: 3px solid rgba(69,87,105,0.45); }
+.qualifier-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+.q-mark { font-weight: 800; }
+.q-mark-yes { color: var(--green); }
+.q-mark-no  { color: var(--sub); }
+.qualifier-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+.qualifier-list li {
+  display: flex; align-items: flex-start; gap: 9px;
+  font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.45;
+}
+.qualifier-list li::before { flex-shrink: 0; font-weight: 800; margin-top: 1px; }
+.qualifier-list.is-yes li::before { content: '✓'; color: var(--green); }
+.qualifier-list.is-no  li::before { content: '✕'; color: var(--sub); }
+
+/* ── Prova social ── */
+.plans-proof { margin: 0 auto 48px; }
+.plans-proof-anchor {
+  text-align: center;
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(22px, 4vw, 30px);
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 6px;
+  line-height: 1.1;
+}
+.plans-proof-anchor span { color: var(--blue); }
+.plans-proof-caption {
+  text-align: center;
+  font-size: 14px; font-weight: 500;
+  color: var(--sub); line-height: 1.6;
+  max-width: 560px; margin: 0 auto 24px;
+}
+.plans-proof-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+.proof-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--blue);
+  border-radius: 12px;
+  padding: 20px 22px;
+}
+.proof-quote {
+  font-size: 14px; font-weight: 500;
+  color: var(--body); line-height: 1.6;
+  margin-bottom: 12px;
+}
+.proof-author {
+  font-family: 'Sora', sans-serif;
+  font-size: 13px; font-weight: 700; color: var(--white);
+}
+.proof-author span {
+  display: block; margin-top: 2px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px; font-weight: 500; color: var(--sub);
+}
+
+/* ── Label de seção (eyebrow) ── */
 .plans-section-label {
   font-size: 11px;
   font-weight: 700;
@@ -100,11 +185,16 @@ header.plans-header {
   color: var(--sub);
   margin-bottom: 20px;
 }
+
+/* ── O que a CLINUP faz (features) — mobile-first ── */
 .plans-features {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: 1fr;
   gap: 14px;
   margin-bottom: 48px;
+}
+@media (min-width: 768px) {
+  .plans-features { grid-template-columns: repeat(2, 1fr); }
 }
 .feature-item {
   display: flex;
@@ -145,13 +235,16 @@ header.plans-header {
   line-height: 1.45;
 }
 
-/* ── Grid de planos ── */
+/* ── Grid de planos — mobile-first ── */
 .plans-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 16px;
   margin-bottom: 32px;
   align-items: start;
+}
+@media (min-width: 768px) {
+  .plans-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
 }
 .plan-card {
   background: var(--card);
@@ -164,9 +257,36 @@ header.plans-header {
   transition: border-color 0.2s, box-shadow 0.2s;
   box-shadow: var(--shadow-sm);
 }
+/* Card destaque (Profissional / recomendado) — diferenciação ampliada */
 .plan-card.plan-featured {
+  transform: scale(1.03);
+  border-width: 2px;
   border-color: var(--blue);
-  box-shadow: 0 8px 26px rgba(16,40,60,0.10), 0 18px 46px rgba(16,40,60,0.07);
+  box-shadow: 0 0 0 4px rgba(12,111,152,0.08), var(--shadow-lg);
+  z-index: 1;
+}
+@media (max-width: 768px) {
+  .plan-card.plan-featured { transform: none; }
+}
+/* Card Escala — superfície escura premium */
+.plan-card.plan-scale {
+  background: linear-gradient(135deg, #0E2233 0%, #16324A 100%);
+  border-color: rgba(91,196,240,0.3);
+}
+.plan-card.plan-scale .plan-name,
+.plan-card.plan-scale .plan-tagline,
+.plan-card.plan-scale .plan-bullets li { color: rgba(255,255,255,0.9); }
+.plan-card.plan-scale .plan-subtitle { color: rgba(255,255,255,0.62); }
+.plan-card.plan-scale .plan-profile  { color: rgba(255,255,255,0.55); }
+.plan-card.plan-scale .plan-price-consult { color: #5BC4F0; }
+.plan-card.plan-scale .plan-bullets li::before { color: #3BC07D; }   /* verde mais claro p/ contraste no navy */
+.plan-card.plan-scale .plan-btn-secondary {
+  border-color: rgba(91,196,240,0.5);
+  color: #5BC4F0;
+}
+.plan-card.plan-scale .plan-btn-secondary:hover {
+  border-color: #5BC4F0;
+  background: rgba(91,196,240,0.10);
 }
 .plan-badge {
   display: none;
@@ -192,6 +312,31 @@ header.plans-header {
   stroke-width: 1.75;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+/* Badge de categoria (Escala) — sempre visível */
+.plan-cat-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: 5px 12px;
+  background: rgba(91,196,240,0.12);
+  border: 1px solid rgba(91,196,240,0.3);
+  border-radius: 100px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #5BC4F0;
+  margin-bottom: 16px;
+}
+
+/* Escassez (Profissional) */
+.plan-availability {
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 600;
+  margin-bottom: 12px;
 }
 
 /* ── Recomendação dinâmica ── */
@@ -263,6 +408,13 @@ header.plans-header {
   margin-bottom: 24px;
   line-height: 1.4;
 }
+.plan-profile {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sub);
+  line-height: 1.4;
+  margin: -16px 0 24px;
+}
 .plan-bullets {
   list-style: none;
   flex: 1;
@@ -322,15 +474,35 @@ header.plans-header {
   background: rgba(91,196,240,0.06);
 }
 
-/* ── Garantia ── */
+/* ── Garantia — reversão de risco (destaque, antes do preço) ── */
 .plans-guarantee {
   text-align: center;
   padding: 24px 28px;
-  background: var(--card);
-  border: 1px solid var(--border);
+  background: rgba(14,122,72,0.04);
+  border: 1.5px solid rgba(14,122,72,0.3);
   border-radius: 14px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px;
+  max-width: 680px;
   box-shadow: var(--shadow-sm);
+}
+.plans-guarantee-icon {
+  display: flex;
+  justify-content: center;
+  color: var(--green);
+  line-height: 0;
+  margin-bottom: 10px;
+}
+.plans-guarantee-icon svg {
+  width: 32px; height: 32px;
+  fill: none; stroke: currentColor; stroke-width: 1.75;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.plans-guarantee-title {
+  font-family: 'Sora', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 8px;
 }
 .plans-guarantee p {
   font-size: 14px;
@@ -338,6 +510,17 @@ header.plans-header {
   line-height: 1.65;
   max-width: 600px;
   margin: 0 auto;
+}
+
+/* ── Âncora de valor ── */
+.plans-anchor-value {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--sub);
+  line-height: 1.6;
+  max-width: 560px;
+  margin: 40px auto;
 }
 
 /* ── Linha de honestidade ── */
@@ -348,6 +531,38 @@ header.plans-header {
   line-height: 1.65;
   max-width: 600px;
   margin: 0 auto 14px;
+}
+
+/* ── FAQ (accordion nativo details/summary) ── */
+.plans-faq {
+  max-width: 680px;
+  margin: 0 auto 48px;
+}
+.plans-faq summary {
+  padding: 18px 20px;
+  cursor: pointer;
+  font-family: 'Sora', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--white);
+  border-bottom: 1px solid var(--border);
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.plans-faq summary::-webkit-details-marker { display: none; }
+.plans-faq summary::after { content: "+"; font-size: 20px; color: var(--blue); flex-shrink: 0; }
+.plans-faq details[open] summary::after { content: "−"; }
+.plans-faq details > p {
+  padding: 16px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.65;
+  color: var(--body);
+  background: var(--card);
+  border-bottom: 1px solid var(--border);
 }
 
 /* ── Por trás da CLINUP ── */
@@ -426,24 +641,71 @@ header.plans-header {
   padding-bottom: 48px;
 }
 
+/* ── Closing CTA (frase + ação geral) ── */
+.plans-closing-cta {
+  text-align: center;
+  max-width: 520px;
+  margin: 40px auto 52px;
+}
 .plans-closing {
   text-align: center;
   font-size: 18px;
   font-weight: 700;
   color: var(--white);
   line-height: 1.5;
-  max-width: 400px;
-  margin: 40px auto 52px;
+  max-width: 420px;
+  margin: 0 auto 20px;
 }
+.plans-closing-btn {
+  max-width: 360px;
+  margin: 0 auto;
+}
+
+/* ── Como funciona (3 passos) — mobile-first ── */
+.plans-howto-sub {
+  text-align: center;
+  font-size: 15px;
+  color: var(--body);
+  line-height: 1.6;
+  max-width: 520px;
+  margin: -8px auto 26px;
+}
+.plans-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 26px;
+}
+@media (min-width: 768px) {
+  .plans-steps { grid-template-columns: repeat(3, 1fr); }
+}
+.step-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px 22px;
+  box-shadow: var(--shadow-sm);
+}
+.step-num {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--blue); color: #fff;
+  font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 14px;
+}
+.step-title {
+  font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px;
+  color: var(--white); margin-bottom: 8px;
+}
+.step-desc { font-size: 13.5px; color: var(--body); line-height: 1.55; }
+
+/* ── Legibilidade: corpo um pouco mais forte (cores escuras vêm do :root global) ── */
+.plans-hero p, .feature-desc, .step-desc, .plan-subtitle, .plan-bullets li,
+.plans-tagline, .plans-guarantee p, .plans-honesty, .plans-team-text,
+.plans-howto-sub { font-weight: 500; }
 
 /* ── Responsivo ── */
 @media (max-width: 768px) {
-  .plans-grid {
-    grid-template-columns: 1fr;
-  }
-  .plans-features {
-    grid-template-columns: 1fr;
-  }
   .plans-page { padding-top: 40px; }
   .plan-btn   { padding: 15px 20px; }
   .plan-badge { font-size: 12px; letter-spacing: 1.5px; }
@@ -451,6 +713,8 @@ header.plans-header {
   .feature-desc  { font-size: 14px; line-height: 1.5; }
   .plan-price-unit { font-size: 14px; }
   .plans-closing   { font-size: 16px; }
+  /* Performance mobile: elementos decorativos do body deixam de repintar no scroll */
+  body::before, body::after { position: absolute; filter: none; opacity: 0.5; }
 }
 @media (max-width: 480px) {
   .plan-card {
@@ -459,6 +723,12 @@ header.plans-header {
   .plans-hero {
     padding: 40px 0 36px;
   }
+}
+@media (max-width: 390px) {
+  .plans-hero h1 { font-size: clamp(22px, 6vw, 28px); }
+  .plan-card { padding: 24px 18px; }
+  .plan-price { font-size: 28px; }
+  .plan-btn { font-size: 14px; padding: 16px 16px; }
 }
 
 /* ── Animações de entrada (reveal no scroll) + stagger ── */
@@ -491,50 +761,6 @@ header.plans-header {
     box-shadow: 0 8px 24px rgba(16,40,60,0.09), 0 16px 40px rgba(16,40,60,0.06);
   }
 }
-
-/* ── Como funciona (3 passos) ── */
-.plans-howto-sub {
-  text-align: center;
-  font-size: 15px;
-  color: var(--body);
-  line-height: 1.6;
-  max-width: 520px;
-  margin: -8px auto 26px;
-}
-.plans-steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 26px;
-}
-.step-item {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 24px 22px;
-  box-shadow: var(--shadow-sm);
-}
-.step-num {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--blue); color: #fff;
-  font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 14px;
-}
-.step-title {
-  font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px;
-  color: var(--white); margin-bottom: 8px;
-}
-.step-desc { font-size: 13.5px; color: var(--body); line-height: 1.55; }
-
-/* ── Legibilidade: corpo um pouco mais forte (cores escuras vêm do :root global) ── */
-.plans-hero p, .feature-desc, .step-desc, .plan-subtitle, .plan-bullets li,
-.plans-tagline, .plans-guarantee p, .plans-honesty, .plans-team-text,
-.plans-howto-sub { font-weight: 500; }
-
-@media (max-width: 768px) {
-  .plans-steps { grid-template-columns: 1fr; }
-}
 </style>
 <script>document.documentElement.classList.add('js-anim');</script>
 </head>
@@ -551,13 +777,56 @@ header.plans-header {
 
 <div class="plans-top-inner">
 
-  <!-- Seção 1 — Hero personalizado -->
+  <!-- Seção 2 — Hero personalizado + qualificador -->
   <section class="plans-hero">
     <h1 id="plans-h"></h1>
     <p id="plans-sub"></p>
+
+    <div class="hero-qualifier">
+      <div class="qualifier-col is-yes">
+        <div class="qualifier-title"><span class="q-mark q-mark-yes">✓</span> Para você se…</div>
+        <ul class="qualifier-list is-yes">
+          <li>Você já recebe contatos, mas perde paciente na hora de agendar</li>
+          <li>Tem uma boa clínica, mas a apresentação online não passa a mesma confiança</li>
+          <li>Quer organizar WhatsApp, site e perfil sem virar uma agência de marketing</li>
+        </ul>
+      </div>
+      <div class="qualifier-col is-no">
+        <div class="qualifier-title"><span class="q-mark q-mark-no">✗</span> Não é para você se…</div>
+        <ul class="qualifier-list is-no">
+          <li>Procura promessa de agenda lotada da noite pro dia</li>
+          <li>Ainda não tem estrutura mínima de atendimento pra receber novos pacientes</li>
+        </ul>
+      </div>
+    </div>
   </section>
 
-  <!-- Seção 2 — O que a CLINUP faz -->
+  <!-- Seção 3 — Tagline de diferenciação (movida pra logo abaixo do hero) -->
+  <p class="plans-tagline reveal">A CLINUP não é agência de tráfego nem social media. Trabalhamos como facilitadores: rápido, eficaz, sem enrolação.</p>
+
+</div><!-- /.plans-top-inner -->
+</div><!-- /.plans-top-bg -->
+
+<main class="plans-page">
+
+  <!-- Seção 4 — Prova social -->
+  <section class="plans-proof reveal">
+    <p class="plans-section-label">Quem já confia na CLINUP</p>
+    <p class="plans-proof-anchor"><span>[XX]</span> clínicas atendidas</p>
+    <p class="plans-proof-caption">Consultórios e clínicas de várias especialidades já organizaram presença, WhatsApp e apresentação com a gente.</p>
+    <div class="plans-proof-grid reveal-group">
+      <div class="proof-card">
+        <p class="proof-quote">"Depois que organizaram meu WhatsApp e a apresentação da clínica, parei de perder quem chamava e ficava sem resposta. O paciente chega e já encontra tudo claro."</p>
+        <p class="proof-author">Dra. [Nome]<span>Dermatologista — [Cidade]</span></p>
+      </div>
+      <div class="proof-card">
+        <p class="proof-quote">"O site novo passou a confiança que faltava. Quem entra entende o que eu ofereço e chama direto no WhatsApp, sem ficar em dúvida."</p>
+        <p class="proof-author">Dr. [Nome]<span>Ortopedista — [Cidade]</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção 5 — O que a CLINUP faz -->
   <p class="plans-section-label reveal">Como a CLINUP ajuda sua clínica</p>
   <div class="plans-features reveal-group">
     <div class="feature-item" data-card="site">
@@ -598,14 +867,7 @@ header.plans-header {
     </div>
   </div>
 
-  <p class="plans-tagline reveal">A CLINUP não é agência de tráfego nem social media. Trabalhamos como facilitadores: rápido, eficaz, sem enrolação.</p>
-
-</div><!-- /.plans-top-inner -->
-</div><!-- /.plans-top-bg -->
-
-<main class="plans-page">
-
-  <!-- Seção — Como funciona (3 passos) -->
+  <!-- Seção 6 — Como funciona (3 passos) -->
   <p class="plans-section-label reveal">Como funciona</p>
   <p class="plans-howto-sub reveal">Do diagnóstico ao paciente agendado, sem você perder tempo nem dinheiro no caminho.</p>
   <div class="plans-steps reveal-group">
@@ -617,12 +879,19 @@ header.plans-header {
   <!-- Linha de honestidade -->
   <p class="plans-honesty reveal">A CLINUP não promete milagre nem agenda lotada da noite pro dia. O que entregamos é estrutura, organização e uma apresentação profissional — o que, no dia a dia, faz a clínica converter melhor o interesse que já existe.</p>
 
-  <!-- Garantia — reversão de risco ANTES do preço -->
+  <!-- Seção 7 — Garantia (risco zero), logo acima dos planos -->
   <div class="plans-guarantee reveal">
+    <div class="plans-guarantee-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+    </div>
+    <div class="plans-guarantee-title">Risco zero para você</div>
     <p>Entrega no prazo combinado, com prévia antes da publicação e 1 rodada de ajuste incluída. Se não fizer sentido, devolvemos o valor.</p>
   </div>
 
-  <!-- Seção 3 — Cards de planos -->
+  <!-- Seção 8 — Âncora de valor -->
+  <p class="plans-anchor-value reveal">Equivale a recuperar [N] pacientes por mês que hoje saem sem agendar.</p>
+
+  <!-- Seção 9 — Cards de planos -->
   <p class="plans-section-label reveal">Conheça os planos</p>
   <div class="plans-grid reveal-group">
 
@@ -640,10 +909,10 @@ header.plans-header {
         <li>1 rodada de ajuste</li>
       </ul>
       <a class="plan-btn plan-btn-secondary"
-         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20escolho%20o%20Plano%20Essencial%20(R%24297%2Fm%C3%AAs)."
+         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20uma%20conversa%20sobre%20o%20Plano%20Essencial%20(R%24%20297%2Fm%C3%AAs)."
          target="_blank" rel="noopener noreferrer"
-         aria-label="Contratar o Plano Essencial por R$ 297 por mês">
-        Quero o Essencial
+         aria-label="Agendar conversa sobre o Plano Essencial">
+        Agendar conversa sobre o Essencial →
       </a>
     </div>
 
@@ -651,6 +920,7 @@ header.plans-header {
     <div class="plan-card" id="card-profissional">
       <div class="plan-badge" id="badge-profissional"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
       <div class="plan-rectag" id="rectag-profissional">Recomendado pro seu caso</div>
+      <p class="plan-availability">● [N] vagas disponíveis este mês</p>
       <div class="plan-name">Profissional</div>
       <div class="plan-price">R$ 997<span class="plan-price-unit">/mês</span></div>
       <div class="plan-subtitle">Pra clínica que quer atender e converter melhor</div>
@@ -662,39 +932,75 @@ header.plans-header {
         <li>1 rodada de ajuste</li>
       </ul>
       <a class="plan-btn plan-btn-secondary"
-         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20escolho%20o%20Plano%20Profissional%20(R%24997%2Fm%C3%AAs)."
+         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20uma%20conversa%20sobre%20o%20Plano%20Profissional%20(R%24%20997%2Fm%C3%AAs)."
          target="_blank" rel="noopener noreferrer"
-         aria-label="Contratar o Plano Profissional por R$ 997 por mês">
-        Quero o Profissional
+         aria-label="Agendar conversa sobre o Plano Profissional">
+        Quero agendar sobre o Profissional →
       </a>
     </div>
 
     <!-- Plano Escala -->
-    <div class="plan-card" id="card-escala">
+    <div class="plan-card plan-scale" id="card-escala">
       <div class="plan-badge" id="badge-escala"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
       <div class="plan-rectag" id="rectag-escala">Recomendado pro seu caso</div>
+      <div class="plan-cat-badge">Para redes e clínicas em expansão</div>
       <div class="plan-name">Escala</div>
       <div class="plan-price-consult">Sob consulta</div>
       <div class="plan-subtitle">Pra clínica com necessidades específicas</div>
+      <p class="plan-profile">Indicado para clínicas com mais de [X] atendimentos/mês</p>
       <ul class="plan-bullets">
-        <li>Tudo do Profissional</li>
-        <li>Estratégia avançada</li>
-        <li>Integrações específicas</li>
-        <li>Acompanhamento premium</li>
+        <li>Gestão multi-unidade</li>
+        <li>Estratégia de funil completo</li>
+        <li>Acompanhamento semanal dedicado</li>
+        <li>Relatórios mensais de performance</li>
       </ul>
       <a class="plan-btn plan-btn-secondary"
-         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20saber%20mais%20sobre%20o%20Plano%20Escala."
+         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20solicitar%20uma%20proposta%20personalizada%20(Plano%20Escala)."
          target="_blank" rel="noopener noreferrer"
-         aria-label="Falar com especialista sobre o Plano Escala">
-        Falar com especialista
+         aria-label="Solicitar proposta personalizada do Plano Escala">
+        Solicitar proposta personalizada →
       </a>
     </div>
 
   </div>
 
-  <p class="plans-closing reveal">Pronto pra começar? Escolha um plano acima.</p>
+  <!-- Seção 10 — FAQ -->
+  <p class="plans-section-label reveal">Perguntas frequentes</p>
+  <section class="plans-faq reveal">
+    <details>
+      <summary>Quanto tempo leva para estar pronto?</summary>
+      <p>Depende do plano, mas a estrutura essencial (site e WhatsApp) costuma ficar pronta em poucos dias. Você sempre recebe uma prévia antes de publicar e tem 1 rodada de ajuste incluída.</p>
+    </details>
+    <details>
+      <summary>E se eu já tiver site ou WhatsApp configurado?</summary>
+      <p>Melhor ainda. A gente revisa e organiza o que já existe em vez de refazer do zero — integrando tudo pra trabalhar junto e converter melhor.</p>
+    </details>
+    <details>
+      <summary>Preciso me comprometer por quanto tempo?</summary>
+      <p>Os planos são mensais e sem fidelidade longa. A ideia é que você continue porque está vendo resultado, não porque está preso a um contrato.</p>
+    </details>
+    <details>
+      <summary>Funciona para qualquer especialidade médica?</summary>
+      <p>Sim. A apresentação, os textos e o site são adaptados à sua especialidade e ao perfil de paciente que você atende.</p>
+    </details>
+    <details>
+      <summary>Como funciona a garantia de devolução?</summary>
+      <p>Entregamos no prazo combinado, com prévia antes da publicação. Se a entrega não fizer sentido pra sua clínica dentro do que foi acordado, devolvemos o valor. Risco zero pra você.</p>
+    </details>
+  </section>
 
-  <!-- Por trás da CLINUP -->
+  <!-- Seção 11 — Closing CTA -->
+  <section class="plans-closing-cta reveal">
+    <p class="plans-closing">Pronto pra começar? Escolha um plano acima — ou fale direto com a gente.</p>
+    <a class="plan-btn plan-btn-primary plans-closing-btn"
+       href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos."
+       target="_blank" rel="noopener noreferrer"
+       aria-label="Falar com a CLINUP no WhatsApp">
+      Falar com a CLINUP no WhatsApp →
+    </a>
+  </section>
+
+  <!-- Seção 12 — Por trás da CLINUP -->
   <section class="plans-team reveal">
     <p class="plans-team-label">Por trás da CLINUP</p>
     <p class="plans-team-text">Uma estrutura focada em clínicas: estratégia, tecnologia e execução trabalhando juntas pra sua clínica converter mais. Sem terceirizar o que importa, sem enrolação.</p>
