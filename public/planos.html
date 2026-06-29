@@ -286,8 +286,8 @@ header.plans-header {
 .plan-card.plan-scale .plan-name,
 .plan-card.plan-scale .plan-tagline,
 .plan-card.plan-scale .plan-bullets li { color: rgba(255,255,255,0.9); }
-.plan-card.plan-scale .plan-subtitle { color: rgba(255,255,255,0.62); }
-.plan-card.plan-scale .plan-profile  { color: rgba(255,255,255,0.55); }
+.plan-card.plan-scale .plan-subtitle { color: rgba(255,255,255,0.80); }
+.plan-card.plan-scale .plan-profile  { color: rgba(255,255,255,0.75); }
 .plan-card.plan-scale .plan-price-consult { color: #5BC4F0; }
 .plan-card.plan-scale .plan-bullets li::before { color: #3BC07D; }   /* verde mais claro p/ contraste no navy */
 .plan-card.plan-scale .plan-btn-secondary {
@@ -343,7 +343,7 @@ header.plans-header {
 
 /* Escassez (Profissional) */
 .plan-availability {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--green);
   font-weight: 600;
   margin-bottom: 12px;
@@ -413,13 +413,13 @@ header.plans-header {
   margin: 14px 0 2px;
 }
 .plan-subtitle {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--sub);
   margin-bottom: 24px;
   line-height: 1.4;
 }
 .plan-profile {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--sub);
   line-height: 1.4;
@@ -651,6 +651,24 @@ header.plans-header {
   padding-bottom: 48px;
 }
 
+/* CTA âncora discreto no hero → pula pros planos (acima da dobra) */
+.plans-anchor-cta {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  margin-top: 24px;
+  font-family: 'Sora', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: none;
+  border-bottom: 1.5px solid rgba(12,111,152,0.35);
+  padding-bottom: 2px;
+  transition: border-color 0.2s, color 0.2s;
+}
+.plans-anchor-cta:hover { border-color: var(--blue); }
+#planos { scroll-margin-top: 24px; }
+
 /* ── Closing CTA (frase + ação geral) ── */
 .plans-closing-cta {
   text-align: center;
@@ -809,6 +827,8 @@ header.plans-header {
         </ul>
       </div>
     </div>
+
+    <a href="#planos" class="plans-anchor-cta">Ver planos e valores ↓</a>
   </section>
 
   <!-- Seção 3 — Tagline de diferenciação (movida pra logo abaixo do hero) -->
@@ -906,7 +926,7 @@ header.plans-header {
   <p class="plans-anchor-value reveal">Pense em quantos pacientes entram em contato e não agendam hoje. Recuperar só uma parte já paga a estrutura.</p>
 
   <!-- Seção 9 — Cards de planos -->
-  <p class="plans-section-label reveal">Conheça os planos</p>
+  <p class="plans-section-label reveal" id="planos">Conheça os planos</p>
   <div class="plans-grid reveal-group">
 
     <!-- Plano Essencial -->
@@ -1005,7 +1025,7 @@ header.plans-header {
 
   <!-- Seção 11 — Closing CTA -->
   <section class="plans-closing-cta reveal">
-    <p class="plans-closing">Pronto pra começar? Escolha um plano acima — ou fale direto com a gente.</p>
+    <p class="plans-closing">Ainda na dúvida de qual plano faz sentido pra sua clínica? Fala com a gente — sem compromisso.</p>
     <a class="plan-btn plan-btn-primary plans-closing-btn"
        href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos."
        target="_blank" rel="noopener noreferrer"
