@@ -188,7 +188,7 @@ header.plans-header {
 
 /* ── Label de seção (eyebrow) ── */
 .plans-section-label {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -343,7 +343,7 @@ header.plans-header {
 
 /* Escassez (Profissional) */
 .plan-availability {
-  font-size: 13px;
+  font-size: 14px;
   color: var(--green);
   font-weight: 600;
   margin-bottom: 12px;
@@ -482,13 +482,13 @@ header.plans-header {
   box-shadow: 0 8px 24px rgba(14,122,72,0.38);
 }
 .plan-btn-secondary {
-  background: transparent;
-  border: 1.5px solid rgba(91,196,240,0.25);
+  background: rgba(91,196,240,0.06);
+  border: 1.5px solid rgba(12,111,152,0.4);
   color: var(--blue);
 }
 .plan-btn-secondary:hover {
   border-color: var(--blue);
-  background: rgba(91,196,240,0.06);
+  background: rgba(91,196,240,0.12);
 }
 
 /* ── Garantia — reversão de risco (destaque, antes do preço) ── */
@@ -662,18 +662,23 @@ header.plans-header {
 .plans-anchor-cta {
   position: relative;
   z-index: 1;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
   margin-top: 24px;
+  padding: 12px 24px;
   font-family: 'Sora', sans-serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--blue);
   text-decoration: none;
-  border-bottom: 1.5px solid rgba(12,111,152,0.35);
-  padding-bottom: 2px;
-  transition: border-color 0.2s, color 0.2s;
+  background: rgba(91,196,240,0.07);
+  border: 1.5px solid rgba(12,111,152,0.35);
+  border-radius: 10px;
+  transition: border-color 0.2s, background 0.2s;
 }
-.plans-anchor-cta:hover { border-color: var(--blue); }
+.plans-anchor-cta:hover { border-color: var(--blue); background: rgba(91,196,240,0.12); }
 #planos { scroll-margin-top: 24px; }
 
 /* ── Closing CTA (frase + ação geral) ── */
@@ -748,8 +753,6 @@ header.plans-header {
   .feature-desc  { font-size: 14px; line-height: 1.5; }
   .plan-price-unit { font-size: 14px; }
   .plans-closing   { font-size: 16px; }
-  /* Performance mobile: elementos decorativos do body deixam de repintar no scroll */
-  body::before, body::after { position: absolute; filter: none; opacity: 0.5; }
 }
 @media (max-width: 480px) {
   .plan-card {
