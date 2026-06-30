@@ -662,6 +662,27 @@ header.plans-header {
   max-width: 560px;
   margin: 40px auto;
 }
+/* ── Escassez honesta (acima dos planos) ── */
+.plans-scarcity {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  max-width: 600px; margin: 0 auto 18px;
+  font-size: 14px; font-weight: 600; color: var(--body);
+  background: rgba(14,122,72,0.06);
+  border: 1px solid rgba(14,122,72,0.18);
+  border-radius: 100px; padding: 10px 20px;
+  text-align: center;
+}
+.scarcity-dot {
+  width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0;
+  background: var(--green);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .scarcity-dot { animation: scarcityPulse 2s ease-in-out infinite; }
+}
+@keyframes scarcityPulse {
+  0%, 100% { box-shadow: 0 0 0 3px rgba(14,122,72,0.18); }
+  50%      { box-shadow: 0 0 0 6px rgba(14,122,72,0.06); }
+}
 
 /* ── Linha de honestidade ── */
 .plans-honesty {
@@ -998,77 +1019,6 @@ header.plans-header {
     </a>
   </div>
 
-  <!-- Seção 4 — Por que a CLINUP (valor + confiança, posicionamento boutique) -->
-  <section class="plans-proof reveal">
-    <p class="plans-section-label">Por que a CLINUP</p>
-    <p class="plans-proof-anchor">Você não vira mais um <span>número numa agência</span></p>
-    <p class="plans-proof-caption">Poucas clínicas por vez, atenção de verdade e foco numa coisa só: você marcar mais consulta.</p>
-    <div class="plans-proof-grid reveal-group">
-      <div class="proof-card">
-        <p class="proof-card-title">Atenção dedicada</p>
-        <p class="proof-quote">A gente atende poucas clínicas por vez pra cuidar bem de cada uma. Você fala direto com quem faz — sem call center, sem fila.</p>
-      </div>
-      <div class="proof-card">
-        <p class="proof-card-title">Começa rápido</p>
-        <p class="proof-quote">Fica pronto em poucos dias. Você vê tudo antes de ir pro ar e ainda tem direito a ajuste. Nada sai sem você aprovar.</p>
-      </div>
-      <div class="proof-card">
-        <p class="proof-card-title">Foco em fechar mais</p>
-        <p class="proof-quote">Não é site bonito só pra ser bonito. Cada detalhe é feito pra virar consulta marcada.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- Seção 5 — O que a CLINUP faz -->
-  <p class="plans-section-label reveal">Como a CLINUP ajuda sua clínica</p>
-  <div class="plans-features reveal-group">
-    <div class="feature-item" data-card="site">
-      <span class="feature-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      </span>
-      <div>
-        <div class="feature-title">Site profissional</div>
-        <div class="feature-desc">O paciente entende e clica pra marcar — sem sair pesquisar o concorrente.</div>
-      </div>
-    </div>
-    <div class="feature-item" data-card="whatsapp">
-      <span class="feature-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
-      </span>
-      <div>
-        <div class="feature-title">WhatsApp organizado</div>
-        <div class="feature-desc">Nenhuma mensagem sem resposta. Ninguém desiste enquanto você está no consultório.</div>
-      </div>
-    </div>
-    <div class="feature-item" data-card="posts">
-      <span class="feature-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
-      </span>
-      <div>
-        <div class="feature-title">Posts prontos pra postar</div>
-        <div class="feature-desc">Sua autoridade sendo construída toda semana, sem você pensar em conteúdo.</div>
-      </div>
-    </div>
-    <div class="feature-item" data-card="perfil">
-      <span class="feature-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-      </span>
-      <div>
-        <div class="feature-title">Perfil revisado pra fechar mais</div>
-        <div class="feature-desc">Quem te acha já bate o olho e confia — antes mesmo de falar com você.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Seção 6 — Como funciona (3 passos) -->
-  <p class="plans-section-label reveal">Como funciona</p>
-  <p class="plans-howto-sub reveal">Do teste rápido ao paciente marcado, sem você perder tempo nem dinheiro no caminho.</p>
-  <div class="plans-steps reveal-group">
-    <div class="step-item"><div class="step-num">1</div><div class="step-title">Teste grátis</div><div class="step-desc">Em 5 minutos, você vê onde sua clínica perde paciente hoje — com base nas suas respostas, não em achismo. E quanto isso te custa todo mês.</div></div>
-    <div class="step-item"><div class="step-num">2</div><div class="step-title">Tudo montado pra fechar mais</div><div class="step-desc">Seu site, seu WhatsApp e seu atendimento juntos pra virar consulta marcada. Pronto rápido, e você vê tudo antes de publicar.</div></div>
-    <div class="step-item"><div class="step-num">3</div><div class="step-title">Mais pacientes, menos esforço</div><div class="step-desc">Sua clínica para de perder quem já estava interessado. Tudo trabalha por você todo dia, enquanto você cuida do atendimento.</div></div>
-  </div>
-
   <!-- Seção 7 — Garantia (risco zero), logo acima dos planos -->
   <div class="plans-guarantee reveal">
     <div class="plans-guarantee-icon" aria-hidden="true">
@@ -1079,9 +1029,10 @@ header.plans-header {
   </div>
 
   <!-- Seção 8 — Âncora de valor -->
-  <p class="plans-anchor-value reveal">Pense em quantos pacientes falam com você e não marcam hoje. Recuperar só uma parte já paga o investimento.</p>
+  <p class="plans-anchor-value reveal">Faça a conta: quanto vale uma consulta na sua clínica? Recuperar só 1 paciente por semana que hoje some já costuma pagar o plano — e ainda sobra.</p>
 
   <!-- Seção 9 — Cards de planos -->
+  <p class="plans-scarcity reveal"><span class="scarcity-dot" aria-hidden="true"></span> Atendemos poucas clínicas por mês pra cuidar de cada uma de perto.</p>
   <p class="plans-section-label reveal" id="planos">Conheça os planos</p>
   <div class="plans-grid reveal-group">
 
@@ -1186,6 +1137,77 @@ header.plans-header {
       <p>A gente entrega no prazo e você vê tudo antes de publicar. Se não fizer sentido pra sua clínica, dentro do que foi combinado, devolvemos seu dinheiro. Risco zero pra você.</p>
     </details>
   </section>
+
+  <!-- Por que a CLINUP (movida pra cá: depois dos planos e do FAQ) -->
+  <section class="plans-proof reveal">
+    <p class="plans-section-label">Por que a CLINUP</p>
+    <p class="plans-proof-anchor">Você não vira mais um <span>número numa agência</span></p>
+    <p class="plans-proof-caption">Poucas clínicas por vez, atenção de verdade e foco numa coisa só: você marcar mais consulta.</p>
+    <div class="plans-proof-grid reveal-group">
+      <div class="proof-card">
+        <p class="proof-card-title">Atenção dedicada</p>
+        <p class="proof-quote">A gente atende poucas clínicas por vez pra cuidar bem de cada uma. Você fala direto com quem faz — sem call center, sem fila.</p>
+      </div>
+      <div class="proof-card">
+        <p class="proof-card-title">Começa rápido</p>
+        <p class="proof-quote">Fica pronto em poucos dias. Você vê tudo antes de ir pro ar e ainda tem direito a ajuste. Nada sai sem você aprovar.</p>
+      </div>
+      <div class="proof-card">
+        <p class="proof-card-title">Foco em fechar mais</p>
+        <p class="proof-quote">Não é site bonito só pra ser bonito. Cada detalhe é feito pra virar consulta marcada.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- O que a CLINUP faz -->
+  <p class="plans-section-label reveal">Como a CLINUP ajuda sua clínica</p>
+  <div class="plans-features reveal-group">
+    <div class="feature-item" data-card="site">
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      </span>
+      <div>
+        <div class="feature-title">Site profissional</div>
+        <div class="feature-desc">O paciente entende e clica pra marcar — sem sair pesquisar o concorrente.</div>
+      </div>
+    </div>
+    <div class="feature-item" data-card="whatsapp">
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+      </span>
+      <div>
+        <div class="feature-title">WhatsApp organizado</div>
+        <div class="feature-desc">Nenhuma mensagem sem resposta. Ninguém desiste enquanto você está no consultório.</div>
+      </div>
+    </div>
+    <div class="feature-item" data-card="posts">
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+      </span>
+      <div>
+        <div class="feature-title">Posts prontos pra postar</div>
+        <div class="feature-desc">Sua autoridade sendo construída toda semana, sem você pensar em conteúdo.</div>
+      </div>
+    </div>
+    <div class="feature-item" data-card="perfil">
+      <span class="feature-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+      </span>
+      <div>
+        <div class="feature-title">Perfil revisado pra fechar mais</div>
+        <div class="feature-desc">Quem te acha já bate o olho e confia — antes mesmo de falar com você.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Como funciona (3 passos) -->
+  <p class="plans-section-label reveal">Como funciona</p>
+  <p class="plans-howto-sub reveal">Do teste rápido ao paciente marcado, sem você perder tempo nem dinheiro no caminho.</p>
+  <div class="plans-steps reveal-group">
+    <div class="step-item"><div class="step-num">1</div><div class="step-title">Teste grátis</div><div class="step-desc">Em 5 minutos, você vê onde sua clínica perde paciente hoje — com base nas suas respostas, não em achismo. E quanto isso te custa todo mês.</div></div>
+    <div class="step-item"><div class="step-num">2</div><div class="step-title">Tudo montado pra fechar mais</div><div class="step-desc">Seu site, seu WhatsApp e seu atendimento juntos pra virar consulta marcada. Pronto rápido, e você vê tudo antes de publicar.</div></div>
+    <div class="step-item"><div class="step-num">3</div><div class="step-title">Mais pacientes, menos esforço</div><div class="step-desc">Sua clínica para de perder quem já estava interessado. Tudo trabalha por você todo dia, enquanto você cuida do atendimento.</div></div>
+  </div>
 
   <!-- Seção 11 — Closing CTA -->
   <section class="plans-closing-cta reveal">
