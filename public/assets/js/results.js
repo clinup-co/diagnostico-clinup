@@ -47,11 +47,11 @@ function showResult() {
     <div class="result-paths">
       <div class="result-path">
         <div class="result-path-title">Continuar como está</div>
-        <div class="result-path-desc">Seguir perdendo parte dos interessados no meio do caminho, na base da tentativa e erro.</div>
+        <div class="result-path-desc">Seguir perdendo parte dos pacientes no caminho, na tentativa e erro.</div>
       </div>
       <div class="result-path result-path--accent">
-        <div class="result-path-title">Organizar a estrutura</div>
-        <div class="result-path-desc">Presença, WhatsApp e atendimento conectados, pra transformar mais interesse em agendamento.</div>
+        <div class="result-path-title">Organizar tudo</div>
+        <div class="result-path-desc">Seu site, seu WhatsApp e seu atendimento juntos, pra mais gente marcar consulta.</div>
       </div>
     </div>
     <div class="cta-section">
@@ -125,9 +125,9 @@ function onWhatsappClick() {
 
 function buildWhatsAppMessage(level, insights) {
   const label = {
-    good:     'Boa estrutura',
-    moderate: 'Estrutura com pontos soltos',
-    critical: 'Gargalos ativos'
+    good:     'Boa base',
+    moderate: 'Uns pontos soltos',
+    critical: 'Vários pontos travando'
   }[level] || level;
 
   const gargalos = insights.filter(i => i.severity !== 'strength');
@@ -166,29 +166,29 @@ function buildPresentationModel() {
 
   let badge, title, subtitle, ctaTitle, ctaDesc, ctaLabel, sectionLabel;
   if (level === 'good') {
-    badge        = '<div class="result-badge good">✅ Boa estrutura</div>';
-    title        = 'Sua clínica já tem uma boa base. O próximo passo é ajustar os pontos finos.';
-    subtitle     = 'A clínica já aparece, recebe interessados e consegue converter parte deles. Agora o foco é identificar onde pequenos ajustes podem aumentar a consistência.';
-    ctaTitle     = 'Veja como resolver isso na prática';
-    ctaDesc      = 'A CLINUP organiza a presença, o WhatsApp e o atendimento da sua clínica. Veja os planos e escolha por onde começar.';
-    ctaLabel     = 'Quero ver onde otimizar';
-    sectionLabel = 'O que encontramos — e onde otimizar';
+    badge        = '<div class="result-badge good">✅ Boa base</div>';
+    title        = 'Sua clínica já vai bem. Agora é só ajustar uns detalhes.';
+    subtitle     = 'As pessoas já te acham, entram em contato e parte marca consulta. Agora a gente vê onde uns ajustes pequenos fazem você fechar mais, com mais regularidade.';
+    ctaTitle     = 'Veja como fazer isso na prática';
+    ctaDesc      = 'A CLINUP organiza seu site, seu WhatsApp e seu atendimento. Veja os planos e escolha por onde começar.';
+    ctaLabel     = 'Quero ver onde melhorar';
+    sectionLabel = 'O que achamos — e onde dá pra melhorar';
   } else if (level === 'moderate') {
-    badge        = '<div class="result-badge moderate">⚠️ Estrutura com pontos soltos</div>';
-    title        = 'Sua clínica atrai interesse. Mas perde pacientes no meio do caminho.';
-    subtitle     = 'Tem movimento, mas a estrutura não está conectada do começo ao fim. Isso faz a clínica perder oportunidades mesmo quando o interesse existe.';
-    ctaTitle     = 'Veja como resolver isso na prática';
-    ctaDesc      = 'A CLINUP organiza a presença, o WhatsApp e o atendimento da sua clínica. Veja os planos e escolha por onde começar.';
+    badge        = '<div class="result-badge moderate">⚠️ Uns pontos soltos</div>';
+    title        = 'Sua clínica atrai gente. Mas perde paciente no meio do caminho.';
+    subtitle     = 'Chega gente interessada, mas parte some antes de marcar. Falta seu site, seu WhatsApp e seu atendimento trabalharem juntos.';
+    ctaTitle     = 'Veja como fazer isso na prática';
+    ctaDesc      = 'A CLINUP organiza seu site, seu WhatsApp e seu atendimento. Veja os planos e escolha por onde começar.';
     ctaLabel     = 'Quero ver onde estou perdendo';
-    sectionLabel = 'O que encontramos na sua clínica';
+    sectionLabel = 'O que achamos na sua clínica';
   } else {
-    badge        = '<div class="result-badge critical">🚨 Gargalos ativos</div>';
-    title        = 'Há mais de um gargalo travando sua clínica ao mesmo tempo.';
-    subtitle     = 'Quando presença, atração e WhatsApp falham juntos, o impacto se acumula e a clínica perde mais oportunidades no caminho. Cada ponto tem solução — e a ordem de correção importa.';
-    ctaTitle     = 'Veja como resolver isso na prática';
-    ctaDesc      = 'A CLINUP organiza a presença, o WhatsApp e o atendimento da sua clínica. Veja os planos e escolha por onde começar.';
+    badge        = '<div class="result-badge critical">🚨 Vários pontos travando</div>';
+    title        = 'Tem mais de uma coisa travando sua clínica ao mesmo tempo.';
+    subtitle     = 'Quando o site, o jeito de te achar e o WhatsApp falham juntos, você perde muito mais paciente no caminho. Cada ponto tem conserto — e a ordem de arrumar importa.';
+    ctaTitle     = 'Veja como fazer isso na prática';
+    ctaDesc      = 'A CLINUP organiza seu site, seu WhatsApp e seu atendimento. Veja os planos e escolha por onde começar.';
     ctaLabel     = 'Quero entender por onde começar';
-    sectionLabel = 'Gargalos identificados no diagnóstico';
+    sectionLabel = 'O que está travando sua clínica';
   }
 
   const insights = selectInsights(level);
@@ -212,22 +212,22 @@ function buildThesis() {
   const badConv      = a[3] === 2;
 
   if (goodSite && goodConv && multiChannel)
-    return 'A estrutura digital da clínica está bem alinhada: presença, atração e conversão funcionam juntos. O próximo passo é escalar de forma mais controlada.';
+    return 'Está tudo no lugar: te acham, chega gente e ela marca consulta. Agora é crescer com calma e controle.';
   if (goodSite && goodConv && (onlyRef || a[2] === 1))
-    return 'A conversão funciona bem. O ponto de atenção está na atração: depender de um canal único torna o fluxo de novos pacientes mais vulnerável a variações.';
+    return 'Quem fala com você acaba marcando. O cuidado é como o paciente te encontra: depender de um lugar só é arriscado — se ele cai, some paciente.';
   if (goodSite && badConv && multiChannel)
-    return 'A clínica atrai bem por vários canais, mas parte desse interesse se perde entre o primeiro contato e o agendamento. O WhatsApp é o ponto crítico.';
+    return 'Chega gente de vários lugares, mas parte some entre o primeiro contato e marcar a consulta. O problema está no WhatsApp.';
   if (goodSite && badConv)
-    return 'A clínica é encontrada, mas perde força na etapa de conversão. O problema não está em atrair — está em transformar esse interesse em agenda.';
+    return 'As pessoas te acham, mas você perde na hora de fechar. Não falta gente interessada — falta transformar esse interesse em consulta marcada.';
   if (goodSite && a[3] === 1 && multiChannel)
-    return 'A atração funciona por vários canais. O próximo passo é fortalecer a etapa de conversão para que mais desse interesse chegue ao agendamento.';
+    return 'Chega gente de vários lugares. Agora é melhorar a hora de fechar, pra mais gente marcar consulta.';
   if (goodSite && a[3] === 1)
-    return 'A base digital está no lugar, mas atração e conversão ainda têm espaço de melhoria. São os dois pontos com maior impacto direto no volume de pacientes.';
+    return 'O básico está no lugar, mas dá pra melhorar como te acham e como você fecha. São os dois pontos que mais mudam o número de pacientes.';
   if (weakSite && goodConv)
-    return 'A conversão responde bem quando alguém chega — o gargalo está antes disso, na visibilidade e na atração de novos interessados.';
+    return 'Quando alguém chega, você fecha bem. O problema é antes: pouca gente te encontra e te procura.';
   if (weakSite && badConv)
-    return 'O diagnóstico aponta dois pontos críticos ao mesmo tempo: a presença digital e a conversão. Quando os dois estão fracos, o impacto no volume de pacientes é ampliado.';
-  return 'O diagnóstico aponta pontos específicos na estrutura digital. Cada um, ajustado, tende a melhorar a forma como a clínica atrai, atende e converte novos pacientes.';
+    return 'Tem dois problemas ao mesmo tempo: pouca gente te acha, e quem chega não fecha. Com os dois fracos, você perde paciente em dobro.';
+  return 'O teste mostrou pontos certos pra arrumar. Cada um ajustado ajuda sua clínica a ser achada, atender melhor e marcar mais consultas.';
 }
 
 function selectInsights(level) {
@@ -238,113 +238,113 @@ function selectInsights(level) {
   if (a[1] === 3) {
     if (level === 'moderate')
       pool.push({icon:'🌐', type:'orange', severity:'warning',
-        title:'Sem presença digital',
-        desc:'Quem pesquisa a clínica no Google não encontra nada que transmita confiança. O paciente some antes de entrar em contato.'});
+        title:'Sem site',
+        desc:'Quem procura sua clínica no Google não acha nada que passe confiança. O paciente desiste antes de falar com você.'});
     else
       pool.push({icon:'🌐', type:'red',    severity:'warning',
-        title:'Sem presença digital',
-        desc:'Quem pesquisa a clínica no Google não encontra nada que transmita confiança. O paciente some antes de entrar em contato.'});
+        title:'Sem site',
+        desc:'Quem procura sua clínica no Google não acha nada que passe confiança. O paciente desiste antes de falar com você.'});
   } else if (a[1] === 2)
     pool.push({icon:'🌐', type:'orange', severity:'warning',
-      title:'Presença digital fraca',
-      desc:'Site desatualizado ou mal estruturado passa impressão de descuido. Em alguns casos prejudica mais do que ajuda.'});
+      title:'Site fraco',
+      desc:'Site velho ou bagunçado passa impressão de descuido. Às vezes atrapalha mais do que ajuda.'});
   else
     pool.push({icon:'🌐', type:'blue',   severity:'strength',
-      title:'Presença digital ativa',
-      desc:'A base está funcional. O próximo passo é garantir que ela esteja gerando movimento real — não só existindo.'});
+      title:'Você é achado na internet',
+      desc:'O básico funciona. Agora é fazer ele trazer paciente de verdade, não só existir.'});
 
   // Q2 — Atração de interessados
   if (a[2] === 2)
     pool.push({icon:'📣', type:'orange', severity:'warning',
       title:'Depende de indicação',
-      desc:'Indicação é sinal de qualidade — mas não é previsível. Quando para de chegar, o fluxo de novos pacientes para junto.'});
+      desc:'Indicação é ótimo sinal, mas você não controla. Quando para de vir, para de chegar paciente novo.'});
   else if (a[2] === 1)
     pool.push({icon:'📣', type:'orange', severity:'opportunity',
-      title:'Canal único de atração',
-      desc:'Crescer com um canal funciona até certo ponto. Um canal só torna o fluxo de pacientes vulnerável a variações que você não controla.'});
+      title:'Você depende de um lugar só',
+      desc:'Crescer com um lugar só funciona até certo ponto. Se ele cair, seu paciente novo cai junto — e isso você não controla.'});
   else
     pool.push({icon:'📣', type:'blue',   severity:'strength',
-      title:'Múltiplos canais ativos',
-      desc:'Boa diversificação. O próximo passo é qualificar o que chega por cada canal e garantir que esteja convertendo.'});
+      title:'O paciente te acha de vários jeitos',
+      desc:'Isso é ótimo. Agora é olhar o que chega de cada lugar e garantir que vire consulta.'});
 
   // Q3 — Conversão no WhatsApp
   if (a[3] === 2) {
     if (level === 'moderate')
       pool.push({icon:'💬', type:'orange', severity:'warning',
-        title:'Alto abandono no WhatsApp',
-        desc:'O WhatsApp é onde o paciente decide. Perder contato ali muitas vezes é falta de estrutura — não de interesse.'});
+        title:'Muita gente some no WhatsApp',
+        desc:'O WhatsApp é onde o paciente decide. Perder gente ali, na maioria das vezes, é falta de organização — não falta de interesse.'});
     else
       pool.push({icon:'💬', type:'red',    severity:'warning',
-        title:'Alto abandono no WhatsApp',
-        desc:'O WhatsApp é onde o paciente decide. Perder contato ali muitas vezes é falta de estrutura — não de interesse.'});
+        title:'Muita gente some no WhatsApp',
+        desc:'O WhatsApp é onde o paciente decide. Perder gente ali, na maioria das vezes, é falta de organização — não falta de interesse.'});
   } else if (a[3] === 1)
     pool.push({icon:'💬', type:'orange', severity:'opportunity',
-      title:'Conversão abaixo do potencial',
-      desc:'Metade fechando significa metade vazando. Com a estrutura certa no atendimento, essa taxa sobe sem aumentar volume.'});
+      title:'Dá pra fechar mais no WhatsApp',
+      desc:'Metade fechando é metade escapando. Com o atendimento organizado, esse número sobe sem precisar de mais gente.'});
   else
     pool.push({icon:'💬', type:'blue',   severity:'strength',
-      title:'Boa conversão no WhatsApp',
-      desc:'Quem chega, fecha. O foco agora é aumentar o volume de interessados qualificados que chegam até esse ponto.'});
+      title:'Você fecha bem no WhatsApp',
+      desc:'Quem fala com você, marca. Agora é trazer mais gente certa até aqui.'});
 
   // Q4 — Prontidão (level-aware)
   if (level === 'good') {
     if (a[4] === 0)
       pool.push({icon:'⚡', type:'blue',   severity:'opportunity',
-        title:'Estrutura pronta para evoluir',
-        desc:'A clínica está operacionalmente preparada. Uma análise fina identifica os pontos exatos onde otimizar para crescer com mais controle.'});
+        title:'Pronto pra dar o próximo passo',
+        desc:'Sua clínica está preparada. Um olhar mais de perto mostra os pontos certos pra melhorar e crescer com controle.'});
     else if (a[4] === 1)
       pool.push({icon:'📅', type:'blue',   severity:'opportunity',
-        title:'Bom momento para uma análise fina',
-        desc:'Com a base bem posicionada, o próximo passo é mapear os pontos de otimização e implementá-los com planejamento.'});
+        title:'Bom momento pra olhar de perto',
+        desc:'Com o básico no lugar, agora é achar o que dá pra melhorar e fazer com calma e plano.'});
     else
       pool.push({icon:'🔍', type:'blue',   severity:'opportunity',
-        title:'Hora certa de mapear o próximo nível',
-        desc:'Avaliar antes de agir é a postura certa quando a base já está estabelecida. Uma análise estruturada mostra o que realmente vale priorizar.'});
+        title:'Boa hora pra planejar o próximo nível',
+        desc:'Avaliar antes de agir é o certo quando a base já está firme. Um olhar organizado mostra o que vale a pena fazer primeiro.'});
   } else if (level === 'critical') {
     if (a[4] === 0)
       pool.push({icon:'⚡', type:'blue',   severity:'opportunity',
-        title:'Urgência reconhecida — definir a ordem é o próximo passo',
-        desc:'Reconhecer a necessidade de agir é o ponto de partida. O diagnóstico já identificou os gargalos — falta definir por qual começar.'});
+        title:'Você quer agir — agora é definir a ordem',
+        desc:'Ver que precisa agir já é o começo. O teste já achou os problemas — falta decidir por qual começar.'});
     else if (a[4] === 1)
       pool.push({icon:'📅', type:'orange', severity:'opportunity',
-        title:'Prazo definido — gargalos seguem ativos',
-        desc:'Ter um prazo para agir é melhor do que não ter. Cada etapa corrigida libera parte do potencial da clínica.'});
+        title:'Você tem um prazo — mas os problemas seguem',
+        desc:'Ter um prazo é melhor do que nenhum. Cada ponto arrumado destrava uma parte da sua clínica.'});
     else
       pool.push({icon:'🔍', type:'orange', severity:'opportunity',
         title:'Por onde começar — essa é a pergunta certa',
-        desc:'Entender a ordem de correção faz toda a diferença quando há vários gargalos ativos. O diagnóstico deu a leitura — falta transformar isso em plano.'});
+        desc:'Saber a ordem de arrumar faz toda diferença quando tem vários problemas juntos. O teste já mostrou — falta virar um plano.'});
   } else {
     if (a[4] === 0)
       pool.push({icon:'⚡', type:'blue',   severity:'opportunity',
-        title:'Momento favorável para organizar',
-        desc:'Estar pronto para agir é uma vantagem. Com os pontos identificados, agir agora reduz o tempo em que a estrutura opera abaixo do potencial.'});
+        title:'Boa hora pra organizar',
+        desc:'Estar pronto pra agir é uma vantagem. Com os pontos achados, arrumar agora faz você perder menos tempo e menos paciente.'});
     else if (a[4] === 1)
       pool.push({icon:'📅', type:'orange', severity:'opportunity',
-        title:'Janela de melhoria disponível',
-        desc:'Ter um prazo definido é melhor do que não ter. Enquanto os pontos desconectados seguem ativos, a estrutura opera abaixo do potencial.'});
+        title:'Dá pra melhorar agora',
+        desc:'Ter um prazo é melhor do que nenhum. Enquanto as pontas seguem soltas, sua clínica rende menos do que podia.'});
     else
       pool.push({icon:'🔍', type:'orange', severity:'opportunity',
-        title:'Avaliação em andamento — próximo passo recomendado',
-        desc:'Entender o cenário antes de agir faz sentido. Com pontos da estrutura desconectados, mapear as prioridades ajuda a decidir por onde começar.'});
+        title:'Ainda avaliando? Esse é o próximo passo',
+        desc:'Entender antes de agir faz sentido. Com as pontas soltas, ver as prioridades ajuda a decidir por onde começar.'});
   }
 
   // Q5 — Faturamento
   if (a[5] === 3)
     pool.push({icon:'💡', type:'orange', severity:'opportunity',
-      title:'Fase inicial — alto potencial',
-      desc:'Clínicas nessa faixa têm o maior espaço de crescimento. Estruturar a captação agora acelera muito o que vem pela frente.'});
+      title:'Começo de jornada — muito a crescer',
+      desc:'Clínicas nessa fase são as que mais têm espaço pra crescer. Organizar agora como você traz paciente acelera muito o que vem.'});
   else if (a[5] === 2)
     pool.push({icon:'📊', type:'blue',   severity:'strength',
-      title:'Crescimento em andamento',
-      desc:'A clínica está crescendo. Com captação mais estruturada, essa curva tende a acelerar de forma mais previsível.'});
+      title:'Você está crescendo',
+      desc:'Sua clínica está crescendo. Com um jeito mais organizado de trazer paciente, isso acelera e fica mais previsível.'});
   else if (a[5] === 1)
     pool.push({icon:'🚀', type:'blue',   severity:'strength',
-      title:'Faturamento consolidado',
-      desc:'A demanda existe e a entrega funciona. O próximo nível é ter um sistema de captação que não dependa de variáveis externas.'});
+      title:'Clínica firme',
+      desc:'Tem paciente e o serviço funciona. O próximo nível é trazer paciente de um jeito que não dependa da sorte.'});
   else if ((quizLeadData.respostas || {}).faturamento_mensal !== 'Prefiro não informar')
     pool.push({icon:'🏆', type:'blue',   severity:'strength',
       title:'Clínica estabelecida',
-      desc:'Alto volume mostra que o serviço tem tração. O desafio agora é manter o crescimento com estrutura — não só com esforço.'});
+      desc:'O volume alto mostra que dá certo. Agora o desafio é continuar crescendo com organização, não só no esforço.'});
 
   const warnings      = pool.filter(i => i.severity === 'warning');
   const strengths     = pool.filter(i => i.severity === 'strength');
