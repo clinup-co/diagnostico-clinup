@@ -247,7 +247,15 @@ header.plans-header {
 }
 
 /* ── Demo ao vivo (iframe navegável) ── */
-.demo-live { display: block; text-decoration: none; max-width: 880px; margin: 0 auto 8px; }
+.demo-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  max-width: 920px;
+  margin: 0 auto 8px;
+}
+@media (min-width: 768px) { .demo-grid { grid-template-columns: 1fr 1fr; } }
+.demo-live { display: block; text-decoration: none; }
 .mockup-demo { box-shadow: var(--shadow-lg); }
 .mockup-url {
   flex: 1; min-width: 0; margin-left: 6px;
@@ -964,18 +972,31 @@ header.plans-header {
 
 <main class="plans-page">
 
-  <!-- Seção — O que você recebe (demo ao vivo navegável: AuraEstetica em /demos/) -->
+  <!-- Seção — O que você recebe (2 demos ao vivo navegáveis em /demos/) -->
   <p class="plans-section-label reveal">O que você recebe</p>
-  <p class="plans-howto-sub reveal">Não é promessa — clique e navegue num site de clínica que a gente faz:</p>
-  <a class="demo-live reveal" href="/demos/aura-estetica/" target="_blank" rel="noopener noreferrer" aria-label="Abrir demonstração de site de clínica ao vivo">
-    <div class="mockup mockup-demo">
-      <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">clinica-exemplo.com.br</span></div>
-      <div class="mockup-screen mockup-screen--demo">
-        <iframe class="demo-iframe" src="/demos/aura-estetica/" title="Demonstração: site de clínica ao vivo" loading="lazy" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
-        <span class="demo-overlay">Clique pra abrir e navegar ao vivo →</span>
+  <p class="plans-howto-sub reveal">Não é promessa — clique e navegue em sites de clínica que a gente faz, ao vivo:</p>
+  <div class="demo-grid reveal-group">
+    <a class="demo-live" href="/demos/aura-estetica/" target="_blank" rel="noopener noreferrer" aria-label="Abrir site de clínica (exemplo 1) ao vivo">
+      <div class="mockup mockup-demo">
+        <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">clinica-exemplo.com.br</span></div>
+        <div class="mockup-screen mockup-screen--demo">
+          <iframe class="demo-iframe" src="/demos/aura-estetica/" title="Site de clínica — exemplo 1" loading="lazy" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+          <span class="demo-overlay">Clique pra navegar ao vivo →</span>
+        </div>
       </div>
-    </div>
-  </a>
+      <p class="deliverable-cap">Site de clínica · exemplo 1</p>
+    </a>
+    <a class="demo-live" href="/demos/estetica-2/" target="_blank" rel="noopener noreferrer" aria-label="Abrir site de clínica (exemplo 2) ao vivo">
+      <div class="mockup mockup-demo">
+        <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">esteticapremium.com.br</span></div>
+        <div class="mockup-screen mockup-screen--demo">
+          <iframe class="demo-iframe" src="/demos/estetica-2/" title="Site de clínica — exemplo 2" loading="lazy" tabindex="-1" aria-hidden="true" scrolling="no"></iframe>
+          <span class="demo-overlay">Clique pra navegar ao vivo →</span>
+        </div>
+      </div>
+      <p class="deliverable-cap">Site de clínica · exemplo 2</p>
+    </a>
+  </div>
 
   <!-- Seção 4 — Por que a CLINUP (valor + confiança, posicionamento boutique) -->
   <section class="plans-proof reveal">
