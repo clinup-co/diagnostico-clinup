@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./aura-icon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <title>Aura Estética | Harmonização Facial &amp; Rejuvenescimento Premium em São Paulo</title>
+    <meta
+      name="description"
+      content="Clínica de estética avançada no Itaim Bibi, São Paulo. Harmonização facial, rejuvenescimento natural e tecnologias de ponta como Ultraformer MPT e laser Lavieen, com atendimento exclusivo."
+    />
+    <link rel="canonical" href="https://www.auraestetica.com.br/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:url" content="https://www.auraestetica.com.br/" />
+    <meta
+      property="og:title"
+      content="Aura Estética | Harmonização Facial &amp; Rejuvenescimento Premium em São Paulo"
+    />
+    <meta
+      property="og:description"
+      content="Harmonização facial, rejuvenescimento natural e tecnologias de ponta (Ultraformer MPT, laser Lavieen) com olhar artístico e atendimento exclusivo no Itaim Bibi."
+    />
+    <meta
+      property="og:image"
+      content="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=2200&h=1400&fm=webp&q=80"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <script type="module" crossorigin src="./assets/index-DUoukJ8C.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Cl9wEdMO.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+      (function () {
+        var inDist = location.pathname.includes('/dist/');
+        var isLocalHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+        var redirectToDist = function () {
+          location.replace(new URL('./dist/index.html', location.href));
+        };
+
+        if (inDist) return;
+
+        if (location.protocol === 'file:') {
+          redirectToDist();
+          return;
+        }
+
+        if (isLocalHost) {
+          window.setTimeout(function () {
+            var root = document.getElementById('root');
+            if (root && root.children.length > 0) return;
+
+            fetch('/@vite/client', { method: 'HEAD' })
+              .then(function (response) {
+                if (!response.ok) redirectToDist();
+              })
+              .catch(redirectToDist);
+          }, 1200);
+        }
+      })();
+    </script>
+  </body>
+</html>
