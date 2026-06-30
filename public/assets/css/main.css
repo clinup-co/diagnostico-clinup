@@ -210,6 +210,7 @@ main {
   font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
   margin-bottom: 20px;
 }
+.result-badge svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .result-badge.critical { background: rgba(178,58,46,0.10); border: 1px solid rgba(178,58,46,0.28); color: var(--red); }
 .result-badge.moderate { background: rgba(154,82,8,0.10); border: 1px solid rgba(154,82,8,0.28); color: var(--orange); }
 .result-badge.good { background: rgba(91,196,240,0.12); border: 1px solid rgba(12,111,152,0.28); color: var(--blue); }
@@ -233,10 +234,11 @@ main {
   border-radius: 14px; padding: 18px 20px;
   box-shadow: var(--shadow-sm);
 }
-.finding-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-.finding-icon.red { background: rgba(178,58,46,0.12); }
-.finding-icon.orange { background: rgba(154,82,8,0.12); }
-.finding-icon.blue { background: rgba(91,196,240,0.14); }
+.finding-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.finding-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.75; stroke-linecap: round; stroke-linejoin: round; display: block; }
+.finding-icon.red { background: rgba(178,58,46,0.12); color: var(--red); }
+.finding-icon.orange { background: rgba(154,82,8,0.12); color: var(--orange); }
+.finding-icon.blue { background: rgba(91,196,240,0.14); color: var(--blue); }
 .finding-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 4px; }
 .finding-desc { font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.55; }
 

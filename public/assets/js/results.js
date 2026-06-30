@@ -166,7 +166,7 @@ function buildPresentationModel() {
 
   let badge, title, subtitle, ctaTitle, ctaDesc, ctaLabel, sectionLabel;
   if (level === 'good') {
-    badge        = '<div class="result-badge good">✅ Boa base</div>';
+    badge        = '<div class="result-badge good"><svg viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>Boa base</div>';
     title        = 'Sua clínica já vai bem. Agora é só ajustar uns detalhes.';
     subtitle     = 'As pessoas já te acham, entram em contato e parte marca consulta. Agora a gente vê onde uns ajustes pequenos fazem você fechar mais, com mais regularidade.';
     ctaTitle     = 'Veja como fazer isso na prática';
@@ -174,7 +174,7 @@ function buildPresentationModel() {
     ctaLabel     = 'Quero ver onde melhorar';
     sectionLabel = 'O que achamos — e onde dá pra melhorar';
   } else if (level === 'moderate') {
-    badge        = '<div class="result-badge moderate">⚠️ Uns pontos soltos</div>';
+    badge        = '<div class="result-badge moderate"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Uns pontos soltos</div>';
     title        = 'Sua clínica atrai gente. Mas perde paciente no meio do caminho.';
     subtitle     = 'Chega gente interessada, mas parte some antes de marcar. Falta seu site, seu WhatsApp e seu atendimento trabalharem juntos.';
     ctaTitle     = 'Veja como fazer isso na prática';
@@ -182,7 +182,7 @@ function buildPresentationModel() {
     ctaLabel     = 'Quero ver onde estou perdendo';
     sectionLabel = 'O que achamos na sua clínica';
   } else {
-    badge        = '<div class="result-badge critical">🚨 Vários pontos travando</div>';
+    badge        = '<div class="result-badge critical"><svg viewBox="0 0 24 24"><path d="M7.86 2h8.28L22 7.86v8.28L16.14 22H7.86L2 16.14V7.86z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>Vários pontos travando</div>';
     title        = 'Tem mais de uma coisa travando sua clínica ao mesmo tempo.';
     subtitle     = 'Quando o site, o jeito de te achar e o WhatsApp falham juntos, você perde muito mais paciente no caminho. Cada ponto tem conserto — e a ordem de arrumar importa.';
     ctaTitle     = 'Veja como fazer isso na prática';
@@ -237,112 +237,112 @@ function selectInsights(level) {
   // Q1 — Presença digital
   if (a[1] === 3) {
     if (level === 'moderate')
-      pool.push({icon:'🌐', type:'orange', severity:'warning',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', type:'orange', severity:'warning',
         title:'Sem site',
         desc:'Quem procura sua clínica no Google não acha nada que passe confiança. O paciente desiste antes de falar com você.'});
     else
-      pool.push({icon:'🌐', type:'red',    severity:'warning',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', type:'red',    severity:'warning',
         title:'Sem site',
         desc:'Quem procura sua clínica no Google não acha nada que passe confiança. O paciente desiste antes de falar com você.'});
   } else if (a[1] === 2)
-    pool.push({icon:'🌐', type:'orange', severity:'warning',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', type:'orange', severity:'warning',
       title:'Site fraco',
       desc:'Site velho ou bagunçado passa impressão de descuido. Às vezes atrapalha mais do que ajuda.'});
   else
-    pool.push({icon:'🌐', type:'blue',   severity:'strength',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', type:'blue',   severity:'strength',
       title:'Você é achado na internet',
       desc:'O básico funciona. Agora é fazer ele trazer paciente de verdade, não só existir.'});
 
   // Q2 — Atração de interessados
   if (a[2] === 2)
-    pool.push({icon:'📣', type:'orange', severity:'warning',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>', type:'orange', severity:'warning',
       title:'Depende de indicação',
       desc:'Indicação é ótimo sinal, mas você não controla. Quando para de vir, para de chegar paciente novo.'});
   else if (a[2] === 1)
-    pool.push({icon:'📣', type:'orange', severity:'opportunity',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>', type:'orange', severity:'opportunity',
       title:'Você depende de um lugar só',
       desc:'Crescer com um lugar só funciona até certo ponto. Se ele cair, seu paciente novo cai junto — e isso você não controla.'});
   else
-    pool.push({icon:'📣', type:'blue',   severity:'strength',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>', type:'blue',   severity:'strength',
       title:'O paciente te acha de vários jeitos',
       desc:'Isso é ótimo. Agora é olhar o que chega de cada lugar e garantir que vire consulta.'});
 
   // Q3 — Conversão no WhatsApp
   if (a[3] === 2) {
     if (level === 'moderate')
-      pool.push({icon:'💬', type:'orange', severity:'warning',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>', type:'orange', severity:'warning',
         title:'Muita gente some no WhatsApp',
         desc:'O WhatsApp é onde o paciente decide. Perder gente ali, na maioria das vezes, é falta de organização — não falta de interesse.'});
     else
-      pool.push({icon:'💬', type:'red',    severity:'warning',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>', type:'red',    severity:'warning',
         title:'Muita gente some no WhatsApp',
         desc:'O WhatsApp é onde o paciente decide. Perder gente ali, na maioria das vezes, é falta de organização — não falta de interesse.'});
   } else if (a[3] === 1)
-    pool.push({icon:'💬', type:'orange', severity:'opportunity',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>', type:'orange', severity:'opportunity',
       title:'Dá pra fechar mais no WhatsApp',
       desc:'Metade fechando é metade escapando. Com o atendimento organizado, esse número sobe sem precisar de mais gente.'});
   else
-    pool.push({icon:'💬', type:'blue',   severity:'strength',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>', type:'blue',   severity:'strength',
       title:'Você fecha bem no WhatsApp',
       desc:'Quem fala com você, marca. Agora é trazer mais gente certa até aqui.'});
 
   // Q4 — Prontidão (level-aware)
   if (level === 'good') {
     if (a[4] === 0)
-      pool.push({icon:'⚡', type:'blue',   severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>', type:'blue',   severity:'opportunity',
         title:'Pronto pra dar o próximo passo',
         desc:'Sua clínica está preparada. Um olhar mais de perto mostra os pontos certos pra melhorar e crescer com controle.'});
     else if (a[4] === 1)
-      pool.push({icon:'📅', type:'blue',   severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>', type:'blue',   severity:'opportunity',
         title:'Bom momento pra olhar de perto',
         desc:'Com o básico no lugar, agora é achar o que dá pra melhorar e fazer com calma e plano.'});
     else
-      pool.push({icon:'🔍', type:'blue',   severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>', type:'blue',   severity:'opportunity',
         title:'Boa hora pra planejar o próximo nível',
         desc:'Avaliar antes de agir é o certo quando a base já está firme. Um olhar organizado mostra o que vale a pena fazer primeiro.'});
   } else if (level === 'critical') {
     if (a[4] === 0)
-      pool.push({icon:'⚡', type:'blue',   severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>', type:'blue',   severity:'opportunity',
         title:'Você quer agir — agora é definir a ordem',
         desc:'Ver que precisa agir já é o começo. O teste já achou os problemas — falta decidir por qual começar.'});
     else if (a[4] === 1)
-      pool.push({icon:'📅', type:'orange', severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>', type:'orange', severity:'opportunity',
         title:'Você tem um prazo — mas os problemas seguem',
         desc:'Ter um prazo é melhor do que nenhum. Cada ponto arrumado destrava uma parte da sua clínica.'});
     else
-      pool.push({icon:'🔍', type:'orange', severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>', type:'orange', severity:'opportunity',
         title:'Por onde começar — essa é a pergunta certa',
         desc:'Saber a ordem de arrumar faz toda diferença quando tem vários problemas juntos. O teste já mostrou — falta virar um plano.'});
   } else {
     if (a[4] === 0)
-      pool.push({icon:'⚡', type:'blue',   severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>', type:'blue',   severity:'opportunity',
         title:'Boa hora pra organizar',
         desc:'Estar pronto pra agir é uma vantagem. Com os pontos achados, arrumar agora faz você perder menos tempo e menos paciente.'});
     else if (a[4] === 1)
-      pool.push({icon:'📅', type:'orange', severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>', type:'orange', severity:'opportunity',
         title:'Dá pra melhorar agora',
         desc:'Ter um prazo é melhor do que nenhum. Enquanto as pontas seguem soltas, sua clínica rende menos do que podia.'});
     else
-      pool.push({icon:'🔍', type:'orange', severity:'opportunity',
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>', type:'orange', severity:'opportunity',
         title:'Ainda avaliando? Esse é o próximo passo',
         desc:'Entender antes de agir faz sentido. Com as pontas soltas, ver as prioridades ajuda a decidir por onde começar.'});
   }
 
   // Q5 — Faturamento
   if (a[5] === 3)
-    pool.push({icon:'💡', type:'orange', severity:'opportunity',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>', type:'orange', severity:'opportunity',
       title:'Começo de jornada — muito a crescer',
       desc:'Clínicas nessa fase são as que mais têm espaço pra crescer. Organizar agora como você traz paciente acelera muito o que vem.'});
   else if (a[5] === 2)
-    pool.push({icon:'📊', type:'blue',   severity:'strength',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg>', type:'blue',   severity:'strength',
       title:'Você está crescendo',
       desc:'Sua clínica está crescendo. Com um jeito mais organizado de trazer paciente, isso acelera e fica mais previsível.'});
   else if (a[5] === 1)
-    pool.push({icon:'🚀', type:'blue',   severity:'strength',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>', type:'blue',   severity:'strength',
       title:'Clínica firme',
       desc:'Tem paciente e o serviço funciona. O próximo nível é trazer paciente de um jeito que não dependa da sorte.'});
   else if ((quizLeadData.respostas || {}).faturamento_mensal !== 'Prefiro não informar')
-    pool.push({icon:'🏆', type:'blue',   severity:'strength',
+    pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>', type:'blue',   severity:'strength',
       title:'Clínica estabelecida',
       desc:'O volume alto mostra que dá certo. Agora o desafio é continuar crescendo com organização, não só no esforço.'});
 
