@@ -319,10 +319,10 @@ header.plans-header {
 }
 /* Card destaque (Profissional / recomendado) — diferenciação ampliada */
 .plan-card.plan-featured {
-  transform: scale(1.03);
-  border-width: 2px;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 4px rgba(12,111,152,0.08), var(--shadow-lg);
+  transform: scale(1.04);
+  border: 2px solid var(--blue);
+  background: linear-gradient(180deg, rgba(91,196,240,0.06), var(--card) 120px);
+  box-shadow: 0 0 0 4px rgba(12,111,152,0.12), var(--shadow-lg);
   z-index: 1;
 }
 @media (max-width: 768px) {
@@ -415,6 +415,17 @@ header.plans-header {
   margin-bottom: 18px;
   width: fit-content;
 }
+/* ── Selo flutuando acima do card (quebra a borda superior, máximo destaque) ── */
+.plan-card { margin-top: 18px; }
+.plan-rectag, .plan-badge {
+  position: absolute;
+  top: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(12,111,152,0.28);
+}
 /* Card de feature recomendado: realce + etiqueta */
 .feature-item.is-rec {
   position: relative;
@@ -478,10 +489,26 @@ header.plans-header {
 .plan-note {
   font-size: 13px;
   font-weight: 500;
-  color: var(--sub);
+  color: var(--body);
   line-height: 1.5;
-  margin: -14px 0 22px;
+  margin: 0 0 22px;
+  background: rgba(14,122,72,0.05);
+  border-left: 3px solid var(--green);
+  border-radius: 8px;
+  padding: 10px 12px;
 }
+.plan-note span { color: var(--green); font-weight: 700; }
+.plan-trust {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sub);
+  line-height: 1.4;
+  margin-top: 10px;
+}
+.plan-trust span { color: var(--green); font-weight: 700; }
+.plan-card.plan-scale .plan-trust { color: rgba(255,255,255,0.6); }
+.plan-card.plan-scale .plan-trust span { color: #3BC07D; }
 .plan-bullets {
   list-style: none;
   flex: 1;
@@ -720,7 +747,7 @@ header.plans-header {
   padding: 12px 24px;
   font-family: 'Sora', sans-serif;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   color: var(--blue);
   text-decoration: none;
   background: rgba(91,196,240,0.07);
@@ -888,7 +915,7 @@ header.plans-header {
       </div>
     </div>
 
-    <a href="#planos" class="plans-anchor-cta">Ver planos e valores ↓</a>
+    <a href="#planos" class="plans-anchor-cta">Ver os planos e quanto custa resolver isso →</a>
   </section>
 
   <!-- Seção 3 — Tagline de diferenciação (movida pra logo abaixo do hero) -->
@@ -1006,9 +1033,6 @@ header.plans-header {
     <div class="step-item"><div class="step-num">3</div><div class="step-title">Mais pacientes, menos esforço</div><div class="step-desc">Sua clínica para de perder quem já estava interessado. Tudo trabalha por você todo dia, enquanto você cuida do atendimento.</div></div>
   </div>
 
-  <!-- Linha de honestidade -->
-  <p class="plans-honesty reveal">A CLINUP não promete milagre nem agenda lotada da noite pro dia. O que a gente entrega é organização e um site profissional — e isso, no dia a dia, faz sua clínica aproveitar melhor o interesse que já tem.</p>
-
   <!-- Seção 7 — Garantia (risco zero), logo acima dos planos -->
   <div class="plans-guarantee reveal">
     <div class="plans-guarantee-icon" aria-hidden="true">
@@ -1044,6 +1068,7 @@ header.plans-header {
          aria-label="Agendar conversa sobre o Plano Essencial">
         Agendar conversa sobre o Essencial →
       </a>
+      <p class="plan-trust"><span>✓</span> Conversa grátis · sem compromisso</p>
     </div>
 
     <!-- Plano Profissional -->
@@ -1061,13 +1086,14 @@ header.plans-header {
         <li>10 posts profissionais por mês</li>
         <li>1 rodada de ajuste</li>
       </ul>
-      <p class="plan-note">Do 8º dia em diante, o total fica R$ 997/mês (plano) + R$ 59,90/mês (ferramenta).</p>
+      <p class="plan-note"><span>✓</span> Transparência total: a ferramenta de WhatsApp é grátis por 7 dias. Depois, R$59,90/mês pagos direto à plataforma — separado do plano e no seu controle.</p>
       <a class="plan-btn plan-btn-secondary"
          href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20uma%20conversa%20sobre%20o%20Plano%20Profissional%20(R%24%20997%2Fm%C3%AAs)."
          target="_blank" rel="noopener noreferrer"
          aria-label="Agendar conversa sobre o Plano Profissional">
         Quero agendar sobre o Profissional →
       </a>
+      <p class="plan-trust"><span>✓</span> Garantia de devolução · sem fidelidade · poucas vagas/mês</p>
     </div>
 
     <!-- Plano Escala -->
@@ -1091,6 +1117,7 @@ header.plans-header {
          aria-label="Solicitar proposta personalizada do Plano Escala">
         Solicitar proposta personalizada →
       </a>
+      <p class="plan-trust"><span>✓</span> Proposta sob medida · sem compromisso</p>
     </div>
 
   </div>
@@ -1115,6 +1142,10 @@ header.plans-header {
       <p>Sim. O site, os textos e tudo mais são feitos pra sua especialidade e pro tipo de paciente que você atende.</p>
     </details>
     <details>
+      <summary>Vocês garantem agenda lotada?</summary>
+      <p>Não, e desconfie de quem garante. O que a gente garante é organização, prazo e devolução se não fizer sentido — o resto é a sua clínica aproveitando melhor o interesse que já chega.</p>
+    </details>
+    <details>
       <summary>Como funciona a garantia de devolução?</summary>
       <p>A gente entrega no prazo e você vê tudo antes de publicar. Se não fizer sentido pra sua clínica, dentro do que foi combinado, devolvemos seu dinheiro. Risco zero pra você.</p>
     </details>
@@ -1123,7 +1154,7 @@ header.plans-header {
   <!-- Seção 11 — Closing CTA -->
   <section class="plans-closing-cta reveal">
     <p class="plans-closing">Ainda na dúvida de qual plano faz sentido pra sua clínica? Fala com a gente — sem compromisso.</p>
-    <a class="plan-btn plan-btn-primary plans-closing-btn"
+    <a class="plan-btn plan-btn-secondary plans-closing-btn"
        href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos."
        target="_blank" rel="noopener noreferrer"
        aria-label="Falar com a CLINUP no WhatsApp">
@@ -1178,17 +1209,17 @@ header.plans-header {
   var COPY = {
     bom: {
       h:     'Sua clínica já vai bem. A CLINUP melhora seu site e seu atendimento pra você <span class="hl-accent">fechar mais</span>.',
-      sub:   'Veja os planos abaixo.',
+      sub:   'Você já atrai e fecha — mas ainda escapa gente no caminho. A gente tapa esses furos pra você não deixar consulta na mesa.',
       badge: 'essencial'
     },
     mediano: {
       h:     'Sua clínica atrai gente, mas <span class="hl-accent">perde paciente</span> no atendimento.',
-      sub:   'A CLINUP organiza seu WhatsApp, melhora seu site e ajuda você a fechar mais.',
+      sub:   'Cada paciente que te chama e não marca é uma consulta que foi embora. A CLINUP fecha esse buraco: site, WhatsApp e atendimento puxando o interesse até a agenda.',
       badge: 'profissional'
     },
     critico: {
       h:     'Sua clínica pode render mais, mas <span class="hl-accent">falta organização</span>. A CLINUP cuida do seu site, do WhatsApp e do atendimento pra você fechar mais.',
-      sub:   'Veja os planos abaixo.',
+      sub:   'Tem dinheiro saindo pela porta em consulta que não marca. A CLINUP organiza site, WhatsApp e atendimento pra estancar isso.',
       badge: 'profissional'
     }
   };
