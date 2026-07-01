@@ -1500,6 +1500,8 @@ body.demo-modal-open { overflow: hidden; }
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
   els.forEach(function (el) { io.observe(el); });
+  // Rede de segurança: garante que nada fique invisível (screenshots, previews, observer travado)
+  setTimeout(function () { els.forEach(function (el) { el.classList.add('is-visible'); }); }, 2500);
 }());
 </script>
 
