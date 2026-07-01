@@ -292,6 +292,41 @@ header.plans-header {
 }
 .demo-live:hover .demo-overlay { opacity: 1; }
 
+/* ── Modal do demo (lightbox navegável) ── */
+.demo-modal { position: fixed; inset: 0; z-index: 1000; display: none; }
+.demo-modal.is-open { display: block; }
+.demo-modal-backdrop { position: absolute; inset: 0; background: rgba(10,22,32,0.72); }
+.demo-modal-panel {
+  position: absolute; top: 3vh; bottom: 3vh; left: 50%; transform: translateX(-50%);
+  width: 94vw; max-width: 1200px;
+  display: flex; flex-direction: column;
+  background: var(--card); border-radius: 14px; overflow: hidden;
+  box-shadow: 0 24px 70px rgba(0,0,0,0.45);
+}
+.demo-modal-bar {
+  display: flex; align-items: center; gap: 12px; flex-shrink: 0;
+  padding: 10px 14px; border-bottom: 1px solid var(--border);
+  background: rgba(16,50,75,0.03);
+}
+.demo-modal-title { flex: 1; min-width: 0; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 13px; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.demo-modal-newtab { font-size: 12px; font-weight: 600; color: var(--blue); text-decoration: none; white-space: nowrap; }
+.demo-modal-newtab:hover { text-decoration: underline; }
+.demo-modal-close {
+  width: 32px; height: 32px; flex-shrink: 0; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--card);
+  color: var(--sub); font-size: 15px; line-height: 1; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.demo-modal-close:hover { color: var(--white); border-color: var(--blue); }
+.demo-modal-iframe { flex: 1; width: 100%; border: 0; background: #fff; }
+body.demo-modal-open { overflow: hidden; }
+/* Mobile: sem thumbnail pesado — frame + CTA, e o modal cuida do ao vivo */
+@media (max-width: 768px) {
+  .demo-iframe { display: none; }
+  .mockup-screen--demo { background: linear-gradient(135deg, rgba(91,196,240,0.12), rgba(242,247,251,0.65)); }
+  .demo-overlay { opacity: 1; }
+}
+
 /* ── O que a CLINUP faz (features) — mobile-first ── */
 .plans-features {
   display: grid;
@@ -1273,6 +1308,19 @@ header.plans-header {
   <p>© 2026 CLINUP. Todos os direitos reservados.</p>
 </footer>
 
+<!-- Modal/lightbox dos demos (navegável sobre a própria página) -->
+<div class="demo-modal" id="demoModal" aria-hidden="true">
+  <div class="demo-modal-backdrop" data-demo-close></div>
+  <div class="demo-modal-panel" role="dialog" aria-modal="true" aria-label="Demonstração de site de clínica ao vivo">
+    <div class="demo-modal-bar">
+      <span class="demo-modal-title" id="demoModalTitle">Demonstração ao vivo</span>
+      <a class="demo-modal-newtab" id="demoModalNewtab" href="#" target="_blank" rel="noopener noreferrer">Abrir em nova aba ↗</a>
+      <button class="demo-modal-close" type="button" data-demo-close aria-label="Fechar demonstração">✕</button>
+    </div>
+    <iframe class="demo-modal-iframe" id="demoModalFrame" title="Site de clínica — demonstração ao vivo" src="about:blank"></iframe>
+  </div>
+</div>
+
 <script>
 (function () {
   // resultado: ?resultado= OU clinup_lead.resultado; null se ausente (acesso direto)
@@ -1434,6 +1482,44 @@ header.plans-header {
   }
   inp.addEventListener('input', update);
   update();
+}());
+</script>
+
+<script>
+// Modal/lightbox dos demos: navega o site de exemplo sem sair da landing
+(function () {
+  var modal  = document.getElementById('demoModal');
+  var frame  = document.getElementById('demoModalFrame');
+  var newtab = document.getElementById('demoModalNewtab');
+  var title  = document.getElementById('demoModalTitle');
+  if (!modal || !frame) return;
+  function openDemo(url, label) {
+    frame.src = url;
+    if (newtab) newtab.href = url;
+    if (title && label) title.textContent = label + ' — ao vivo';
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('demo-modal-open');
+  }
+  function closeDemo() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('demo-modal-open');
+    frame.src = 'about:blank';
+  }
+  document.querySelectorAll('.demo-live').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      var cap = a.querySelector('.deliverable-cap');
+      openDemo(a.getAttribute('href'), cap ? cap.textContent : 'Demonstração');
+    });
+  });
+  modal.addEventListener('click', function (e) {
+    if (e.target.hasAttribute('data-demo-close')) closeDemo();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && modal.classList.contains('is-open')) closeDemo();
+  });
 }());
 </script>
 
