@@ -385,7 +385,7 @@ body.demo-modal-open { overflow: hidden; }
   align-items: start;
 }
 @media (min-width: 768px) {
-  .plans-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .plans-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; max-width: 720px; margin-left: auto; margin-right: auto; }
 }
 .plan-card {
   background: var(--card);
@@ -746,6 +746,23 @@ body.demo-modal-open { overflow: hidden; }
 .roi-suffix { font-size: 13px; color: var(--sub); font-weight: 500; }
 .roi-out { font-size: 15px; font-weight: 500; color: var(--body); line-height: 1.6; }
 .roi-out strong { color: var(--blue); font-weight: 700; }
+/* ── Faixa de upsell "para redes / alto volume" (substitui o card Escala) ── */
+.plans-enterprise {
+  display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
+  max-width: 720px; margin: 20px auto 0;
+  padding: 18px 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow-sm);
+  text-decoration: none;
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.plans-enterprise:hover { border-color: rgba(12,111,152,0.4); box-shadow: var(--shadow-md); }
+.plans-enterprise-txt { font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.5; }
+.plans-enterprise-txt strong { color: var(--white); font-weight: 700; }
+.plans-enterprise-cta { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 14px; color: var(--blue); white-space: nowrap; flex-shrink: 0; }
 
 /* ── Linha de honestidade ── */
 .plans-honesty {
@@ -1155,31 +1172,13 @@ body.demo-modal-open { overflow: hidden; }
       <p class="plan-trust"><span>✓</span> Garantia de devolução · sem fidelidade · poucas vagas/mês</p>
     </div>
 
-    <!-- Plano Escala -->
-    <div class="plan-card plan-scale" id="card-escala">
-      <div class="plan-badge" id="badge-escala"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
-      <div class="plan-rectag" id="rectag-escala">Recomendado pro seu caso</div>
-      <div class="plan-cat-badge">Para redes e clínicas em expansão</div>
-      <div class="plan-name">Escala</div>
-      <div class="plan-price-consult">Sob consulta</div>
-      <div class="plan-subtitle">Pra clínica que precisa de algo sob medida</div>
-      <p class="plan-profile">Indicado para redes e clínicas de alto volume</p>
-      <ul class="plan-bullets">
-        <li>Cuidamos de várias unidades</li>
-        <li>Estratégia completa, do primeiro contato ao agendamento</li>
-        <li>Acompanhamento toda semana, só pra você</li>
-        <li>Relatório de resultados todo mês</li>
-      </ul>
-      <a class="plan-btn plan-btn-secondary"
-         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20solicitar%20uma%20proposta%20personalizada%20(Plano%20Escala)."
-         target="_blank" rel="noopener noreferrer"
-         aria-label="Solicitar proposta personalizada do Plano Escala">
-        Solicitar proposta personalizada →
-      </a>
-      <p class="plan-trust"><span>✓</span> Proposta sob medida · sem compromisso</p>
-    </div>
-
   </div>
+
+  <!-- Faixa de upsell: redes / alto volume (o antigo "Escala" virou proposta sob medida) -->
+  <a class="plans-enterprise reveal" href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20tenho%20uma%20rede%20ou%20alto%20volume%20de%20atendimentos.%20Quero%20uma%20proposta%20sob%20medida." target="_blank" rel="noopener noreferrer" aria-label="Falar sobre proposta sob medida para redes ou alto volume">
+    <span class="plans-enterprise-txt"><strong>Rede de clínicas ou alto volume?</strong> A gente monta uma proposta sob medida pra você.</span>
+    <span class="plans-enterprise-cta">Falar sobre proposta →</span>
+  </a>
 
   <!-- Seção 10 — FAQ -->
   <p class="plans-section-label reveal">Perguntas frequentes</p>
