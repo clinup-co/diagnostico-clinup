@@ -1116,7 +1116,7 @@ body.demo-modal-open { overflow: hidden; }
   <div class="demo-grid reveal-group">
     <a class="demo-live" href="/demos/aura-estetica/" target="_blank" rel="noopener noreferrer" aria-label="Abrir site de clínica (exemplo 1) ao vivo">
       <div class="mockup mockup-demo">
-        <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">clinica-exemplo.com.br</span></div>
+        <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">auraestetica.com.br</span></div>
         <div class="mockup-screen mockup-screen--demo">
           <img class="demo-thumb" src="/assets/img/demo-aura.jpg" alt="Site de clínica Aura Estética" width="1280" height="800" loading="lazy">
           <span class="demo-overlay">Ver o site ao vivo →</span>
@@ -1126,7 +1126,7 @@ body.demo-modal-open { overflow: hidden; }
     </a>
     <a class="demo-live" href="/demos/estetica-2/" target="_blank" rel="noopener noreferrer" aria-label="Abrir site de clínica (exemplo 2) ao vivo">
       <div class="mockup mockup-demo">
-        <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">esteticapremium.com.br</span></div>
+        <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">luminaface.com.br</span></div>
         <div class="mockup-screen mockup-screen--demo">
           <img class="demo-thumb" src="/assets/img/demo-lumina.jpg" alt="Site de clínica LuminaFace" width="1280" height="800" loading="lazy">
           <span class="demo-overlay">Ver o site ao vivo →</span>
@@ -1336,7 +1336,7 @@ body.demo-modal-open { overflow: hidden; }
   <!-- Seção 12 — Por trás da CLINUP -->
   <section class="plans-team reveal">
     <p class="plans-team-label">Por trás da CLINUP</p>
-    <p class="plans-team-text">A CLINUP nasceu de uma ideia simples: clínica boa não pode perder paciente por estar desorganizada na internet. Por isso a gente trabalha só com clínicas e faz tudo aqui dentro — a ideia, a parte técnica e a execução — por quem realmente sabe programar, sem template pronto revendido. E é tudo direto e na transparência: você fala com quem faz, aprova cada detalhe antes de publicar e só continua se fizer sentido pra você.</p>
+    <p class="plans-team-text">A CLINUP existe por uma ideia simples: clínica boa não pode perder paciente por estar desorganizada na internet. Por isso a gente trabalha só com clínicas e faz tudo aqui dentro — a ideia, a parte técnica e a execução — por quem realmente sabe programar, sem template pronto revendido. E é tudo direto e na transparência: você fala com quem faz, aprova cada detalhe antes de publicar e só continua se fizer sentido pra você.</p>
   </section>
 
 </main>
@@ -1457,7 +1457,7 @@ body.demo-modal-open { overflow: hidden; }
   var pts = hasResult ? getPontos() : null;
   function cardState(card) {
     if (!pts) return 'neutro';
-    if (level === 'critico') return 'rec';          // regra de segurança: todos recomendados
+    if (level === 'critico') return 'neutro';       // crítico: não marca todos (tudo recomendado = nada recomendado)
     var p1 = pts[1], p2 = pts[2], p3 = pts[3];      // "recomendado" tem prioridade sobre "apagado"
     switch (card) {
       case 'site':     if (p1 === 0 || p1 === 8)  return 'rec'; if (p1 === 20) return 'dim'; return 'neutro';
