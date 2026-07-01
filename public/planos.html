@@ -736,12 +736,14 @@ body.demo-modal-open { overflow: hidden; }
 }
 .roi-lead { font-size: 15px; font-weight: 500; color: var(--body); margin-bottom: 16px; }
 .roi-lead strong { color: var(--white); font-weight: 700; }
+.roi-inputs { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 16px; }
 .roi-calc {
   display: inline-flex; align-items: center; gap: 8px;
   background: rgba(91,196,240,0.08);
   border: 1.5px solid rgba(91,196,240,0.3);
-  border-radius: 12px; padding: 8px 14px; margin-bottom: 16px;
+  border-radius: 12px; padding: 8px 14px;
 }
+.roi-input--sm { width: 52px; }
 .roi-prefix { font-family: 'Sora', sans-serif; font-weight: 800; color: var(--blue); font-size: 18px; }
 .roi-input {
   width: 96px; border: none; background: transparent; outline: none;
@@ -1117,11 +1119,17 @@ body.demo-modal-open { overflow: hidden; }
 
   <!-- Seção 8 — Âncora de valor -->
   <div class="roi-box reveal">
-    <p class="roi-lead">Faça a conta: quanto vale <strong>uma consulta</strong> na sua clínica?</p>
-    <div class="roi-calc">
-      <span class="roi-prefix">R$</span>
-      <input type="number" id="roiInput" class="roi-input" inputmode="numeric" value="400" min="0" max="100000" step="10" aria-label="Valor de uma consulta na sua clínica">
-      <span class="roi-suffix">por consulta</span>
+    <p class="roi-lead">Faça a conta com os <strong>seus números</strong>:</p>
+    <div class="roi-inputs">
+      <div class="roi-calc">
+        <span class="roi-prefix">R$</span>
+        <input type="number" id="roiValue" class="roi-input" inputmode="numeric" value="400" min="0" max="100000" step="10" aria-label="Valor de uma consulta">
+        <span class="roi-suffix">por consulta</span>
+      </div>
+      <div class="roi-calc">
+        <input type="number" id="roiPatients" class="roi-input roi-input--sm" inputmode="numeric" value="1" min="0" max="50" step="1" aria-label="Pacientes recuperados por semana">
+        <span class="roi-suffix">paciente(s)/semana</span>
+      </div>
     </div>
     <p class="roi-out" id="roiOut"></p>
   </div>
@@ -1164,7 +1172,7 @@ body.demo-modal-open { overflow: hidden; }
       <ul class="plan-bullets">
         <li>Tudo do Essencial</li>
         <li>Revisão geral de como sua clínica aparece</li>
-        <li><span>Ferramenta de WhatsApp que responde automaticamente — <em>7 dias grátis; depois R$59,90/mês pagos direto à ferramenta, à parte do plano</em></span></li>
+        <li>Ferramenta de WhatsApp que responde automaticamente (7 dias grátis)</li>
         <li>10 posts profissionais por mês</li>
         <li>1 rodada de ajuste</li>
       </ul>
@@ -1471,21 +1479,31 @@ body.demo-modal-open { overflow: hidden; }
 </script>
 
 <script>
-// Calculadora de ROI honesta — o valor é do próprio visitante (nada inventado)
+// Calculadora de ROI — 2 números do próprio visitante (consulta + pacientes/semana)
 (function () {
-  var inp = document.getElementById('roiInput');
+  var val = document.getElementById('roiValue');
+  var pat = document.getElementById('roiPatients');
   var out = document.getElementById('roiOut');
-  if (!inp || !out) return;
+  if (!val || !pat || !out) return;
+  var PLANO = 297; // Essencial (o mais barato)
+  function fmt(n) { return Math.round(n).toLocaleString('pt-BR'); }
   function update() {
-    var v = Math.min(Math.max(parseFloat(inp.value) || 0, 0), 100000);
-    if (v <= 0) {
-      out.innerHTML = 'Recuperando só <strong>1 paciente por semana</strong> que hoje some, o plano costuma se pagar sozinho — e ainda sobra.';
+    var v = Math.min(Math.max(parseFloat(val.value) || 0, 0), 100000);
+    var p = Math.min(Math.max(parseFloat(pat.value) || 0, 0), 50);
+    var monthly = v * p * 4;
+    if (monthly <= 0) {
+      out.innerHTML = 'Coloque seus números aí em cima e veja quanto você recupera por mês.';
       return;
     }
-    var monthly = Math.round(v * 4);
-    out.innerHTML = 'Recuperando só <strong>1 paciente por semana</strong> que hoje some, são cerca de <strong>R$ ' + monthly.toLocaleString('pt-BR') + '/mês</strong> de volta no seu caixa — o plano se paga rápido.';
+    var net = monthly - PLANO;
+    if (net > 0) {
+      out.innerHTML = 'São cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> de volta no seu caixa. Tirando o plano Essencial (R$ 297), sobra <strong>~R$ ' + fmt(net) + ' líquido</strong> todo mês.';
+    } else {
+      out.innerHTML = 'São cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> de volta no seu caixa — já cobre boa parte do plano.';
+    }
   }
-  inp.addEventListener('input', update);
+  val.addEventListener('input', update);
+  pat.addEventListener('input', update);
   update();
 }());
 </script>
