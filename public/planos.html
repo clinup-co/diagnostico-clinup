@@ -335,9 +335,8 @@ body.demo-modal-open { overflow: hidden; }
 }
 .sticky-cta-plans {
   flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
-  padding: 13px 18px; border-radius: 10px;
-  border: 1.5px solid rgba(12,111,152,0.4); background: rgba(91,196,240,0.06);
-  color: var(--blue); font-family: 'Sora', sans-serif; font-weight: 800; font-size: 14px; text-decoration: none;
+  padding: 13px 8px; border: none; background: transparent;
+  color: var(--sub); font-family: 'Sora', sans-serif; font-weight: 700; font-size: 13px; text-decoration: none;
 }
 .sticky-cta-wpp {
   flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -679,25 +678,28 @@ body.demo-modal-open { overflow: hidden; }
   box-shadow: 0 8px 24px rgba(14,122,72,0.38);
 }
 .plan-btn-secondary {
-  background: rgba(91,196,240,0.06);
-  border: 1.5px solid rgba(12,111,152,0.4);
+  background: #fff;
+  border: 2px solid var(--blue);
   color: var(--blue);
+  box-shadow: 0 3px 12px rgba(12,111,152,0.14);
 }
 .plan-btn-secondary:hover {
   border-color: var(--blue);
-  background: rgba(91,196,240,0.12);
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 8px 20px rgba(12,111,152,0.26);
 }
 
 /* ── Garantia — reversão de risco (destaque, antes do preço) ── */
 .plans-guarantee {
   text-align: center;
-  padding: 24px 28px;
-  background: rgba(14,122,72,0.04);
-  border: 1.5px solid rgba(14,122,72,0.3);
-  border-radius: 14px;
+  padding: 28px 28px;
+  background: rgba(14,122,72,0.05);
+  border: 2px solid rgba(14,122,72,0.38);
+  border-radius: 16px;
   margin: 0 auto 20px;
   max-width: 680px;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 8px 26px rgba(14,122,72,0.10);
 }
 .plans-guarantee-icon {
   display: flex;
@@ -713,7 +715,7 @@ body.demo-modal-open { overflow: hidden; }
 }
 .plans-guarantee-title {
   font-family: 'Sora', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 800;
   color: var(--white);
   margin-bottom: 8px;
@@ -945,6 +947,7 @@ body.demo-modal-open { overflow: hidden; }
   transition: transform 0.15s, box-shadow 0.15s;
 }
 .plans-anchor-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(45,158,201,0.42); }
+.plans-anchor-cta--hero { margin-top: 22px; }
 #planos { scroll-margin-top: 24px; }
 
 /* ── Closing CTA (frase + ação geral) ── */
@@ -1086,6 +1089,8 @@ body.demo-modal-open { overflow: hidden; }
     <h1 id="plans-h"></h1>
     <p id="plans-sub"></p>
 
+    <a href="#planos" class="plans-anchor-cta plans-anchor-cta--hero">Ver planos e preços →</a>
+
     <div class="hero-qualifier">
       <div class="qualifier-col is-yes">
         <div class="qualifier-title"><span class="q-mark q-mark-yes">✓</span> Para você se…</div>
@@ -1149,7 +1154,7 @@ body.demo-modal-open { overflow: hidden; }
       <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
     </div>
     <div class="plans-guarantee-title">Risco zero para você</div>
-    <p>A gente entrega no prazo, você vê tudo antes de publicar e tem direito a um ajuste. Se não fizer sentido pra você, devolvemos seu dinheiro.</p>
+    <p>A gente entrega no prazo, você vê tudo antes de publicar e tem direito a um ajuste. Se não fizer sentido pra você, <strong>devolvemos seu dinheiro</strong>.</p>
   </div>
 
   <!-- Seção 8 — Âncora de valor -->
@@ -1162,7 +1167,7 @@ body.demo-modal-open { overflow: hidden; }
         <span class="roi-suffix">por consulta</span>
       </div>
       <div class="roi-calc">
-        <input type="number" id="roiPatients" class="roi-input roi-input--sm" inputmode="numeric" value="1" min="0" max="50" step="1" aria-label="Pacientes recuperados por semana">
+        <input type="number" id="roiPatients" class="roi-input roi-input--sm" inputmode="numeric" value="2" min="0" max="50" step="1" aria-label="Pacientes recuperados por semana">
         <span class="roi-suffix">paciente(s)/semana</span>
       </div>
     </div>
@@ -1415,8 +1420,8 @@ body.demo-modal-open { overflow: hidden; }
       badge: 'profissional'
     },
     critico: {
-      h:     'Sua clínica pode render mais, mas <span class="hl-accent">falta organização</span>. A CLINUP cuida do seu site, do WhatsApp e do atendimento pra você fechar mais.',
-      sub:   'Tem dinheiro saindo pela porta em consulta que não marca. A CLINUP organiza site, WhatsApp e atendimento pra estancar isso.',
+      h:     'Chega paciente todo dia — e some antes de marcar. Tem <span class="hl-accent">dinheiro saindo</span> da sua clínica em cada etapa.',
+      sub:   'Não é falta de paciente: é paciente que chega e escapa. A CLINUP organiza seu site, seu WhatsApp e o atendimento pra transformar contato em consulta marcada.',
       badge: 'profissional'
     }
   };
