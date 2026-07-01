@@ -507,6 +507,13 @@ body.demo-modal-open { overflow: hidden; }
   white-space: nowrap;
   box-shadow: 0 4px 12px rgba(12,111,152,0.28);
 }
+@media (max-width: 768px) {
+  /* Mobile: selo volta pro fluxo (não sobrepõe o card de cima) + espaçamento uniforme */
+  .plan-card { margin-top: 0; }
+  .plan-rectag, .plan-badge {
+    position: static; transform: none; margin: 0 0 14px; box-shadow: none;
+  }
+}
 /* Card de feature recomendado: realce + etiqueta */
 .feature-item.is-rec {
   position: relative;
@@ -1114,7 +1121,7 @@ body.demo-modal-open { overflow: hidden; }
     <p class="roi-lead">Faça a conta: quanto vale <strong>uma consulta</strong> na sua clínica?</p>
     <div class="roi-calc">
       <span class="roi-prefix">R$</span>
-      <input type="number" id="roiInput" class="roi-input" inputmode="numeric" value="400" min="0" aria-label="Valor de uma consulta na sua clínica">
+      <input type="number" id="roiInput" class="roi-input" inputmode="numeric" value="400" min="0" max="100000" step="10" aria-label="Valor de uma consulta na sua clínica">
       <span class="roi-suffix">por consulta</span>
     </div>
     <p class="roi-out" id="roiOut"></p>
@@ -1471,7 +1478,7 @@ body.demo-modal-open { overflow: hidden; }
   var out = document.getElementById('roiOut');
   if (!inp || !out) return;
   function update() {
-    var v = parseFloat(inp.value) || 0;
+    var v = Math.min(Math.max(parseFloat(inp.value) || 0, 0), 100000);
     if (v <= 0) {
       out.innerHTML = 'Recuperando só <strong>1 paciente por semana</strong> que hoje some, o plano costuma se pagar sozinho — e ainda sobra.';
       return;
