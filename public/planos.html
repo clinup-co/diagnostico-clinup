@@ -938,6 +938,13 @@ body.demo-modal-open { overflow: hidden; }
 }
 .plans-anchor-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(45,158,201,0.42); }
 .plans-anchor-cta--hero { margin-top: 22px; }
+.hero-wpp-link {
+  position: relative; z-index: 1;
+  display: block; margin-top: 12px;
+  font-family: 'Sora', sans-serif; font-weight: 700; font-size: 14px;
+  color: var(--green); text-decoration: none;
+}
+.hero-wpp-link:hover { text-decoration: underline; }
 #planos { scroll-margin-top: 24px; }
 
 /* ── Closing CTA (frase + ação geral) ── */
@@ -1080,6 +1087,7 @@ body.demo-modal-open { overflow: hidden; }
     <p id="plans-sub"></p>
 
     <a href="#planos" class="plans-anchor-cta plans-anchor-cta--hero">Ver planos e preços →</a>
+    <a href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos." target="_blank" rel="noopener noreferrer" class="hero-wpp-link">ou fale agora no WhatsApp →</a>
 
     <div class="hero-qualifier">
       <div class="qualifier-col is-yes">
@@ -1517,7 +1525,7 @@ body.demo-modal-open { overflow: hidden; }
     }
     var net = monthly - PLANO;
     if (net > 0) {
-      out.innerHTML = 'São cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> de volta no seu caixa. Tirando o plano Essencial (R$ 297), sobra <strong>~R$ ' + fmt(net) + ' líquido</strong> todo mês.';
+      out.innerHTML = 'São cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> de volta no seu caixa. Mesmo tirando o plano de entrada (R$ 297), sobra <strong>~R$ ' + fmt(net) + ' líquido</strong> todo mês.';
     } else {
       out.innerHTML = 'São cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> de volta no seu caixa — já cobre boa parte do plano.';
     }
