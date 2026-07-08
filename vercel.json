@@ -1,6 +1,7 @@
 {
   "version": 2,
   "rewrites": [
-    { "source": "/planos", "destination": "/planos.html" }
+    { "source": "/planos", "destination": "/planos.html" },
+    { "source": "/consultoria", "destination": "/consultoria.html" }
   ]
 }

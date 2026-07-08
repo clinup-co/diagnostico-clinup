@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Consultoria estratégica gratuita — CLINUP</title>
+<meta name="description" content="Agende uma conversa rápida e sem compromisso para entender o diagnóstico da sua clínica e por onde começar.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/main.css">
+<style>
+/* ── Página de consultoria (transição consultiva diagnóstico → WhatsApp) ──
+   Reaproveita os componentes do main.css: .result-badge, .section-label,
+   .finding, .cta-section, .cta-eyebrow/.cta-title/.cta-desc, .cta-note.
+   Só o layout específico da página fica aqui. */
+header.cons-header { justify-content: center; text-align: center; }
+
+.cons-page {
+  width: 100%; max-width: 640px;
+  margin: 0 auto; padding: 10px 24px 56px;
+  position: relative; z-index: 1;
+}
+
+.cons-hero { text-align: center; margin-bottom: 8px; }
+.cons-badge-wrap { min-height: 4px; }
+.cons-h {
+  font-family: 'Sora', sans-serif;
+  font-size: clamp(26px, 6vw, 36px);
+  font-weight: 800; line-height: 1.15; letter-spacing: -0.5px;
+  color: var(--white); margin-bottom: 14px;
+}
+.cons-h .hl { color: var(--blue); }
+.cons-sub {
+  font-size: 17px; font-weight: 500; color: var(--body);
+  line-height: 1.65; max-width: 520px; margin: 0 auto 26px;
+}
+
+/* Botão de WhatsApp — verde (ação real de WhatsApp, conforme o design system) */
+.cons-cta-wpp {
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+  background: var(--green); color: #fff;
+  font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 800;
+  border: none; border-radius: 12px; padding: 19px 28px;
+  text-decoration: none; width: 100%; cursor: pointer; letter-spacing: 0.3px;
+  box-shadow: 0 8px 22px rgba(14,122,72,0.28);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.cons-cta-wpp:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(14,122,72,0.42); }
+.cons-cta-wpp svg { width: 24px; height: 24px; flex-shrink: 0; fill: currentColor; }
+
+/* Como funciona — passos numerados (espelha o visual dos .finding) */
+.cons-steps { display: flex; flex-direction: column; gap: 12px; margin-bottom: 8px; }
+.cons-step {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 18px; box-shadow: var(--shadow-sm);
+}
+.cons-step-num {
+  flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
+  background: rgba(91,196,240,0.14); color: var(--blue);
+  font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+}
+.cons-step-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+.cons-step-desc { font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.55; }
+
+.cons-footer { text-align: center; font-size: 12px; color: var(--sub); padding: 28px 24px; }
+
+@media (max-width: 480px) {
+  .cons-page { padding: 6px 20px 48px; }
+  .finding { padding: 14px 16px; gap: 12px; }
+}
+</style>
+</head>
+<body>
+<div class="top-stripe"></div>
+
+<header class="cons-header">
+  <img src="assets/images/logo.png" alt="CLINUP" style="width:40px;height:40px;border-radius:50%;object-fit:contain;border:1.5px solid rgba(91,196,240,0.35);background:#0A1E30;padding:2px;">
+  <div class="logo-text">CLIN<em>UP</em></div>
+</header>
+
+<main class="cons-page">
+
+  <!-- Hero -->
+  <section class="cons-hero">
+    <div class="cons-badge-wrap"><span class="result-badge good" id="consBadge" style="display:none"></span></div>
+    <h1 class="cons-h" id="consH">Vamos olhar sua clínica juntos — <span class="hl">sem compromisso</span>.</h1>
+    <p class="cons-sub">Você já fez o diagnóstico. Agora, numa conversa rápida no WhatsApp, a gente entende o seu caso a fundo e te mostra por onde começar. Sem venda e sem compromisso.</p>
+    <a class="cons-cta-wpp" id="consCta" href="https://wa.me/5511951438583?text=Ol%C3%A1!%20Fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20a%20consultoria%20estrat%C3%A9gica%20gratuita." target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.16c-.24.68-1.42 1.31-1.96 1.36-.5.05-.98.23-3.36-.7-2.84-1.12-4.65-4-4.79-4.19-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07.99-2.36.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.81 2 .88 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.38-.43.51-.14.14-.29.29-.12.57.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.29 2.34 1.44.29.14.46.12.63-.07.17-.19.72-.85.91-1.14.19-.29.38-.24.65-.14.27.1 1.69.8 1.98.94.29.14.48.22.55.34.07.12.07.69-.17 1.37Z"/></svg>
+      Agendar minha consultoria gratuita
+    </a>
+    <p class="cta-note">Conversa gratuita · sem compromisso · você decide o que fizer sentido.</p>
+  </section>
+
+  <!-- O que você leva da conversa -->
+  <p class="section-label">O que você leva da conversa</p>
+  <div class="findings">
+    <div class="finding">
+      <div class="finding-icon blue"><svg viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg></div>
+      <div class="finding-body">
+        <div class="finding-title">A leitura do seu diagnóstico</div>
+        <div class="finding-desc">A gente passa pelos pontos que apareceram no seu teste e explica, sem jargão, o que cada um significa pra sua clínica.</div>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="finding-icon blue"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+      <div class="finding-body">
+        <div class="finding-title">As prioridades da sua clínica</div>
+        <div class="finding-desc">Onde está o maior vazamento de pacientes e o que resolver primeiro — pra você não gastar energia no lugar errado.</div>
+      </div>
+    </div>
+    <div class="finding">
+      <div class="finding-icon blue"><svg viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg></div>
+      <div class="finding-body">
+        <div class="finding-title">Um caminho claro</div>
+        <div class="finding-desc">Você sai da conversa sabendo o próximo passo. Se fizer sentido seguir com a CLINUP, a gente te mostra como. Se não, tudo bem também.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Como funciona -->
+  <p class="section-label">Como funciona</p>
+  <div class="cons-steps">
+    <div class="cons-step">
+      <div class="cons-step-num">1</div>
+      <div>
+        <div class="cons-step-title">Você chama no WhatsApp</div>
+        <div class="cons-step-desc">Toca no botão e cai direto na nossa conversa, com uma mensagem já pronta.</div>
+      </div>
+    </div>
+    <div class="cons-step">
+      <div class="cons-step-num">2</div>
+      <div>
+        <div class="cons-step-title">A gente marca um horário</div>
+        <div class="cons-step-desc">Combinamos um momento rápido que caiba na sua agenda.</div>
+      </div>
+    </div>
+    <div class="cons-step">
+      <div class="cons-step-num">3</div>
+      <div>
+        <div class="cons-step-title">Conversa direta, sem enrolação</div>
+        <div class="cons-step-desc">Uma conversa curta e honesta sobre a sua clínica. No fim, você decide o que fizer sentido.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA final -->
+  <div class="cta-section" style="margin-top:28px;">
+    <div class="cta-eyebrow">Vamos conversar</div>
+    <h3 class="cta-title">Dá pra resolver — e começa com uma conversa.</h3>
+    <p class="cta-desc">Sem custo e sem compromisso. O objetivo é te dar <strong>clareza sobre a sua clínica</strong>, não te empurrar nada.</p>
+    <a class="cons-cta-wpp" id="consCta2" href="https://wa.me/5511951438583?text=Ol%C3%A1!%20Fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20a%20consultoria%20estrat%C3%A9gica%20gratuita." target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm5.8 14.16c-.24.68-1.42 1.31-1.96 1.36-.5.05-.98.23-3.36-.7-2.84-1.12-4.65-4-4.79-4.19-.14-.19-1.15-1.53-1.15-2.92 0-1.39.73-2.07.99-2.36.26-.29.57-.36.76-.36.19 0 .38 0 .55.01.18.01.42-.07.65.5.24.58.81 2 .88 2.15.07.14.12.31.02.5-.1.19-.15.31-.29.48-.14.17-.3.38-.43.51-.14.14-.29.29-.12.57.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.29 2.34 1.44.29.14.46.12.63-.07.17-.19.72-.85.91-1.14.19-.29.38-.24.65-.14.27.1 1.69.8 1.98.94.29.14.48.22.55.34.07.12.07.69-.17 1.37Z"/></svg>
+      Agendar minha consultoria gratuita
+    </a>
+    <p class="cta-note">Você fala direto com quem entende do assunto.</p>
+  </div>
+
+</main>
+
+<footer class="cons-footer">© 2026 CLINUP. Todos os direitos reservados.</footer>
+
+<script>
+// Personalização + montagem do WhatsApp a partir do diagnóstico (localStorage clinup_lead).
+// Página autossuficiente: não depende dos JS do quiz.
+(function () {
+  var lead = {};
+  try { lead = JSON.parse(localStorage.getItem('clinup_lead') || '{}') || {}; } catch (e) {}
+
+  // Nível do resultado: ?resultado= (bom/mediano/critico) OU clinup_lead.resultado (good/moderate/critical)
+  var qs = new URLSearchParams(window.location.search).get('resultado');
+  var toPt = { good: 'bom', moderate: 'mediano', critical: 'critico' };
+  var level = (qs === 'bom' || qs === 'mediano' || qs === 'critico') ? qs : (toPt[lead.resultado] || '');
+  var levelLabel = { bom: 'Boa base', mediano: 'Uns pontos soltos', critico: 'Vários pontos travando' }[level] || '';
+
+  // Primeiro nome (capitalizado)
+  var nome = (lead.nome || '').trim();
+  var first = nome ? nome.split(/\s+/)[0] : '';
+  if (first) first = first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
+
+  // Headline personalizada
+  var h = document.getElementById('consH');
+  if (h && first) {
+    h.innerHTML = first + ', vamos olhar sua clínica juntos — <span class="hl">sem compromisso</span>.';
+  }
+
+  // Badge do resultado (reutiliza .result-badge) — só se soubermos o nível
+  var badge = document.getElementById('consBadge');
+  if (badge && level) {
+    var cls = { bom: 'good', mediano: 'moderate', critico: 'critical' }[level] || 'good';
+    badge.className = 'result-badge ' + cls;
+    badge.textContent = 'Seu diagnóstico: ' + levelLabel;
+    badge.style.display = 'inline-flex';
+  }
+
+  // Mensagem pré-preenchida do WhatsApp (consultiva)
+  var msg = [
+    'Olá! ' + (first ? ('Sou ' + first + '. ') : '') + 'Fiz o diagnóstico da CLINUP' + (levelLabel ? (' (resultado: ' + levelLabel + ')') : '') + '.',
+    '',
+    'Quero agendar a consultoria estratégica gratuita pra entender o que faz sentido pra minha clínica.'
+  ].join('\n');
+  var waUrl = 'https://wa.me/5511951438583?text=' + encodeURIComponent(msg);
+
+  // Registra o clique no WhatsApp (mesmo endpoint do quiz — só precisa do email)
+  function markWhatsapp() {
+    if (!lead.email) return;
+    try {
+      fetch('/api/lead-sync', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'mark_whatsapp', email: lead.email, source: lead.source || 'quiz_clinup' })
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
+  Array.prototype.forEach.call(document.querySelectorAll('.cons-cta-wpp'), function (a) {
+    a.setAttribute('href', waUrl);
+    a.addEventListener('click', markWhatsapp);
+  });
+}());
+</script>
+</body>
+</html>

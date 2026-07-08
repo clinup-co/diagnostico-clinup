@@ -59,8 +59,8 @@ function showResult() {
       <h3 class="cta-title">${model.ctaTitle}</h3>
       <p class="cta-desc">${model.ctaDesc}</p>
       <a class="btn-whatsapp"
-         href="/planos?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
-        Continuar
+         href="/consultoria?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
+        Ver meu próximo passo
       </a>
       <button class="btn-restart" onclick="restartQuiz()">↩ Refazer o diagnóstico</button>
     </div>
@@ -169,24 +169,24 @@ function buildPresentationModel() {
     badge        = '<div class="result-badge good"><svg viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>Boa base</div>';
     title        = 'Sua clínica já vai bem. Agora é só ajustar uns detalhes.';
     subtitle     = 'As pessoas já te acham, entram em contato e parte marca consulta. Agora a gente vê onde uns ajustes pequenos fazem você fechar mais, com mais regularidade.';
-    ctaTitle     = 'Veja como fazer isso na prática';
-    ctaDesc      = 'A CLINUP organiza seu site, seu WhatsApp e seu atendimento. Veja os planos e escolha por onde começar.';
+    ctaTitle     = 'Vamos resolver isso juntos';
+    ctaDesc      = 'Dá pra resolver — e o primeiro passo é uma conversa rápida com a gente, sem compromisso.';
     ctaLabel     = 'Quero ver onde melhorar';
     sectionLabel = 'O que achamos — e onde dá pra melhorar';
   } else if (level === 'moderate') {
     badge        = '<div class="result-badge moderate"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Uns pontos soltos</div>';
     title        = 'Sua clínica atrai gente. Mas perde paciente no meio do caminho.';
     subtitle     = 'Chega gente interessada, mas parte some antes de marcar. Falta seu site, seu WhatsApp e seu atendimento trabalharem juntos.';
-    ctaTitle     = 'Veja como fazer isso na prática';
-    ctaDesc      = 'A CLINUP organiza seu site, seu WhatsApp e seu atendimento. Veja os planos e escolha por onde começar.';
+    ctaTitle     = 'Vamos resolver isso juntos';
+    ctaDesc      = 'Dá pra resolver — e o primeiro passo é uma conversa rápida com a gente, sem compromisso.';
     ctaLabel     = 'Quero ver onde estou perdendo';
     sectionLabel = 'O que achamos na sua clínica';
   } else {
     badge        = '<div class="result-badge critical"><svg viewBox="0 0 24 24"><path d="M7.86 2h8.28L22 7.86v8.28L16.14 22H7.86L2 16.14V7.86z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>Vários pontos travando</div>';
     title        = 'Tem mais de uma coisa travando sua clínica ao mesmo tempo.';
     subtitle     = 'Quando o site, o jeito de te achar e o WhatsApp falham juntos, você perde muito mais paciente no caminho. Cada ponto tem conserto — e a ordem de arrumar importa.';
-    ctaTitle     = 'Veja como fazer isso na prática';
-    ctaDesc      = 'A CLINUP organiza seu site, seu WhatsApp e seu atendimento. Veja os planos e escolha por onde começar.';
+    ctaTitle     = 'Vamos resolver isso juntos';
+    ctaDesc      = 'Dá pra resolver — e o primeiro passo é uma conversa rápida com a gente, sem compromisso.';
     ctaLabel     = 'Quero entender por onde começar';
     sectionLabel = 'O que está travando sua clínica';
   }
