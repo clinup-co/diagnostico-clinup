@@ -48,6 +48,37 @@ async function syncResult(payload, res) {
   return res.status(200).json({ ok: true });
 }
 
+// Captura imediata (submit do formulário, antes do quiz): upsert por email
+// só dos dados de contato. Colunas ausentes do body não são tocadas no
+// conflito — um lead que já tem respostas/resultado não é sobrescrito.
+function buildCapturePayload(payload) {
+  return {
+    nome:        payload.nome,
+    email:       payload.email,
+    telefone:    payload.telefone,
+    etapa_atual: payload.etapa_atual,
+    source:      payload.source
+  };
+}
+
+async function captureLead(payload, res) {
+  if (!payload?.email) {
+    return res.status(400).json({ error: 'email is required' });
+  }
+
+  const result = await supabaseFetch('/rest/v1/leads?on_conflict=email', {
+    method: 'POST',
+    headers: supabaseHeaders('resolution=merge-duplicates,return=minimal'),
+    body: JSON.stringify(buildCapturePayload(payload))
+  });
+
+  if (!result.ok) {
+    return res.status(result.status).json({ error: 'failed_to_capture_lead', details: result.text });
+  }
+
+  return res.status(200).json({ ok: true });
+}
+
 async function markWhatsapp(email, source, res) {
   if (!email) {
     return res.status(400).json({ error: 'email is required' });
@@ -91,6 +122,10 @@ module.exports = async function handler(req, res) {
 
   if (body.action === 'sync_result') {
     return syncResult(body.payload || {}, res);
+  }
+
+  if (body.action === 'capture_lead') {
+    return captureLead(body.payload || {}, res);
   }
 
   if (body.action === 'mark_whatsapp') {

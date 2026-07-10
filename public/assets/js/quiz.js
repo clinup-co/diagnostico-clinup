@@ -4,6 +4,7 @@
 function startQuiz() {
   quizLeadData.etapaAtual = 'quiz';
   persistState();
+  trackOnce('quiz_start');
   document.getElementById('intro').style.display = 'none';
   document.getElementById('progressWrap').classList.add('show');
   showQuestion(1);
@@ -54,6 +55,11 @@ function selectOpt(qNum, score, btn) {
   const labelKey  = PERGUNTA_LABELS[qNum] || ('pergunta_' + qNum);
   quizLeadData.respostas[labelKey] = sanitize(getOptText(btn));
   persistState();
+
+  // Evento por pergunta respondida (1x por pergunta por carregamento);
+  // opcao = índice 1-based do botão escolhido dentro das opções
+  const opts = btn.closest('.options').querySelectorAll('.opt');
+  trackOnce('question_' + qNum, { opcao: Array.prototype.indexOf.call(opts, btn) + 1 });
 
   enableNext(qNum);
 }

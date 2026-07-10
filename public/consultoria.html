@@ -73,6 +73,8 @@ header.cons-header { justify-content: center; text-align: center; }
   .finding { padding: 14px 16px; gap: 12px; }
 }
 </style>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 <body>
 <div class="top-stripe"></div>
@@ -168,6 +170,11 @@ header.cons-header { justify-content: center; text-align: center; }
 // Personalização + montagem do WhatsApp a partir do diagnóstico (localStorage clinup_lead).
 // Página autossuficiente: não depende dos JS do quiz.
 (function () {
+  // Analytics (Vercel Web Analytics) — nunca quebra a página se não carregar
+  function track(name, data) {
+    try { window.va && window.va('event', { name: name, data: data || {} }); } catch (e) {}
+  }
+
   var lead = {};
   try { lead = JSON.parse(localStorage.getItem('clinup_lead') || '{}') || {}; } catch (e) {}
 
@@ -176,6 +183,8 @@ header.cons-header { justify-content: center; text-align: center; }
   var toPt = { good: 'bom', moderate: 'mediano', critical: 'critico' };
   var level = (qs === 'bom' || qs === 'mediano' || qs === 'critico') ? qs : (toPt[lead.resultado] || '');
   var levelLabel = { bom: 'Boa base', mediano: 'Uns pontos soltos', critico: 'Vários pontos travando' }[level] || '';
+
+  track('consultoria_view', level ? { resultado: level } : {});
 
   // Primeiro nome (capitalizado)
   var nome = (lead.nome || '').trim();
@@ -220,6 +229,9 @@ header.cons-header { justify-content: center; text-align: center; }
   Array.prototype.forEach.call(document.querySelectorAll('.cons-cta-wpp'), function (a) {
     a.setAttribute('href', waUrl);
     a.addEventListener('click', markWhatsapp);
+    a.addEventListener('click', function () {
+      track('wpp_click', { origem: a.id === 'consCta2' ? 'consultoria_final' : 'consultoria_topo' });
+    });
   });
 }());
 </script>

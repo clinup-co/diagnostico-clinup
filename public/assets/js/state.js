@@ -40,6 +40,7 @@ restoreState();
 function showLeadScreen() {
   document.getElementById('leadScreen').classList.remove('hidden');
   document.getElementById('leadScreen').style.display = '';
+  trackOnce('view_form');
 }
 
 function hideAllScreens() {
@@ -59,6 +60,7 @@ function resumeSession() {
     const etapa = quizLeadData.etapaAtual;
 
     if (!etapa || etapa === 'formulario') {
+      trackOnce('view_form');
       const n = document.getElementById('leadName');
       const e = document.getElementById('leadEmail');
       const p = document.getElementById('leadPhone');
@@ -72,6 +74,7 @@ function resumeSession() {
     if (!quizLeadData.nome || !quizLeadData.email) {
       localStorage.removeItem('clinup_lead');
       localStorage.removeItem('clinup_answers');
+      trackOnce('view_form'); // formulário segue visível (estado padrão da página)
       return;
     }
 

@@ -69,6 +69,49 @@ async function saveLeadToSupabase(attempt) {
   }
 }
 
+// Captura imediata no submit do formulário — o servidor faz upsert por email
+// apenas dos dados de contato (não sobrescreve respostas/resultado de um lead
+// que já existe). Fire-and-forget: falha nunca bloqueia o funil.
+async function captureLeadToSupabase(attempt) {
+  if (_leadCaptured) return;
+  attempt = attempt || 1;
+  const payload = buildSupabasePayload();
+
+  console.log('[CLINUP] Captura — tentativa', attempt, '— payload:', JSON.stringify(payload));
+
+  try {
+    const res = await fetch(LEAD_SYNC_URL, {
+      method:  'POST',
+      headers: serverHeaders(),
+      body:    JSON.stringify({
+        action: 'capture_lead',
+        payload
+      })
+    });
+
+    const body = await res.text();
+    console.log('[CLINUP] Captura — Status:', res.status, '— Resposta:', body);
+
+    if (res.ok) {
+      _leadCaptured = true;
+      console.log('[CLINUP] Lead capturado com sucesso.');
+      return;
+    }
+
+    if (attempt < 3) {
+      setTimeout(() => captureLeadToSupabase(attempt + 1), attempt * 3000);
+    } else {
+      console.warn('[CLINUP] Captura falhou após 3 tentativas. Status:', res.status, body);
+    }
+
+  } catch(err) {
+    console.warn('[CLINUP] Erro de rede na captura, tentativa', attempt, ':', err.message);
+    if (attempt < 3) {
+      setTimeout(() => captureLeadToSupabase(attempt + 1), attempt * 3000);
+    }
+  }
+}
+
 async function updateWhatsappClicked() {
   if (!quizLeadData.email) return;
   try {

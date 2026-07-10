@@ -43,6 +43,11 @@ function goToIntro() {
   quizLeadData.etapaAtual = 'intro';
   persistState();
 
+  // Captura imediata: lead vai pro Supabase já no submit do formulário,
+  // antes do quiz — leads que abandonam no meio não se perdem.
+  captureLeadToSupabase();
+  trackOnce('lead_captured');
+
   document.getElementById('leadScreen').classList.add('hidden');
   document.getElementById('intro').style.display = '';
   document.getElementById('intro').classList.remove('hidden');

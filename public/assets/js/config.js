@@ -29,4 +29,25 @@ const STATE_VERSION = '3';
 
 const answers = {};
 
-let _leadSaved = false;
+let _leadSaved    = false; // sync completo no resultado (sync_result)
+let _leadCaptured = false; // captura imediata no submit do formulário (capture_lead)
+
+// ─────────────────────────────────────────────
+// ANALYTICS — Vercel Web Analytics (eventos custom)
+// window.va é o stub enfileirador definido no <head>; se o script
+// /_vercel/insights não carregar (ad blocker etc.), vira no-op.
+// ─────────────────────────────────────────────
+const _trackedOnce = {};
+
+function track(name, data) {
+  try {
+    window.va && window.va('event', { name: name, data: data || {} });
+  } catch (e) {}
+}
+
+// Dispara um evento no máximo 1x por carregamento de página
+function trackOnce(name, data) {
+  if (_trackedOnce[name]) return;
+  _trackedOnce[name] = true;
+  track(name, data);
+}

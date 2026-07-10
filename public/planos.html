@@ -1067,6 +1067,8 @@ body.demo-modal-open { overflow: hidden; }
 }
 </style>
 <script>document.documentElement.classList.add('js-anim');</script>
+<script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
+<script defer src="/_vercel/insights/script.js"></script>
 </head>
 
 <body>
@@ -1588,6 +1590,32 @@ body.demo-modal-open { overflow: hidden; }
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   onScroll();
+}());
+</script>
+
+<script>
+// Analytics (Vercel Web Analytics) — wpp_click em todos os CTAs de WhatsApp.
+// Nunca quebra a página se o script de insights não carregar.
+(function () {
+  function track(name, data) {
+    try { window.va && window.va('event', { name: name, data: data || {} }); } catch (e) {}
+  }
+  var origens = [
+    ['.hero-wpp-link',               'planos_hero'],
+    ['#card-essencial .plan-btn',    'planos_essencial'],
+    ['#card-profissional .plan-btn', 'planos_profissional'],
+    ['.plans-enterprise',            'planos_custom'],
+    ['.plans-closing-btn',           'planos_final'],
+    ['.sticky-cta-wpp',              'planos_sticky']
+  ];
+  origens.forEach(function (par) {
+    document.querySelectorAll(par[0]).forEach(function (a) {
+      if ((a.getAttribute('href') || '').indexOf('wa.me') === -1) return;
+      a.addEventListener('click', function () {
+        track('wpp_click', { origem: par[1] });
+      });
+    });
+  });
 }());
 </script>
 
