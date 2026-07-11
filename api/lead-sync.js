@@ -120,16 +120,25 @@ module.exports = async function handler(req, res) {
     return res.status(400).json({ error: 'invalid_json' });
   }
 
-  if (body.action === 'sync_result') {
-    return syncResult(body.payload || {}, res);
-  }
+  // Exceção não tratada (ex.: URL do Supabase malformada, falha de rede no
+  // fetch) vira 500 com mensagem em vez de FUNCTION_INVOCATION_FAILED mudo.
+  try {
+    if (body.action === 'sync_result') {
+      return await syncResult(body.payload || {}, res);
+    }
 
-  if (body.action === 'capture_lead') {
-    return captureLead(body.payload || {}, res);
-  }
+    if (body.action === 'capture_lead') {
+      return await captureLead(body.payload || {}, res);
+    }
 
-  if (body.action === 'mark_whatsapp') {
-    return markWhatsapp(body.email, body.source || 'quiz_clinup', res);
+    if (body.action === 'mark_whatsapp') {
+      return await markWhatsapp(body.email, body.source || 'quiz_clinup', res);
+    }
+  } catch (err) {
+    return res.status(500).json({
+      error: 'internal_error',
+      details: String((err && err.message) || err)
+    });
   }
 
   return res.status(400).json({ error: 'unknown_action' });
