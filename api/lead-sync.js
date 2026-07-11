@@ -135,9 +135,14 @@ module.exports = async function handler(req, res) {
       return await markWhatsapp(body.email, body.source || 'quiz_clinup', res);
     }
   } catch (err) {
+    // "fetch failed" do undici esconde a causa (DNS, porta, TLS) em err.cause
+    const cause = err && err.cause
+      ? String(err.cause.message || err.cause.code || err.cause)
+      : undefined;
     return res.status(500).json({
       error: 'internal_error',
-      details: String((err && err.message) || err)
+      details: String((err && err.message) || err),
+      cause
     });
   }
 
