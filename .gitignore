@@ -21,3 +21,6 @@ Thumbs.db
 
 .vercel
 .env*
+
+# Contexto local do Claude (repo publico - nao versionar)
+CLAUDE.md
