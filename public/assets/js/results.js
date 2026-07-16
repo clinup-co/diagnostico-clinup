@@ -50,11 +50,11 @@ function showResult() {
     <div class="result-paths">
       <div class="result-path">
         <div class="result-path-title">Continuar como está</div>
-        <div class="result-path-desc">Seguir perdendo parte dos pacientes no caminho, na tentativa e erro.</div>
+        <div class="result-path-desc">Cada mês igual: paciente chegando, parte escapando — e você sem saber onde.</div>
       </div>
       <div class="result-path result-path--accent">
         <div class="result-path-title">Organizar tudo</div>
-        <div class="result-path-desc">Seu site, seu WhatsApp e seu atendimento juntos, pra mais gente marcar consulta.</div>
+        <div class="result-path-desc">Site, WhatsApp e atendimento puxando juntos, <strong>pra mais gente marcar consulta</strong>.</div>
       </div>
     </div>
     <div class="cta-section">
@@ -63,7 +63,7 @@ function showResult() {
       <p class="cta-desc">${model.ctaDesc}</p>
       <a class="btn-whatsapp"
          href="/consultoria?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
-        Ver meu próximo passo
+        Agendar minha conversa gratuita →
       </a>
       <button class="btn-restart" onclick="restartQuiz()">↩ Refazer o diagnóstico</button>
     </div>
@@ -171,25 +171,25 @@ function buildPresentationModel() {
   if (level === 'good') {
     badge        = '<div class="result-badge good"><svg viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>Boa base</div>';
     title        = 'Sua clínica já vai bem. Agora é só ajustar uns detalhes.';
-    subtitle     = 'As pessoas já te acham, entram em contato e parte marca consulta. Agora a gente vê onde uns ajustes pequenos fazem você fechar mais, com mais regularidade.';
-    ctaTitle     = 'Vamos resolver isso juntos';
-    ctaDesc      = 'Dá pra resolver — e o primeiro passo é uma conversa rápida com a gente, sem compromisso.';
+    subtitle     = 'As pessoas já te acham, entram em contato e parte marca consulta. Agora a gente vê onde <strong>uns ajustes pequenos fazem você fechar mais</strong>, com regularidade.';
+    ctaTitle     = 'Sua base é boa — dá pra extrair mais dela';
+    ctaDesc      = 'Numa conversa rápida, a gente te mostra os 2 ou 3 ajustes que mais fazem diferença no seu caso. <strong>Gratuita e direto ao ponto.</strong>';
     ctaLabel     = 'Quero ver onde melhorar';
     sectionLabel = 'O que achamos — e onde dá pra melhorar';
   } else if (level === 'moderate') {
     badge        = '<div class="result-badge moderate"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Uns pontos soltos</div>';
     title        = 'Sua clínica atrai gente. Mas perde paciente no meio do caminho.';
-    subtitle     = 'Chega gente interessada, mas parte some antes de marcar. Falta seu site, seu WhatsApp e seu atendimento trabalharem juntos.';
-    ctaTitle     = 'Vamos resolver isso juntos';
-    ctaDesc      = 'Dá pra resolver — e o primeiro passo é uma conversa rápida com a gente, sem compromisso.';
+    subtitle     = 'Chega gente interessada, mas <strong>parte some antes de marcar</strong>. Falta seu site, seu WhatsApp e seu atendimento trabalharem juntos.';
+    ctaTitle     = 'Você já atrai — falta parar de perder';
+    ctaDesc      = 'Numa conversa rápida, a gente te mostra onde os pacientes estão escapando e o que arrumar primeiro. <strong>Gratuita e sem compromisso.</strong>';
     ctaLabel     = 'Quero ver onde estou perdendo';
     sectionLabel = 'O que achamos na sua clínica';
   } else {
     badge        = '<div class="result-badge critical"><svg viewBox="0 0 24 24"><path d="M7.86 2h8.28L22 7.86v8.28L16.14 22H7.86L2 16.14V7.86z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>Vários pontos travando</div>';
     title        = 'Tem mais de uma coisa travando sua clínica ao mesmo tempo.';
-    subtitle     = 'Quando o site, o jeito de te achar e o WhatsApp falham juntos, você perde muito mais paciente no caminho. Cada ponto tem conserto — e a ordem de arrumar importa.';
-    ctaTitle     = 'Vamos resolver isso juntos';
-    ctaDesc      = 'Dá pra resolver — e o primeiro passo é uma conversa rápida com a gente, sem compromisso.';
+    subtitle     = 'Quando o site, o jeito de te achar e o WhatsApp falham juntos, você perde muito mais paciente no caminho. <strong>Cada ponto tem conserto — e a ordem de arrumar importa.</strong>';
+    ctaTitle     = 'Cada semana assim custa pacientes';
+    ctaDesc      = 'Quanto antes você souber a ordem certa de arrumar, menos consulta perde. A conversa é <strong>gratuita e direto ao ponto</strong>.';
     ctaLabel     = 'Quero entender por onde começar';
     sectionLabel = 'O que está travando sua clínica';
   }
@@ -215,22 +215,22 @@ function buildThesis() {
   const badConv      = a[3] === 2;
 
   if (goodSite && goodConv && multiChannel)
-    return 'Está tudo no lugar: te acham, chega gente e ela marca consulta. Agora é crescer com calma e controle.';
+    return 'Está tudo no lugar: te acham, chega gente e ela marca consulta. <strong>Agora é crescer com calma e controle.</strong>';
   if (goodSite && goodConv && (onlyRef || a[2] === 1))
-    return 'Quem fala com você acaba marcando. O cuidado é como o paciente te encontra: depender de um lugar só é arriscado — se ele cai, some paciente.';
+    return 'Quem fala com você acaba marcando. O cuidado é como o paciente te encontra: <strong>depender de um lugar só é arriscado</strong> — se ele cai, some paciente.';
   if (goodSite && badConv && multiChannel)
-    return 'Chega gente de vários lugares, mas parte some entre o primeiro contato e marcar a consulta. O problema está no WhatsApp.';
+    return 'Chega gente de vários lugares, mas parte some entre o primeiro contato e marcar a consulta. <strong>O problema está no WhatsApp.</strong>';
   if (goodSite && badConv)
-    return 'As pessoas te acham, mas você perde na hora de fechar. Não falta gente interessada — falta transformar esse interesse em consulta marcada.';
+    return 'As pessoas te acham, mas você perde na hora de fechar. Não falta gente interessada — <strong>falta transformar esse interesse em consulta marcada</strong>.';
   if (goodSite && a[3] === 1 && multiChannel)
-    return 'Chega gente de vários lugares. Agora é melhorar a hora de fechar, pra mais gente marcar consulta.';
+    return 'Chega gente de vários lugares. Agora é <strong>melhorar a hora de fechar</strong>, pra mais gente marcar consulta.';
   if (goodSite && a[3] === 1)
-    return 'O básico está no lugar, mas dá pra melhorar como te acham e como você fecha. São os dois pontos que mais mudam o número de pacientes.';
+    return 'O básico está no lugar, mas dá pra melhorar como te acham e como você fecha. <strong>São os dois pontos que mais mudam o número de pacientes.</strong>';
   if (weakSite && goodConv)
-    return 'Quando alguém chega, você fecha bem. O problema é antes: pouca gente te encontra e te procura.';
+    return 'Quando alguém chega, você fecha bem. O problema é antes: <strong>pouca gente te encontra e te procura</strong>.';
   if (weakSite && badConv)
-    return 'Tem dois problemas ao mesmo tempo: pouca gente te acha, e quem chega não fecha. Com os dois fracos, você perde paciente em dobro.';
-  return 'O teste mostrou pontos certos pra arrumar. Cada um ajustado ajuda sua clínica a ser achada, atender melhor e marcar mais consultas.';
+    return 'Tem dois problemas ao mesmo tempo: pouca gente te acha, e quem chega não fecha. <strong>Com os dois fracos, você perde paciente em dobro.</strong>';
+  return 'O teste mostrou pontos certos pra arrumar. <strong>Cada um ajustado ajuda sua clínica a ser achada, atender melhor e marcar mais consultas.</strong>';
 }
 
 function selectInsights(level) {

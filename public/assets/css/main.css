@@ -218,7 +218,14 @@ main {
 .result-title { font-family: 'Sora', sans-serif; font-size: clamp(26px, 5vw, 38px); font-weight: 800; line-height: 1.1; letter-spacing: -1px; margin-bottom: 14px; }
 .result-sub { font-size: 17px; font-weight: 500; color: var(--body); line-height: 1.65; }
 .result-sub strong { color: var(--off); font-weight: 600; }
-.result-thesis { font-size: 14px; font-weight: 500; color: var(--blue); line-height: 1.6; margin-top: 18px; padding-top: 18px; border-top: 1px solid rgba(91,196,240,0.15); }
+.result-thesis {
+  font-size: 16px; font-weight: 500; color: var(--white); line-height: 1.6;
+  margin-top: 20px; padding: 14px 16px; text-align: left;
+  background: rgba(91,196,240,0.10);
+  border-left: 4px solid var(--blue);
+  border-radius: 0 10px 10px 0;
+}
+.result-thesis strong { color: var(--blue); font-weight: 700; }
 
 /* Divider */
 .section-label {
