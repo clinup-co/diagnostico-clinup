@@ -42,6 +42,9 @@ function checkRateLimit() {
 
 function maskPhone(input) {
   let v = input.value.replace(/\D/g, '');
+  // Código do país digitado/colado junto (+55...): só remove quando sobram dígitos
+  // além dos 11 — número com DDD 55 (região de Santa Maria-RS) tem 11 e fica intacto
+  if (v.length > 11 && v.startsWith('55')) v = v.slice(2);
   if (v.length > 11) v = v.slice(0, 11);
   v = v.length <= 10
     ? v.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3')

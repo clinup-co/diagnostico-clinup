@@ -20,7 +20,29 @@ function goToIntro() {
     return;
   }
 
-  // Rate limiting
+  const nameInput  = document.getElementById('leadName');
+  const phoneInput = document.getElementById('leadPhone');
+  const name       = nameInput.value.trim();
+  const cleanPhone = phoneInput.value.replace(/\D/g, '');
+
+  // Clique inválido: mostra o erro no campo e foca — nunca falha em silêncio
+  // nem consome tentativa do rate limit
+  const nameOk  = name.length >= 2 && /^[A-Za-zÀ-ÿ\s]+$/.test(name);
+  const phoneOk = cleanPhone.length === 11;
+  if (!nameOk || !phoneOk) {
+    if (!name) {
+      nameInput.classList.add('invalid');
+      document.getElementById('errName').textContent = 'Digite seu nome';
+    } else validateName(nameInput);
+    if (!cleanPhone) {
+      phoneInput.classList.add('invalid');
+      document.getElementById('errPhone').textContent = 'Digite seu WhatsApp';
+    } else validatePhone(phoneInput);
+    (nameOk ? phoneInput : nameInput).focus();
+    return;
+  }
+
+  // Rate limiting — só submissão válida conta como tentativa
   if (!checkRateLimit()) {
     const btn = document.getElementById('btnContinue');
     btn.textContent = 'Muitas tentativas. Tente em 1 hora.';
@@ -28,17 +50,13 @@ function goToIntro() {
     return;
   }
 
-  const name  = document.getElementById('leadName').value.trim();
-  const phone = document.getElementById('leadPhone').value.trim();
   const email = document.getElementById('leadEmail').value.trim();
-  if (name.length < 2 || phone.replace(/\D/g,'').length !== 11) return;
 
   quizLeadData.nome  = sanitize(name);
-  const cleanPhone   = phone.replace(/\D/g, '');
   quizLeadData.email = email
     ? sanitize(email).toLowerCase()
     : `sem-email-${cleanPhone}@nao-informado.com`;
-  quizLeadData.telefone  = phone.replace(/\D/g,'').replace(/^55/, '').replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+  quizLeadData.telefone  = cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
   quizLeadData.createdAt = new Date().toISOString();
   quizLeadData.etapaAtual = 'intro';
   persistState();
