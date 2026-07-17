@@ -5,6 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Planos CLINUP — Site e WhatsApp organizados para clínicas</title>
 <meta name="description" content="Conheça os planos da CLINUP e escolha o caminho ideal para sua clínica.">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png">
+<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CLINUP">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:title" content="Planos CLINUP — Site e WhatsApp organizados para clínicas">
+<meta property="og:description" content="Conheça os planos da CLINUP e escolha o caminho ideal para sua clínica.">
+<meta property="og:url" content="https://diagnostico-clinup-lac.vercel.app/planos">
+<meta property="og:image" content="https://diagnostico-clinup-lac.vercel.app/assets/img/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -1144,6 +1157,22 @@ body.demo-modal-open { overflow: hidden; }
 <script>document.documentElement.classList.add('js-anim');</script>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
+<!-- Meta Pixel -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window,document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1568791558372631');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
+/></noscript>
 </head>
 
 <body>
@@ -1688,6 +1717,10 @@ body.demo-modal-open { overflow: hidden; }
   function track(name, data) {
     try { window.va && window.va('event', { name: name, data: data || {} }); } catch (e) {}
   }
+  // Meta Pixel — mesmo princípio: no-op se o fbq não carregar (ad blocker)
+  function trackPixel(name, data) {
+    try { window.fbq && window.fbq('track', name, data || {}); } catch (e) {}
+  }
   var origens = [
     ['.hero-wpp-link',               'planos_hero'],
     ['#card-essencial .plan-btn',    'planos_essencial'],
@@ -1701,6 +1734,7 @@ body.demo-modal-open { overflow: hidden; }
       if ((a.getAttribute('href') || '').indexOf('wa.me') === -1) return;
       a.addEventListener('click', function () {
         track('wpp_click', { origem: par[1] });
+        trackPixel('Contact', { content_name: par[1] });
       });
     });
   });

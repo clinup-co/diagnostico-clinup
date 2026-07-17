@@ -65,6 +65,7 @@ function goToIntro() {
   // antes do quiz — leads que abandonam no meio não se perdem.
   captureLeadToSupabase();
   trackOnce('lead_captured');
+  trackPixelOnce('Lead');
 
   document.getElementById('leadScreen').classList.add('hidden');
   document.getElementById('intro').style.display = '';

@@ -16,9 +16,9 @@ function showResult() {
   quizLeadData.etapaAtual    = 'resultado';
   persistState();
   saveLeadToSupabase();
-  trackOnce('result_view', {
-    resultado: ({ good: 'bom', moderate: 'mediano', critical: 'critico' })[model.level] || model.level
-  });
+  const resultadoPt = ({ good: 'bom', moderate: 'mediano', critical: 'critico' })[model.level] || model.level;
+  trackOnce('result_view', { resultado: resultadoPt });
+  trackPixelOnce('ViewContent', { content_name: 'resultado_' + resultadoPt });
 
   const insightsHTML = model.insights.map(i => `
     <div class="finding">

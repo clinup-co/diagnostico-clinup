@@ -35,6 +35,47 @@ function restoreState() {
 restoreState();
 
 // ─────────────────────────────────────────────
+// ATRIBUIÇÃO — UTM da URL → source da sessão
+// O source é a chave de atribuição do lead: mark_whatsapp faz PATCH por
+// email+source, então o MESMO valor precisa valer nos 3 estágios
+// (capture_lead → sync_result → mark_whatsapp). Regra: o source só é
+// definido ANTES da captura (etapa 'formulario'); quem volta com sessão
+// já capturada mantém o source original — senão o clique no WhatsApp
+// erraria a linha no banco.
+// ─────────────────────────────────────────────
+function applyUtmToSource() {
+  try {
+    const params    = new URLSearchParams(window.location.search);
+    const utmSource = (params.get('utm_source') || '').trim();
+    if (!utmSource) return;
+
+    // Só sessão ainda não capturada (formulário) recebe nova atribuição
+    const etapa = quizLeadData.etapaAtual;
+    if (etapa && etapa !== 'formulario') return;
+
+    // Valor saneado: minúsculas, só [a-z0-9_-], máx. 40 chars — mantém o
+    // campo source limpo no banco e o filtro do PATCH previsível
+    const clean = utmSource.toLowerCase().replace(/[^a-z0-9_-]/g, '').slice(0, 40);
+    if (!clean) return;
+
+    quizLeadData.source = 'quiz_clinup__' + clean;
+
+    // UTMs brutas: guardadas dentro de respostas (jsonb já existente no
+    // schema) — chegam ao banco junto do sync_result, sem mudança de schema
+    if (!quizLeadData.respostas) quizLeadData.respostas = {};
+    quizLeadData.respostas._utm = {
+      source:   utmSource,
+      medium:   (params.get('utm_medium')   || '').trim(),
+      campaign: (params.get('utm_campaign') || '').trim()
+    };
+
+    persistState();
+  } catch (e) {}
+}
+
+applyUtmToSource();
+
+// ─────────────────────────────────────────────
 // TELAS — mostrar / esconder
 // ─────────────────────────────────────────────
 function showLeadScreen() {

@@ -51,3 +51,23 @@ function trackOnce(name, data) {
   _trackedOnce[name] = true;
   track(name, data);
 }
+
+// ─────────────────────────────────────────────
+// META PIXEL — eventos padrão (Lead, ViewContent, Contact)
+// window.fbq é definido pelo snippet no <head>; se o script for
+// bloqueado (ad blocker etc.), vira no-op — nunca quebra o funil.
+// ─────────────────────────────────────────────
+const _pixelTrackedOnce = {};
+
+function trackPixel(name, data) {
+  try {
+    window.fbq && window.fbq('track', name, data || {});
+  } catch (e) {}
+}
+
+// Dispara um evento do Pixel no máximo 1x por carregamento de página
+function trackPixelOnce(name, data) {
+  if (_pixelTrackedOnce[name]) return;
+  _pixelTrackedOnce[name] = true;
+  trackPixel(name, data);
+}
