@@ -28,7 +28,15 @@
    Reaproveita os componentes do main.css: .result-badge, .section-label,
    .finding, .cta-section, .cta-eyebrow/.cta-title/.cta-desc, .cta-note.
    Só o layout específico da página fica aqui. */
-header.cons-header { justify-content: center; text-align: center; }
+/* Header no mesmo padrão slim da landing: âncora visual idêntica em todas as páginas */
+header.cons-header {
+  width: 100%; max-width: none; margin: 0;
+  display: flex; align-items: center; justify-content: flex-start; gap: 10px;
+  padding: 12px 24px;
+  background: rgba(242,247,251,0.92);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
 
 .cons-page {
   width: 100%; max-width: 640px;
@@ -79,7 +87,16 @@ header.cons-header { justify-content: center; text-align: center; }
 .cons-step-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
 .cons-step-desc { font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.55; }
 
-.cons-footer { text-align: center; font-size: 12px; color: var(--sub); padding: 28px 24px; }
+.cons-footer {
+  text-align: center; padding: 32px 24px 28px;
+  border-top: 1px solid var(--border);
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+}
+.cons-footer p { font-size: 12px; color: var(--sub); }
+.cons-footer-tag { font-size: 13.5px !important; font-weight: 500; color: var(--body) !important; max-width: 420px; }
+.cons-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; }
+.cons-footer-links a { font-size: 13px; font-weight: 600; color: var(--body); text-decoration: none; }
+.cons-footer-links a:hover { color: #1279A3; }
 
 @media (max-width: 480px) {
   .cons-page { padding: 6px 20px 48px; }
@@ -109,7 +126,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <div class="top-stripe"></div>
 
 <header class="cons-header">
-  <img src="assets/images/logo.png" alt="CLINUP" style="width:40px;height:40px;border-radius:50%;object-fit:contain;border:1.5px solid rgba(91,196,240,0.35);background:#0A1E30;padding:2px;">
+  <img src="assets/images/logo.png" alt="CLINUP" style="width:38px;height:38px;border-radius:50%;object-fit:contain;border:1.5px solid rgba(91,196,240,0.35);background:#0A1E30;padding:2px;">
   <div class="logo-text">CLIN<em>UP</em></div>
 </header>
 
@@ -193,7 +210,14 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 </main>
 
-<footer class="cons-footer">© 2026 CLINUP. Todos os direitos reservados.</footer>
+<footer class="cons-footer">
+  <p class="cons-footer-tag">Site, WhatsApp e atendimento da sua clínica puxando na mesma direção.</p>
+  <nav class="cons-footer-links" aria-label="Links do rodapé">
+    <a href="/">Página inicial</a>
+    <a href="/diagnostico">Diagnóstico gratuito</a>
+  </nav>
+  <p>© 2026 CLINUP. Todos os direitos reservados.</p>
+</footer>
 
 <script>
 // Personalização + montagem do WhatsApp a partir do diagnóstico (localStorage clinup_lead).

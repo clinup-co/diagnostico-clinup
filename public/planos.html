@@ -24,10 +24,23 @@
 <link rel="stylesheet" href="assets/css/main.css">
 <style>
 /* ── Layout da página de planos ── */
+/* Header no mesmo padrão slim da landing: marca à esquerda, ação à direita */
 header.plans-header {
-  justify-content: center;
-  text-align: center;
+  width: 100%; max-width: none; margin: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 12px 24px;
+  background: rgba(242,247,251,0.92);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
 }
+.plans-header-brand { display: flex; align-items: center; gap: 10px; }
+.plans-header-link {
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
+  color: var(--green, #0E7A48); text-decoration: none; white-space: nowrap;
+  border: 1.5px solid rgba(14,122,72,0.35); border-radius: 100px; padding: 9px 16px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.plans-header-link:hover { background: var(--green, #0E7A48); border-color: var(--green, #0E7A48); color: #fff; }
 
 .plans-page {
   width: 100%;
@@ -774,6 +787,15 @@ body.demo-modal-open { overflow: hidden; }
 }
 .roi-lead { font-size: 15px; font-weight: 500; color: var(--body); margin-bottom: 16px; }
 .roi-lead strong { color: var(--white); font-weight: 700; }
+/* Chip "Simulação": a conta é estimativa declarada, nunca promessa */
+.roi-sim {
+  display: inline-block; vertical-align: middle; margin-right: 10px;
+  font-family: 'Sora', sans-serif; font-size: 10.5px; font-weight: 700;
+  letter-spacing: 1.5px; text-transform: uppercase;
+  color: #1279A3; background: rgba(91,196,240,0.12);
+  border: 1px solid rgba(91,196,240,0.4);
+  border-radius: 100px; padding: 4px 10px;
+}
 .roi-inputs { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 16px; }
 .roi-calc {
   display: inline-flex; align-items: center; gap: 8px;
@@ -898,6 +920,10 @@ body.demo-modal-open { overflow: hidden; }
   font-size: 12px;
   color: var(--sub);
 }
+.plans-footer-tag { font-size: 13.5px !important; font-weight: 500; color: var(--body) !important; max-width: 420px; }
+.plans-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; }
+.plans-footer-links a { font-size: 13px; font-weight: 600; color: var(--body); text-decoration: none; }
+.plans-footer-links a:hover { color: #1279A3; }
 
 /* ── Classes utilitárias (extraídas de inline) ── */
 .brand-logo {
@@ -941,15 +967,16 @@ body.demo-modal-open { overflow: hidden; }
   font-family: 'Sora', sans-serif;
   font-size: 15px;
   font-weight: 800;
-  color: #060D15;
+  color: #06121E;
   text-decoration: none;
-  background: linear-gradient(135deg, var(--blue-soft) 0%, var(--blue2) 100%);
+  /* mesmo primário saturado da landing: um só azul de ação no site inteiro */
+  background: linear-gradient(135deg, #4FBCEC 0%, #1F8FBE 100%);
   border: none;
   border-radius: 12px;
-  box-shadow: 0 8px 22px rgba(45,158,201,0.28);
+  box-shadow: 0 10px 26px rgba(23,124,166,0.38);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.plans-anchor-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 32px rgba(45,158,201,0.42); }
+.plans-anchor-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(23,124,166,0.5); }
 .plans-anchor-cta--hero { margin-top: 22px; }
 .hero-wpp-link {
   position: relative; z-index: 1;
@@ -1181,8 +1208,11 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <div class="top-stripe"></div>
 
 <header class="plans-header">
-  <img src="assets/images/logo.png" alt="CLINUP" class="brand-logo brand-logo--header">
-  <div class="logo-text">CLIN<em>UP</em></div>
+  <div class="plans-header-brand">
+    <img src="assets/images/logo.png" alt="CLINUP" class="brand-logo brand-logo--header">
+    <div class="logo-text">CLIN<em>UP</em></div>
+  </div>
+  <a class="plans-header-link" href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos." target="_blank" rel="noopener noreferrer">Falar no WhatsApp →</a>
 </header>
 
 <div class="plans-top-inner">
@@ -1288,9 +1318,9 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <p>A gente entrega no prazo, você vê tudo antes de publicar e tem direito a um ajuste. Se não fizer sentido pra você, <strong>devolvemos seu dinheiro</strong>.</p>
   </div>
 
-  <!-- Seção 8 — Âncora de valor -->
+  <!-- Seção 8 — Âncora de valor (simulação declarada: estimativa, não promessa) -->
   <div class="roi-box reveal">
-    <p class="roi-lead">Faça a conta com os <strong>seus números</strong>:</p>
+    <p class="roi-lead"><span class="roi-sim" aria-label="Esta conta é uma simulação">Simulação</span>Faça a conta com os <strong>seus números</strong>:</p>
     <div class="roi-inputs">
       <div class="roi-calc">
         <span class="roi-prefix">R$</span>
@@ -1314,7 +1344,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
     <!-- Plano Essencial -->
     <div class="plan-card" id="card-essencial">
-      <div class="plan-badge" id="badge-essencial"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
+      <div class="plan-badge" id="badge-essencial"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Recomendado para a maioria</div>
       <div class="plan-rectag" id="rectag-essencial">Recomendado pro seu caso</div>
       <div class="plan-name">Essencial</div>
       <div class="plan-price">R$ 297<span class="plan-price-unit">/mês</span></div>
@@ -1336,9 +1366,8 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
     <!-- Plano Profissional -->
     <div class="plan-card" id="card-profissional">
-      <div class="plan-badge" id="badge-profissional"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Mais escolhido</div>
+      <div class="plan-badge" id="badge-profissional"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Recomendado para a maioria</div>
       <div class="plan-rectag" id="rectag-profissional">Recomendado pro seu caso</div>
-      <p class="plan-availability">● Poucas vagas por mês — atenção dedicada</p>
       <div class="plan-name">Profissional</div>
       <div class="plan-price">R$ 997<span class="plan-price-unit">/mês</span></div>
       <div class="plan-subtitle">Pra clínica que quer atender e fechar melhor</div>
@@ -1356,7 +1385,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
          aria-label="Agendar conversa sobre o Plano Profissional">
         Quero agendar sobre o Profissional →
       </a>
-      <p class="plan-trust"><span>✓</span> Garantia de devolução · sem fidelidade · poucas vagas/mês</p>
+      <p class="plan-trust"><span>✓</span> Garantia de devolução · sem fidelidade</p>
     </div>
 
   </div>
@@ -1473,6 +1502,11 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <img src="assets/images/logo.png" alt="CLINUP" class="brand-logo brand-logo--footer">
     <div class="logo-text logo-text--sm">CLIN<em>UP</em></div>
   </div>
+  <p class="plans-footer-tag">Site, WhatsApp e atendimento da sua clínica puxando na mesma direção.</p>
+  <nav class="plans-footer-links" aria-label="Links do rodapé">
+    <a href="/diagnostico">Diagnóstico gratuito</a>
+    <a href="/consultoria">Conversa gratuita</a>
+  </nav>
   <p>© 2026 CLINUP. Todos os direitos reservados.</p>
 </footer>
 
@@ -1568,14 +1602,14 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
   // ── selo dos planos (nunca dois selos no mesmo card) ──
   if (!hasResult) {
-    // acesso direto: neutro padrão — "Mais escolhido" no Profissional (como hoje)
+    // acesso direto: neutro padrão — "Recomendado para a maioria" no Profissional
     show('badge-profissional');
     featurePlan('profissional');
   } else {
     var recommended = (level === 'bom') ? 'essencial' : 'profissional';
-    // Profissional mantém "Mais escolhido" só quando NÃO é ele o recomendado (caso bom)
+    // Profissional mantém o selo geral só quando NÃO é ele o recomendado (caso bom)
     if (recommended !== 'profissional') show('badge-profissional');
-    // recomendado: tag "Recomendado pro seu caso" (substitui "Mais escolhido" se for o Profissional) + borda
+    // recomendado: tag "Recomendado pro seu caso" (substitui o selo geral se for o Profissional) + borda
     show('rectag-' + recommended);
     featurePlan(recommended);
   }
@@ -1618,10 +1652,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         obs.unobserve(e.target);
       }
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+  }, { threshold: 0.05, rootMargin: '0px 0px 18% 0px' }); // revela um pouco ANTES de entrar na tela
   els.forEach(function (el) { io.observe(el); });
   // Rede de segurança: garante que nada fique invisível (screenshots, previews, observer travado)
-  setTimeout(function () { els.forEach(function (el) { el.classList.add('is-visible'); }); }, 2500);
+  setTimeout(function () { els.forEach(function (el) { el.classList.add('is-visible'); }); }, 1400);
 }());
 </script>
 
@@ -1639,14 +1673,15 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     var p = Math.min(Math.max(parseFloat(pat.value) || 0, 0), 50);
     var monthly = v * p * 4;
     if (monthly <= 0) {
-      out.innerHTML = 'Coloque seus números aí em cima e veja quanto você recupera por mês.';
+      out.innerHTML = 'Coloque seus números aí em cima e veja a estimativa do que daria pra recuperar por mês.';
       return;
     }
     var net = monthly - PLANO;
+    // Gramática de simulação ("seriam/sobrariam"): estimativa, nunca promessa
     if (net > 0) {
-      out.innerHTML = 'São cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> de volta no seu caixa. Mesmo tirando o plano de entrada (R$ 297), sobra <strong>~R$ ' + fmt(net) + ' líquido</strong> todo mês.';
+      out.innerHTML = 'Nessa conta, seriam cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> voltando pro seu caixa. Mesmo tirando o plano de entrada (R$ 297), sobrariam <strong>~R$ ' + fmt(net) + ' líquidos</strong> por mês.';
     } else {
-      out.innerHTML = 'São cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> de volta no seu caixa — já cobre boa parte do plano.';
+      out.innerHTML = 'Nessa conta, seriam cerca de <strong>R$ ' + fmt(monthly) + '/mês</strong> voltando pro seu caixa — já cobriria boa parte do plano.';
     }
   }
   val.addEventListener('input', update);
