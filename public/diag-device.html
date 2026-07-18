@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Diagnóstico do aparelho — CLINUP (interno)</title>
+<style>
+/* Página interna de suporte: CSS só com propriedades antigas de propósito,
+   pra renderizar direito até em navegador de 2018 */
+body { margin: 0; font-family: Arial, sans-serif; background: #F2F7FB; color: #0E2233; padding: 20px 16px 40px; }
+h1 { font-size: 20px; margin: 0 0 4px; }
+.sub { font-size: 13px; color: #5A6E7E; margin: 0 0 20px; }
+.box { background: #fff; border: 1px solid #D8E2EA; border-radius: 10px; padding: 14px 16px; margin-bottom: 12px; }
+.box h2 { font-size: 14px; margin: 0 0 8px; color: #1279A3; text-transform: uppercase; letter-spacing: 1px; }
+.kv { font-size: 14px; line-height: 1.6; word-break: break-word; }
+.row { display: block; font-size: 15px; padding: 7px 10px; border-radius: 7px; margin-bottom: 6px; font-weight: bold; }
+.ok { background: #E3F4EC; color: #14683F; }
+.bad { background: #FBE4E4; color: #9E2B2B; }
+.note { font-size: 13px; color: #5A6E7E; line-height: 1.5; margin-top: 16px; }
+</style>
+</head>
+<body>
+<h1>Diagnóstico do aparelho</h1>
+<p class="sub">Página interna — tira um print desta tela inteira e manda.</p>
+
+<div class="box">
+  <h2>Navegador</h2>
+  <div class="kv" id="ua">…</div>
+</div>
+
+<div class="box">
+  <h2>Tela</h2>
+  <div class="kv" id="tela">…</div>
+</div>
+
+<div class="box">
+  <h2>Suporte a recursos do site</h2>
+  <div id="feats">…</div>
+</div>
+
+<p class="note" id="veredito"></p>
+
+<script>
+(function () {
+  // Navegador + versão (parse simples do user agent)
+  var ua = navigator.userAgent;
+  var browser = 'Desconhecido';
+  var m;
+  if ((m = ua.match(/SamsungBrowser\/([\d.]+)/))) browser = 'Samsung Internet ' + m[1] + ' (base Chromium ' + ((ua.match(/Chrome\/(\d+)/) || [])[1] || '?') + ')';
+  else if ((m = ua.match(/Chrome\/([\d.]+)/))) browser = 'Chrome ' + m[1];
+  else if ((m = ua.match(/Firefox\/([\d.]+)/))) browser = 'Firefox ' + m[1];
+  document.getElementById('ua').innerHTML =
+    '<strong>' + browser + '</strong><br><span style="font-size:11px;color:#8A9BA8;">' + ua + '</span>';
+
+  // Tela + escala de fonte do sistema (font boosting / acessibilidade)
+  var probe = document.createElement('div');
+  probe.style.cssText = 'font-size:16px;position:absolute;left:-9999px;';
+  probe.textContent = 'x';
+  document.body.appendChild(probe);
+  var fs = window.getComputedStyle(probe).fontSize;
+  document.body.removeChild(probe);
+  var dark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  document.getElementById('tela').innerHTML =
+    'Viewport: <strong>' + window.innerWidth + ' × ' + window.innerHeight + '</strong>' +
+    ' · Pixel ratio: <strong>' + (window.devicePixelRatio || 1) + '</strong><br>' +
+    'Fonte 16px renderiza como: <strong>' + fs + '</strong>' +
+    (parseFloat(fs) > 17 ? ' ⚠ (fonte do sistema aumentada!)' : ' (normal)') + '<br>' +
+    'Modo escuro do sistema: <strong>' + (dark ? 'ATIVO ⚠' : 'desligado') + '</strong>';
+
+  // Recursos de CSS/JS que o site usa
+  var sup = function (p, v) { try { return window.CSS && CSS.supports && CSS.supports(p, v); } catch (e) { return false; } };
+  var feats = [
+    ['Flexbox com gap',        sup('gap', '10px')],
+    ['margin-inline (faixas)', sup('margin-inline', '0px')],
+    ['clamp() (títulos)',      sup('width', 'clamp(1px, 2vw, 3px)')],
+    ['conic-gradient (anel)',  sup('background', 'conic-gradient(red, blue)')],
+    ['backdrop-filter (nav)',  sup('backdrop-filter', 'blur(2px)') || sup('-webkit-backdrop-filter', 'blur(2px)')],
+    ['overflow: clip',         sup('overflow-x', 'clip')],
+    ['CSS grid',               sup('display', 'grid')],
+    ['IntersectionObserver',   'IntersectionObserver' in window],
+    ['CSS.supports (testes)',  !!(window.CSS && CSS.supports)]
+  ];
+  var html = '';
+  var falhas = 0;
+  for (var i = 0; i < feats.length; i++) {
+    var okf = feats[i][1];
+    if (!okf) falhas++;
+    html += '<span class="row ' + (okf ? 'ok' : 'bad') + '">' + (okf ? '✔ ' : '✖ FALTA: ') + feats[i][0] + '</span>';
+  }
+  document.getElementById('feats').innerHTML = html;
+
+  var v = document.getElementById('veredito');
+  if (falhas >= 2) {
+    v.innerHTML = '<strong>Veredito provável:</strong> este navegador é antigo demais pros recursos do site — atualizar o Chrome/Samsung Internet pela Play Store deve resolver.';
+  } else if (parseFloat(fs) > 17) {
+    v.innerHTML = '<strong>Veredito provável:</strong> a fonte do sistema está aumentada nas configurações do aparelho, o que desmonta o layout.';
+  } else {
+    v.innerHTML = '<strong>Tudo verde por aqui:</strong> então o problema é cache/aba antiga ou algum modo do navegador (ex.: modo escuro forçado do Samsung Internet). Manda o print desta tela + um print do site bugado.';
+  }
+}());
+</script>
+</body>
+</html>
