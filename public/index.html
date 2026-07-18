@@ -30,6 +30,8 @@ body { background: #F2F7FB; }
 
 .lp-nav {
   position: sticky; top: 0; z-index: 100;
+  /* anula o header global do main.css (max-width 640px da coluna do quiz) */
+  width: 100%; max-width: none; margin: 0;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   padding: 14px 24px;
   background: rgba(242,247,251,0.92);
