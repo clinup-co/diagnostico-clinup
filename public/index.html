@@ -270,8 +270,9 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 .cmp-card--before .cmp-list li::before { content: '✕'; color: rgba(234,244,250,0.4); font-weight: 800; flex-shrink: 0; }
 .cmp-card--after .cmp-list li { color: var(--body); }
 .cmp-card--after .cmp-list li::before { content: '✓'; color: var(--green); font-weight: 800; flex-shrink: 0; }
-/* Miniatura da tela de resultado dentro do "depois": o produto em si,
-   não uma promessa — mesmos números do exemplo do hero (58%, coerência) */
+/* Miniatura do resultado dentro do "depois": só a lista de prioridades
+   (sem score — nota mediana no "depois" lia como contradição; feedback
+   do Gabriel 18/07). O produto é a clareza da ordem, não um número. */
 .cmp-shot {
   background: #F6FAFD; border: 1px solid var(--border); border-radius: 12px;
   padding: 16px; margin-top: 4px;
@@ -283,18 +284,6 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   text-transform: uppercase; color: var(--sub);
   border: 1px solid var(--border); border-radius: 100px; padding: 3px 8px;
 }
-.cmp-shot-score { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-.cmp-shot-ring {
-  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
-  background: conic-gradient(#E08A1E 0 58%, #E9EFF4 58% 100%);
-  display: flex; align-items: center; justify-content: center;
-}
-.cmp-shot-ring span {
-  width: 38px; height: 38px; border-radius: 50%; background: #fff;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 800; color: var(--white);
-}
-.cmp-shot-badge { font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #B26F0E; }
 .cmp-shot-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .cmp-shot-list li {
   display: flex; align-items: center; gap: 10px;
@@ -676,17 +665,13 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <div class="cmp-title">Com clareza</div>
         <div class="cmp-shot">
           <div class="cmp-shot-head">
-            <span class="cmp-shot-title">Diagnóstico da clínica</span>
+            <span class="cmp-shot-title">O que arrumar primeiro</span>
             <span class="cmp-shot-eg">Exemplo</span>
-          </div>
-          <div class="cmp-shot-score">
-            <div class="cmp-shot-ring"><span>58%</span></div>
-            <div class="cmp-shot-badge">Uns pontos soltos</div>
           </div>
           <ol class="cmp-shot-list">
             <li><b>1</b> WhatsApp — muita gente some sem resposta</li>
             <li><b>2</b> Agendamento com atrito na hora de marcar</li>
-            <li class="is-ok"><b>✓</b> Site — já passa confiança</li>
+            <li class="is-ok"><b>✓</b> Site — já passa confiança, mantém</li>
           </ol>
         </div>
         <p class="cmp-shot-cap">Prioridades em ordem, com os seus números — é isso que o diagnóstico te entrega.</p>

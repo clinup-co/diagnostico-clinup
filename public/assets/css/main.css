@@ -12,7 +12,9 @@ html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
-body { overflow-x: clip; }
+/* hidden = fallback p/ navegador antigo (que ignora clip e ficaria sem
+   guarda nenhuma); clip sobrescreve nos modernos */
+body { overflow-x: hidden; overflow-x: clip; }
 
 :root {
   /* ATENÇÃO: nomes legado do tema escuro — o VALOR é o que vale, não o nome:
