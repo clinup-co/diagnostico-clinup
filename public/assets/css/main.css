@@ -1,18 +1,17 @@
 ﻿*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* Blindagem de viewport (todas as páginas):
-   1) overflow-x: nada jamais estoura a lateral — mata a "faixa branca à
-      direita" em qualquer aparelho, mesmo se um elemento vazar;
+   1) overflow-x hidden: nada jamais estoura a lateral — mata a "faixa
+      branca à direita" em qualquer aparelho, mesmo se um elemento vazar;
    2) text-size-adjust: impede o navegador Android de inflar fontes por
       conta própria (font boosting), que desmonta o layout em telas 360px.
-   Nota: hidden é o fallback; clip (Chrome 90+) não interfere no sticky. */
+   ATENÇÃO: NUNCA usar overflow-x CLIP no html — no elemento raiz o clip
+   contamina o eixo Y (visible vira clip) e a PÁGINA INTEIRA PARA DE ROLAR.
+   hidden no raiz preserva o scroll vertical e o position:sticky. */
 html {
   overflow-x: hidden;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
-}
-@supports (overflow-x: clip) {
-  html { overflow-x: clip; }
 }
 
 :root {
