@@ -68,6 +68,7 @@ function showResult() {
          href="/consultoria?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
         Agendar minha conversa gratuita →
       </a>
+      <button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do resultado</button>
       <button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>
     </div>
   `;
@@ -121,6 +122,53 @@ function animateScoreRing(score) {
     if (t < 1) requestAnimationFrame(tick);
     else num.textContent = target;
   })(start);
+}
+
+// Resumo do resultado em texto puro — o usuário leva o diagnóstico com ele
+// (colar em nota, mandar pro sócio, guardar). Clipboard API com fallback.
+function copyResultSummary(btn) {
+  try {
+    const model = buildPresentationModel();
+    const label = {
+      good: 'Boa base', moderate: 'Uns pontos soltos', critical: 'Vários pontos travando'
+    }[model.level] || model.level;
+    const lines = [
+      'Diagnóstico CLINUP — ' + (quizLeadData.nome || 'minha clínica'),
+      'Resultado: ' + model.score + '% · ' + label,
+      '',
+      'Principais pontos:'
+    ];
+    model.insights.forEach(i => lines.push('- ' + i.title));
+    lines.push('', 'Feito em: diagnostico-clinup-lac.vercel.app');
+    const text = lines.join('\n');
+
+    const confirm = () => {
+      const original = btn.textContent;
+      btn.textContent = 'Copiado ✓';
+      btn.disabled = true;
+      setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2200);
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(confirm).catch(() => fallbackCopy(text, confirm));
+    } else {
+      fallbackCopy(text, confirm);
+    }
+  } catch (e) {}
+}
+
+function fallbackCopy(text, onDone) {
+  try {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    onDone();
+  } catch (e) {}
 }
 
 function onWhatsappClick() {

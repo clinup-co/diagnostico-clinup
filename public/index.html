@@ -135,7 +135,6 @@ body { background: #F2F7FB; }
 section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem sob a nav sticky */
 @media (min-width: 900px) {
   section { padding: 108px 0 0; }
-  .lp-closing { margin-top: 104px; }
 }
 
 /* ── Faixas de seção (full-bleed): capítulos visuais alternados ── */
@@ -148,7 +147,7 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 .lp-band--white { background: #fff; border-block: 1px solid var(--border); }
 .lp-band--dark  { background: linear-gradient(135deg, #0E2233 0%, #16324A 100%); }
 .lp-band--dark .lp-label { color: rgba(234,244,250,0.65); }
-.lp-band--dark .lp-label::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12' fill='none' stroke='%235BC4F0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 9h3l2-4 2 6 2-3h3l3-3'/%3E%3C/svg%3E"); }
+.lp-band--dark .lp-label--pulse::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12' fill='none' stroke='%235BC4F0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 9h3l2-4 2 6 2-3h3l3-3'/%3E%3C/svg%3E"); }
 .lp-band--dark .lp-h2 { color: #fff; }
 .lp-band--dark .lp-h2-sub { color: rgba(234,244,250,0.82); }
 
@@ -271,6 +270,46 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 .cmp-card--before .cmp-list li::before { content: '✕'; color: rgba(234,244,250,0.4); font-weight: 800; flex-shrink: 0; }
 .cmp-card--after .cmp-list li { color: var(--body); }
 .cmp-card--after .cmp-list li::before { content: '✓'; color: var(--green); font-weight: 800; flex-shrink: 0; }
+/* Miniatura da tela de resultado dentro do "depois": o produto em si,
+   não uma promessa — mesmos números do exemplo do hero (58%, coerência) */
+.cmp-shot {
+  background: #F6FAFD; border: 1px solid var(--border); border-radius: 12px;
+  padding: 16px; margin-top: 4px;
+}
+.cmp-shot-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+.cmp-shot-title { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: var(--white); }
+.cmp-shot-eg {
+  font-family: 'Sora', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--sub);
+  border: 1px solid var(--border); border-radius: 100px; padding: 3px 8px;
+}
+.cmp-shot-score { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.cmp-shot-ring {
+  width: 52px; height: 52px; border-radius: 50%; flex-shrink: 0;
+  background: conic-gradient(#E08A1E 0 58%, #E9EFF4 58% 100%);
+  display: flex; align-items: center; justify-content: center;
+}
+.cmp-shot-ring span {
+  width: 38px; height: 38px; border-radius: 50%; background: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Sora', sans-serif; font-size: 12px; font-weight: 800; color: var(--white);
+}
+.cmp-shot-badge { font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #B26F0E; }
+.cmp-shot-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.cmp-shot-list li {
+  display: flex; align-items: center; gap: 10px;
+  background: #fff; border: 1px solid var(--border); border-radius: 9px;
+  padding: 9px 12px; font-size: 12.5px; font-weight: 600; color: var(--body); line-height: 1.4;
+}
+.cmp-shot-list b {
+  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 800;
+  background: rgba(224,138,30,0.14); color: #B26F0E;
+}
+.cmp-shot-list li.is-ok b { background: rgba(30,142,99,0.12); color: #1E8E63; }
+.cmp-shot-cap { font-size: 13px; font-weight: 500; color: var(--body); margin-top: 14px; line-height: 1.5; }
+
 /* Seta conectora entre os cards (só desktop; no mobile os cards empilham) */
 .cmp-arrow {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
@@ -297,7 +336,14 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   border: 1px solid rgba(91,196,240,0.35); border-radius: 100px; padding: 8px 16px;
 }
 
-/* ── FAQ (mesmo padrão da planos) ── */
+/* ── FAQ: título à esquerda, perguntas à direita (quebra a centro-simetria) ── */
+.lp-faq-grid { max-width: 960px; margin: 0 auto; }
+@media (min-width: 900px) {
+  .lp-faq-grid { display: grid; grid-template-columns: 0.75fr 1.45fr; gap: 56px; align-items: start; }
+  .lp-faq-intro .lp-label, .lp-faq-intro .lp-h2, .lp-faq-intro .lp-h2-sub { text-align: left; margin-left: 0; }
+  .lp-faq-intro .lp-h2 { margin-bottom: 12px; }
+  .lp-faq-grid .lp-faq { margin: 0; }
+}
 .lp-faq { max-width: 680px; margin: 0 auto; }
 .lp-faq summary {
   padding: 18px 20px; cursor: pointer;
@@ -313,11 +359,8 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   color: var(--body); background: var(--card); border-bottom: 1px solid var(--border);
 }
 
-/* ── Fechamento dark ── */
-.lp-closing {
-  background: #0E2233; border-radius: 22px; padding: 48px 26px; text-align: center;
-  margin-top: 72px;
-}
+/* ── Fechamento dark: faixa full-bleed (uma só gramática de dark no site) ── */
+.lp-closing { text-align: center; }
 .lp-closing-eyebrow { color: #5BC4F0; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
 .lp-closing h2 { color: #fff; font-family: 'Sora', sans-serif; font-weight: 800; font-size: clamp(22px, 4vw, 30px); line-height: 1.2; margin-bottom: 12px; }
 .lp-closing p { color: rgba(234,244,250,0.85); font-size: 15.5px; font-weight: 500; line-height: 1.6; max-width: 540px; margin: 0 auto 24px; }
@@ -364,9 +407,10 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 }
 @keyframes lpUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
 
-/* ── Vida na página: entradas, flutuação, hovers, divisor vivo ── */
-/* Assinatura pulse-up antes dos eyebrows (mesma da planos) */
-.lp-label::before, .lp-eyebrow::before {
+/* ── Vida na página: entradas, flutuação, hovers ── */
+/* Assinatura pulse-up: usada com parcimônia (hero, dor, transformação) —
+   repetida em toda seção ela vira carimbo e perde o valor */
+.lp-eyebrow::before, .lp-label--pulse::before {
   content: '';
   display: inline-block;
   width: 22px; height: 11px;
@@ -497,7 +541,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
   <!-- A DOR INVISÍVEL -->
   <section id="dor" class="lp-band lp-band--white">
-    <p class="lp-label reveal">A dor invisível</p>
+    <p class="lp-label lp-label--pulse reveal">A dor invisível</p>
     <h2 class="lp-h2 reveal">A maioria das clínicas perde pacientes antes mesmo da consulta acontecer</h2>
     <p class="lp-h2-sub reveal">Nem sempre o problema está no serviço. Muitas vezes a perda acontece antes: no site que não passa confiança, no WhatsApp sem resposta ou no excesso de etapas pra marcar.</p>
     <div class="lp-pains reveal-group">
@@ -612,7 +656,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
   <!-- TRANSFORMAÇÃO (antes → depois) -->
   <section id="transformacao" class="lp-band lp-band--dark">
-    <p class="lp-label reveal">Transformação</p>
+    <p class="lp-label lp-label--pulse reveal">Transformação</p>
     <h2 class="lp-h2 reveal">Quando você enxerga o que trava a conversão, tudo muda</h2>
     <p class="lp-h2-sub reveal">A mesma clínica, os mesmos pacientes — a diferença é saber onde está o vazamento.</p>
     <div class="cmp-grid reveal-group">
@@ -630,13 +674,22 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       <div class="cmp-card cmp-card--after">
         <span class="cmp-tag">Depois</span>
         <div class="cmp-title">Com clareza</div>
-        <ul class="cmp-list">
-          <li>Você sabe onde perde paciente</li>
-          <li>Site, WhatsApp e atendimento no mesmo time</li>
-          <li>Caminho fácil até a consulta</li>
-          <li>Prioridades definidas, em ordem</li>
-          <li>Interesse virando agenda</li>
-        </ul>
+        <div class="cmp-shot">
+          <div class="cmp-shot-head">
+            <span class="cmp-shot-title">Diagnóstico da clínica</span>
+            <span class="cmp-shot-eg">Exemplo</span>
+          </div>
+          <div class="cmp-shot-score">
+            <div class="cmp-shot-ring"><span>58%</span></div>
+            <div class="cmp-shot-badge">Uns pontos soltos</div>
+          </div>
+          <ol class="cmp-shot-list">
+            <li><b>1</b> WhatsApp — muita gente some sem resposta</li>
+            <li><b>2</b> Agendamento com atrito na hora de marcar</li>
+            <li class="is-ok"><b>✓</b> Site — já passa confiança</li>
+          </ol>
+        </div>
+        <p class="cmp-shot-cap">Prioridades em ordem, com os seus números — é isso que o diagnóstico te entrega.</p>
       </div>
       <span class="cmp-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </div>
@@ -647,20 +700,18 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <p class="lp-label reveal">Por que a CLINUP</p>
     <div class="lp-position reveal">
       <p>A CLINUP trabalha <strong>só com clínicas</strong>. O diagnóstico existe pra te dar <strong>clareza estratégica</strong> sobre captação e conversão — em vez de agir no escuro, você passa a saber exatamente o que fortalecer. <strong>Sem promessa de agenda lotada</strong>: quem garante milagre, desconfie.</p>
-      <div class="lp-seals">
-        <span class="lp-seal">Gratuito</span>
-        <span class="lp-seal">Menos de 2 minutos</span>
-        <span class="lp-seal">Resultado na hora</span>
-        <span class="lp-seal">Feito para clínicas</span>
-      </div>
     </div>
   </section>
 
   <!-- FAQ -->
   <section id="faq" class="lp-band lp-band--white">
-    <p class="lp-label reveal">FAQ</p>
-    <h2 class="lp-h2 reveal">Dúvidas frequentes</h2>
-    <div class="lp-faq reveal" style="margin-top:24px;">
+    <div class="lp-faq-grid">
+    <div class="lp-faq-intro">
+      <p class="lp-label reveal">FAQ</p>
+      <h2 class="lp-h2 reveal">Dúvidas frequentes</h2>
+      <p class="lp-h2-sub reveal">Respostas diretas — como o resto do diagnóstico.</p>
+    </div>
+    <div class="lp-faq reveal">
       <details>
         <summary>O diagnóstico é gratuito mesmo?</summary>
         <p><strong>Sim, sem pegadinha.</strong> O objetivo é te ajudar a identificar gargalos e oportunidades. Se depois você quiser uma conversa pra aprofundar, ela também é gratuita — e sem compromisso.</p>
@@ -679,13 +730,18 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       </details>
       <details>
         <summary>Meus dados ficam protegidos?</summary>
-        <p><strong>Sim.</strong> Usamos seu nome e WhatsApp só pra montar o resultado e falar com você. Seus dados não são compartilhados com terceiros.</p>
+        <p><strong>Sim.</strong> Usamos seu nome e WhatsApp só pra montar o resultado e falar com você. Seus dados não são compartilhados com terceiros — os detalhes estão na nossa <a href="/privacidade" style="color:#1279A3;font-weight:600;">política de privacidade</a>.</p>
       </details>
+      <details>
+        <summary>O que acontece depois do resultado?</summary>
+        <p><strong>Você decide.</strong> O resultado é seu — dá pra encerrar ali mesmo. Se quiser aprofundar, você agenda uma conversa gratuita. A gente pode te mandar uma mensagem no WhatsApp sobre o seu resultado, mas sem insistência: você responde se fizer sentido.</p>
+      </details>
+    </div>
     </div>
   </section>
 
   <!-- FECHAMENTO -->
-  <section class="lp-closing reveal">
+  <section class="lp-closing lp-band lp-band--dark reveal">
     <p class="lp-closing-eyebrow">Comece agora</p>
     <h2>Descubra onde sua clínica está perdendo pacientes</h2>
     <p>Em menos de 2 minutos, você tem uma visão clara dos gargalos que estão segurando seus agendamentos — e do que arrumar primeiro.</p>
@@ -704,6 +760,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <nav class="lp-footer-links" aria-label="Links do rodapé">
     <a class="cta-diag" data-origem="footer" href="/diagnostico">Fazer o diagnóstico gratuito</a>
     <a href="#faq">Dúvidas frequentes</a>
+    <a href="/privacidade">Política de privacidade</a>
   </nav>
   <p>© 2026 CLINUP. Todos os direitos reservados.</p>
 </footer>

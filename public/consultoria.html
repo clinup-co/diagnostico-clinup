@@ -52,7 +52,9 @@ header.cons-header {
   font-weight: 800; line-height: 1.15; letter-spacing: -0.5px;
   color: var(--white); margin-bottom: 14px;
 }
-.cons-h .hl { color: var(--blue); }
+.cons-h .hl { color: var(--blue); white-space: nowrap; } /* "em 20 minutos" nunca quebra deixando "minutos." órfão */
+.cons-sign { text-align: center; font-size: 13.5px; font-weight: 500; color: var(--body); margin-top: 12px; }
+.cons-sign strong { color: var(--white); }
 .cons-sub {
   font-size: 17px; font-weight: 500; color: var(--body);
   line-height: 1.65; max-width: 520px; margin: 0 auto 26px;
@@ -142,6 +144,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       Agendar minha consultoria gratuita
     </a>
     <p class="cta-note">Gratuita, direto no WhatsApp · você decide o que fizer sentido.</p>
+    <p class="cons-sign">Quem atende: <strong>Gabriel, da CLINUP</strong> — você fala direto com quem faz.</p>
   </section>
 
   <!-- O que você leva da conversa -->
@@ -215,6 +218,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <nav class="cons-footer-links" aria-label="Links do rodapé">
     <a href="/">Página inicial</a>
     <a href="/diagnostico">Diagnóstico gratuito</a>
+    <a href="/privacidade">Política de privacidade</a>
   </nav>
   <p>© 2026 CLINUP. Todos os direitos reservados.</p>
 </footer>
