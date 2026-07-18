@@ -12,7 +12,7 @@ function checkLeadForm() {
   }
 }
 
-function goToIntro() {
+function submitLeadForm() {
   // Honeypot: se bot preencheu o campo oculto, bloqueia
   const hp = document.getElementById('hp_field');
   if (hp && hp.value.length > 0) {
@@ -58,7 +58,6 @@ function goToIntro() {
     : `sem-email-${cleanPhone}@nao-informado.com`;
   quizLeadData.telefone  = cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
   quizLeadData.createdAt = new Date().toISOString();
-  quizLeadData.etapaAtual = 'intro';
   persistState();
 
   // Captura imediata: lead vai pro Supabase já no submit do formulário,
@@ -67,8 +66,8 @@ function goToIntro() {
   trackOnce('lead_captured');
   trackPixelOnce('Lead');
 
+  // Direto pra pergunta 1 — sem tela intermediária: o usuário acabou de se
+  // comprometer; cada clique extra entre o form e o quiz é abandono
   document.getElementById('leadScreen').classList.add('hidden');
-  document.getElementById('intro').style.display = '';
-  document.getElementById('intro').classList.remove('hidden');
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  startQuiz();
 }

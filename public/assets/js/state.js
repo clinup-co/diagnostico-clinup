@@ -86,8 +86,6 @@ function showLeadScreen() {
 
 function hideAllScreens() {
   document.getElementById('leadScreen').classList.add('hidden');
-  document.getElementById('intro').style.display = 'none';
-  document.getElementById('intro').classList.add('hidden');
   document.getElementById('progressWrap').style.display = 'none';
   document.querySelectorAll('.question-screen').forEach(q => q.classList.remove('active'));
   document.getElementById('result').classList.remove('show');
@@ -128,9 +126,10 @@ function resumeSession() {
     hideAllScreens();
 
     if (etapa === 'intro') {
-      const intro = document.getElementById('intro');
-      intro.style.display = '';
-      intro.classList.remove('hidden');
+      // Etapa legada (a tela intersticial foi removida): cai direto na pergunta 1
+      document.getElementById('progressWrap').classList.add('show');
+      document.getElementById('progressWrap').style.display = '';
+      showQuestion(1);
       return;
     }
 
@@ -155,6 +154,18 @@ function resumeSession() {
     const qNum = match[2] ? parseInt(match[2]) : 1;
     document.getElementById('progressWrap').classList.add('show');
     document.getElementById('progressWrap').style.display = '';
+
+    // Aviso de retomada: quem volta no meio do quiz sabe onde está —
+    // e pode recomeçar (o lead capturado e a atribuição são preservados)
+    if (Object.keys(answers).length > 0 && !document.getElementById('resumeNote')) {
+      const note = document.createElement('div');
+      note.className = 'resume-note';
+      note.id = 'resumeNote';
+      note.innerHTML = 'Continuando de onde você parou. ' +
+        '<button type="button" onclick="restartQuizAnswers()">Recomeçar do zero</button>';
+      const pw = document.getElementById('progressWrap');
+      pw.parentNode.insertBefore(note, pw);
+    }
 
     Object.keys(answers).forEach(k => {
       const n = parseInt(k);

@@ -5,6 +5,8 @@ function showResult() {
   if (answers[5] === undefined && answers['5'] === undefined) return;
   document.querySelectorAll('.question-screen').forEach(q => q.classList.remove('active'));
   document.getElementById('progressWrap').style.display = 'none';
+  const resumeNote = document.getElementById('resumeNote');
+  if (resumeNote) resumeNote.remove();
 
   const model  = buildPresentationModel();
   const result = document.getElementById('result');
@@ -43,6 +45,7 @@ function showResult() {
       <h2 class="result-title">${model.title}</h2>
       <p class="result-sub">${model.subtitle}</p>
       <p class="result-thesis">${model.thesis}</p>
+      <p class="score-method">Score calculado a partir das suas 5 respostas — cada uma pesa pelo impacto em captação e conversão de pacientes.</p>
     </div>
     <p class="section-label">${model.sectionLabel}</p>
     <div class="findings">${insightsHTML}</div>
@@ -65,7 +68,7 @@ function showResult() {
          href="/consultoria?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
         Agendar minha conversa gratuita →
       </a>
-      <button class="btn-restart" onclick="restartQuiz()">↩ Refazer o diagnóstico</button>
+      <button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>
     </div>
   `;
 

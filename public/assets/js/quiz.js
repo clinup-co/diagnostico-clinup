@@ -1,11 +1,14 @@
 // ─────────────────────────────────────────────
 // QUIZ — navegação e seleção de respostas
+// Seleção auto-avança (padrão Typeform): 1 toque por pergunta.
+// Só a pergunta 5 mantém botão explícito ("Ver meu diagnóstico").
 // ─────────────────────────────────────────────
+let _advanceTimer = null;
+
 function startQuiz() {
   quizLeadData.etapaAtual = 'quiz';
   persistState();
   trackOnce('quiz_start');
-  document.getElementById('intro').style.display = 'none';
   document.getElementById('progressWrap').classList.add('show');
   showQuestion(1);
 }
@@ -29,12 +32,16 @@ function showQuestion(n) {
     }
     quizLeadData.etapaAtual = 'pergunta_' + n;
     persistState();
-    window.scrollTo({top: 0, behavior: 'smooth'});
+    // Posicionamento instantâneo: o layout nunca se move depois de renderizado
+    // (scroll suave atrasado deslocava as opções sob o dedo do usuário)
+    window.scrollTo(0, 0);
   }
 }
 
+// Progresso dotado: o formulário já contou como avanço, a barra nunca
+// nasce em 0% — começar com crédito aumenta conclusão (endowed progress)
 function updateProgress(n) {
-  const pct = Math.round(((n - 1) / 5) * 100);
+  const pct = 20 + Math.round(((n - 1) / 5) * 80);
   document.getElementById('progressFill').style.width = pct + '%';
   document.getElementById('progressPct').textContent  = pct + '%';
   document.getElementById('progressNum').textContent  = n;
@@ -62,6 +69,12 @@ function selectOpt(qNum, score, btn) {
   trackOnce('question_' + qNum, { opcao: Array.prototype.indexOf.call(opts, btn) + 1 });
 
   enableNext(qNum);
+
+  // Auto-avanço: 320ms pra seleção registrar visualmente antes da transição
+  if (qNum < 5) {
+    clearTimeout(_advanceTimer);
+    _advanceTimer = setTimeout(() => goNext(qNum), 320);
+  }
 }
 
 function enableNext(qNum) {
@@ -76,7 +89,29 @@ function goNext(qNum) {
 }
 
 function goBack(qNum) {
+  clearTimeout(_advanceTimer); // voltar cancela qualquer avanço pendente
   if (qNum > 1) showQuestion(qNum - 1);
+}
+
+// Recomeçar do zero (link do aviso de sessão retomada): limpa respostas,
+// preserva lead já capturado e a atribuição (_utm).
+// (Diferente do restartQuiz de results.js, que reseta o funil inteiro.)
+function restartQuizAnswers() {
+  clearTimeout(_advanceTimer);
+  Object.keys(answers).forEach(k => { delete answers[k]; });
+  quizLeadData.pontos = {};
+  const utm = quizLeadData.respostas && quizLeadData.respostas._utm;
+  quizLeadData.respostas = utm ? { _utm: utm } : {};
+  quizLeadData.resultado = '';
+  quizLeadData.quizConcluido = false;
+  document.querySelectorAll('.opt').forEach(o => {
+    o.classList.remove('selected'); o.dataset.selected = 'false';
+  });
+  const n5 = document.getElementById('next5');
+  if (n5) n5.classList.remove('enabled');
+  const note = document.getElementById('resumeNote');
+  if (note) note.remove();
+  showQuestion(1);
 }
 
 function getTotal() {
