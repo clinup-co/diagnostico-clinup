@@ -468,6 +468,12 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   /* CTA numa linha só em 360px */
   .lp-btn { padding-inline: 14px; font-size: 15px; }
 
+  /* Hero mobile: CTA na dobra + card espiando o anel logo abaixo.
+     O checklist é redundante (o próprio card mostra Site/WhatsApp/etc) —
+     escondê-lo sobe o anel pra dentro da 1ª tela. */
+  .lp-hero .lp-checks { display: none; }
+  .lp-hero-act .lp-cta-note { margin-bottom: 2px; }
+
   /* Card do hero compacto: cabe junto com título + CTA na 1ª tela.
      Esconde os 2 medidores extras, encolhe o anel e aperta o padding. */
   .lp-mock { padding: 20px 18px 14px; }
@@ -613,6 +619,14 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       <h1>Sua clínica pode estar perdendo pacientes todos os dias — <em>sem você ver onde</em>.</h1>
       <p class="lp-hero-sub">Em 5 perguntas e 2 minutos, veja onde os pacientes escapam — e o que arrumar primeiro.</p>
     </div>
+    <div class="lp-hero-act">
+      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
+      <p class="lp-cta-note">Menos de 2 minutos · sem compromisso</p>
+      <ul class="lp-checks">
+        <li>Site, WhatsApp e atendimento analisados juntos</li>
+        <li>Gratuito — e sem compromisso com nada depois</li>
+      </ul>
+    </div>
     <div class="lp-mock-wrap">
       <div class="lp-mock" aria-hidden="true">
         <div class="lp-mock-bar"><span></span><span></span><span></span><em>resultado do diagnóstico</em></div>
@@ -639,14 +653,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         </div>
         <p class="lp-mock-cap">Exemplo — o seu sai na hora, com os seus números</p>
       </div>
-    </div>
-    <div class="lp-hero-act">
-      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
-      <p class="lp-cta-note">Menos de 2 minutos · sem compromisso</p>
-      <ul class="lp-checks">
-        <li>Site, WhatsApp e atendimento analisados juntos</li>
-        <li>Gratuito — e sem compromisso com nada depois</li>
-      </ul>
     </div>
   </section>
 
