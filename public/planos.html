@@ -975,6 +975,8 @@ body.demo-modal-open { overflow: hidden; }
   border-radius: 12px;
   box-shadow: 0 10px 26px rgba(23,124,166,0.38);
   transition: transform 0.15s, box-shadow 0.15s;
+  /* quebra em 2 linhas centrada e equilibrada; a seta vai presa por &nbsp; */
+  text-align: center; text-wrap: balance;
 }
 .plans-anchor-cta:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(23,124,166,0.5); }
 .plans-anchor-cta--hero { margin-top: 22px; }
@@ -1147,6 +1149,24 @@ body.demo-modal-open { overflow: hidden; }
   .deliv-row { grid-template-columns: 1fr; }
   .posts-grid { max-width: 340px; width: 100%; margin: 0 auto; }
 }
+/* ≤560px: 3 colunas viravam tiras de ~100px com uma palavra por linha —
+   vira carrossel com o próximo card "espiando" (convite natural pro swipe) */
+@media (max-width: 560px) {
+  .posts-grid {
+    display: flex; gap: 10px; max-width: none; margin: 0;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory; padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+  .posts-grid::-webkit-scrollbar { display: none; }
+  .post-mini { flex: 0 0 58%; scroll-snap-align: start; font-size: 13.5px; padding: 14px 12px; }
+}
+
+/* ≤640px: corpo de 3+ linhas centralizado alinha à esquerda (títulos seguem centrados) */
+@media (max-width: 640px) {
+  #plans-sub, .plans-tagline, .plans-guarantee p, .roi-out,
+  .plans-team-text, .plans-closing { text-align: left; }
+}
 
 /* ── Caixa-resumo da oferta (antes dos cards de plano) ── */
 .offer-summary {
@@ -1212,7 +1232,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <img src="assets/images/logo.png" alt="CLINUP" class="brand-logo brand-logo--header">
     <div class="logo-text">CLIN<em>UP</em></div>
   </div>
-  <a class="plans-header-link" href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos." target="_blank" rel="noopener noreferrer">Falar no WhatsApp →</a>
+  <a class="plans-header-link" href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos." target="_blank" rel="noopener noreferrer">Falar no WhatsApp&nbsp;→</a>
 </header>
 
 <div class="plans-top-inner">
@@ -1242,7 +1262,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       </div>
     </div>
 
-    <a href="#planos" class="plans-anchor-cta">Ver os planos e quanto custa resolver isso →</a>
+    <a href="#planos" class="plans-anchor-cta">Ver os planos e quanto custa resolver isso&nbsp;→</a>
   </section>
 
   <!-- Seção 3 — Tagline de diferenciação (movida pra logo abaixo do hero) -->
@@ -1358,7 +1378,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
          href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20uma%20conversa%20sobre%20o%20Plano%20Essencial%20(R%24%20297%2Fm%C3%AAs)."
          target="_blank" rel="noopener noreferrer"
          aria-label="Agendar conversa sobre o Plano Essencial">
-        Agendar conversa sobre o Essencial →
+        Agendar conversa sobre o Essencial&nbsp;→
       </a>
       <p class="plan-trust"><span>✓</span> Conversa grátis · sem compromisso</p>
     </div>
@@ -1382,7 +1402,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
          href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20uma%20conversa%20sobre%20o%20Plano%20Profissional%20(R%24%20997%2Fm%C3%AAs)."
          target="_blank" rel="noopener noreferrer"
          aria-label="Agendar conversa sobre o Plano Profissional">
-        Quero agendar sobre o Profissional →
+        Quero agendar sobre o Profissional&nbsp;→
       </a>
       <p class="plan-trust"><span>✓</span> Garantia de devolução · sem fidelidade</p>
     </div>
@@ -1392,7 +1412,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <!-- Faixa de upsell: redes / alto volume (o antigo "Escala" virou proposta sob medida) -->
   <a class="plans-enterprise reveal" href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20tenho%20uma%20rede%20ou%20alto%20volume%20de%20atendimentos.%20Quero%20uma%20proposta%20sob%20medida." target="_blank" rel="noopener noreferrer" aria-label="Falar sobre proposta sob medida para redes ou alto volume">
     <span class="plans-enterprise-txt"><strong>Rede de clínicas ou alto volume?</strong> A gente monta uma proposta sob medida pra você.</span>
-    <span class="plans-enterprise-cta">Falar sobre proposta →</span>
+    <span class="plans-enterprise-cta">Falar sobre proposta&nbsp;→</span>
   </a>
 
   <!-- O que a CLINUP faz (personalizado pelas respostas do diagnóstico) -->
@@ -1483,7 +1503,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
        href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos."
        target="_blank" rel="noopener noreferrer"
        aria-label="Falar com a CLINUP no WhatsApp">
-      Falar com a CLINUP no WhatsApp →
+      Falar com a CLINUP no WhatsApp&nbsp;→
     </a>
   </section>
 
@@ -1513,7 +1533,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <!-- Sticky CTA (mobile) -->
 <div class="sticky-cta" id="stickyCta">
   <a href="#planos" class="sticky-cta-plans">Ver planos</a>
-  <a href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos." target="_blank" rel="noopener noreferrer" class="sticky-cta-wpp">Falar no WhatsApp →</a>
+  <a href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos." target="_blank" rel="noopener noreferrer" class="sticky-cta-wpp">Falar no WhatsApp&nbsp;→</a>
 </div>
 
 <!-- Modal/lightbox dos demos (navegável sobre a própria página) -->

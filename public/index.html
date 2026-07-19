@@ -53,6 +53,13 @@ body { background: #F2F7FB; }
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 }
 .lp-nav-cta:hover { background: #1279A3; border-color: #1279A3; color: #fff; }
+/* ≤560px: marca + pill precisam caber em 360px SEM vazar (o pill estourava
+   25px pra fora da tela) e com alvo de toque ≥44px */
+@media (max-width: 560px) {
+  .lp-nav { padding: 8px 16px; gap: 10px; }
+  .lp-nav-cta { padding: 14px 16px; }
+  .lp-nav-cta-full { display: none; }
+}
 @media (min-width: 900px) {
   .lp-nav { padding: 14px 40px; }
   .lp-nav-links { display: flex; }
@@ -89,6 +96,9 @@ body { background: #F2F7FB; }
   min-height: 52px; padding: 16px 32px;
   font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 0.2px;
   color: #06121E; text-decoration: none;
+  /* se o rótulo quebrar em 2 linhas, quebra centrado e equilibrado —
+     nunca com a seta órfã (ela vai presa por &nbsp; no HTML) */
+  text-align: center; text-wrap: balance;
   background: linear-gradient(135deg, #4FBCEC 0%, #1F8FBE 100%);
   border: none; border-radius: 12px;
   box-shadow: 0 10px 26px rgba(23,124,166,0.38);
@@ -378,6 +388,49 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 .lp-sticky .lp-btn { width: 100%; min-height: 48px; padding: 13px 16px; font-size: 15px; }
 @media (max-width: 768px) { .lp-sticky.is-visible { display: block; } }
 
+/* ── Mobile (≤899px): CTA acima da dobra ──
+   No celular o checklist descia o botão pra 2ª tela; aqui ele sobe
+   (eyebrow → h1 → sub → CTA → nota → checklist) via order, sem tocar o desktop. */
+@media (max-width: 899px) {
+  .lp-hero { padding: 32px 0 44px; }
+  .lp-hero-copy { display: flex; flex-direction: column; }
+  .lp-hero-copy .lp-checks { order: 1; margin: 24px 0 0; }
+  .lp-hero-copy .lp-hero-sub { margin-bottom: 22px; }
+}
+
+/* ── Mobile (≤640px): legibilidade e densidade ── */
+@media (max-width: 640px) {
+  /* parágrafo com 3+ linhas centralizado é ilegível em coluna estreita:
+     título continua centrado, corpo alinha à esquerda */
+  .lp-h2-sub, .lp-position p, .lp-closing p { text-align: left; }
+  .lp-closing { text-align: left; }
+  .lp-closing .lp-btn--block { margin: 0; }
+  .lp-closing-eyebrow, .lp-closing h2 { text-align: left; }
+
+  /* CTA numa linha só em 360px */
+  .lp-btn { padding-inline: 14px; font-size: 15px; }
+
+  /* menos ar entre seções (os vazios de ~130px entre capítulos) */
+  section { padding: 52px 0 0; }
+  .lp-band { padding-block: 52px; }
+  .lp-h2-sub { margin-bottom: 28px; }
+
+  /* cards mais densos: a pilha de 16 cards de anatomia igual encolhe */
+  .lp-pains, .lp-steps { gap: 12px; }
+  .lpb-grid { gap: 10px; }
+  .lp-pain { padding: 16px 18px; }
+  .lp-pain-num { margin-bottom: 6px; }
+  .lp-pain--feature { padding: 22px 20px; }
+  /* bento: ícone na linha do título (flutuando sozinho desperdiçava ~60px/card) */
+  .lpb-card { display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; align-items: start; padding: 16px; }
+  .lpb-icon { grid-row: 1 / span 2; margin-bottom: 0; margin-top: 2px; }
+  .lpb-title { margin-bottom: 3px; align-self: center; }
+  /* passos: bolha numerada na linha do título */
+  .lp-step { display: grid; grid-template-columns: 32px 1fr; column-gap: 12px; padding: 16px; }
+  .lp-step-num { grid-row: 1 / span 2; margin-bottom: 0; }
+  .lp-step-title { align-self: center; margin-bottom: 4px; }
+}
+
 /* ── Reveal no scroll: curto, sutil, e o conteúdo nunca fica refém dele.
    Regra de ouro (Stripe/Linear): a animação assenta o conteúdo, não o esconde —
    por isso 0.42s, 12px de deslocamento e escalonamento máximo de ~0.27s. ── */
@@ -417,6 +470,13 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   .js-anim .lp-hero-copy > *:nth-child(4) { animation-delay: 0.34s; }
   .js-anim .lp-hero-copy > *:nth-child(5) { animation-delay: 0.44s; }
   .js-anim .lp-hero-copy > *:nth-child(6) { animation-delay: 0.52s; }
+  /* mobile: o checklist (4º filho) aparece DEPOIS do botão (5º) e da nota (6º)
+     — os delays seguem a ordem visual, não a do DOM */
+  @media (max-width: 899px) {
+    .js-anim .lp-hero-copy > *:nth-child(5) { animation-delay: 0.32s; }
+    .js-anim .lp-hero-copy > *:nth-child(6) { animation-delay: 0.40s; }
+    .js-anim .lp-hero-copy > *:nth-child(4) { animation-delay: 0.48s; }
+  }
   .js-anim .lp-mock-wrap { opacity: 0; animation: lpUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards; }
 
   /* Card do raio-x flutua de leve depois de entrar */
@@ -480,7 +540,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <a href="#beneficios">Benefícios</a>
     <a href="#faq">FAQ</a>
   </nav>
-  <a class="lp-nav-cta cta-diag" data-origem="nav" href="/diagnostico">Diagnóstico gratuito →</a>
+  <a class="lp-nav-cta cta-diag" data-origem="nav" href="/diagnostico">Diagnóstico<span class="lp-nav-cta-full"> gratuito</span>&nbsp;→</a>
 </header>
 
 <main class="lp-page">
@@ -497,7 +557,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <li>Resultado na hora, em menos de 2 minutos</li>
         <li>Gratuito — e sem compromisso com nada depois</li>
       </ul>
-      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Fazer o diagnóstico gratuito →</a>
+      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
       <p class="lp-cta-note">Menos de 2 minutos · resultado na hora</p>
     </div>
     <div class="lp-mock-wrap">
@@ -590,7 +650,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       </div>
     </div>
     <div class="lp-center reveal">
-      <a class="lp-btn cta-diag" data-origem="passos" href="/diagnostico">Fazer meu diagnóstico agora →</a>
+      <a class="lp-btn cta-diag" data-origem="passos" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
     </div>
   </section>
 
@@ -730,7 +790,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <p class="lp-closing-eyebrow">Comece agora</p>
     <h2>Descubra onde sua clínica está perdendo pacientes</h2>
     <p>Em menos de 2 minutos, você tem uma visão clara dos gargalos que estão segurando seus agendamentos — e do que arrumar primeiro.</p>
-    <a class="lp-btn lp-btn--block cta-diag" data-origem="final" href="/diagnostico">Fazer o diagnóstico gratuito →</a>
+    <a class="lp-btn lp-btn--block cta-diag" data-origem="final" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
     <p class="lp-cta-note">Rápido, direto e sem compromisso</p>
   </section>
 
@@ -752,7 +812,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- Sticky CTA (mobile) -->
 <div class="lp-sticky" id="lpSticky">
-  <a class="lp-btn cta-diag" data-origem="sticky" href="/diagnostico">Fazer o diagnóstico gratuito →</a>
+  <a class="lp-btn cta-diag" data-origem="sticky" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
 </div>
 
 <script>

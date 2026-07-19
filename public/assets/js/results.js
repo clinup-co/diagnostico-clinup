@@ -66,7 +66,7 @@ function showResult() {
       <p class="cta-desc">${model.ctaDesc}</p>
       <a class="btn-whatsapp"
          href="/consultoria?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
-        Agendar minha conversa gratuita →
+        Agendar minha conversa gratuita&nbsp;→
       </a>
       <button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do resultado</button>
       <button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>

@@ -54,6 +54,10 @@ header.cons-header {
 }
 .cons-h .hl { color: var(--blue); white-space: nowrap; } /* "em 20 minutos" nunca quebra deixando "minutos." órfão */
 .cons-sign { text-align: center; font-size: 13.5px; font-weight: 500; color: var(--body); margin-top: 12px; }
+/* ≤640px: sub de 5-6 linhas centralizado é ilegível — corpo à esquerda, título centrado */
+@media (max-width: 640px) {
+  .cons-sub { text-align: left; }
+}
 .cons-sign strong { color: var(--white); }
 .cons-sub {
   font-size: 17px; font-weight: 500; color: var(--body);
