@@ -115,6 +115,15 @@ body { background: #F2F7FB; }
   padding: 28px 26px 18px; box-shadow: var(--shadow-lg);
   max-width: 420px; margin: 0 auto; width: 100%;
 }
+/* Barra de browser no card: o mesmo conteúdo passa a ler como print do
+   produto, não como card flutuante (mesma gramática dos mockups da planos) */
+.lp-mock-bar {
+  display: flex; align-items: center; gap: 5px;
+  margin: -28px -26px 20px; padding: 10px 14px;
+  background: #0E2233; border-radius: 17px 17px 0 0;
+}
+.lp-mock-bar span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.22); }
+.lp-mock-bar em { font-style: normal; margin-left: 7px; font-size: 11px; font-weight: 600; letter-spacing: 0.4px; color: rgba(234,244,250,0.55); }
 .lp-mock-head {
   display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px;
 }
@@ -328,6 +337,31 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 }
 .lp-position p { font-size: 15.5px; font-weight: 500; color: var(--body); line-height: 1.7; max-width: 620px; margin: 0 auto 22px; }
 .lp-position p strong { color: var(--white); }
+/* Prova visual: screenshots reais das demos em moldura de browser.
+   Sem link de propósito — na landing o único caminho é o diagnóstico. */
+.lp-proof { display: grid; grid-template-columns: 1fr; gap: 14px; max-width: 760px; margin: 26px auto 0; }
+@media (min-width: 620px) { .lp-proof { grid-template-columns: 1fr 1fr; } }
+.lp-proof-shot {
+  margin: 0; border-radius: 14px; overflow: hidden;
+  border: 1px solid var(--border); box-shadow: var(--shadow-md); background: #fff;
+}
+.lp-shot-bar { display: flex; align-items: center; gap: 5px; padding: 9px 12px; background: #0E2233; }
+.lp-shot-bar span { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.22); }
+.lp-shot-bar em { font-style: normal; margin-left: 6px; font-size: 11px; font-weight: 600; color: rgba(234,244,250,0.55); }
+.lp-proof-shot img { display: block; width: 100%; height: auto; }
+.lp-proof-cap { text-align: center; font-size: 13px; font-weight: 500; color: var(--sub); margin-top: 14px; }
+/* mobile: carrossel com card seguinte "espiando" (mesma gramática dos posts da planos) */
+@media (max-width: 619px) {
+  .lp-proof {
+    display: flex; gap: 12px; margin-inline: -24px; padding-inline: 24px; padding-bottom: 6px;
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+  }
+  .lp-proof::-webkit-scrollbar { display: none; }
+  .lp-proof-shot { flex: 0 0 82%; scroll-snap-align: start; }
+  .lp-proof-cap { text-align: left; }
+}
+
 .lp-seals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
 .lp-seal {
   font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700;
@@ -562,6 +596,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </div>
     <div class="lp-mock-wrap">
       <div class="lp-mock" aria-hidden="true">
+        <div class="lp-mock-bar"><span></span><span></span><span></span><em>resultado do diagnóstico</em></div>
         <div class="lp-mock-head">
           <div class="lp-mock-title">Diagnóstico da clínica<span>resultado imediato</span></div>
         </div>
@@ -746,6 +781,17 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <div class="lp-position reveal">
       <p>A CLINUP trabalha <strong>só com clínicas</strong>. O diagnóstico existe pra te dar <strong>clareza estratégica</strong> sobre captação e conversão — em vez de agir no escuro, você passa a saber exatamente o que fortalecer. <strong>Sem promessa de agenda lotada</strong>: quem garante milagre, desconfie.</p>
     </div>
+    <div class="lp-proof reveal-group">
+      <figure class="lp-proof-shot">
+        <div class="lp-shot-bar" aria-hidden="true"><span></span><span></span><span></span><em>auraestetica.com.br</em></div>
+        <img src="/assets/img/demo-aura.jpg" alt="Site de clínica construído pela CLINUP — demo Aura Estética" width="1280" height="800" loading="lazy">
+      </figure>
+      <figure class="lp-proof-shot">
+        <div class="lp-shot-bar" aria-hidden="true"><span></span><span></span><span></span><em>luminaface.com.br</em></div>
+        <img src="/assets/img/demo-lumina.jpg" alt="Site de clínica construído pela CLINUP — demo LuminaFace" width="1280" height="800" loading="lazy">
+      </figure>
+    </div>
+    <p class="lp-proof-cap reveal">Sites construídos pela CLINUP — demos de clínicas fictícias, trabalho real.</p>
   </section>
 
   <!-- FAQ -->

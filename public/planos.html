@@ -875,6 +875,22 @@ body.demo-modal-open { overflow: hidden; }
 }
 
 /* ── Por trás da CLINUP ── */
+/* Slot de imagem auto-ativável: quando public/assets/img/bastidores.jpg
+   existir, a foto entra sozinha; até lá, "imagem em breve" */
+.plans-team-shot { max-width: 460px; margin: 0 auto 22px; }
+.ph-slot { position: relative; overflow: hidden; background: #E9F1F8; border: 1px dashed rgba(18,121,163,0.4); }
+.ph-slot img { display: none; width: 100%; height: auto; }
+.ph-slot.has-img img { display: block; }
+.ph-slot.has-img { border-style: solid; border-color: var(--border); }
+.ph-slot.has-img .ph-fallback { display: none; }
+.ph-fallback {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
+}
+.ph-fallback svg { width: 24px; height: 24px; stroke: #7E97AA; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ph-fallback em { font-style: normal; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #7E97AA; }
+.ph-slot--wide { border-radius: 14px; }
+.ph-slot--wide:not(.has-img) { min-height: 180px; }
 .plans-team {
   max-width: 600px;
   margin: 0 auto 40px;
@@ -1510,6 +1526,15 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <!-- Seção 12 — Por trás da CLINUP -->
   <section class="plans-team reveal">
     <p class="plans-team-label">Por trás da CLINUP</p>
+    <!-- Pra ativar a imagem: suba public/assets/img/bastidores.jpg (16:9, 920px+ de largura).
+         Nada mais precisa mudar — o slot troca sozinho. -->
+    <figure class="plans-team-shot ph-slot ph-slot--wide">
+      <img src="/assets/img/bastidores.jpg" alt="Bastidores da CLINUP" loading="lazy" onload="this.parentElement.classList.add('has-img')">
+      <span class="ph-fallback" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.9-3.9a2 2 0 0 0-2.8 0L6 19"/></svg>
+        <em>imagem em breve</em>
+      </span>
+    </figure>
     <p class="plans-team-text">A CLINUP existe por uma ideia simples: <strong>clínica boa não pode perder paciente por estar desorganizada na internet.</strong> Por isso a gente trabalha só com clínicas e faz tudo aqui dentro — a ideia, a parte técnica e a execução — por quem realmente sabe programar, sem template pronto revendido.</p>
     <p class="plans-team-text">E é tudo direto e na transparência: você fala com quem faz, aprova cada detalhe antes de publicar e só continua se fizer sentido pra você.</p>
   </section>
