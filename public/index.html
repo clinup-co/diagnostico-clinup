@@ -67,13 +67,25 @@ body { background: #F2F7FB; }
 
 .lp-page { width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 24px 72px; }
 
-/* ── Hero ── */
+/* ── Hero ──
+   3 blocos: mensagem (lead) → card (mock) → ação (act).
+   Mobile empilha nessa ordem (mensagem, PROVA visual, CTA numa tela).
+   Desktop: mensagem+ação na coluna esquerda, card na direita. */
 .lp-hero {
-  display: grid; grid-template-columns: 1fr; gap: 40px;
-  align-items: center; padding: 48px 0 56px;
+  display: grid; grid-template-columns: 1fr; gap: 22px;
+  align-items: center; padding: 32px 0 48px;
   position: relative;
 }
-@media (min-width: 900px) { .lp-hero { grid-template-columns: 1.08fr 0.92fr; padding: 64px 0 72px; } }
+@media (min-width: 900px) {
+  .lp-hero {
+    grid-template-columns: 1.08fr 0.92fr;
+    grid-template-areas: "lead mock" "act mock";
+    gap: 26px 44px; align-items: start; padding: 64px 0 72px;
+  }
+  .lp-hero-lead { grid-area: lead; }
+  .lp-hero-act  { grid-area: act; align-self: start; }
+  .lp-hero .lp-mock-wrap { grid-area: mock; align-self: center; }
+}
 .lp-eyebrow {
   display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 3px;
   text-transform: uppercase; color: var(--blue); margin-bottom: 18px;
@@ -83,11 +95,13 @@ body { background: #F2F7FB; }
   line-height: 1.12; letter-spacing: -1.2px; color: var(--white); margin-bottom: 18px;
 }
 .lp-hero h1 em { font-style: normal; color: var(--blue); }
-.lp-hero-sub { font-size: 17px; font-weight: 500; color: var(--body); line-height: 1.65; max-width: 500px; margin-bottom: 24px; }
-.lp-checks { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 30px; }
+.lp-hero-sub { font-size: 17px; font-weight: 500; color: var(--body); line-height: 1.6; max-width: 460px; margin-bottom: 0; }
+/* Bloco de ação: CTA + nota + trust curto (2 itens) */
+.lp-hero-act { display: flex; flex-direction: column; }
+.lp-checks { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 16px 0 0; }
 .lp-checks li {
-  display: flex; align-items: flex-start; gap: 10px;
-  font-size: 15px; font-weight: 500; color: var(--body); line-height: 1.5;
+  display: flex; align-items: flex-start; gap: 9px;
+  font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.45;
 }
 .lp-checks li::before { content: '✓'; color: var(--green); font-weight: 800; flex-shrink: 0; margin-top: 1px; }
 
@@ -207,9 +221,43 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
   display: flex; align-items: center; justify-content: center; margin-bottom: 14px;
 }
-.lp-step-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15.5px; color: var(--white); margin-bottom: 8px; }
+.lp-step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.lp-step-num { margin-bottom: 0; }
+.lp-step-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15.5px; color: var(--white); margin-bottom: 0; }
 .lp-step-desc { font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.55; }
 .lp-center { text-align: center; }
+
+/* ── Mini-telas reais do produto dentro de cada passo (show, don't tell):
+   a pessoa VÊ a pergunta, o resultado e as prioridades antes de começar. ── */
+.lp-step-shot {
+  background: #F6FAFD; border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; margin-bottom: 16px; height: 180px;
+  display: flex; flex-direction: column; justify-content: center; gap: 9px; overflow: hidden;
+}
+/* passo 1 — pergunta do quiz */
+.hw-qtop { display: flex; justify-content: space-between; align-items: center; font-family: 'Sora',sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--sub); }
+.hw-qbar { height: 4px; border-radius: 100px; background: rgba(16,50,75,0.10); overflow: hidden; margin-bottom: 2px; }
+.hw-qbar i { display: block; height: 100%; width: 20%; border-radius: 100px; background: var(--blue); }
+.hw-q { font-family: 'Sora',sans-serif; font-size: 12.5px; font-weight: 700; color: var(--white); line-height: 1.25; margin-bottom: 1px; }
+.hw-opt { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; font-size: 11.5px; font-weight: 600; color: var(--body); }
+.hw-ic { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; }
+.hw-ic--ok { background: rgba(30,142,99,0.14); color: #1E8E63; }
+.hw-ic--warn { background: rgba(224,138,30,0.16); color: #B26F0E; }
+.hw-ic--neg { background: rgba(211,58,44,0.12); color: #C0392B; }
+/* passo 2 — resultado */
+.hw-res { display: flex; align-items: center; gap: 14px; }
+.hw-ring { width: 68px; height: 68px; border-radius: 50%; flex-shrink: 0; background: conic-gradient(#E08A1E 0 58%, #E9EFF4 58% 100%); display: flex; align-items: center; justify-content: center; }
+.hw-ring b { width: 50px; height: 50px; border-radius: 50%; background: #F6FAFD; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-size: 16px; font-weight: 800; color: var(--white); }
+.hw-res-side { flex: 1; min-width: 0; }
+.hw-badge { display: inline-block; font-family: 'Sora',sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #B26F0E; background: rgba(224,138,30,0.12); border: 1px solid rgba(224,138,30,0.3); border-radius: 100px; padding: 3px 8px; margin-bottom: 9px; }
+.hw-mrow { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
+.hw-mtrack { height: 5px; border-radius: 100px; background: rgba(16,50,75,0.10); overflow: hidden; margin-bottom: 8px; }
+.hw-mtrack i { display: block; height: 100%; border-radius: 100px; }
+/* passo 3 — prioridades */
+.hw-plabel { font-family: 'Sora',sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--sub); margin-bottom: 1px; }
+.hw-pitem { display: flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 11.5px; font-weight: 600; color: var(--body); }
+.hw-pn { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-size: 10px; font-weight: 800; background: rgba(224,138,30,0.14); color: #B26F0E; }
+.hw-pitem.is-ok .hw-pn { background: rgba(30,142,99,0.12); color: #1E8E63; }
 
 /* ── Benefícios (bento grid: ícone + título + microlinha) ── */
 .lpb-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
@@ -397,14 +445,15 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 .lp-sticky .lp-btn { width: 100%; min-height: 48px; padding: 13px 16px; font-size: 15px; }
 @media (max-width: 768px) { .lp-sticky.is-visible { display: block; } }
 
-/* ── Mobile (≤899px): CTA acima da dobra ──
-   No celular o checklist descia o botão pra 2ª tela; aqui ele sobe
-   (eyebrow → h1 → sub → CTA → nota → checklist) via order, sem tocar o desktop. */
+/* ── Mobile (≤899px): mensagem → PROVA (card) → CTA numa tela só ──
+   O card sobe pra logo abaixo do título; a mensagem enxuga; o CTA fica
+   colado no card. Assim os 3 segundos entregam: o quê + prova + ação. */
 @media (max-width: 899px) {
-  .lp-hero { padding: 32px 0 44px; }
-  .lp-hero-copy { display: flex; flex-direction: column; }
-  .lp-hero-copy .lp-checks { order: 1; margin: 24px 0 0; }
-  .lp-hero-copy .lp-hero-sub { margin-bottom: 22px; }
+  .lp-hero { padding: 28px 0 40px; gap: 18px; }
+  .lp-hero-lead { text-align: left; }
+  .lp-eyebrow { margin-bottom: 12px; }
+  .lp-hero h1 { margin-bottom: 12px; }
+  .lp-mock-wrap { margin: 0 auto; }
 }
 
 /* ── Mobile (≤640px): legibilidade e densidade ── */
@@ -418,6 +467,17 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 
   /* CTA numa linha só em 360px */
   .lp-btn { padding-inline: 14px; font-size: 15px; }
+
+  /* Card do hero compacto: cabe junto com título + CTA na 1ª tela.
+     Esconde os 2 medidores extras, encolhe o anel e aperta o padding. */
+  .lp-mock { padding: 20px 18px 14px; }
+  .lp-mock-bar { margin: -20px -18px 14px; }
+  .lp-mock-head { margin-bottom: 12px; }
+  .lp-meter--hide-sm { display: none; }
+  .lp-ring { width: 92px; height: 92px; margin-bottom: 8px; }
+  .lp-ring-in { width: 68px; height: 68px; font-size: 21px; }
+  .lp-mock-badge { margin-bottom: 12px; }
+  .lp-meter { margin-bottom: 9px; }
 
   /* menos ar entre seções (os vazios de ~130px entre capítulos) */
   section { padding: 52px 0 0; }
@@ -434,10 +494,9 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   .lpb-card { display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; align-items: start; padding: 16px; }
   .lpb-icon { grid-row: 1 / span 2; margin-bottom: 0; margin-top: 2px; }
   .lpb-title { margin-bottom: 3px; align-self: center; }
-  /* passos: bolha numerada na linha do título */
-  .lp-step { display: grid; grid-template-columns: 32px 1fr; column-gap: 12px; padding: 16px; }
-  .lp-step-num { grid-row: 1 / span 2; margin-bottom: 0; }
-  .lp-step-title { align-self: center; margin-bottom: 4px; }
+  /* passos com mini-tela: padding menor */
+  .lp-step { padding: 14px; }
+  .lp-step-shot { margin-bottom: 12px; }
 }
 
 /* ── Reveal no scroll: curto, sutil, e o conteúdo nunca fica refém dele.
@@ -472,21 +531,14 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 
 @media (prefers-reduced-motion: no-preference) {
   /* Hero: entrada em cascata no carregamento (acima da dobra, sem esperar scroll) */
-  .js-anim .lp-hero-copy > * { opacity: 0; animation: lpUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .js-anim .lp-hero-copy > *:nth-child(1) { animation-delay: 0.05s; }
-  .js-anim .lp-hero-copy > *:nth-child(2) { animation-delay: 0.14s; }
-  .js-anim .lp-hero-copy > *:nth-child(3) { animation-delay: 0.24s; }
-  .js-anim .lp-hero-copy > *:nth-child(4) { animation-delay: 0.34s; }
-  .js-anim .lp-hero-copy > *:nth-child(5) { animation-delay: 0.44s; }
-  .js-anim .lp-hero-copy > *:nth-child(6) { animation-delay: 0.52s; }
-  /* mobile: o checklist (4º filho) aparece DEPOIS do botão (5º) e da nota (6º)
-     — os delays seguem a ordem visual, não a do DOM */
-  @media (max-width: 899px) {
-    .js-anim .lp-hero-copy > *:nth-child(5) { animation-delay: 0.32s; }
-    .js-anim .lp-hero-copy > *:nth-child(6) { animation-delay: 0.40s; }
-    .js-anim .lp-hero-copy > *:nth-child(4) { animation-delay: 0.48s; }
-  }
-  .js-anim .lp-mock-wrap { opacity: 0; animation: lpUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards; }
+  .js-anim .lp-hero-lead > *, .js-anim .lp-hero-act > * { opacity: 0; animation: lpUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  .js-anim .lp-hero-lead > *:nth-child(1) { animation-delay: 0.05s; }
+  .js-anim .lp-hero-lead > *:nth-child(2) { animation-delay: 0.14s; }
+  .js-anim .lp-hero-lead > *:nth-child(3) { animation-delay: 0.24s; }
+  .js-anim .lp-hero-act > *:nth-child(1) { animation-delay: 0.46s; }
+  .js-anim .lp-hero-act > *:nth-child(2) { animation-delay: 0.54s; }
+  .js-anim .lp-hero-act > *:nth-child(3) { animation-delay: 0.60s; }
+  .js-anim .lp-mock-wrap { opacity: 0; animation: lpUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.32s forwards; }
 
   /* Card do raio-x flutua de leve depois de entrar */
   .lp-mock { animation: mockFloat 7s ease-in-out 1.6s infinite; }
@@ -556,18 +608,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
   <!-- HERO -->
   <section class="lp-hero">
-    <div class="lp-hero-copy">
+    <div class="lp-hero-lead">
       <span class="lp-eyebrow">Diagnóstico gratuito · para donos de clínica</span>
       <h1>Sua clínica pode estar perdendo pacientes todos os dias — <em>sem você ver onde</em>.</h1>
-      <p class="lp-hero-sub">Em 5 perguntas, você descobre onde os interessados escapam — no site, no jeito que te encontram, no WhatsApp ou na hora de marcar — e o que arrumar primeiro.</p>
-      <ul class="lp-checks">
-        <li>Veja onde os pacientes desistem no caminho até a consulta</li>
-        <li>Site, WhatsApp e atendimento analisados juntos</li>
-        <li>Resultado na hora, em menos de 2 minutos</li>
-        <li>Gratuito — e sem compromisso com nada depois</li>
-      </ul>
-      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
-      <p class="lp-cta-note">Menos de 2 minutos · resultado na hora</p>
+      <p class="lp-hero-sub">Em 5 perguntas e 2 minutos, veja onde os pacientes escapam — e o que arrumar primeiro.</p>
     </div>
     <div class="lp-mock-wrap">
       <div class="lp-mock" aria-hidden="true">
@@ -585,16 +629,24 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
           <div class="lp-meter-row"><span>WhatsApp</span><b>48%</b></div>
           <div class="lp-meter-track"><div class="lp-meter-fill lp-meter-fill--low" style="width:48%"></div></div>
         </div>
-        <div class="lp-meter">
+        <div class="lp-meter lp-meter--hide-sm">
           <div class="lp-meter-row"><span>Atendimento</span><b>74%</b></div>
           <div class="lp-meter-track"><div class="lp-meter-fill" style="width:74%"></div></div>
         </div>
-        <div class="lp-meter">
+        <div class="lp-meter lp-meter--hide-sm">
           <div class="lp-meter-row"><span>Agendamento</span><b>55%</b></div>
           <div class="lp-meter-track"><div class="lp-meter-fill lp-meter-fill--low" style="width:55%"></div></div>
         </div>
-        <p class="lp-mock-cap">Exemplo de resultado — o seu sai na hora, com os seus números</p>
+        <p class="lp-mock-cap">Exemplo — o seu sai na hora, com os seus números</p>
       </div>
+    </div>
+    <div class="lp-hero-act">
+      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
+      <p class="lp-cta-note">Menos de 2 minutos · sem compromisso</p>
+      <ul class="lp-checks">
+        <li>Site, WhatsApp e atendimento analisados juntos</li>
+        <li>Gratuito — e sem compromisso com nada depois</li>
+      </ul>
     </div>
   </section>
 
@@ -644,18 +696,50 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <p class="lp-h2-sub reveal">Simples e objetivo: você enxerga os pontos de atrito que reduzem seus agendamentos — sem instalar nada, sem reunião.</p>
     <div class="lp-steps reveal-group">
       <div class="lp-step">
-        <div class="lp-step-num">1</div>
-        <div class="lp-step-title">Você responde 5 perguntas</div>
+        <div class="lp-step-shot" aria-hidden="true">
+          <div class="hw-qtop"><span>Pergunta 1 de 5</span><span>20%</span></div>
+          <div class="hw-qbar"><i></i></div>
+          <div class="hw-q">A clínica tem site hoje?</div>
+          <div class="hw-opt"><span class="hw-ic hw-ic--ok">✓</span> Sim, temos um site</div>
+          <div class="hw-opt"><span class="hw-ic hw-ic--warn">!</span> Temos, mas é fraco</div>
+          <div class="hw-opt"><span class="hw-ic hw-ic--neg">✕</span> Não temos nada</div>
+        </div>
+        <div class="lp-step-head">
+          <div class="lp-step-num">1</div>
+          <div class="lp-step-title">Você responde 5 perguntas</div>
+        </div>
         <div class="lp-step-desc">Menos de 2 minutos sobre o momento da sua clínica: site, como te acham e como você fecha.</div>
       </div>
       <div class="lp-step">
-        <div class="lp-step-num">2</div>
-        <div class="lp-step-title">O resultado sai na hora</div>
+        <div class="lp-step-shot" aria-hidden="true">
+          <div class="hw-res">
+            <div class="hw-ring"><b>58%</b></div>
+            <div class="hw-res-side">
+              <span class="hw-badge">Uns pontos soltos</span>
+              <div class="hw-mrow"><span>Site</span><span>62%</span></div>
+              <div class="hw-mtrack"><i style="width:62%;background:linear-gradient(90deg,#2D9EC9,#5BC4F0)"></i></div>
+              <div class="hw-mrow"><span>WhatsApp</span><span>48%</span></div>
+              <div class="hw-mtrack"><i style="width:48%;background:linear-gradient(90deg,#d3801c,#E08A1E)"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-step-head">
+          <div class="lp-step-num">2</div>
+          <div class="lp-step-title">O resultado sai na hora</div>
+        </div>
         <div class="lp-step-desc">Você vê onde está perdendo paciente — com os pontos fortes e os gargalos do seu caso.</div>
       </div>
       <div class="lp-step">
-        <div class="lp-step-num">3</div>
-        <div class="lp-step-title">Você sai com prioridades</div>
+        <div class="lp-step-shot" aria-hidden="true">
+          <div class="hw-plabel">Seu plano de ação</div>
+          <div class="hw-pitem"><span class="hw-pn">1</span> Primeiro: organizar o WhatsApp</div>
+          <div class="hw-pitem"><span class="hw-pn">2</span> Depois: facilitar o agendamento</div>
+          <div class="hw-pitem is-ok"><span class="hw-pn">✓</span> Site está bem — manter</div>
+        </div>
+        <div class="lp-step-head">
+          <div class="lp-step-num">3</div>
+          <div class="lp-step-title">Você sai com prioridades</div>
+        </div>
         <div class="lp-step-desc">O que arrumar primeiro, em ordem. E, se quiser, uma conversa gratuita pra aprofundar.</div>
       </div>
     </div>
