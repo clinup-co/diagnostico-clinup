@@ -66,7 +66,7 @@ function showResult() {
       <p class="cta-desc">${model.ctaDesc}</p>
       <a class="btn-whatsapp"
          href="/consultoria?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
-        Agendar minha conversa gratuita&nbsp;→
+        Agendar minha sessão gratuita&nbsp;→
       </a>
       <button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do resultado</button>
       <button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>
@@ -224,7 +224,7 @@ function buildPresentationModel() {
     title        = 'Sua clínica já vai bem. Agora é só ajustar uns detalhes.';
     subtitle     = 'As pessoas já te acham, entram em contato e parte marca consulta. Agora a gente vê onde <strong>uns ajustes pequenos fazem você fechar mais</strong>, com regularidade.';
     ctaTitle     = 'Sua base é boa — dá pra extrair mais dela';
-    ctaDesc      = 'Numa conversa rápida, a gente te mostra os 2 ou 3 ajustes que mais fazem diferença no seu caso. <strong>Gratuita e direto ao ponto.</strong>';
+    ctaDesc      = 'Numa sessão rápida, a gente te mostra os 2 ou 3 ajustes que mais fazem diferença no seu caso — e monta seu plano de ação. <strong>Gratuita e direto ao ponto.</strong>';
     ctaLabel     = 'Quero ver onde melhorar';
     sectionLabel = 'O que achamos — e onde dá pra melhorar';
   } else if (level === 'moderate') {
@@ -232,7 +232,7 @@ function buildPresentationModel() {
     title        = 'Sua clínica atrai gente. Mas perde paciente no meio do caminho.';
     subtitle     = 'Chega gente interessada, mas <strong>parte some antes de marcar</strong>. Falta seu site, seu WhatsApp e seu atendimento trabalharem juntos.';
     ctaTitle     = 'Você já atrai — falta parar de perder';
-    ctaDesc      = 'Numa conversa rápida, a gente te mostra onde os pacientes estão escapando e o que arrumar primeiro. <strong>Gratuita e sem compromisso.</strong>';
+    ctaDesc      = 'Numa sessão rápida, a gente te mostra onde os pacientes estão escapando e monta com você o plano de ação. <strong>Gratuita e sem compromisso.</strong>';
     ctaLabel     = 'Quero ver onde estou perdendo';
     sectionLabel = 'O que achamos na sua clínica';
   } else {
@@ -240,7 +240,7 @@ function buildPresentationModel() {
     title        = 'Tem mais de uma coisa travando sua clínica ao mesmo tempo.';
     subtitle     = 'Quando o site, o jeito de te achar e o WhatsApp falham juntos, você perde muito mais paciente no caminho. <strong>Cada ponto tem conserto — e a ordem de arrumar importa.</strong>';
     ctaTitle     = 'Cada semana assim custa pacientes';
-    ctaDesc      = 'Quanto antes você souber a ordem certa de arrumar, menos consulta perde. A conversa é <strong>gratuita e direto ao ponto</strong>.';
+    ctaDesc      = 'Quanto antes você tiver seu plano de ação na mão, menos consulta perde. A sessão é <strong>gratuita e direto ao ponto</strong>.';
     ctaLabel     = 'Quero entender por onde começar';
     sectionLabel = 'O que está travando sua clínica';
   }
