@@ -276,6 +276,8 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 @media (min-width: 768px) {
   .lp-step-shot { padding: 26px 30px; min-height: 240px; gap: 12px; }
   .hw-qtop, .hw-plabel { font-size: 11px; }
+  .hw-head-t { font-size: 12.5px; }
+  .hw-eg { font-size: 9.5px; }
   .hw-q { font-size: 15px; }
   .hw-opt, .hw-pitem { font-size: 13px; padding: 9px 12px; }
   .hw-ring { width: 84px; height: 84px; }
@@ -294,19 +296,26 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 .hw-ic--warn { background: rgba(224,138,30,0.16); color: #B26F0E; }
 .hw-ic--neg { background: rgba(211,58,44,0.12); color: #C0392B; }
 /* passo 2 — resultado */
-.hw-res { display: flex; align-items: center; gap: 14px; }
+.hw-res { display: flex; align-items: flex-start; gap: 14px; }
 .hw-ring { width: 68px; height: 68px; border-radius: 50%; flex-shrink: 0; background: conic-gradient(#E08A1E 0 58%, #E9EFF4 58% 100%); display: flex; align-items: center; justify-content: center; }
 .hw-ring b { width: 50px; height: 50px; border-radius: 50%; background: #F6FAFD; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-size: 16px; font-weight: 800; color: var(--white); }
 .hw-res-side { flex: 1; min-width: 0; }
 .hw-badge { display: inline-block; font-family: 'Sora',sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #B26F0E; background: rgba(224,138,30,0.12); border: 1px solid rgba(224,138,30,0.3); border-radius: 100px; padding: 3px 8px; margin-bottom: 9px; }
 .hw-mrow { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
 .hw-mtrack { height: 5px; border-radius: 100px; background: rgba(16,50,75,0.10); overflow: hidden; margin-bottom: 8px; }
-.hw-mtrack i { display: block; height: 100%; border-radius: 100px; }
+.hw-mtrack i { display: block; height: 100%; border-radius: 100px; width: var(--w, 0%); }
 /* passo 3 — prioridades */
 .hw-plabel { font-family: 'Sora',sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--sub); margin-bottom: 1px; }
-.hw-pitem { display: flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 7px 10px; font-size: 11.5px; font-weight: 600; color: var(--body); }
-.hw-pn { width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-size: 10px; font-weight: 800; background: rgba(224,138,30,0.14); color: #B26F0E; }
+.hw-pitem { display: flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 8px 11px; font-size: 11.5px; font-weight: 600; color: var(--body); }
+.hw-pn { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-size: 10.5px; font-weight: 800; background: rgba(224,138,30,0.14); color: #B26F0E; }
 .hw-pitem.is-ok .hw-pn { background: rgba(30,142,99,0.12); color: #1E8E63; }
+
+/* ── Gramática de "tela" comum aos mockups: header + tag "exemplo" + opção selecionada ── */
+.hw-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.hw-head-t { font-family: 'Sora',sans-serif; font-size: 11px; font-weight: 700; color: var(--white); }
+.hw-eg { font-family: 'Sora',sans-serif; font-size: 8.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--sub); border: 1px solid var(--border); border-radius: 100px; padding: 2px 7px; flex-shrink: 0; }
+/* opção "respondida" no quiz (mostra que é interativo) */
+.hw-opt--sel { border-color: rgba(12,111,152,0.55); background: rgba(91,196,240,0.10); color: var(--white); box-shadow: 0 0 0 1px rgba(12,111,152,0.25) inset; }
 
 /* ── Benefícios (bento grid: ícone + título + microlinha) ── */
 .lpb-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
@@ -579,9 +588,9 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
    por isso 0.42s, 12px de deslocamento e escalonamento máximo de ~0.27s. ── */
 @media (prefers-reduced-motion: no-preference) {
   .js-anim .reveal { opacity: 0; }
-  .js-anim .reveal.is-visible { opacity: 1; animation: lpUp 0.42s cubic-bezier(0.16, 1, 0.3, 1); }
+  .js-anim .reveal.is-visible { opacity: 1; animation: lpUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
   .js-anim .reveal-group > * { opacity: 0; }
-  .js-anim .reveal-group.is-visible > * { opacity: 1; animation: lpUp 0.42s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
+  .js-anim .reveal-group.is-visible > * { opacity: 1; animation: lpUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
   .js-anim .reveal-group.is-visible > *:nth-child(2) { animation-delay: 0.05s; }
   .js-anim .reveal-group.is-visible > *:nth-child(3) { animation-delay: 0.10s; }
   .js-anim .reveal-group.is-visible > *:nth-child(4) { animation-delay: 0.14s; }
@@ -590,7 +599,7 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   .js-anim .reveal-group.is-visible > *:nth-child(7) { animation-delay: 0.24s; }
   .js-anim .reveal-group.is-visible > *:nth-child(8) { animation-delay: 0.27s; }
 }
-@keyframes lpUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes lpUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
 
 /* ── Vida na página: entradas, flutuação, hovers ── */
 /* Assinatura pulse-up: usada com parcimônia (hero, dor, transformação) —
@@ -631,6 +640,72 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   .lp-meter-fill { transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1); }
 }
 @keyframes mockFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+
+/* ══ Camada 2 — os mockups se demonstram ao entrar na tela ══
+   Itens recolhidos só quando a animação está ligada E o mockup ainda não tocou.
+   .is-played (via IO + failsafe no JS) devolve ao estado final. Reduced-motion
+   e no-JS já mostram tudo pronto (o estado final é o default). */
+@media (prefers-reduced-motion: no-preference) {
+  .js-anim [data-play]:not(.is-played) .hw-opt,
+  .js-anim [data-play]:not(.is-played) .hw-pitem,
+  .js-anim [data-play]:not(.is-played) .cmp-shot-list li,
+  .js-anim [data-play]:not(.is-played) .lp-value li { opacity: 0; transform: translateY(9px); }
+  .js-anim [data-play].is-played .hw-opt,
+  .js-anim [data-play].is-played .hw-pitem,
+  .js-anim [data-play].is-played .cmp-shot-list li,
+  .js-anim [data-play].is-played .lp-value li {
+    opacity: 1; transform: none;
+    transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  /* escalonamento (a estrutura de cada mockup é fixa, então nth-child é seguro) */
+  .js-anim [data-play].is-played .hw-opt:nth-child(5) { transition-delay: 0.07s; }
+  .js-anim [data-play].is-played .hw-opt:nth-child(6) { transition-delay: 0.14s; }
+  .js-anim [data-play].is-played .hw-pitem:nth-child(3) { transition-delay: 0.08s; }
+  .js-anim [data-play].is-played .hw-pitem:nth-child(4) { transition-delay: 0.16s; }
+  .js-anim [data-play].is-played .cmp-shot-list li:nth-child(2) { transition-delay: 0.09s; }
+  .js-anim [data-play].is-played .cmp-shot-list li:nth-child(3) { transition-delay: 0.18s; }
+  .js-anim [data-play].is-played .lp-value li:nth-child(2) { transition-delay: 0.06s; }
+  .js-anim [data-play].is-played .lp-value li:nth-child(3) { transition-delay: 0.12s; }
+  .js-anim [data-play].is-played .lp-value li:nth-child(4) { transition-delay: 0.18s; }
+  .js-anim [data-play].is-played .lp-value li:nth-child(5) { transition-delay: 0.24s; }
+  /* barras do resultado enchem ao entrar (o anel conta via JS) */
+  .js-anim [data-play="result"]:not(.is-played) .hw-mtrack i { width: 0; }
+  .js-anim [data-play="result"].is-played .hw-mtrack i { width: var(--w); transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
+  /* progresso do quiz enche ao entrar */
+  .js-anim [data-play="quiz"]:not(.is-played) .hw-qbar i { width: 0; }
+  .js-anim [data-play="quiz"].is-played .hw-qbar i { width: 20%; transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s; }
+}
+
+/* ══ Camada 3 — micro-interações (feedback, não enfeite) ══ */
+/* Botão: brilho que atravessa no hover + pressão no clique */
+.lp-btn { position: relative; overflow: hidden; }
+.lp-btn::after {
+  content: ''; position: absolute; top: 0; left: -75%; width: 45%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.38), transparent);
+  transform: skewX(-18deg); pointer-events: none;
+}
+.lp-btn:active { transform: translateY(0); box-shadow: 0 6px 16px rgba(23,124,166,0.34); }
+@media (prefers-reduced-motion: no-preference) {
+  .lp-btn::after { transition: left 0.6s ease; }
+  .lp-btn:hover::after { left: 130%; }
+}
+/* FAQ: painel abre com fade+slide (some o abre-no-talho nativo) */
+@media (prefers-reduced-motion: no-preference) {
+  .lp-faq details[open] > p { animation: faqOpen 0.3s ease; }
+}
+@keyframes faqOpen { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+/* Ponteiro fino: sublinhado da nav + ícones reagindo ao hover do card */
+@media (hover: hover) {
+  .lp-nav-links a { position: relative; }
+  .lp-nav-links a::after {
+    content: ''; position: absolute; left: 0; bottom: -5px; width: 100%; height: 2px;
+    background: var(--blue-soft); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.25s ease;
+  }
+  .lp-nav-links a:hover::after { transform: scaleX(1); }
+  .lp-pain .lp-pain-ic, .lpb-card .lpb-icon { transition: transform 0.25s ease; }
+  .lp-pain:hover .lp-pain-ic, .lpb-card:hover .lpb-icon { transform: scale(1.08); }
+}
 
 /* Sticky CTA desliza de baixo em vez de piscar */
 @media (max-width: 768px) {
@@ -784,12 +859,12 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <p class="lp-h2-sub reveal">Simples e objetivo: você enxerga os pontos de atrito que reduzem seus agendamentos — sem instalar nada, sem reunião.</p>
     <div class="lp-flow reveal-group">
       <div class="lp-flow-row">
-        <div class="lp-step-shot" aria-hidden="true">
+        <div class="lp-step-shot lp-shot--screen" aria-hidden="true" data-play="quiz">
           <div class="hw-qtop"><span>Pergunta 1 de 5</span><span>20%</span></div>
           <div class="hw-qbar"><i></i></div>
           <div class="hw-q">A clínica tem site hoje?</div>
           <div class="hw-opt"><span class="hw-ic hw-ic--ok">✓</span> Sim, temos um site</div>
-          <div class="hw-opt"><span class="hw-ic hw-ic--warn">!</span> Temos, mas é fraco</div>
+          <div class="hw-opt hw-opt--sel"><span class="hw-ic hw-ic--warn">!</span> Temos, mas é fraco</div>
           <div class="hw-opt"><span class="hw-ic hw-ic--neg">✕</span> Não temos nada</div>
         </div>
         <div class="lp-flow-text">
@@ -801,15 +876,23 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         </div>
       </div>
       <div class="lp-flow-row">
-        <div class="lp-step-shot" aria-hidden="true">
+        <div class="lp-step-shot lp-shot--screen" aria-hidden="true" data-play="result">
+          <div class="hw-head">
+            <span class="hw-head-t">Diagnóstico da clínica</span>
+            <span class="hw-eg">exemplo</span>
+          </div>
           <div class="hw-res">
-            <div class="hw-ring"><b>58%</b></div>
+            <div class="hw-ring" data-target="58"><b>58%</b></div>
             <div class="hw-res-side">
               <span class="hw-badge">Uns pontos soltos</span>
               <div class="hw-mrow"><span>Site</span><span>62%</span></div>
-              <div class="hw-mtrack"><i style="width:62%;background:linear-gradient(90deg,#2D9EC9,#5BC4F0)"></i></div>
+              <div class="hw-mtrack"><i style="--w:62%;background:linear-gradient(90deg,#2D9EC9,#5BC4F0)"></i></div>
               <div class="hw-mrow"><span>WhatsApp</span><span>48%</span></div>
-              <div class="hw-mtrack"><i style="width:48%;background:linear-gradient(90deg,#d3801c,#E08A1E)"></i></div>
+              <div class="hw-mtrack"><i style="--w:48%;background:linear-gradient(90deg,#d3801c,#E08A1E)"></i></div>
+              <div class="hw-mrow"><span>Atendimento</span><span>74%</span></div>
+              <div class="hw-mtrack"><i style="--w:74%;background:linear-gradient(90deg,#2D9EC9,#5BC4F0)"></i></div>
+              <div class="hw-mrow"><span>Agendamento</span><span>55%</span></div>
+              <div class="hw-mtrack"><i style="--w:55%;background:linear-gradient(90deg,#d3801c,#E08A1E)"></i></div>
             </div>
           </div>
         </div>
@@ -822,8 +905,11 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         </div>
       </div>
       <div class="lp-flow-row">
-        <div class="lp-step-shot" aria-hidden="true">
-          <div class="hw-plabel">Seu plano de ação</div>
+        <div class="lp-step-shot lp-shot--screen" aria-hidden="true" data-play="priorities">
+          <div class="hw-head">
+            <span class="hw-head-t">Seu plano de ação</span>
+            <span class="hw-eg">exemplo</span>
+          </div>
           <div class="hw-pitem"><span class="hw-pn">1</span> Primeiro: organizar o WhatsApp</div>
           <div class="hw-pitem"><span class="hw-pn">2</span> Depois: facilitar o agendamento</div>
           <div class="hw-pitem is-ok"><span class="hw-pn">✓</span> Site está bem — manter</div>
@@ -911,7 +997,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       <div class="cmp-card cmp-card--after">
         <span class="cmp-tag">Depois</span>
         <div class="cmp-title">Com clareza</div>
-        <div class="cmp-shot">
+        <div class="cmp-shot" data-play="compare">
           <div class="cmp-shot-head">
             <span class="cmp-shot-title">Seu plano de ação</span>
             <span class="cmp-shot-eg">Exemplo</span>
@@ -979,7 +1065,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <h2>Descubra onde sua clínica está perdendo pacientes</h2>
     <p>Em menos de 2 minutos, você tem uma visão clara dos gargalos que estão segurando seus agendamentos — e do que arrumar primeiro.</p>
     <p class="lp-value-lead">No fim, você sai com:</p>
-    <ul class="lp-value">
+    <ul class="lp-value" data-play="value">
       <li><b>A nota da sua clínica</b> — de 0 a 100, com o que puxa pra cima e pra baixo</li>
       <li><b>Seus pontos fortes e seus gargalos</b>, nomeados um a um</li>
       <li><b>A ordem do que arrumar primeiro</b> — não tudo de uma vez</li>
@@ -1094,6 +1180,43 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     }, { threshold: 0.05, rootMargin: '0px 0px 18% 0px' });
     els.forEach(function (el) { io.observe(el); });
     setTimeout(function () { els.forEach(function (el) { el.classList.add('is-visible'); }); }, 1400);
+  }
+
+  // ── Mockups se demonstram ao entrar na tela (1×). Failsafe garante estado
+  //    final; reduced-motion / sem IO pinta tudo pronto na hora. ──
+  var plays = document.querySelectorAll('[data-play]');
+  var paintHwRing = function (el, v) {
+    var r = el.querySelector('.hw-ring'); if (!r) return;
+    var b = r.querySelector('b');
+    if (b) b.textContent = v + '%';
+    r.style.background = 'conic-gradient(#E08A1E 0 ' + v + '%, #E9EFF4 ' + v + '% 100%)';
+  };
+  var ringTarget = function (el) {
+    var r = el.querySelector('.hw-ring');
+    return r ? (parseInt(r.getAttribute('data-target'), 10) || 58) : 0;
+  };
+  var playEl = function (el) {
+    if (el.classList.contains('is-played')) return;
+    el.classList.add('is-played');
+    if (el.getAttribute('data-play') === 'result') {
+      var target = ringTarget(el), DUR = 1000, t0 = performance.now();
+      (function tick(now) {
+        var t = Math.min(1, (now - t0) / DUR), e = 1 - Math.pow(1 - t, 3);
+        paintHwRing(el, Math.round(e * target));
+        if (t < 1) requestAnimationFrame(tick); else paintHwRing(el, target);
+      })(performance.now());
+    }
+  };
+  if (reduce || !('IntersectionObserver' in window) || !document.documentElement.classList.contains('js-anim')) {
+    plays.forEach(function (el) { el.classList.add('is-played'); if (el.getAttribute('data-play') === 'result') paintHwRing(el, ringTarget(el)); });
+  } else {
+    // zera o anel do resultado pra um count-up limpo quando entrar
+    plays.forEach(function (el) { if (el.getAttribute('data-play') === 'result') paintHwRing(el, 0); });
+    var pio = new IntersectionObserver(function (entries, obs) {
+      entries.forEach(function (e) { if (e.isIntersecting) { playEl(e.target); obs.unobserve(e.target); } });
+    }, { threshold: 0.25 });
+    plays.forEach(function (el) { pio.observe(el); });
+    setTimeout(function () { plays.forEach(playEl); }, 1600); // failsafe
   }
 }());
 </script>
