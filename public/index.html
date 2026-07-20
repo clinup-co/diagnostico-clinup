@@ -154,6 +154,25 @@ body { background: #F2F7FB; }
 .lp-meter-fill--low { background: linear-gradient(90deg, #d3801c, #E08A1E); }
 .lp-mock-cap { text-align: center; font-size: 12px; font-weight: 500; color: var(--sub); padding: 10px 0 4px; }
 
+/* ── Faixa de confiança: sinais VERIFICÁVEIS logo abaixo do hero.
+   Não é prova social (zero clínica/número inventado) — é o que a CLINUP
+   realmente garante. O ponto exato onde o dono decide se continua. ── */
+.lp-trust {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 14px 32px; margin: 4px 0 4px; padding: 18px 8px;
+  border-block: 1px solid var(--border);
+}
+.lp-trust-item {
+  display: inline-flex; align-items: center; gap: 9px;
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600;
+  color: var(--sub); white-space: nowrap;
+}
+.lp-trust-item svg {
+  width: 18px; height: 18px; flex-shrink: 0;
+  fill: none; stroke: var(--blue); stroke-width: 1.8;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+
 /* ── Labels de seção (mesma assinatura da planos) ── */
 .lp-label {
   font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
@@ -211,28 +230,49 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 .lp-pain--feature .lp-pain-title { color: #fff; font-size: 19px; }
 .lp-pain--feature .lp-pain-desc { color: rgba(234,244,250,0.82); font-size: 14.5px; max-width: 600px; }
 
-/* ── Como funciona (3 passos) ── */
-.lp-steps { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 30px; }
-@media (min-width: 768px) { .lp-steps { grid-template-columns: repeat(3, 1fr); } }
-.lp-step { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 24px 22px; box-shadow: var(--shadow-sm); }
+/* ── Como funciona: fluxo assimétrico (zigue-zague), não grade de cards ──
+   Cada etapa é uma linha editorial: mockup emoldurado de um lado, texto nu
+   do outro, invertendo o lado a cada linha. Quebra a monotonia das grades
+   vizinhas (dor/benefícios) e dá largura pro mockup respirar. */
+.lp-flow { display: flex; flex-direction: column; gap: 22px; margin-bottom: 30px; }
+.lp-flow-row { display: flex; flex-direction: column; gap: 16px; }
+@media (min-width: 768px) {
+  .lp-flow { gap: 44px; }
+  .lp-flow-row { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  /* linhas pares: mockup à direita, texto à esquerda (o zigue-zague) */
+  .lp-flow-row:nth-child(even) .lp-step-shot { order: 2; }
+}
+.lp-flow-text { max-width: 440px; }
 .lp-step-num {
   width: 32px; height: 32px; border-radius: 50%;
   background: var(--blue); color: #fff;
   font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
-  display: flex; align-items: center; justify-content: center; margin-bottom: 14px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
-.lp-step-head { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-.lp-step-num { margin-bottom: 0; }
-.lp-step-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15.5px; color: var(--white); margin-bottom: 0; }
-.lp-step-desc { font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.55; }
+.lp-step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.lp-step-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(17px, 2.4vw, 20px); color: var(--white); }
+.lp-step-desc { font-size: 15px; font-weight: 500; color: var(--body); line-height: 1.6; }
 .lp-center { text-align: center; }
 
 /* ── Mini-telas reais do produto dentro de cada passo (show, don't tell):
    a pessoa VÊ a pergunta, o resultado e as prioridades antes de começar. ── */
 .lp-step-shot {
-  background: #F6FAFD; border: 1px solid var(--border); border-radius: 12px;
-  padding: 14px; margin-bottom: 16px; height: 180px;
-  display: flex; flex-direction: column; justify-content: center; gap: 9px; overflow: hidden;
+  background: #F6FAFD; border: 1px solid var(--border); border-radius: 14px;
+  padding: 16px; min-height: 190px;
+  display: flex; flex-direction: column; justify-content: center; gap: 10px; overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+/* Desktop: a linha assimétrica dá o dobro de largura ao mockup — o conteúdo
+   das mini-telas cresce junto pra não boiar num frame grande e vazio. */
+@media (min-width: 768px) {
+  .lp-step-shot { padding: 26px 30px; min-height: 240px; gap: 12px; }
+  .hw-qtop, .hw-plabel { font-size: 11px; }
+  .hw-q { font-size: 15px; }
+  .hw-opt, .hw-pitem { font-size: 13px; padding: 9px 12px; }
+  .hw-ring { width: 84px; height: 84px; }
+  .hw-ring b { width: 62px; height: 62px; font-size: 20px; }
+  .hw-badge { font-size: 10px; }
+  .hw-mrow { font-size: 12.5px; }
 }
 /* passo 1 — pergunta do quiz */
 .hw-qtop { display: flex; justify-content: space-between; align-items: center; font-family: 'Sora',sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--sub); }
@@ -490,8 +530,12 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   .lp-band { padding-block: 52px; }
   .lp-h2-sub { margin-bottom: 28px; }
 
+  /* faixa de confiança: 2×2 pra não amontoar em 360px */
+  .lp-trust { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; padding: 16px 4px; justify-items: start; }
+  .lp-trust-item { font-size: 12.5px; white-space: normal; }
+
   /* cards mais densos: a pilha de 16 cards de anatomia igual encolhe */
-  .lp-pains, .lp-steps { gap: 12px; }
+  .lp-pains { gap: 12px; }
   .lpb-grid { gap: 10px; }
   .lp-pain { padding: 16px 18px; }
   .lp-pain-num { margin-bottom: 6px; }
@@ -500,9 +544,8 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
   .lpb-card { display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; align-items: start; padding: 16px; }
   .lpb-icon { grid-row: 1 / span 2; margin-bottom: 0; margin-top: 2px; }
   .lpb-title { margin-bottom: 3px; align-self: center; }
-  /* passos com mini-tela: padding menor */
-  .lp-step { padding: 14px; }
-  .lp-step-shot { margin-bottom: 12px; }
+  /* fluxo: mockup ajusta ao conteúdo (o gap do .lp-flow-row separa do texto) */
+  .lp-step-shot { min-height: 0; padding: 14px; }
 }
 
 /* ── Reveal no scroll: curto, sutil, e o conteúdo nunca fica refém dele.
@@ -551,8 +594,8 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 
   /* Hovers com elevação (só ponteiro fino) */
   @media (hover: hover) {
-    .lp-pain, .lp-step, .lpb-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
-    .lp-pain:hover, .lp-step:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(16,40,60,0.11); }
+    .lp-pain, .lpb-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+    .lp-pain:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(16,40,60,0.11); }
     .lpb-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(16,40,60,0.09); }
     .lp-seal { transition: transform 0.2s ease; }
     .lp-seal:hover { transform: translateY(-2px); }
@@ -656,6 +699,26 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </div>
   </section>
 
+  <!-- FAIXA DE CONFIANÇA (sinais verificáveis — nada de prova social inventada) -->
+  <div class="lp-trust reveal">
+    <span class="lp-trust-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 9v6M9 12h6"/></svg>
+      Só para clínicas
+    </span>
+    <span class="lp-trust-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+      Diagnóstico em 4 frentes
+    </span>
+    <span class="lp-trust-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
+      Dados protegidos · LGPD
+    </span>
+    <span class="lp-trust-item">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
+      Sem compromisso
+    </span>
+  </div>
+
   <!-- A DOR INVISÍVEL -->
   <section id="dor" class="lp-band lp-band--white">
     <p class="lp-label lp-label--pulse reveal">A dor invisível</p>
@@ -700,8 +763,8 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <p class="lp-label reveal">Como funciona</p>
     <h2 class="lp-h2 reveal">O diagnóstico mostra onde sua clínica está perdendo pacientes</h2>
     <p class="lp-h2-sub reveal">Simples e objetivo: você enxerga os pontos de atrito que reduzem seus agendamentos — sem instalar nada, sem reunião.</p>
-    <div class="lp-steps reveal-group">
-      <div class="lp-step">
+    <div class="lp-flow reveal-group">
+      <div class="lp-flow-row">
         <div class="lp-step-shot" aria-hidden="true">
           <div class="hw-qtop"><span>Pergunta 1 de 5</span><span>20%</span></div>
           <div class="hw-qbar"><i></i></div>
@@ -710,13 +773,15 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
           <div class="hw-opt"><span class="hw-ic hw-ic--warn">!</span> Temos, mas é fraco</div>
           <div class="hw-opt"><span class="hw-ic hw-ic--neg">✕</span> Não temos nada</div>
         </div>
-        <div class="lp-step-head">
-          <div class="lp-step-num">1</div>
-          <div class="lp-step-title">Você responde 5 perguntas</div>
+        <div class="lp-flow-text">
+          <div class="lp-step-head">
+            <div class="lp-step-num">1</div>
+            <div class="lp-step-title">Você responde 5 perguntas</div>
+          </div>
+          <div class="lp-step-desc">Menos de 2 minutos sobre o momento da sua clínica: site, como te acham e como você fecha.</div>
         </div>
-        <div class="lp-step-desc">Menos de 2 minutos sobre o momento da sua clínica: site, como te acham e como você fecha.</div>
       </div>
-      <div class="lp-step">
+      <div class="lp-flow-row">
         <div class="lp-step-shot" aria-hidden="true">
           <div class="hw-res">
             <div class="hw-ring"><b>58%</b></div>
@@ -729,24 +794,28 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
             </div>
           </div>
         </div>
-        <div class="lp-step-head">
-          <div class="lp-step-num">2</div>
-          <div class="lp-step-title">O resultado sai na hora</div>
+        <div class="lp-flow-text">
+          <div class="lp-step-head">
+            <div class="lp-step-num">2</div>
+            <div class="lp-step-title">O resultado sai na hora</div>
+          </div>
+          <div class="lp-step-desc">Você vê onde está perdendo paciente — com os pontos fortes e os gargalos do seu caso.</div>
         </div>
-        <div class="lp-step-desc">Você vê onde está perdendo paciente — com os pontos fortes e os gargalos do seu caso.</div>
       </div>
-      <div class="lp-step">
+      <div class="lp-flow-row">
         <div class="lp-step-shot" aria-hidden="true">
           <div class="hw-plabel">Seu plano de ação</div>
           <div class="hw-pitem"><span class="hw-pn">1</span> Primeiro: organizar o WhatsApp</div>
           <div class="hw-pitem"><span class="hw-pn">2</span> Depois: facilitar o agendamento</div>
           <div class="hw-pitem is-ok"><span class="hw-pn">✓</span> Site está bem — manter</div>
         </div>
-        <div class="lp-step-head">
-          <div class="lp-step-num">3</div>
-          <div class="lp-step-title">Você sai com prioridades</div>
+        <div class="lp-flow-text">
+          <div class="lp-step-head">
+            <div class="lp-step-num">3</div>
+            <div class="lp-step-title">Você sai com prioridades</div>
+          </div>
+          <div class="lp-step-desc">O que arrumar primeiro, em ordem. E, se quiser, uma conversa gratuita pra aprofundar.</div>
         </div>
-        <div class="lp-step-desc">O que arrumar primeiro, em ordem. E, se quiser, uma conversa gratuita pra aprofundar.</div>
       </div>
     </div>
     <div class="lp-center reveal">
