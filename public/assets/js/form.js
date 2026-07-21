@@ -60,14 +60,14 @@ function submitLeadForm() {
   quizLeadData.createdAt = new Date().toISOString();
   persistState();
 
-  // Captura imediata: lead vai pro Supabase já no submit do formulário,
-  // antes do quiz — leads que abandonam no meio não se perdem.
+  // Captura no gate (pós-quiz): o contato é o último passo pra revelar o
+  // resultado. capture_lead salva o contato; showResult dispara o sync_result
+  // completo logo em seguida (upsert pela mesma chave de email).
   captureLeadToSupabase();
   trackOnce('lead_captured');
   trackPixelOnce('Lead');
 
-  // Direto pra pergunta 1 — sem tela intermediária: o usuário acabou de se
-  // comprometer; cada clique extra entre o form e o quiz é abandono
+  // Direto pro resultado — o usuário já respondeu as 5 perguntas
   document.getElementById('leadScreen').classList.add('hidden');
-  startQuiz();
+  showResult();
 }

@@ -49,9 +49,11 @@ function applyUtmToSource() {
     const utmSource = (params.get('utm_source') || '').trim();
     if (!utmSource) return;
 
-    // Só sessão ainda não capturada (formulário) recebe nova atribuição
-    const etapa = quizLeadData.etapaAtual;
-    if (etapa && etapa !== 'formulario') return;
+    // Só sessão ainda não concluída/capturada recebe nova atribuição. A captura
+    // agora acontece no gate (pós-quiz), então o source pode ser definido durante
+    // 'inicio'/quiz/gate — mas nunca depois do resultado (senão o mark_whatsapp
+    // erraria a linha no banco).
+    if (quizLeadData.quizConcluido || quizLeadData.etapaAtual === 'resultado') return;
 
     // Valor saneado: minúsculas, só [a-z0-9_-], máx. 40 chars — mantém o
     // campo source limpo no banco e o filtro do PATCH previsível
@@ -94,99 +96,101 @@ function hideAllScreens() {
 // ─────────────────────────────────────────────
 // RETOMADA DE SESSÃO — restaura onde o usuário parou
 // ─────────────────────────────────────────────
+// Restaura as seleções salvas das perguntas já respondidas (pra quem retoma no
+// meio e navega pra trás encontrar suas escolhas marcadas).
+function restoreAnswerSelections() {
+  Object.keys(answers).forEach(function (k) {
+    var n = parseInt(k);
+    if (isNaN(n)) return;
+    var labelKey   = PERGUNTA_LABELS[n] || ('pergunta_' + n);
+    var storedText = (quizLeadData.respostas || {})[labelKey] || '';
+    document.querySelectorAll('#opts' + n + ' .opt').forEach(function (o) {
+      var hit = storedText ? getOptText(o) === storedText
+                           : parseInt(o.dataset.score) === answers[n];
+      if (hit) { o.classList.add('selected'); o.dataset.selected = 'true'; }
+    });
+    enableNext(n);
+  });
+}
+
+// Preenche o formulário do gate com o contato já salvo (ignora o email fallback).
+function prefillLeadForm() {
+  try {
+    if (quizLeadData.nome)     document.getElementById('leadName').value  = quizLeadData.nome;
+    if (quizLeadData.telefone) document.getElementById('leadPhone').value = quizLeadData.telefone;
+    if (quizLeadData.email && quizLeadData.email.indexOf('@nao-informado.com') === -1)
+      document.getElementById('leadEmail').value = quizLeadData.email;
+    if (quizLeadData.nome || quizLeadData.telefone) checkLeadForm();
+  } catch (e) {}
+}
+
+function showProgress() {
+  var pw = document.getElementById('progressWrap');
+  pw.classList.add('show');
+  pw.style.display = '';
+}
+
+function showResumeNote() {
+  if (Object.keys(answers).length > 0 && !document.getElementById('resumeNote')) {
+    var note = document.createElement('div');
+    note.className = 'resume-note';
+    note.id = 'resumeNote';
+    note.innerHTML = 'Continuando de onde você parou. ' +
+      '<button type="button" onclick="restartQuizAnswers()">Recomeçar do zero</button>';
+    var pw = document.getElementById('progressWrap');
+    pw.parentNode.insertBefore(note, pw);
+  }
+}
+
+// ─────────────────────────────────────────────
+// RETOMADA DE SESSÃO — funil QUIZ-FIRST
+// Ordem: quiz (P1..P5) → gate (nome + WhatsApp) → resultado. A captura acontece
+// no gate; a retomada devolve o usuário ao estágio onde parou.
+// ─────────────────────────────────────────────
 function resumeSession() {
   try {
-    const etapa = quizLeadData.etapaAtual;
+    var etapa      = quizLeadData.etapaAtual;
+    var numAnswers = Object.keys(answers).length;
+    var hasContact = !!(quizLeadData.nome && quizLeadData.telefone);
 
-    if (!etapa || etapa === 'formulario') {
-      trackOnce('view_form');
-      const n = document.getElementById('leadName');
-      const e = document.getElementById('leadEmail');
-      const p = document.getElementById('leadPhone');
-      if (quizLeadData.nome)     n.value = quizLeadData.nome;
-      if (quizLeadData.email)    e.value = quizLeadData.email;
-      if (quizLeadData.telefone) p.value = quizLeadData.telefone;
-      if (quizLeadData.nome || quizLeadData.email) checkLeadForm();
-      return;
-    }
-
-    if (!quizLeadData.nome || !quizLeadData.email) {
-      localStorage.removeItem('clinup_lead');
-      localStorage.removeItem('clinup_answers');
-      trackOnce('view_form'); // formulário segue visível (estado padrão da página)
-      return;
-    }
-
-    try {
-      document.getElementById('leadName').value  = quizLeadData.nome;
-      document.getElementById('leadEmail').value = quizLeadData.email;
-      document.getElementById('leadPhone').value = quizLeadData.telefone || '';
-    } catch(e) {}
-
-    hideAllScreens();
-
-    if (etapa === 'intro') {
-      // Etapa legada (a tela intersticial foi removida): cai direto na pergunta 1
-      document.getElementById('progressWrap').classList.add('show');
-      document.getElementById('progressWrap').style.display = '';
-      showQuestion(1);
-      return;
-    }
-
-    if (etapa === 'resultado') {
-      const hasAnswers = Object.keys(answers).length >= 5;
-      if (!hasAnswers) {
-        localStorage.removeItem('clinup_lead');
-        localStorage.removeItem('clinup_answers');
-        showLeadScreen();
-        return;
-      }
+    // Concluído (5 respostas + contato): mostra o resultado
+    if (etapa === 'resultado' && numAnswers >= 5 && hasContact) {
+      hideAllScreens();
       showResult();
       return;
     }
 
-    const match = etapa.match(/^(quiz|pergunta_(\d+))$/);
-    if (!match) {
-      showLeadScreen();
+    // Quiz terminado, contato ainda não dado: volta pro gate
+    if (numAnswers >= 5 && !hasContact) {
+      hideAllScreens();
+      prefillLeadForm();
+      showLeadScreen();                 // é o gate (dispara trackOnce('view_form'))
+      quizLeadData.etapaAtual = 'gate';
+      persistState();
       return;
     }
 
-    const qNum = match[2] ? parseInt(match[2]) : 1;
-    document.getElementById('progressWrap').classList.add('show');
-    document.getElementById('progressWrap').style.display = '';
-
-    // Aviso de retomada: quem volta no meio do quiz sabe onde está —
-    // e pode recomeçar (o lead capturado e a atribuição são preservados)
-    if (Object.keys(answers).length > 0 && !document.getElementById('resumeNote')) {
-      const note = document.createElement('div');
-      note.className = 'resume-note';
-      note.id = 'resumeNote';
-      note.innerHTML = 'Continuando de onde você parou. ' +
-        '<button type="button" onclick="restartQuizAnswers()">Recomeçar do zero</button>';
-      const pw = document.getElementById('progressWrap');
-      pw.parentNode.insertBefore(note, pw);
+    // No meio do quiz: retoma na pergunta onde parou
+    var m = etapa && etapa.match(/^pergunta_(\d+)$/);
+    if (m && numAnswers > 0) {
+      hideAllScreens();
+      showProgress();
+      restoreAnswerSelections();
+      showResumeNote();
+      quizLeadData.etapaAtual = 'quiz';
+      trackOnce('quiz_start');
+      showQuestion(parseInt(m[1]) || 1);
+      return;
     }
 
-    Object.keys(answers).forEach(k => {
-      const n = parseInt(k);
-      if (isNaN(n)) return;
-      const labelKey   = PERGUNTA_LABELS[n] || ('pergunta_' + n);
-      const storedText = quizLeadData.respostas[labelKey] || '';
-      document.querySelectorAll('#opts' + n + ' .opt').forEach(o => {
-        const hit = storedText
-          ? getOptText(o) === storedText
-          : parseInt(o.dataset.score) === answers[n];
-        if (hit) { o.classList.add('selected'); o.dataset.selected = 'true'; }
-      });
-      enableNext(n);
-    });
+    // Tráfego novo (ou estado inconsistente): começa o quiz na pergunta 1
+    startQuiz();
 
-    showQuestion(qNum);
-
-  } catch(err) {
+  } catch (err) {
     console.warn('[CLINUP] Erro ao retomar sessão, reiniciando:', err);
     localStorage.removeItem('clinup_lead');
     localStorage.removeItem('clinup_answers');
-    showLeadScreen();
+    localStorage.removeItem('clinup_version');
+    startQuiz();
   }
 }

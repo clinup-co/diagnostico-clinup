@@ -6,10 +6,13 @@
 let _advanceTimer = null;
 
 function startQuiz() {
+  document.getElementById('leadScreen').classList.add('hidden');
   quizLeadData.etapaAtual = 'quiz';
   persistState();
   trackOnce('quiz_start');
-  document.getElementById('progressWrap').classList.add('show');
+  var pw = document.getElementById('progressWrap');
+  pw.classList.add('show');
+  pw.style.display = '';
   showQuestion(1);
 }
 
@@ -85,12 +88,30 @@ function enableNext(qNum) {
 function goNext(qNum) {
   if (answers[qNum] === undefined) return;
   if (qNum < 5) showQuestion(qNum + 1);
-  else showResult();
+  else goToGate();
 }
 
 function goBack(qNum) {
   clearTimeout(_advanceTimer); // voltar cancela qualquer avanço pendente
   if (qNum > 1) showQuestion(qNum - 1);
+}
+
+// Fim do quiz → gate: pede nome/WhatsApp pra revelar o resultado. O sunk-cost
+// das 5 respostas dispara a conversão; a captura acontece aqui (não mais na
+// entrada), então tráfego frio responde o quiz antes de dar o contato.
+function goToGate() {
+  clearTimeout(_advanceTimer);
+  if (answers[5] === undefined && answers['5'] === undefined) return;
+  quizLeadData.etapaAtual = 'gate';
+  persistState();
+  document.querySelectorAll('.question-screen').forEach(function (q) { q.classList.remove('active'); });
+  document.getElementById('progressWrap').style.display = 'none';
+  var note = document.getElementById('resumeNote');
+  if (note) note.remove();
+  prefillLeadForm();
+  showLeadScreen();          // dispara trackOnce('view_form') — agora no gate
+  trackOnce('quiz_complete');
+  window.scrollTo(0, 0);
 }
 
 // Recomeçar do zero (link do aviso de sessão retomada): limpa respostas,

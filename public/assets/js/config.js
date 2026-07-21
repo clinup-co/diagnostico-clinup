@@ -10,7 +10,7 @@ const quizLeadData = {
   respostas:       {},
   pontos:          {},
   resultado:       '',
-  etapaAtual:      'formulario',
+  etapaAtual:      'inicio',
   quizConcluido:   false,
   whatsappClicado: false,
   createdAt:       '',
@@ -25,7 +25,7 @@ const PERGUNTA_LABELS = {
   5: 'faturamento_mensal'
 };
 
-const STATE_VERSION = '3';
+const STATE_VERSION = '4';
 
 const answers = {};
 
