@@ -39,6 +39,12 @@ body { background: #F2F7FB; }
   backdrop-filter: blur(10px);
 }
 .lp-nav-brand { display: flex; align-items: center; gap: 10px; }
+/* Descritor sob o logo: ancora "o que a CLINUP é" pra quem bate o olho na 1ª tela */
+.lp-nav-brandtext { display: flex; flex-direction: column; justify-content: center; line-height: 1.05; }
+.lp-nav-tag {
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.1px; color: var(--sub); white-space: nowrap; margin-top: 2px;
+}
 .lp-nav-links { display: none; gap: 26px; }
 .lp-nav-links a {
   font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600;
@@ -743,7 +749,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <header class="lp-nav">
   <div class="lp-nav-brand">
     <img src="assets/images/logo.png" alt="CLINUP" style="width:38px;height:38px;border-radius:50%;object-fit:contain;border:1.5px solid rgba(91,196,240,0.35);background:#0A1E30;padding:2px;">
-    <div class="logo-text">CLIN<em>UP</em></div>
+    <div class="lp-nav-brandtext">
+      <div class="logo-text">CLIN<em>UP</em></div>
+      <span class="lp-nav-tag">mais pacientes para clínicas</span>
+    </div>
   </div>
   <nav class="lp-nav-links" aria-label="Seções da página">
     <a href="#dor">A dor invisível</a>
