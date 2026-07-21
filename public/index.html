@@ -245,6 +245,59 @@ section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem s
 .lp-pain--feature .lp-pain-title { color: #fff; font-size: 19px; }
 .lp-pain--feature .lp-pain-desc { color: rgba(234,244,250,0.82); font-size: 14.5px; max-width: 600px; }
 
+/* ── Diagrama da jornada: o diferencial VISÍVEL — o caminho inteiro (Google→Agenda)
+   e onde o paciente escapa em cada etapa. Substitui a grade de cards por um fluxo
+   escaneável (mostra, não conta) e quebra a monotonia dos grids vizinhos. ── */
+.jflow { max-width: 940px; margin: 0 auto; }
+.jflow-track { display: flex; align-items: stretch; justify-content: center; gap: 8px; }
+.jstep {
+  flex: 1 1 0; min-width: 0;
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px;
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 20px 12px 16px; box-shadow: var(--shadow-sm);
+}
+.jstep-ic {
+  width: 46px; height: 46px; border-radius: 13px; flex-shrink: 0;
+  background: rgba(91,196,240,0.12); color: var(--blue);
+  display: flex; align-items: center; justify-content: center;
+}
+.jstep-ic svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.jstep-txt { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+.jstep-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; color: var(--white); }
+.jstep-leak { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #B4472B; line-height: 1.25; }
+.jstep-leak::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #D0623C; flex-shrink: 0; }
+/* nó do WhatsApp: verde (verde = só WhatsApp) */
+.jstep--wa .jstep-ic { background: rgba(30,142,99,0.12); color: var(--green); }
+/* nó-objetivo: agenda = ganho, não vazamento */
+.jstep--goal { border-color: rgba(30,142,99,0.42); background: linear-gradient(160deg, rgba(30,142,99,0.08), var(--card) 70%); }
+.jstep--goal .jstep-ic { background: rgba(30,142,99,0.14); color: #1E8E63; }
+.jstep-win { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: #1E8E63; line-height: 1.25; }
+.jstep-win::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #1E8E63; flex-shrink: 0; }
+.jflow-arrow { display: flex; align-items: center; color: var(--sub); flex-shrink: 0; }
+.jflow-arrow svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.jflow-band {
+  margin-top: 20px; display: flex; align-items: center; gap: 14px;
+  background: linear-gradient(135deg, #0E2233 0%, #16324A 100%);
+  border: 1px solid rgba(91,196,240,0.28); border-radius: 14px;
+  padding: 18px 22px; color: rgba(234,244,250,0.92);
+  font-size: 15px; font-weight: 600; line-height: 1.45;
+}
+.jflow-band b { color: #5BC4F0; font-weight: 700; }
+.jflow-band-ic {
+  flex-shrink: 0; width: 42px; height: 42px; border-radius: 12px;
+  background: rgba(91,196,240,0.16); color: #5BC4F0;
+  display: flex; align-items: center; justify-content: center;
+}
+.jflow-band-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 700px) {
+  .jflow-track { flex-direction: column; align-items: stretch; gap: 6px; }
+  .jstep { flex-direction: row; text-align: left; gap: 13px; padding: 13px 15px; }
+  .jstep-txt { align-items: flex-start; }
+  .jstep-ic { width: 40px; height: 40px; }
+  .jflow-arrow { justify-content: center; transform: rotate(90deg); }
+  .jflow-band { font-size: 14px; padding: 16px 18px; }
+}
+
 /* ── Como funciona: fluxo assimétrico (zigue-zague), não grade de cards ──
    Cada etapa é uma linha editorial: mockup emoldurado de um lado, texto nu
    do outro, invertendo o lado a cada linha. Quebra a monotonia das grades
@@ -768,16 +821,16 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <!-- HERO -->
   <section class="lp-hero">
     <div class="lp-hero-lead">
-      <span class="lp-eyebrow">CLINUP · para clínicas</span>
-      <h1>Mais pacientes do movimento que sua clínica <em>já tem</em>.</h1>
-      <p class="lp-hero-sub">A CLINUP organiza a jornada do paciente — do Google ao WhatsApp até a agenda — pra você parar de perder quem já estava interessado.</p>
+      <span class="lp-eyebrow">CLINUP · captação e conversão para clínicas</span>
+      <h1>Sua clínica perde pacientes no caminho entre o Google e a agenda — <em>sem você ver onde</em>.</h1>
+      <p class="lp-hero-sub">Não é só mais tráfego e post bonito: a CLINUP organiza a jornada inteira — site, WhatsApp e agendamento — pra transformar o interesse que já chega em consulta marcada.</p>
     </div>
     <div class="lp-hero-act">
-      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Ver onde estou perdendo pacientes&nbsp;→</a>
+      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Ver onde minha clínica perde pacientes&nbsp;→</a>
       <p class="lp-cta-note">O 1º passo é gratuito · diagnóstico de 2 minutos · sem compromisso</p>
       <ul class="lp-checks">
-        <li>A CLINUP cuida do caminho todo: site, Google, WhatsApp e agenda</li>
-        <li>Comece de graça — em 2 minutos você vê onde perde hoje</li>
+        <li>A jornada inteira numa mão só — não pedaços soltos</li>
+        <li>Comece de graça: em 2 minutos você vê onde perde hoje</li>
       </ul>
     </div>
     <div class="lp-mock-wrap">
@@ -856,7 +909,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       <div class="lp-pain lp-pain--feature">
         <div class="lp-pain-num">Síntese</div>
         <div class="lp-pain-title">A perda é silenciosa — e some do seu radar</div>
-        <div class="lp-pain-desc">Não parece que você está perdendo paciente: parece só que "veio menos gente". Sem enxergar o caminho inteiro, você conserta no chute e gasta energia no lugar errado. E cada paciente que desiste na demora do WhatsApp ou num site confuso é faturamento do mês indo direto pra clínica ao lado. É esse caminho inteiro — da busca ao agendamento — que a CLINUP organiza pra você.</div>
+        <div class="lp-pain-desc">Não parece perda — parece só que "veio menos gente". Mas cada paciente que desiste na demora do WhatsApp ou num site confuso é faturamento indo direto pra clínica ao lado. Sem ver o caminho inteiro, você conserta no chute.</div>
       </div>
     </div>
   </section>
@@ -864,31 +917,45 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <!-- COMO A CLINUP RESOLVE -->
   <section id="como-resolve">
     <p class="lp-label lp-label--pulse reveal">Como a CLINUP resolve</p>
-    <h2 class="lp-h2 reveal">A gente organiza a jornada inteira do paciente — pra ela parar de vazar</h2>
-    <p class="lp-h2-sub reveal">Do primeiro clique no Google até a consulta marcada, cada etapa passa a puxar na mesma direção. É assim que o interesse que já chega vira paciente na cadeira.</p>
-    <div class="lp-pains reveal-group">
-      <div class="lp-pain">
-        <span class="lp-pain-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
-        <div class="lp-pain-num">Etapa 01</div>
-        <div class="lp-pain-title">Te encontram e confiam</div>
-        <div class="lp-pain-desc">Sua clínica aparece pra quem está procurando e passa segurança logo de cara — o paciente escolhe você, não o concorrente do lado.</div>
+    <h2 class="lp-h2 reveal">A gente cuida da jornada inteira — não de um pedaço só</h2>
+    <p class="lp-h2-sub reveal">Do clique no Google até a consulta marcada, cada etapa é um lugar onde o paciente pode escapar. A maioria das clínicas cuida de uma parte e perde nas outras.</p>
+    <div class="jflow reveal">
+      <div class="jflow-track">
+        <div class="jstep">
+          <span class="jstep-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
+          <div class="jstep-txt">
+            <div class="jstep-name">Google</div>
+            <div class="jstep-leak">some se não te acham</div>
+          </div>
+        </div>
+        <span class="jflow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <div class="jstep">
+          <span class="jstep-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+          <div class="jstep-txt">
+            <div class="jstep-name">Site</div>
+            <div class="jstep-leak">some se não confia</div>
+          </div>
+        </div>
+        <span class="jflow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <div class="jstep jstep--wa">
+          <span class="jstep-ic"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
+          <div class="jstep-txt">
+            <div class="jstep-name">WhatsApp</div>
+            <div class="jstep-leak">some na demora</div>
+          </div>
+        </div>
+        <span class="jflow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        <div class="jstep jstep--goal">
+          <span class="jstep-ic"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg></span>
+          <div class="jstep-txt">
+            <div class="jstep-name">Agenda</div>
+            <div class="jstep-win">consulta marcada</div>
+          </div>
+        </div>
       </div>
-      <div class="lp-pain">
-        <span class="lp-pain-ic"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
-        <div class="lp-pain-num">Etapa 02</div>
-        <div class="lp-pain-title">Falam com você e não somem</div>
-        <div class="lp-pain-desc">O WhatsApp responde rápido e no tom certo. A conversa vira consulta, em vez de morrer no vácuo do "depois te respondo".</div>
-      </div>
-      <div class="lp-pain">
-        <span class="lp-pain-ic"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
-        <div class="lp-pain-num">Etapa 03</div>
-        <div class="lp-pain-title">Marcam sem desistir</div>
-        <div class="lp-pain-desc">Agendar fica simples — sem a etapa a mais que empurra a decisão pro "depois" que nunca chega.</div>
-      </div>
-      <div class="lp-pain lp-pain--feature">
-        <div class="lp-pain-num">O jeito CLINUP</div>
-        <div class="lp-pain-title">A jornada inteira puxando junto — não cada parte solta</div>
-        <div class="lp-pain-desc">Site, Google, WhatsApp e agenda deixam de ser pedaços desconexos e viram um caminho só, pensado pra converter. E tudo começa de graça: um diagnóstico de 2 minutos mostra onde a sua clínica perde hoje — pra gente saber por onde começar.</div>
+      <div class="jflow-band">
+        <span class="jflow-band-ic"><svg viewBox="0 0 24 24"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><path d="M8 12h8"/></svg></span>
+        <span>A CLINUP costura as 4 etapas num <b>caminho só</b> — o paciente para de cair no vão entre elas.</span>
       </div>
     </div>
   </section>
@@ -1097,8 +1164,8 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       <li><b>Um resumo pra levar</b> — copiar, guardar ou mandar pro sócio</li>
       <li><b>Uma sessão gratuita pra montar seu plano de ação</b> — sem compromisso</li>
     </ul>
-    <a class="lp-btn lp-btn--block cta-diag" data-origem="final" href="/diagnostico">Descobrir onde estou perdendo pacientes&nbsp;→</a>
-    <p class="lp-cta-note">Rápido, direto e sem compromisso</p>
+    <a class="lp-btn lp-btn--block cta-diag" data-origem="final" href="/diagnostico">Quero ver meu diagnóstico agora&nbsp;→</a>
+    <p class="lp-cta-note">Rápido, direto e sem compromisso · resultado na hora</p>
   </section>
 
 </main>
