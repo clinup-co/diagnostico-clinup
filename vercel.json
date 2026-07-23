@@ -4,6 +4,7 @@
     { "source": "/planos", "destination": "/planos.html" },
     { "source": "/consultoria", "destination": "/consultoria.html" },
     { "source": "/diagnostico", "destination": "/diagnostico.html" },
-    { "source": "/privacidade", "destination": "/privacidade.html" }
+    { "source": "/privacidade", "destination": "/privacidade.html" },
+    { "source": "/termos", "destination": "/termos.html" }
   ]
 }

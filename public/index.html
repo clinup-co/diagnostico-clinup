@@ -3,16 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>CLINUP — Mais pacientes do movimento que sua clínica já tem</title>
-<meta name="description" content="A CLINUP organiza a jornada do paciente da sua clínica — do Google ao WhatsApp até a agenda — pra transformar mais interessados em consultas. Comece com um diagnóstico gratuito de 2 minutos.">
+<title>ClinUp — Diagnóstico de Lucro para clínicas</title>
+<meta name="description" content="A ClinUp não faz marketing: encontramos o lucro que sua clínica perde hoje — leads sem resposta no WhatsApp, faltas e horários vazios — e mostramos como recuperar. Diagnóstico gratuito de 2 minutos.">
 <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png">
 <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="CLINUP">
+<meta property="og:site_name" content="ClinUp">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:title" content="Mais pacientes do movimento que sua clínica já tem">
-<meta property="og:description" content="A CLINUP organiza a jornada do paciente — do Google ao WhatsApp à agenda — pra transformar mais interessados em consultas. Comece com um diagnóstico gratuito de 2 minutos.">
+<meta property="og:title" content="ClinUp — recuperamos o lucro que sua clínica está perdendo">
+<meta property="og:description" content="Leads sem resposta no WhatsApp, faltas e horários vazios têm preço. O diagnóstico gratuito de 2 minutos mostra onde sua clínica perde dinheiro hoje — e por onde começar.">
 <meta property="og:url" content="https://diagnostico-clinup-lac.vercel.app/">
 <meta property="og:image" content="https://diagnostico-clinup-lac.vercel.app/assets/img/og-cover.png">
 <meta property="og:image:width" content="1200">
@@ -20,760 +20,392 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/main.css">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;650;700&display=swap" rel="stylesheet">
 <style>
-/* ── LANDING (pré-diagnóstico): estrutura de persuasão, pele CLINUP ──
-   Reaproveita tokens do main.css (:root) e componentes globais
-   (.top-stripe, .logo-text, .result-badge). Layout específico fica aqui. */
-body { background: #F2F7FB; }
+/* ════════════════════════════════════════════════════════════════════
+   ClinUp — Landing "Diagnóstico de Lucro" (dark premium)
+   Página: Sora (títulos) + Plus Jakarta Sans (corpo).
+   Dashboards mockados (.mk): Inter + tabular-nums — são "o produto".
+   Verde (#2BD576) só como semântica de dado dentro dos mocks.
+   ════════════════════════════════════════════════════════════════════ */
+:root{
+  --bg:#0A0E1A; --bg-deep:#050811; --card:#111827; --raised:#1A2233; --line:#232B3D;
+  --ink:#E7EAF0; --ink-2:#8A94A6; --ink-3:#5A6478;
+  --loss:#F4574D; --warn:#F5A623; --gain:#2BD576; --action:#4D7CFE; --action-soft:#7EA2FF;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto} }
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+::selection{background:rgba(77,124,254,.35)}
+img,svg{max-width:100%}
+a{color:inherit}
 
-.lp-nav {
-  position: sticky; top: 0; z-index: 100;
-  /* anula o header global do main.css (max-width 640px da coluna do quiz) */
-  width: 100%; max-width: none; margin: 0;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  padding: 14px 24px;
-  background: rgba(242,247,251,0.92);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(10px);
-}
-.lp-nav-brand { display: flex; align-items: center; gap: 10px; }
-/* Descritor sob o logo: ancora "o que a CLINUP é" pra quem bate o olho na 1ª tela */
-.lp-nav-brandtext { display: flex; flex-direction: column; justify-content: center; line-height: 1.05; }
-.lp-nav-tag {
-  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 10.5px; font-weight: 600;
-  letter-spacing: 0.1px; color: var(--sub); white-space: nowrap; margin-top: 2px;
-}
-.lp-nav-links { display: none; gap: 26px; }
-.lp-nav-links a {
-  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600;
-  color: var(--body); text-decoration: none;
-}
-.lp-nav-links a:hover { color: var(--blue); }
-/* CTA da nav é secundário: não compete com o botão-herói da dobra */
-.lp-nav-cta {
-  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; letter-spacing: 0.3px;
-  color: #1279A3; text-decoration: none; white-space: nowrap;
-  border: 1.5px solid rgba(18,121,163,0.4); border-radius: 100px; padding: 10px 18px;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-}
-.lp-nav-cta:hover { background: #1279A3; border-color: #1279A3; color: #fff; }
-/* ≤560px: marca + pill precisam caber em 360px SEM vazar (o pill estourava
-   25px pra fora da tela) e com alvo de toque ≥44px */
-@media (max-width: 560px) {
-  .lp-nav { padding: 8px 16px; gap: 10px; }
-  .lp-nav-cta { padding: 14px 16px; }
-  .lp-nav-cta-full { display: none; }
-}
-@media (min-width: 900px) {
-  .lp-nav { padding: 14px 40px; }
-  .lp-nav-links { display: flex; }
-}
+.wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 24px}
+.wrap--narrow{max-width:800px}
 
-.lp-page { width: 100%; max-width: 1040px; margin: 0 auto; padding: 0 24px 72px; }
+/* ── Nav ─────────────────────────────────────────────────────────── */
+.nav{
+  position:sticky; top:0; z-index:60;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  padding:14px 28px;
+  background:rgba(10,14,26,.82); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  border-bottom:1px solid transparent;
+}
+.nav.is-scrolled{border-bottom-color:var(--line)}
+.brand{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.brand-mark{
+  width:34px;height:34px;border-radius:9px;background:var(--action);
+  display:grid;place-items:center;color:#fff;
+  font-family:'Inter',sans-serif;font-weight:700;font-size:16px;
+}
+.brand-name{font-family:'Sora',sans-serif;font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
+.brand-name b{color:var(--action-soft);font-weight:700}
+.nav-links{display:flex;gap:26px}
+.nav-links a{font-size:14px;font-weight:600;color:var(--ink-2);text-decoration:none;white-space:nowrap;transition:color .18s ease}
+.nav-links a:hover{color:var(--ink)}
+@media (max-width:900px){ .nav-links{display:none} }
 
-/* ── Hero ──
-   3 blocos: mensagem (lead) → card (mock) → ação (act).
-   Mobile empilha nessa ordem (mensagem, PROVA visual, CTA numa tela).
-   Desktop: mensagem+ação na coluna esquerda, card na direita. */
-.lp-hero {
-  display: grid; grid-template-columns: 1fr; gap: 22px;
-  align-items: center; padding: 32px 0 48px;
-  position: relative;
+/* ── Botões ──────────────────────────────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;color:#fff;
+  background:var(--action);border:none;border-radius:12px;padding:16px 30px;
+  text-decoration:none;cursor:pointer;white-space:nowrap;
+  box-shadow:0 10px 30px rgba(77,124,254,.30);
+  transition:background .18s ease, transform .18s ease, box-shadow .18s ease;
 }
-@media (min-width: 900px) {
-  .lp-hero {
-    grid-template-columns: 1.08fr 0.92fr;
-    grid-template-areas: "lead mock" "act mock";
-    gap: 26px 44px; align-items: start; padding: 64px 0 72px;
-  }
-  .lp-hero-lead { grid-area: lead; }
-  .lp-hero-act  { grid-area: act; align-self: start; }
-  .lp-hero .lp-mock-wrap { grid-area: mock; align-self: center; }
+.btn:hover{background:#618BFF;transform:translateY(-1px);box-shadow:0 14px 34px rgba(77,124,254,.38)}
+.btn--sm{font-size:14px;padding:11px 20px;border-radius:10px;box-shadow:0 6px 18px rgba(77,124,254,.25)}
+.cta-note{font-size:13px;font-weight:500;color:var(--ink-3);margin-top:14px}
+.linkcta{
+  display:inline-block;margin-top:22px;font-size:15px;font-weight:700;color:var(--action-soft);
+  text-decoration:none;transition:color .18s ease;
 }
-.lp-eyebrow {
-  display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 3px;
-  text-transform: uppercase; color: var(--blue); margin-bottom: 18px;
-}
-.lp-hero h1 {
-  font-family: 'Sora', sans-serif; font-size: clamp(30px, 5.4vw, 46px); font-weight: 800;
-  line-height: 1.12; letter-spacing: -1.2px; color: var(--white); margin-bottom: 18px;
-}
-.lp-hero h1 em { font-style: normal; color: var(--blue); }
-.lp-hero-sub { font-size: 17px; font-weight: 500; color: var(--body); line-height: 1.6; max-width: 460px; margin-bottom: 0; }
-/* Bloco de ação: CTA + nota + trust curto (2 itens) */
-.lp-hero-act { display: flex; flex-direction: column; }
-.lp-checks { list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 16px 0 0; }
-.lp-checks li {
-  display: flex; align-items: flex-start; gap: 9px;
-  font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.45;
-}
-.lp-checks li::before { content: '✓'; color: var(--green); font-weight: 800; flex-shrink: 0; margin-top: 1px; }
+.linkcta:hover{color:#A5BEFF;text-decoration:underline;text-underline-offset:4px}
 
-.lp-btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  min-height: 52px; padding: 16px 32px;
-  font-family: 'Sora', sans-serif; font-size: 16px; font-weight: 800; letter-spacing: 0.2px;
-  color: #06121E; text-decoration: none;
-  /* se o rótulo quebrar em 2 linhas, quebra centrado e equilibrado —
-     nunca com a seta órfã (ela vai presa por &nbsp; no HTML) */
-  text-align: center; text-wrap: balance;
-  background: linear-gradient(135deg, #4FBCEC 0%, #1F8FBE 100%);
-  border: none; border-radius: 12px;
-  box-shadow: 0 10px 26px rgba(23,124,166,0.38);
-  transition: transform 0.15s, box-shadow 0.15s;
-  cursor: pointer;
+/* ── Seções / tipografia ─────────────────────────────────────────── */
+section{scroll-margin-top:84px}
+.sec{padding:112px 0}
+.kicker{
+  display:block;font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--action-soft);margin-bottom:16px;
 }
-.lp-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(23,124,166,0.5); }
-.lp-btn--block { display: flex; width: 100%; max-width: 420px; }
-.lp-cta-note { font-size: 13px; font-weight: 600; color: var(--body); margin-top: 12px; }
-
-/* Card raio-x (exemplo honesto do resultado real) */
-.lp-mock {
-  background: var(--card); border: 1px solid var(--border); border-radius: 18px;
-  padding: 28px 26px 18px; box-shadow: var(--shadow-lg);
-  max-width: 420px; margin: 0 auto; width: 100%;
+h1{
+  font-family:'Sora',sans-serif;font-weight:800;
+  font-size:clamp(34px,5.2vw,58px);line-height:1.1;letter-spacing:-.02em;
 }
-/* Barra de browser no card: o mesmo conteúdo passa a ler como print do
-   produto, não como card flutuante (mesma gramática dos mockups da planos) */
-.lp-mock-bar {
-  display: flex; align-items: center; gap: 5px;
-  margin: -28px -26px 20px; padding: 10px 14px;
-  background: #0E2233; border-radius: 17px 17px 0 0;
+h1 .hl{
+  background:linear-gradient(92deg,#8FB0FF,#4D7CFE);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
 }
-.lp-mock-bar span { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.22); }
-.lp-mock-bar em { font-style: normal; margin-left: 7px; font-size: 11px; font-weight: 600; letter-spacing: 0.4px; color: rgba(234,244,250,0.55); }
-.lp-mock-head {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 20px;
+h2{
+  font-family:'Sora',sans-serif;font-weight:700;
+  font-size:clamp(26px,3.6vw,40px);line-height:1.16;letter-spacing:-.015em;
 }
-.lp-mock-title { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: var(--white); }
-.lp-mock-title span { display: block; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 12px; font-weight: 500; color: var(--sub); margin-top: 2px; }
-.lp-ring { width: 118px; height: 118px; border-radius: 50%; margin: 0 auto 12px; background: conic-gradient(#E08A1E 0 58%, #E9EFF4 58% 100%); display: flex; align-items: center; justify-content: center; }
-.lp-ring-in { width: 88px; height: 88px; border-radius: 50%; background: var(--card); display: flex; align-items: center; justify-content: center; font-family: 'Sora', sans-serif; font-size: 26px; font-weight: 800; color: var(--white); }
-.lp-mock-badge { text-align: center; margin-bottom: 18px; }
-.lp-meter { margin-bottom: 12px; }
-.lp-meter-row { display: flex; justify-content: space-between; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; font-weight: 600; color: var(--body); margin-bottom: 5px; }
-.lp-meter-row b { color: var(--white); font-weight: 700; }
-.lp-meter-track { height: 7px; border-radius: 100px; background: rgba(16,50,75,0.08); overflow: hidden; }
-.lp-meter-fill { height: 100%; border-radius: 100px; background: linear-gradient(90deg, #2D9EC9, #5BC4F0); }
-.lp-meter-fill--low { background: linear-gradient(90deg, #d3801c, #E08A1E); }
-.lp-mock-cap { text-align: center; font-size: 12px; font-weight: 500; color: var(--sub); padding: 10px 0 4px; }
-
-/* ── Faixa de confiança: sinais VERIFICÁVEIS logo abaixo do hero.
-   Não é prova social (zero clínica/número inventado) — é o que a CLINUP
-   realmente garante. O ponto exato onde o dono decide se continua. ── */
-.lp-trust {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
-  gap: 14px 32px; margin: 4px 0 4px; padding: 18px 8px;
-  border-block: 1px solid var(--border);
+.lead{font-size:17.5px;color:var(--ink-2);line-height:1.7}
+.checks{list-style:none;margin-top:26px;display:grid;gap:14px}
+.checks li{
+  position:relative;padding-left:32px;font-size:15.5px;font-weight:500;color:var(--ink-2);line-height:1.55;
 }
-.lp-trust-item {
-  display: inline-flex; align-items: center; gap: 9px;
-  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600;
-  color: var(--sub); white-space: nowrap;
-}
-.lp-trust-item svg {
-  width: 18px; height: 18px; flex-shrink: 0;
-  fill: none; stroke: var(--blue); stroke-width: 1.8;
-  stroke-linecap: round; stroke-linejoin: round;
+.checks li::before{
+  content:"";position:absolute;left:0;top:2px;width:20px;height:20px;border-radius:6px;
+  background-color:rgba(77,124,254,.14);
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237EA2FF' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E");
+  background-size:12px 12px;background-position:center;background-repeat:no-repeat;
 }
 
-/* ── Labels de seção (mesma assinatura da planos) ── */
-.lp-label {
-  font-size: 12px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
-  color: var(--sub); margin-bottom: 16px; text-align: center;
+/* ── Hero ────────────────────────────────────────────────────────── */
+.hero{
+  position:relative;padding:96px 0 120px;text-align:center;overflow:hidden;
 }
-.lp-h2 {
-  font-family: 'Sora', sans-serif; font-size: clamp(24px, 4vw, 34px); font-weight: 800;
-  line-height: 1.15; letter-spacing: -0.8px; color: var(--white);
-  text-align: center; max-width: 720px; margin: 0 auto 14px;
+.hero::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(640px 340px at 50% -60px, rgba(77,124,254,.16), transparent 70%);
 }
-.lp-h2-sub { font-size: 16px; font-weight: 500; color: var(--body); line-height: 1.6; text-align: center; max-width: 620px; margin: 0 auto 36px; }
-section { padding: 72px 0 0; scroll-margin-top: 76px; } /* âncoras não somem sob a nav sticky */
-@media (min-width: 900px) {
-  section { padding: 108px 0 0; }
+.hero>.wrap{position:relative}
+.hero h1{max-width:900px;margin:0 auto}
+.hero .lead{max-width:720px;margin:24px auto 0}
+.hero-cta{margin-top:36px}
+.hero-mock{max-width:1080px;margin:64px auto 0;padding:0 24px}
+
+/* ── Zig-zag (pilares) ───────────────────────────────────────────── */
+.zig{
+  display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);
+  gap:72px;align-items:center;
+}
+.zig--flip .zig-copy{order:2}
+.zig-copy .lead{margin-top:18px}
+@media (max-width:980px){
+  .zig{grid-template-columns:1fr;gap:44px}
+  .zig--flip .zig-copy{order:0} /* mobile: texto em cima, mock embaixo */
 }
 
-/* ── Faixas de seção (full-bleed): capítulos visuais alternados ── */
-.lp-band {
-  margin-inline: calc(50% - 50vw);
-  padding-inline: calc(50vw - 50%);
-  padding-block: 72px;
+/* ── Transformação ───────────────────────────────────────────────── */
+.transform{
+  background:radial-gradient(700px 380px at 50% 0%, rgba(43,213,118,.09), transparent 70%), var(--bg-deep);
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);
 }
-@media (min-width: 900px) { .lp-band { padding-block: 104px; } }
-.lp-band--white { background: #fff; border-block: 1px solid var(--border); }
-.lp-band--dark  { background: linear-gradient(135deg, #0E2233 0%, #16324A 100%); }
-.lp-band--dark .lp-label { color: rgba(234,244,250,0.65); }
-.lp-band--dark .lp-label--pulse::before { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12' fill='none' stroke='%235BC4F0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 9h3l2-4 2 6 2-3h3l3-3'/%3E%3C/svg%3E"); }
-.lp-band--dark .lp-h2 { color: #fff; }
-.lp-band--dark .lp-h2-sub { color: rgba(234,244,250,0.82); }
+.transform-head{max-width:780px;margin:0 auto;text-align:center}
+.transform-head .kicker{color:var(--gain)}
+.transform-head .lead{margin-top:20px}
+.transform-mock{max-width:1080px;margin:56px auto 0;padding:0 24px}
+.transform-cta{text-align:center;margin-top:48px}
 
-/* ── A dor invisível (3 vazamentos + síntese) ── */
-.lp-pains { display: grid; grid-template-columns: 1fr; gap: 16px; }
-@media (min-width: 768px) { .lp-pains { grid-template-columns: repeat(3, 1fr); } }
-.lp-pain {
-  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-  padding: 22px 24px; box-shadow: var(--shadow-sm);
+/* ── Como funciona ───────────────────────────────────────────────── */
+.steps-head{max-width:680px;margin:0 auto 52px;text-align:center}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.step{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:30px 28px;
+  transition:border-color .18s ease, transform .18s ease;
 }
-.lp-pain-ic {
-  width: 40px; height: 40px; border-radius: 11px;
-  background: rgba(91,196,240,0.12); color: var(--blue);
-  display: flex; align-items: center; justify-content: center; margin-bottom: 14px;
-}
-.lp-pain-ic svg {
-  width: 21px; height: 21px; display: block;
-  fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round;
-}
-.lp-pain-num {
-  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 2px;
-  color: var(--blue); margin-bottom: 10px;
-  display: flex; align-items: center; gap: 10px;
-}
-.lp-pain-num::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.lp-pain-title { font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 6px; }
-.lp-pain-desc { font-size: 14px; font-weight: 500; color: var(--body); line-height: 1.55; }
-/* A síntese das dores vira o clímax da seção: card escuro de largura cheia */
-.lp-pain--feature {
-  grid-column: 1 / -1;
-  background: linear-gradient(135deg, #0E2233 0%, #16324A 100%);
-  border-color: rgba(91,196,240,0.28);
-  padding: 26px 28px;
-}
-.lp-pain--feature .lp-pain-num { color: #5BC4F0; }
-.lp-pain--feature .lp-pain-num::after { background: rgba(255,255,255,0.14); }
-.lp-pain--feature .lp-pain-title { color: #fff; font-size: 19px; }
-.lp-pain--feature .lp-pain-desc { color: rgba(234,244,250,0.82); font-size: 14.5px; max-width: 600px; }
+.step:hover{border-color:#31405C;transform:translateY(-2px)}
+.step-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.step-n{font-family:'Inter',sans-serif;font-weight:650;font-size:13px;color:var(--action-soft);letter-spacing:.08em}
+.step-ico{width:40px;height:40px;border-radius:11px;background:rgba(77,124,254,.12);display:grid;place-items:center}
+.step-ico svg{width:20px;height:20px;stroke:var(--action-soft);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.step h3{font-family:'Sora',sans-serif;font-weight:700;font-size:19px;margin-bottom:10px}
+.step p{font-size:14.5px;color:var(--ink-2);line-height:1.65}
+@media (max-width:860px){ .steps{grid-template-columns:1fr} }
 
-/* ── Diagrama da jornada: o diferencial VISÍVEL — o caminho inteiro (Google→Agenda)
-   e onde o paciente escapa em cada etapa. Substitui a grade de cards por um fluxo
-   escaneável (mostra, não conta) e quebra a monotonia dos grids vizinhos. ── */
-.jflow { max-width: 940px; margin: 0 auto; }
-.jflow-track { display: flex; align-items: stretch; justify-content: center; gap: 8px; }
-.jstep {
-  flex: 1 1 0; min-width: 0;
-  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px;
-  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
-  padding: 20px 12px 16px; box-shadow: var(--shadow-sm);
+/* ── Fechamento ──────────────────────────────────────────────────── */
+.final-card{
+  position:relative;max-width:820px;margin:0 auto;text-align:center;
+  background:linear-gradient(180deg,#101728,#0C1220);
+  border:1px solid var(--line);border-radius:22px;padding:72px 40px;overflow:hidden;
 }
-.jstep-ic {
-  width: 46px; height: 46px; border-radius: 13px; flex-shrink: 0;
-  background: rgba(91,196,240,0.12); color: var(--blue);
-  display: flex; align-items: center; justify-content: center;
+.final-card::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(420px 200px at 50% -40px, rgba(77,124,254,.14), transparent 70%);
 }
-.jstep-ic svg { width: 24px; height: 24px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.jstep-txt { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-.jstep-name { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; color: var(--white); }
-.jstep-leak { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; color: #B4472B; line-height: 1.25; }
-.jstep-leak::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #D0623C; flex-shrink: 0; }
-/* nó do WhatsApp: verde (verde = só WhatsApp) */
-.jstep--wa .jstep-ic { background: rgba(30,142,99,0.12); color: var(--green); }
-/* nó-objetivo: agenda = ganho, não vazamento */
-.jstep--goal { border-color: rgba(30,142,99,0.42); background: linear-gradient(160deg, rgba(30,142,99,0.08), var(--card) 70%); }
-.jstep--goal .jstep-ic { background: rgba(30,142,99,0.14); color: #1E8E63; }
-.jstep-win { display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 700; color: #1E8E63; line-height: 1.25; }
-.jstep-win::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #1E8E63; flex-shrink: 0; }
-.jflow-arrow { display: flex; align-items: center; color: var(--sub); flex-shrink: 0; }
-.jflow-arrow svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-.jflow-band {
-  margin-top: 20px; display: flex; align-items: center; gap: 14px;
-  background: linear-gradient(135deg, #0E2233 0%, #16324A 100%);
-  border: 1px solid rgba(91,196,240,0.28); border-radius: 14px;
-  padding: 18px 22px; color: rgba(234,244,250,0.92);
-  font-size: 15px; font-weight: 600; line-height: 1.45;
+.final-card>*{position:relative}
+.final-card .lead{max-width:560px;margin:18px auto 0}
+.final-card .btn{margin-top:34px}
+@media (max-width:640px){ .final-card{padding:52px 22px} }
+
+/* ── Rodapé ──────────────────────────────────────────────────────── */
+.footer{border-top:1px solid var(--line);padding:56px 0 42px}
+.footer-grid{display:flex;align-items:flex-start;justify-content:space-between;gap:32px;flex-wrap:wrap}
+.footer-tag{font-size:14px;color:var(--ink-3);margin-top:14px;max-width:340px}
+.footer-links{display:grid;gap:12px}
+.footer-links a{font-size:14px;font-weight:600;color:var(--ink-2);text-decoration:none;transition:color .18s ease}
+.footer-links a:hover{color:var(--ink)}
+.footer-legal{margin-top:44px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
+
+/* ── Sticky CTA (mobile) ─────────────────────────────────────────── */
+.sticky-cta{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:70;
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
+  background:rgba(10,14,26,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);
 }
-.jflow-band b { color: #5BC4F0; font-weight: 700; }
-.jflow-band-ic {
-  flex-shrink: 0; width: 42px; height: 42px; border-radius: 12px;
-  background: rgba(91,196,240,0.16); color: #5BC4F0;
-  display: flex; align-items: center; justify-content: center;
-}
-.jflow-band-ic svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.9; stroke-linecap: round; stroke-linejoin: round; }
-@media (max-width: 700px) {
-  .jflow-track { flex-direction: column; align-items: stretch; gap: 6px; }
-  .jstep { flex-direction: row; text-align: left; gap: 13px; padding: 13px 15px; }
-  .jstep-txt { align-items: flex-start; }
-  .jstep-ic { width: 40px; height: 40px; }
-  .jflow-arrow { justify-content: center; transform: rotate(90deg); }
-  .jflow-band { font-size: 14px; padding: 16px 18px; }
+.sticky-cta .btn{width:100%}
+@media (max-width:768px){
+  .sticky-cta{display:block;transform:translateY(110%);transition:transform .3s ease}
+  .sticky-cta.is-visible{transform:translateY(0)}
 }
 
-/* ── Como funciona: fluxo assimétrico (zigue-zague), não grade de cards ──
-   Cada etapa é uma linha editorial: mockup emoldurado de um lado, texto nu
-   do outro, invertendo o lado a cada linha. Quebra a monotonia das grades
-   vizinhas (dor/benefícios) e dá largura pro mockup respirar. */
-.lp-flow { display: flex; flex-direction: column; gap: 22px; margin-bottom: 30px; }
-.lp-flow-row { display: flex; flex-direction: column; gap: 16px; }
-@media (min-width: 768px) {
-  .lp-flow { gap: 44px; }
-  .lp-flow-row { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-  /* linhas pares: mockup à direita, texto à esquerda (o zigue-zague) */
-  .lp-flow-row:nth-child(even) .lp-step-shot { order: 2; }
+/* ── Ritmo mobile ────────────────────────────────────────────────── */
+@media (max-width:640px){
+  .sec{padding:72px 0}
+  .hero{padding:64px 0 84px}
+  .hero-mock{margin-top:44px}
 }
-.lp-flow-text { max-width: 440px; }
-.lp-step-num {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: var(--blue); color: #fff;
-  font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-}
-.lp-step-head { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.lp-step-title { font-family: 'Sora', sans-serif; font-weight: 700; font-size: clamp(17px, 2.4vw, 20px); color: var(--white); }
-.lp-step-desc { font-size: 15px; font-weight: 500; color: var(--body); line-height: 1.6; }
-.lp-center { text-align: center; }
-
-/* ── Mini-telas reais do produto dentro de cada passo (show, don't tell):
-   a pessoa VÊ a pergunta, o resultado e as prioridades antes de começar. ── */
-.lp-step-shot {
-  background: #F6FAFD; border: 1px solid var(--border); border-radius: 14px;
-  padding: 16px; min-height: 190px;
-  display: flex; flex-direction: column; justify-content: center; gap: 10px; overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-/* Desktop: a linha assimétrica dá o dobro de largura ao mockup — o conteúdo
-   das mini-telas cresce junto pra não boiar num frame grande e vazio. */
-@media (min-width: 768px) {
-  .lp-step-shot { padding: 26px 30px; min-height: 240px; gap: 12px; }
-  .hw-qtop, .hw-plabel { font-size: 11px; }
-  .hw-head-t { font-size: 12.5px; }
-  .hw-eg { font-size: 9.5px; }
-  .hw-q { font-size: 15px; }
-  .hw-opt, .hw-pitem { font-size: 13px; padding: 9px 12px; }
-  .hw-ring { width: 84px; height: 84px; }
-  .hw-ring b { width: 62px; height: 62px; font-size: 20px; }
-  .hw-badge { font-size: 10px; }
-  .hw-mrow { font-size: 12.5px; }
-}
-/* passo 1 — pergunta do quiz */
-.hw-qtop { display: flex; justify-content: space-between; align-items: center; font-family: 'Sora',sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--sub); }
-.hw-qbar { height: 4px; border-radius: 100px; background: rgba(16,50,75,0.10); overflow: hidden; margin-bottom: 2px; }
-.hw-qbar i { display: block; height: 100%; width: 20%; border-radius: 100px; background: var(--blue); }
-.hw-q { font-family: 'Sora',sans-serif; font-size: 12.5px; font-weight: 700; color: var(--white); line-height: 1.25; margin-bottom: 1px; }
-.hw-opt { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 6px 9px; font-size: 11.5px; font-weight: 600; color: var(--body); }
-.hw-ic { width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 800; }
-.hw-ic--ok { background: rgba(30,142,99,0.14); color: #1E8E63; }
-.hw-ic--warn { background: rgba(224,138,30,0.16); color: #B26F0E; }
-.hw-ic--neg { background: rgba(211,58,44,0.12); color: #C0392B; }
-/* passo 2 — resultado */
-.hw-res { display: flex; align-items: center; gap: 14px; }
-.hw-ring { width: 68px; height: 68px; border-radius: 50%; flex-shrink: 0; background: conic-gradient(#E08A1E 0 58%, #E9EFF4 58% 100%); display: flex; align-items: center; justify-content: center; }
-.hw-ring b { width: 50px; height: 50px; border-radius: 50%; background: #F6FAFD; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-size: 16px; font-weight: 800; color: var(--white); }
-.hw-res-side { flex: 1; min-width: 0; }
-.hw-badge { display: inline-block; font-family: 'Sora',sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #B26F0E; background: rgba(224,138,30,0.12); border: 1px solid rgba(224,138,30,0.3); border-radius: 100px; padding: 3px 8px; margin-bottom: 9px; }
-.hw-mrow { display: flex; justify-content: space-between; font-size: 11px; font-weight: 700; color: var(--white); margin-bottom: 3px; }
-.hw-mtrack { height: 5px; border-radius: 100px; background: rgba(16,50,75,0.10); overflow: hidden; margin-bottom: 8px; }
-.hw-mtrack i { display: block; height: 100%; border-radius: 100px; width: var(--w, 0%); }
-/* passo 3 — prioridades */
-.hw-plabel { font-family: 'Sora',sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--sub); margin-bottom: 1px; }
-.hw-pitem { display: flex; align-items: center; gap: 9px; background: #fff; border: 1px solid var(--border); border-radius: 8px; padding: 8px 11px; font-size: 11.5px; font-weight: 600; color: var(--body); }
-.hw-pn { width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-family: 'Sora',sans-serif; font-size: 10.5px; font-weight: 800; background: rgba(224,138,30,0.14); color: #B26F0E; }
-.hw-pitem.is-ok .hw-pn { background: rgba(30,142,99,0.12); color: #1E8E63; }
-
-/* ── Gramática de "tela" comum aos mockups: header + tag "exemplo" + opção selecionada ── */
-.hw-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
-.hw-head-t { font-family: 'Sora',sans-serif; font-size: 11px; font-weight: 700; color: var(--white); }
-.hw-eg { font-family: 'Sora',sans-serif; font-size: 8.5px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--sub); border: 1px solid var(--border); border-radius: 100px; padding: 2px 7px; flex-shrink: 0; }
-/* opção "respondida" no quiz (mostra que é interativo) */
-.hw-opt--sel { border-color: rgba(12,111,152,0.55); background: rgba(91,196,240,0.10); color: var(--white); box-shadow: 0 0 0 1px rgba(12,111,152,0.25) inset; }
-
-/* ── Benefícios (bento grid: ícone + título + microlinha) ── */
-.lpb-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-@media (min-width: 620px) {
-  .lpb-grid { grid-template-columns: 1fr 1fr; }
-  .lpb-card--dark, .lpb-card--accent { grid-column: span 2; }
-}
-@media (min-width: 960px) {
-  .lpb-grid { grid-template-columns: repeat(4, 1fr); }
-  .lpb-card--dark { grid-column: span 2; }
-  /* fechamento da seção em largura cheia: malha 4+4+4 sem buracos */
-  .lpb-card--accent { grid-column: 1 / -1; }
-}
-.lpb-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-  padding: 22px 20px; box-shadow: var(--shadow-sm);
-  display: flex; flex-direction: column; gap: 0;
-}
-.lpb-icon {
-  width: 40px; height: 40px; border-radius: 11px; flex-shrink: 0;
-  background: rgba(91,196,240,0.12); color: var(--blue);
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 14px;
-}
-.lpb-icon svg {
-  width: 21px; height: 21px; display: block;
-  fill: none; stroke: currentColor; stroke-width: 1.9;
-  stroke-linecap: round; stroke-linejoin: round;
-}
-.lpb-title { font-family: 'Sora', sans-serif; font-size: 15.5px; font-weight: 700; color: var(--white); line-height: 1.3; margin-bottom: 6px; }
-.lpb-desc { font-size: 13.5px; font-weight: 500; color: var(--body); line-height: 1.5; }
-/* Destaque escuro (quebra o ritmo claro da página no meio da lista) */
-.lpb-card--dark {
-  background: linear-gradient(135deg, #0E2233 0%, #16324A 100%);
-  border-color: rgba(91,196,240,0.28);
-}
-.lpb-card--dark .lpb-title { color: #fff; }
-.lpb-card--dark .lpb-desc { color: rgba(234,244,250,0.8); }
-.lpb-card--dark .lpb-icon { background: rgba(91,196,240,0.16); color: #5BC4F0; }
-/* Destaque claro com acento azul */
-.lpb-card--accent {
-  background: linear-gradient(135deg, rgba(91,196,240,0.10), var(--card) 65%);
-  border-color: rgba(12,111,152,0.30);
+@media (max-width:480px){
+  .nav{padding:12px 16px}
+  .btn--sm{font-size:13px;padding:10px 14px}
 }
 
-/* ── Transformação: comparação lado a lado ──
-   Justaposição estática no lugar do slider: o contraste inteiro é entregue
-   de graça, sem interação — e a hierarquia visual (antes apagado, depois
-   luminoso) já conta quem vence antes da leitura. ── */
-.cmp-grid {
-  display: grid; grid-template-columns: 1fr; gap: 16px;
-  max-width: 880px; margin: 0 auto; position: relative;
-}
-@media (min-width: 820px) { .cmp-grid { grid-template-columns: 1fr 1fr; gap: 24px; } }
-.cmp-card { border-radius: 18px; padding: 30px 28px; }
-.cmp-card--before {
-  background: rgba(255,255,255,0.045);
-  border: 1px solid rgba(255,255,255,0.13);
-}
-.cmp-card--after {
-  background: #fff;
-  border: 1px solid rgba(91,196,240,0.45);
-  box-shadow: 0 24px 64px rgba(0,0,0,0.38);
-}
-.cmp-tag {
-  display: inline-block; font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 700;
-  letter-spacing: 2.5px; text-transform: uppercase; margin-bottom: 8px;
-}
-.cmp-card--before .cmp-tag { color: rgba(234,244,250,0.55); }
-.cmp-card--after  .cmp-tag { color: #1279A3; }
-.cmp-title { font-family: 'Sora', sans-serif; font-size: 21px; font-weight: 800; margin-bottom: 18px; }
-.cmp-card--before .cmp-title { color: rgba(234,244,250,0.82); }
-.cmp-card--after  .cmp-title { color: var(--white); }
-.cmp-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-.cmp-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14.5px; font-weight: 500; line-height: 1.55; }
-.cmp-card--before .cmp-list li { color: rgba(234,244,250,0.62); }
-.cmp-card--before .cmp-list li::before { content: '✕'; color: rgba(234,244,250,0.4); font-weight: 800; flex-shrink: 0; }
-.cmp-card--after .cmp-list li { color: var(--body); }
-.cmp-card--after .cmp-list li::before { content: '✓'; color: var(--green); font-weight: 800; flex-shrink: 0; }
-/* Miniatura do resultado dentro do "depois": só a lista de prioridades
-   (sem score — nota mediana no "depois" lia como contradição; feedback
-   do Gabriel 18/07). O produto é a clareza da ordem, não um número. */
-.cmp-shot {
-  background: #F6FAFD; border: 1px solid var(--border); border-radius: 12px;
-  padding: 16px; margin-top: 4px;
-}
-.cmp-shot-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
-.cmp-shot-title { font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700; color: var(--white); }
-.cmp-shot-eg {
-  font-family: 'Sora', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: var(--sub);
-  border: 1px solid var(--border); border-radius: 100px; padding: 3px 8px;
-}
-.cmp-shot-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-.cmp-shot-list li {
-  display: flex; align-items: center; gap: 10px;
-  background: #fff; border: 1px solid var(--border); border-radius: 9px;
-  padding: 9px 12px; font-size: 12.5px; font-weight: 600; color: var(--body); line-height: 1.4;
-}
-.cmp-shot-list b {
-  width: 20px; height: 20px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Sora', sans-serif; font-size: 11px; font-weight: 800;
-  background: rgba(224,138,30,0.14); color: #B26F0E;
-}
-.cmp-shot-list li.is-ok b { background: rgba(30,142,99,0.12); color: #1E8E63; }
-.cmp-shot-cap { font-size: 13px; font-weight: 500; color: var(--body); margin-top: 14px; line-height: 1.5; }
-
-/* Seta conectora entre os cards (só desktop; no mobile os cards empilham) */
-.cmp-arrow {
-  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-  width: 46px; height: 46px; border-radius: 50%;
-  background: var(--blue, #5BC4F0); color: #06121E;
-  display: none; align-items: center; justify-content: center;
-  box-shadow: 0 8px 24px rgba(0,0,0,0.35); z-index: 2;
-}
-.cmp-arrow svg { width: 20px; height: 20px; stroke: currentColor; fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
-@media (min-width: 820px) { .cmp-arrow { display: flex; } }
-
-/* ── Posicionamento ── */
-.lp-position {
-  background: var(--card); border: 1px solid var(--border); border-radius: 16px;
-  padding: 34px 30px; box-shadow: var(--shadow-sm);
-  max-width: 760px; margin: 0 auto; text-align: center;
-}
-.lp-position p { font-size: 15.5px; font-weight: 500; color: var(--body); line-height: 1.7; max-width: 620px; margin: 0 auto 22px; }
-.lp-position p strong { color: var(--white); }
-.lp-seals { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
-.lp-seal {
-  font-family: 'Sora', sans-serif; font-size: 12.5px; font-weight: 700;
-  color: var(--blue); background: rgba(91,196,240,0.10);
-  border: 1px solid rgba(91,196,240,0.35); border-radius: 100px; padding: 8px 16px;
+/* ── Reveal on scroll ────────────────────────────────────────────── */
+html.js-anim .reveal{opacity:0;transform:translateY(16px);transition:opacity .55s ease,transform .55s ease}
+html.js-anim .reveal.is-visible{opacity:1;transform:none}
+@media (prefers-reduced-motion: reduce){
+  html.js-anim .reveal{opacity:1;transform:none;transition:none}
 }
 
-/* ── FAQ: título à esquerda, perguntas à direita (quebra a centro-simetria) ── */
-.lp-faq-grid { max-width: 960px; margin: 0 auto; }
-@media (min-width: 900px) {
-  .lp-faq-grid { display: grid; grid-template-columns: 0.75fr 1.45fr; gap: 56px; align-items: start; }
-  .lp-faq-intro .lp-label, .lp-faq-intro .lp-h2, .lp-faq-intro .lp-h2-sub { text-align: left; margin-left: 0; }
-  .lp-faq-intro .lp-h2 { margin-bottom: 12px; }
-  .lp-faq-grid .lp-faq { margin: 0; }
+/* ════════════════════════════════════════════════════════════════════
+   Moldura dos dashboards (janela + selo de simulação)
+   ════════════════════════════════════════════════════════════════════ */
+.mockframe{
+  background:#0D1322;border:1px solid var(--line);border-radius:16px;overflow:hidden;
+  box-shadow:0 40px 100px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.02);
+  text-align:left; /* não herdar o center das seções */
 }
-.lp-faq { max-width: 680px; margin: 0 auto; }
-.lp-faq summary {
-  padding: 18px 20px; cursor: pointer;
-  font-family: 'Sora', sans-serif; font-weight: 700; font-size: 15px; color: var(--white);
-  border-bottom: 1px solid var(--border); list-style: none;
-  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+.mf-bar{
+  display:flex;align-items:center;gap:12px;padding:11px 16px;
+  border-bottom:1px solid var(--line);background:rgba(255,255,255,.02);
 }
-.lp-faq summary::-webkit-details-marker { display: none; }
-.lp-faq summary::after { content: "+"; font-size: 20px; color: var(--blue); flex-shrink: 0; }
-.lp-faq details[open] summary::after { content: "−"; }
-.lp-faq details > p {
-  padding: 16px 20px; font-size: 14px; font-weight: 500; line-height: 1.65;
-  color: var(--body); background: var(--card); border-bottom: 1px solid var(--border);
+.mf-dots{display:inline-flex;gap:6px;flex-shrink:0}
+.mf-dots i{width:10px;height:10px;border-radius:50%;background:#232B3D;display:block}
+.mf-title{
+  font-family:'Inter',sans-serif;font-size:12px;color:var(--ink-3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;
 }
-
-/* ── Fechamento dark: faixa full-bleed (uma só gramática de dark no site) ── */
-.lp-closing { text-align: center; }
-.lp-closing-eyebrow { color: #5BC4F0; font-family: 'Sora', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 10px; }
-.lp-closing h2 { color: #fff; font-family: 'Sora', sans-serif; font-weight: 800; font-size: clamp(22px, 4vw, 30px); line-height: 1.2; margin-bottom: 12px; }
-.lp-closing p { color: rgba(234,244,250,0.85); font-size: 15.5px; font-weight: 500; line-height: 1.6; max-width: 540px; margin: 0 auto 24px; }
-.lp-closing .lp-btn--block { margin: 0 auto; }
-.lp-closing .lp-cta-note { color: rgba(234,244,250,0.6); }
-/* Value stack: o que o diagnóstico REALMENTE entrega (fonte: results.js) —
-   materializa a oferta gratuita logo antes do botão, sem inventar nada. */
-.lp-closing .lp-value-lead {
-  font-family: 'Sora', sans-serif; font-weight: 700; font-size: 13px;
-  letter-spacing: 1px; text-transform: uppercase; color: #5BC4F0;
-  max-width: 460px; margin: 0 auto 14px; text-align: left;
+.mf-sim{
+  margin-left:auto;flex-shrink:0;
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:500;color:var(--ink-2);
+  border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap;
+  background:rgba(255,255,255,.03);
 }
-.lp-closing .lp-value {
-  list-style: none; max-width: 460px; margin: 0 auto 26px;
-  display: flex; flex-direction: column; gap: 12px; text-align: left;
-}
-.lp-closing .lp-value li {
-  display: flex; align-items: flex-start; gap: 11px;
-  font-size: 14.5px; font-weight: 500; color: rgba(234,244,250,0.85); line-height: 1.5;
-}
-.lp-closing .lp-value li::before { content: '✓'; flex-shrink: 0; color: #5BC4F0; font-weight: 800; margin-top: 1px; }
-.lp-closing .lp-value b { color: #fff; font-weight: 700; }
-
-.lp-footer {
-  text-align: center; padding: 36px 24px 28px;
-  border-top: 1px solid var(--border);
-  display: flex; flex-direction: column; align-items: center; gap: 12px;
-}
-.lp-footer p { font-size: 12px; color: var(--sub); }
-.lp-footer-tag { font-size: 13.5px; font-weight: 500; color: var(--body); max-width: 420px; }
-.lp-footer-brand { display: flex; align-items: center; gap: 10px; }
-.lp-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; }
-.lp-footer-links a { font-size: 13px; font-weight: 600; color: var(--body); text-decoration: none; }
-.lp-footer-links a:hover { color: #1279A3; }
-
-/* ── Sticky CTA mobile ── */
-.lp-sticky {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
-  display: none; padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-  background: rgba(255,255,255,0.94); border-top: 1px solid var(--border);
-  box-shadow: 0 -6px 20px rgba(16,40,60,0.08); backdrop-filter: blur(10px);
-}
-.lp-sticky .lp-btn { width: 100%; min-height: 48px; padding: 13px 16px; font-size: 15px; }
-@media (max-width: 768px) { .lp-sticky.is-visible { display: block; } }
-
-/* ── Mobile (≤899px): mensagem → PROVA (card) → CTA numa tela só ──
-   O card sobe pra logo abaixo do título; a mensagem enxuga; o CTA fica
-   colado no card. Assim os 3 segundos entregam: o quê + prova + ação. */
-@media (max-width: 899px) {
-  .lp-hero { padding: 28px 0 40px; gap: 18px; }
-  .lp-hero-lead { text-align: left; }
-  .lp-eyebrow { margin-bottom: 12px; }
-  .lp-hero h1 { margin-bottom: 12px; }
-  .lp-mock-wrap { margin: 0 auto; }
+.mf-body{padding:22px}
+@media (max-width:640px){
+  .mf-body{padding:14px}
+  .mf-title{display:none}
 }
 
-/* ── Mobile (≤640px): legibilidade e densidade ── */
-@media (max-width: 640px) {
-  /* parágrafo com 3+ linhas centralizado é ilegível em coluna estreita:
-     título continua centrado, corpo alinha à esquerda */
-  .lp-h2-sub, .lp-position p, .lp-closing p { text-align: left; }
-  .lp-closing { text-align: left; }
-  .lp-closing .lp-btn--block { margin: 0; }
-  .lp-closing-eyebrow, .lp-closing h2 { text-align: left; }
+/* ════════════════════════════════════════════════════════════════════
+   Componentes dos mockups (.mk — fonte Inter, fidelidade aos originais)
+   ════════════════════════════════════════════════════════════════════ */
+.mk{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:var(--ink)}
+.num{font-variant-numeric:tabular-nums}
+.mk-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.mk-h{
+  font-family:inherit;font-size:13px;font-weight:500;color:var(--ink-2);
+  letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px;
+}
+.mk-sub{font-size:12.5px;color:var(--ink-3);line-height:1.5}
+.mk-sub b{color:var(--warn);font-weight:500}
 
-  /* CTA numa linha só em 360px */
-  .lp-btn { padding-inline: 14px; font-size: 15px; }
+.mk-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.mk-who{font-size:16px;font-weight:600;letter-spacing:-.01em}
+.mk-whosub{font-size:12px;color:var(--ink-3);margin-top:3px}
+.mk-pill{
+  border:1px solid var(--line);background:var(--card);border-radius:9px;
+  padding:8px 14px;font-size:13px;color:var(--ink-2);white-space:nowrap;
+}
+@media (max-width:640px){ .mk-pill{display:none} }
 
-  /* Hero mobile: CTA na dobra + card espiando o anel logo abaixo.
-     O checklist é redundante (o próprio card mostra Site/WhatsApp/etc) —
-     escondê-lo sobe o anel pra dentro da 1ª tela. */
-  .lp-hero .lp-checks { display: none; }
-  .lp-hero-act .lp-cta-note { margin-bottom: 2px; }
+/* KPIs (mockups 1 e 4) */
+.mk-kpis{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:14px;margin-bottom:14px}
+.mk-kpi .mk-v{font-size:clamp(26px,2.6vw,38px);font-weight:650;letter-spacing:-.02em;margin:10px 0 8px}
+.mk-kpi--hero .mk-v{font-size:clamp(32px,3.4vw,48px)}
+.mk-v--loss{color:var(--loss)} .mk-v--warn{color:var(--warn)} .mk-v--gain{color:var(--gain)}
+.mk-v--glowloss{text-shadow:0 0 28px rgba(244,87,77,.28)}
+.mk-v--glowgain{text-shadow:0 0 28px rgba(43,213,118,.28)}
+.mk-v-unit{font-size:20px;color:var(--ink-2);font-weight:500}
+.mk-kpi--hero .mk-v--fit{font-size:clamp(24px,2.4vw,34px);white-space:nowrap}
+.mk-delta{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:7px;padding:4px 9px}
+.mk-delta--bad{color:var(--loss);background:rgba(244,87,77,.1)}
+.mk-delta--good{color:var(--gain);background:rgba(43,213,118,.1)}
+.mk-bench{font-size:12px;color:var(--ink-3);margin-top:6px}
+.mk-bench em{color:var(--gain);font-style:normal;font-weight:500}
+.mk-was{font-size:12.5px;color:var(--ink-3)}
+@media (max-width:920px){ .mk-kpis{grid-template-columns:1fr 1fr} }
+@media (max-width:520px){ .mk-kpis{grid-template-columns:1fr} }
 
-  /* Card do hero compacto: cabe junto com título + CTA na 1ª tela.
-     Esconde os 2 medidores extras, encolhe o anel e aperta o padding. */
-  .lp-mock { padding: 20px 18px 14px; }
-  .lp-mock-bar { margin: -20px -18px 14px; }
-  .lp-mock-head { margin-bottom: 12px; }
-  .lp-meter--hide-sm { display: none; }
-  .lp-ring { width: 92px; height: 92px; margin-bottom: 8px; }
-  .lp-ring-in { width: 68px; height: 68px; font-size: 21px; }
-  .lp-mock-badge { margin-bottom: 12px; }
-  .lp-meter { margin-bottom: 9px; }
+/* Linhas de cards */
+.mk-row{display:grid;grid-template-columns:62fr 38fr;gap:14px}
+.mk-row--gap{margin-bottom:14px}
+@media (max-width:920px){ .mk-row{grid-template-columns:1fr} }
 
-  /* menos ar entre seções (os vazios de ~130px entre capítulos) */
-  section { padding: 52px 0 0; }
-  .lp-band { padding-block: 52px; }
-  .lp-h2-sub { margin-bottom: 28px; }
+/* Cabeçalho de gráfico + legendas */
+.mk-chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.mk-legend{display:flex;gap:18px;font-size:12px;color:var(--ink-2);flex-wrap:wrap}
+.mk-dot{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:-1px}
+.mk-lswatch{display:inline-block;width:16px;height:0;border-top:3px solid;border-radius:2px;margin-right:7px;vertical-align:3px}
 
-  /* faixa de confiança: 2×2 pra não amontoar em 360px */
-  .lp-trust { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; padding: 16px 4px; justify-items: start; }
-  .lp-trust-item { font-size: 12.5px; white-space: normal; }
+/* Funil (mockup 1) */
+.mk-stage{margin-top:14px}
+.mk-lbl{display:flex;justify-content:space-between;font-size:12.5px;color:var(--ink-2);margin-bottom:6px}
+.mk-lbl .num{color:var(--ink);font-weight:600}
+.mk-bar{
+  height:30px;border-radius:8px;
+  background:linear-gradient(90deg,rgba(77,124,254,.34),rgba(77,124,254,.16));
+  border:1px solid rgba(77,124,254,.28);
+}
+.mk-bar--gain{
+  background:linear-gradient(90deg,rgba(43,213,118,.4),rgba(43,213,118,.18));
+  border-color:rgba(43,213,118,.35);
+}
+.mk-leak{display:flex;justify-content:flex-end;padding:7px 2px 0}
+.mk-leak span{
+  font-size:12px;font-weight:600;color:var(--loss);background:rgba(244,87,77,.1);
+  border-radius:7px;padding:4px 10px;display:inline-flex;align-items:center;gap:6px;
+}
+.mk-leak svg{width:13px;height:13px;stroke:var(--loss);fill:none;stroke-width:2;stroke-linecap:round}
+.mk-foot{margin-top:16px;font-size:12px;color:var(--ink-3);display:flex;gap:8px 14px;flex-wrap:wrap}
 
-  /* cards mais densos: a pilha de 16 cards de anatomia igual encolhe */
-  .lp-pains { gap: 12px; }
-  .lpb-grid { gap: 10px; }
-  .lp-pain { padding: 16px 18px; }
-  .lp-pain-num { margin-bottom: 6px; }
-  .lp-pain--feature { padding: 22px 20px; }
-  /* bento: ícone na linha do título (flutuando sozinho desperdiçava ~60px/card) */
-  .lpb-card { display: grid; grid-template-columns: 40px 1fr; column-gap: 12px; align-items: start; padding: 16px; }
-  .lpb-icon { grid-row: 1 / span 2; margin-bottom: 0; margin-top: 2px; }
-  .lpb-title { margin-bottom: 3px; align-self: center; }
-  /* fluxo: mockup ajusta ao conteúdo (o gap do .lp-flow-row separa do texto) */
-  .lp-step-shot { min-height: 0; padding: 14px; }
+/* Heatmap (mockup 2) */
+.mk-hm{display:grid;grid-template-columns:52px repeat(7,1fr);gap:6px;margin-top:18px}
+.mk-hm-cl{font-size:11.5px;color:var(--ink-2);text-align:center;padding-bottom:2px;font-weight:500}
+.mk-hm-rl{font-size:11px;color:var(--ink-3);display:flex;align-items:center}
+.mk-cell{height:38px;border-radius:6px}
+.mk-c-fast{background:rgba(43,213,118,.5)}
+.mk-c-mid{background:rgba(245,166,35,.5)}
+.mk-c-late{background:rgba(244,87,77,.55)}
+.mk-c-dead{background:#080B14;border:1px solid rgba(244,87,77,.5)}
+.mk-hleg{display:flex;gap:10px 18px;margin-top:16px;font-size:11.5px;color:var(--ink-2);align-items:center;flex-wrap:wrap}
+.mk-sw{width:13px;height:13px;border-radius:4px;display:inline-block;margin-right:6px;vertical-align:-2px}
+@media (max-width:520px){
+  .mk-hm{grid-template-columns:42px repeat(7,1fr);gap:4px}
+  .mk-cell{height:26px}
 }
 
-/* ── Reveal no scroll: curto, sutil, e o conteúdo nunca fica refém dele.
-   Regra de ouro (Stripe/Linear): a animação assenta o conteúdo, não o esconde —
-   por isso 0.42s, 12px de deslocamento e escalonamento máximo de ~0.27s. ── */
-@media (prefers-reduced-motion: no-preference) {
-  .js-anim .reveal { opacity: 0; }
-  .js-anim .reveal.is-visible { opacity: 1; animation: lpUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
-  .js-anim .reveal-group > * { opacity: 0; }
-  .js-anim .reveal-group.is-visible > * { opacity: 1; animation: lpUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards; }
-  .js-anim .reveal-group.is-visible > *:nth-child(2) { animation-delay: 0.05s; }
-  .js-anim .reveal-group.is-visible > *:nth-child(3) { animation-delay: 0.10s; }
-  .js-anim .reveal-group.is-visible > *:nth-child(4) { animation-delay: 0.14s; }
-  .js-anim .reveal-group.is-visible > *:nth-child(5) { animation-delay: 0.18s; }
-  .js-anim .reveal-group.is-visible > *:nth-child(6) { animation-delay: 0.21s; }
-  .js-anim .reveal-group.is-visible > *:nth-child(7) { animation-delay: 0.24s; }
-  .js-anim .reveal-group.is-visible > *:nth-child(8) { animation-delay: 0.27s; }
-}
-@keyframes lpUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
-
-/* ── Vida na página: entradas, flutuação, hovers ── */
-/* Assinatura pulse-up: usada com parcimônia (hero, dor, transformação) —
-   repetida em toda seção ela vira carimbo e perde o valor */
-.lp-eyebrow::before, .lp-label--pulse::before {
-  content: '';
-  display: inline-block;
-  width: 22px; height: 11px;
-  margin-right: 10px;
-  vertical-align: middle;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='12' viewBox='0 0 24 12' fill='none' stroke='%230C6F98' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 9h3l2-4 2 6 2-3h3l3-3'/%3E%3C/svg%3E") no-repeat center / contain;
+/* Feed de perdas (mockup 2) */
+.mk-tx{display:flex;align-items:center;gap:12px;padding:13px 2px;border-bottom:1px solid var(--line)}
+.mk-tx:last-child{border-bottom:none;padding-bottom:4px}
+.mk-tx-t{width:82px;flex-shrink:0;font-size:12.5px;color:var(--ink-3)}
+.mk-tx-m{flex:1;min-width:0;font-size:13.5px;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mk-badge{font-size:11.5px;font-weight:600;border-radius:7px;padding:5px 10px;white-space:nowrap}
+.mk-b-loss{color:var(--loss);background:rgba(244,87,77,.1)}
+.mk-b-warn{color:var(--warn);background:rgba(245,166,35,.1)}
+.mk-b-gain{color:var(--gain);background:rgba(43,213,118,.1)}
+.mk-tx-val{width:84px;flex-shrink:0;text-align:right;font-size:14.5px;font-weight:650}
+.mk-vloss{color:var(--loss)} .mk-vgain{color:var(--gain)}
+@media (max-width:600px){
+  .mk-tx{flex-wrap:wrap;gap:6px 10px;padding:12px 0}
+  .mk-tx-t{width:auto}
+  .mk-tx-m{flex:1 1 100%;white-space:normal}
+  .mk-tx-val{width:auto;margin-left:auto}
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  /* Hero: entrada em cascata no carregamento (acima da dobra, sem esperar scroll) */
-  .js-anim .lp-hero-lead > *, .js-anim .lp-hero-act > * { opacity: 0; animation: lpUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-  .js-anim .lp-hero-lead > *:nth-child(1) { animation-delay: 0.05s; }
-  .js-anim .lp-hero-lead > *:nth-child(2) { animation-delay: 0.14s; }
-  .js-anim .lp-hero-lead > *:nth-child(3) { animation-delay: 0.24s; }
-  .js-anim .lp-hero-act > *:nth-child(1) { animation-delay: 0.46s; }
-  .js-anim .lp-hero-act > *:nth-child(2) { animation-delay: 0.54s; }
-  .js-anim .lp-hero-act > *:nth-child(3) { animation-delay: 0.60s; }
-  .js-anim .lp-mock-wrap { opacity: 0; animation: lpUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.32s forwards; }
-
-  /* Card do raio-x flutua de leve depois de entrar */
-  .lp-mock { animation: mockFloat 7s ease-in-out 1.6s infinite; }
-
-  /* Hovers com elevação (só ponteiro fino) */
-  @media (hover: hover) {
-    .lp-pain, .lpb-card { transition: transform 0.25s ease, box-shadow 0.25s ease; }
-    .lp-pain:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(16,40,60,0.11); }
-    .lpb-card:hover { transform: translateY(-3px); box-shadow: 0 8px 22px rgba(16,40,60,0.09); }
-    .lp-seal { transition: transform 0.2s ease; }
-    .lp-seal:hover { transform: translateY(-2px); }
-  }
-
-  /* Barras do raio-x enchem no carregamento (JS define a largura) */
-  .lp-meter-fill { transition: width 0.85s cubic-bezier(0.22, 1, 0.36, 1); }
+/* Donut + projeção (mockup 3) */
+.mk-donut-wrap{display:flex;flex-direction:column;align-items:center}
+.mk-donut-wrap .mk-h{align-self:flex-start}
+.mk-donut{position:relative;width:170px;height:170px;margin:12px 0 6px}
+.mk-donut svg{width:100%;height:100%;display:block}
+.mk-donut-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.mk-donut-mid .v{font-size:36px;font-weight:650;color:var(--loss);letter-spacing:-.02em}
+.mk-donut-mid .l{font-size:12px;color:var(--ink-3);margin-top:2px}
+.mk-benchbox{
+  margin-top:14px;width:100%;background:rgba(43,213,118,.06);
+  border:1px solid rgba(43,213,118,.25);border-radius:10px;padding:12px 14px;
+  font-size:12.5px;color:var(--ink-2);
 }
-@keyframes mockFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+.mk-benchbox b{color:var(--gain);font-weight:650}
+.mk-proj{background:rgba(244,87,77,.07);border:1px solid rgba(244,87,77,.3);border-radius:14px;padding:22px}
+.mk-proj-big{
+  font-size:clamp(24px,4vw,32px);font-weight:650;color:var(--loss);letter-spacing:-.015em;
+  text-shadow:0 0 26px rgba(244,87,77,.25);margin:6px 0 8px;
+}
+.mk-proj .mk-sub{font-size:13px}
 
-/* ══ Camada 2 — os mockups se demonstram ao entrar na tela ══
-   Itens recolhidos só quando a animação está ligada E o mockup ainda não tocou.
-   .is-played (via IO + failsafe no JS) devolve ao estado final. Reduced-motion
-   e no-JS já mostram tudo pronto (o estado final é o default). */
-@media (prefers-reduced-motion: no-preference) {
-  .js-anim [data-play]:not(.is-played) .hw-opt,
-  .js-anim [data-play]:not(.is-played) .hw-pitem,
-  .js-anim [data-play]:not(.is-played) .cmp-shot-list li,
-  .js-anim [data-play]:not(.is-played) .lp-value li { opacity: 0; transform: translateY(9px); }
-  .js-anim [data-play].is-played .hw-opt,
-  .js-anim [data-play].is-played .hw-pitem,
-  .js-anim [data-play].is-played .cmp-shot-list li,
-  .js-anim [data-play].is-played .lp-value li {
-    opacity: 1; transform: none;
-    transition: opacity 0.4s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  /* escalonamento (a estrutura de cada mockup é fixa, então nth-child é seguro) */
-  .js-anim [data-play].is-played .hw-opt:nth-child(5) { transition-delay: 0.07s; }
-  .js-anim [data-play].is-played .hw-opt:nth-child(6) { transition-delay: 0.14s; }
-  .js-anim [data-play].is-played .hw-pitem:nth-child(3) { transition-delay: 0.08s; }
-  .js-anim [data-play].is-played .hw-pitem:nth-child(4) { transition-delay: 0.16s; }
-  .js-anim [data-play].is-played .cmp-shot-list li:nth-child(2) { transition-delay: 0.09s; }
-  .js-anim [data-play].is-played .cmp-shot-list li:nth-child(3) { transition-delay: 0.18s; }
-  .js-anim [data-play].is-played .lp-value li:nth-child(2) { transition-delay: 0.06s; }
-  .js-anim [data-play].is-played .lp-value li:nth-child(3) { transition-delay: 0.12s; }
-  .js-anim [data-play].is-played .lp-value li:nth-child(4) { transition-delay: 0.18s; }
-  .js-anim [data-play].is-played .lp-value li:nth-child(5) { transition-delay: 0.24s; }
-  /* barras do resultado enchem ao entrar (o anel conta via JS) */
-  .js-anim [data-play="result"]:not(.is-played) .hw-mtrack i { width: 0; }
-  .js-anim [data-play="result"].is-played .hw-mtrack i { width: var(--w); transition: width 0.9s cubic-bezier(0.22, 1, 0.36, 1); }
-  /* progresso do quiz enche ao entrar */
-  .js-anim [data-play="quiz"]:not(.is-played) .hw-qbar i { width: 0; }
-  .js-anim [data-play="quiz"].is-played .hw-qbar i { width: 20%; transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s; }
+/* Relatório mensal + faixa acumulada (mockup 4) */
+.mk-doc{background:var(--raised);border:1px solid var(--line);border-radius:11px;padding:18px;margin-top:16px}
+.mk-doc-dh{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.mk-doc-mark{
+  width:26px;height:26px;border-radius:7px;background:var(--action);flex-shrink:0;
+  display:grid;place-items:center;color:#fff;font-size:12px;font-weight:700;
 }
-
-/* ══ Camada 3 — micro-interações (feedback, não enfeite) ══ */
-/* Botão: brilho que atravessa no hover + pressão no clique */
-.lp-btn { position: relative; overflow: hidden; }
-.lp-btn::after {
-  content: ''; position: absolute; top: 0; left: -75%; width: 45%; height: 100%;
-  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.38), transparent);
-  transform: skewX(-18deg); pointer-events: none;
+.mk-doc-t{font-size:13px;font-weight:600}
+.mk-doc-d{font-size:11px;color:var(--ink-3)}
+.mk-dl{height:7px;border-radius:4px;background:#232B3D;margin-bottom:8px}
+.mk-btn{
+  display:flex;align-items:center;justify-content:center;gap:9px;width:100%;margin-top:18px;
+  background:var(--action);border-radius:10px;color:#fff;font-size:13.5px;font-weight:600;padding:12px;
 }
-.lp-btn:active { transform: translateY(0); box-shadow: 0 6px 16px rgba(23,124,166,0.34); }
-@media (prefers-reduced-motion: no-preference) {
-  .lp-btn::after { transition: left 0.6s ease; }
-  .lp-btn:hover::after { left: 130%; }
+.mk-btn svg{width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mk-strip{
+  background:rgba(43,213,118,.06);border:1px solid rgba(43,213,118,.28);border-radius:14px;
+  padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:8px 16px;flex-wrap:wrap;
+  margin-top:14px;
 }
-/* FAQ: painel abre com fade+slide (some o abre-no-talho nativo) */
-@media (prefers-reduced-motion: no-preference) {
-  .lp-faq details[open] > p { animation: faqOpen 0.3s ease; }
-}
-@keyframes faqOpen { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
-/* Ponteiro fino: sublinhado da nav + ícones reagindo ao hover do card */
-@media (hover: hover) {
-  .lp-nav-links a { position: relative; }
-  .lp-nav-links a::after {
-    content: ''; position: absolute; left: 0; bottom: -5px; width: 100%; height: 2px;
-    background: var(--blue-soft); transform: scaleX(0); transform-origin: left;
-    transition: transform 0.25s ease;
-  }
-  .lp-nav-links a:hover::after { transform: scaleX(1); }
-  .lp-pain .lp-pain-ic, .lpb-card .lpb-icon { transition: transform 0.25s ease; }
-  .lp-pain:hover .lp-pain-ic, .lpb-card:hover .lpb-icon { transform: scale(1.08); }
-}
-
-/* Sticky CTA desliza de baixo em vez de piscar */
-@media (max-width: 768px) {
-  .lp-sticky { display: block; transform: translateY(110%); transition: transform 0.3s ease; }
-  .lp-sticky.is-visible { transform: translateY(0); }
-}
-
-/* Nav ganha sombra ao rolar */
-.lp-nav.is-scrolled { box-shadow: 0 6px 18px rgba(16,40,60,0.08); }
+.mk-strip-l{font-size:13px;color:var(--ink-2)}
+.mk-strip-v{font-size:24px;font-weight:650;color:var(--gain);letter-spacing:-.01em}
 </style>
 <script>document.documentElement.classList.add('js-anim');</script>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -797,406 +429,556 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </head>
 
 <body>
-<div class="top-stripe"></div>
 
-<header class="lp-nav">
-  <div class="lp-nav-brand">
-    <img src="assets/images/logo.png" alt="CLINUP" style="width:38px;height:38px;border-radius:50%;object-fit:contain;border:1.5px solid rgba(91,196,240,0.35);background:#0A1E30;padding:2px;">
-    <div class="lp-nav-brandtext">
-      <div class="logo-text">CLIN<em>UP</em></div>
-      <span class="lp-nav-tag">mais pacientes para clínicas</span>
-    </div>
-  </div>
-  <nav class="lp-nav-links" aria-label="Seções da página">
-    <a href="#dor">A dor invisível</a>
-    <a href="#como-resolve">Como resolvemos</a>
-    <a href="#diagnostico">O diagnóstico</a>
-    <a href="#faq">FAQ</a>
+<header class="nav">
+  <a class="brand" href="/" aria-label="ClinUp — página inicial">
+    <span class="brand-mark" aria-hidden="true">C</span>
+    <span class="brand-name">Clin<b>Up</b></span>
+  </a>
+  <nav class="nav-links" aria-label="Seções da página">
+    <a href="#pilar-whatsapp">WhatsApp</a>
+    <a href="#pilar-agenda">Agenda</a>
+    <a href="#transformacao">A virada</a>
+    <a href="#como-funciona">Como funciona</a>
   </nav>
-  <a class="lp-nav-cta cta-diag" data-origem="nav" href="/diagnostico">Diagnóstico<span class="lp-nav-cta-full"> gratuito</span>&nbsp;→</a>
+  <a class="btn btn--sm cta-diag" data-origem="nav" href="/diagnostico">Gerar meu diagnóstico&nbsp;→</a>
 </header>
 
-<main class="lp-page">
+<main>
 
-  <!-- HERO -->
-  <section class="lp-hero">
-    <div class="lp-hero-lead">
-      <span class="lp-eyebrow">CLINUP · captação e conversão para clínicas</span>
-      <h1>Sua clínica perde pacientes no caminho entre o Google e a agenda — <em>sem você ver onde</em>.</h1>
-      <p class="lp-hero-sub">Não é só mais tráfego e post bonito: a CLINUP organiza a jornada inteira — site, WhatsApp e agendamento — pra transformar o interesse que já chega em consulta marcada.</p>
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="wrap">
+    <span class="kicker">ClinUp · Diagnóstico de Lucro para clínicas</span>
+    <h1>A ClinUp não faz marketing. <span class="hl">Nós recuperamos o lucro</span> que sua clínica está perdendo hoje.</h1>
+    <p class="lead">Faça o diagnóstico gratuito de 2 minutos e veja em qual dos 4 pilares de conversão — resposta no WhatsApp, agendamento, faltas e retorno de pacientes — sua clínica perde dinheiro. Sem dancinha, sem posts inúteis: dados.</p>
+    <div class="hero-cta">
+      <a class="btn cta-diag" data-origem="hero" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
+      <p class="cta-note">Gratuito · 2 minutos · resultado na hora</p>
     </div>
-    <div class="lp-hero-act">
-      <a class="lp-btn lp-btn--block cta-diag" data-origem="hero" href="/diagnostico">Ver onde minha clínica perde pacientes&nbsp;→</a>
-      <p class="lp-cta-note">O 1º passo é gratuito · diagnóstico de 2 minutos · sem compromisso</p>
-      <ul class="lp-checks">
-        <li>A jornada inteira numa mão só — não pedaços soltos</li>
-        <li>Comece de graça: em 2 minutos você vê onde perde hoje</li>
-      </ul>
-    </div>
-    <div class="lp-mock-wrap">
-      <div class="lp-mock" aria-hidden="true">
-        <div class="lp-mock-bar"><span></span><span></span><span></span><em>resultado do diagnóstico</em></div>
-        <div class="lp-mock-head">
-          <div class="lp-mock-title">Diagnóstico da clínica<span>resultado imediato</span></div>
-        </div>
-        <div class="lp-ring"><div class="lp-ring-in">58%</div></div>
-        <div class="lp-mock-badge"><span class="result-badge moderate">Uns pontos soltos</span></div>
-        <div class="lp-meter">
-          <div class="lp-meter-row"><span>Site</span><b>62%</b></div>
-          <div class="lp-meter-track"><div class="lp-meter-fill" style="width:62%"></div></div>
-        </div>
-        <div class="lp-meter">
-          <div class="lp-meter-row"><span>WhatsApp</span><b>48%</b></div>
-          <div class="lp-meter-track"><div class="lp-meter-fill lp-meter-fill--low" style="width:48%"></div></div>
-        </div>
-        <div class="lp-meter lp-meter--hide-sm">
-          <div class="lp-meter-row"><span>Atendimento</span><b>74%</b></div>
-          <div class="lp-meter-track"><div class="lp-meter-fill" style="width:74%"></div></div>
-        </div>
-        <div class="lp-meter lp-meter--hide-sm">
-          <div class="lp-meter-row"><span>Agendamento</span><b>55%</b></div>
-          <div class="lp-meter-track"><div class="lp-meter-fill lp-meter-fill--low" style="width:55%"></div></div>
-        </div>
-        <p class="lp-mock-cap">Exemplo — o seu sai na hora, com os seus números</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- FAIXA DE CONFIANÇA (sinais verificáveis — nada de prova social inventada) -->
-  <div class="lp-trust reveal">
-    <span class="lp-trust-item">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 9v6M9 12h6"/></svg>
-      Só para clínicas
-    </span>
-    <span class="lp-trust-item">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-      A jornada em 4 frentes
-    </span>
-    <span class="lp-trust-item">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>
-      Dados protegidos · LGPD
-    </span>
-    <span class="lp-trust-item">
-      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>
-      Sem compromisso
-    </span>
   </div>
 
-  <!-- A DOR INVISÍVEL -->
-  <section id="dor" class="lp-band lp-band--white">
-    <p class="lp-label lp-label--pulse reveal">A dor invisível</p>
-    <h2 class="lp-h2 reveal">A maioria das clínicas perde pacientes antes mesmo da consulta acontecer</h2>
-    <p class="lp-h2-sub reveal">Nem sempre o problema está no serviço. Quase sempre a perda acontece antes — no caminho até a consulta, onde ninguém está olhando.</p>
-    <div class="lp-pains reveal-group">
-      <div class="lp-pain">
-        <span class="lp-pain-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-        <div class="lp-pain-num">01 / 03</div>
-        <div class="lp-pain-title">Na hora de te encontrar</div>
-        <div class="lp-pain-desc">Ele acha sua clínica, não sente confiança e vai pro concorrente — e você nunca fica sabendo que ele existiu.</div>
+  <figure class="hero-mock reveal" aria-label="Demonstração ilustrativa de uma auditoria ClinUp, com dados simulados de uma clínica de exemplo">
+    <div class="mockframe">
+      <div class="mf-bar">
+        <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="mf-title">Auditoria ClinUp — Clínica Exemplo</span>
+        <span class="mf-sim">Simulação · dados ilustrativos</span>
       </div>
-      <div class="lp-pain">
-        <span class="lp-pain-ic"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
-        <div class="lp-pain-num">02 / 03</div>
-        <div class="lp-pain-title">No primeiro contato</div>
-        <div class="lp-pain-desc">A resposta no WhatsApp demora, e o interesse morre em silêncio antes de virar consulta.</div>
-      </div>
-      <div class="lp-pain">
-        <span class="lp-pain-ic"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
-        <div class="lp-pain-num">03 / 03</div>
-        <div class="lp-pain-title">Na hora de marcar</div>
-        <div class="lp-pain-desc">Agendar dá trabalho, a decisão fica pra "depois" — e "depois" vira nunca. O paciente estava pronto.</div>
-      </div>
-      <div class="lp-pain lp-pain--feature">
-        <div class="lp-pain-num">Síntese</div>
-        <div class="lp-pain-title">A perda é silenciosa — e some do seu radar</div>
-        <div class="lp-pain-desc">Não parece perda — parece só que "veio menos gente". Mas cada paciente que desiste na demora do WhatsApp ou num site confuso é faturamento indo direto pra clínica ao lado. Sem ver o caminho inteiro, você conserta no chute.</div>
+      <div class="mf-body mk" aria-hidden="true">
+        <div class="mk-head">
+          <div>
+            <div class="mk-who">Clínica Exemplo — Dermatologia</div>
+            <div class="mk-whosub">Auditoria ClinUp · Visão geral</div>
+          </div>
+          <div class="mk-pill">Últimos 30 dias <span style="font-size:10px">▾</span></div>
+        </div>
+
+        <div class="mk-kpis">
+          <div class="mk-card mk-kpi mk-kpi--hero">
+            <div class="mk-h">Receita perdida no mês</div>
+            <div class="mk-v num mk-v--loss mk-v--glowloss">R$ 18.450</div>
+            <span class="mk-delta mk-delta--bad">▲ 12% vs mês anterior</span>
+            <div class="mk-sub" style="margin-top:10px">Soma de leads não convertidos por demora e horários vazios por falta</div>
+          </div>
+          <div class="mk-card mk-kpi">
+            <div class="mk-h">Leads sem resposta</div>
+            <div class="mk-v num mk-v--loss">34</div>
+            <div class="mk-sub">tempo médio de resposta: <b>3h 47min</b></div>
+          </div>
+          <div class="mk-card mk-kpi">
+            <div class="mk-h">Faltas (no-show)</div>
+            <div class="mk-v num mk-v--loss">19</div>
+            <div class="mk-sub num">R$ 7.980 em horários vazios</div>
+          </div>
+          <div class="mk-card mk-kpi">
+            <div class="mk-h">Conversão de leads</div>
+            <div class="mk-v num mk-v--warn">22%</div>
+            <div class="mk-bench num">clínicas com automação: <em>41%</em></div>
+          </div>
+        </div>
+
+        <div class="mk-row">
+          <div class="mk-card">
+            <div class="mk-chart-head">
+              <div>
+                <div class="mk-h">Receita potencial vs realizada</div>
+                <div class="mk-sub">por semana · últimos 30 dias</div>
+              </div>
+              <div class="mk-legend num">
+                <span><span class="mk-dot" style="background:var(--gain)"></span>Realizada</span>
+                <span><span class="mk-dot" style="background:repeating-linear-gradient(45deg,rgba(244,87,77,.2),rgba(244,87,77,.2) 2px,var(--loss) 2px,var(--loss) 3px)"></span>Perdida</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 640 300" width="100%" style="display:block">
+              <defs>
+                <pattern id="hatch" patternUnits="userSpaceOnUse" width="6" height="6" patternTransform="rotate(45)">
+                  <rect width="6" height="6" fill="rgba(244,87,77,.16)"/>
+                  <line x1="0" y1="0" x2="0" y2="6" stroke="#F4574D" stroke-width="1.6"/>
+                </pattern>
+              </defs>
+              <g stroke="#E7EAF0" stroke-opacity=".08">
+                <line x1="52" y1="250" x2="628" y2="250"/><line x1="52" y1="192.5" x2="628" y2="192.5"/>
+                <line x1="52" y1="135" x2="628" y2="135"/><line x1="52" y1="77.5" x2="628" y2="77.5"/><line x1="52" y1="20" x2="628" y2="20"/>
+              </g>
+              <g fill="#5A6478" font-size="11" font-family="Inter" text-anchor="end">
+                <text x="46" y="254">0</text><text x="46" y="196">4k</text><text x="46" y="139">8k</text><text x="46" y="81">12k</text><text x="46" y="24">16k</text>
+              </g>
+              <rect x="106" y="46"  width="44" height="204" rx="4" fill="#2BD576" fill-opacity=".85"/>
+              <rect x="160" y="194" width="44" height="56"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7"/>
+              <rect x="246" y="66"  width="44" height="184" rx="4" fill="#2BD576" fill-opacity=".85"/>
+              <rect x="300" y="184" width="44" height="66"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7"/>
+              <rect x="386" y="33"  width="44" height="217" rx="4" fill="#2BD576" fill-opacity=".85"/>
+              <rect x="440" y="190" width="44" height="60"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7"/>
+              <rect x="526" y="55"  width="44" height="195" rx="4" fill="#2BD576" fill-opacity=".85"/>
+              <rect x="580" y="167" width="44" height="83"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7"/>
+              <g fill="#8A94A6" font-size="12" font-family="Inter" text-anchor="middle">
+                <text x="155" y="274">Semana 1</text><text x="295" y="274">Semana 2</text>
+                <text x="435" y="274">Semana 3</text><text x="575" y="274">Semana 4</text>
+              </g>
+              <g fill="#F4574D" font-size="11.5" font-weight="600" font-family="Inter" text-anchor="middle">
+                <text x="182" y="186">−3,9k</text><text x="322" y="176">−4,6k</text>
+                <text x="462" y="182">−4,2k</text><text x="602" y="159">−5,7k</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="mk-card">
+            <div class="mk-h">Ralo do funil</div>
+            <div class="mk-sub">onde os pacientes se perdem</div>
+
+            <div class="mk-stage">
+              <div class="mk-lbl"><span>Leads recebidos</span><span class="num">152</span></div>
+              <div class="mk-bar" style="width:100%"></div>
+            </div>
+            <div class="mk-leak"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−34 · sem resposta</span></div>
+
+            <div class="mk-stage" style="margin-top:2px">
+              <div class="mk-lbl"><span>Respondidos</span><span class="num">118</span></div>
+              <div class="mk-bar" style="width:78%"></div>
+            </div>
+            <div class="mk-leak"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−57 · não agendaram</span></div>
+
+            <div class="mk-stage" style="margin-top:2px">
+              <div class="mk-lbl"><span>Agendados</span><span class="num">61</span></div>
+              <div class="mk-bar" style="width:40%"></div>
+            </div>
+            <div class="mk-leak"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−19 · faltaram</span></div>
+
+            <div class="mk-stage" style="margin-top:2px">
+              <div class="mk-lbl"><span>Compareceram</span><span class="num" style="color:var(--gain)">42</span></div>
+              <div class="mk-bar mk-bar--gain" style="width:28%"></div>
+            </div>
+
+            <div class="mk-foot" style="margin-top:22px"><span>De cada 10 pessoas que chamam a clínica, <span style="color:var(--ink);font-weight:600">7 se perdem no caminho.</span></span></div>
+          </div>
+        </div>
+
+        <div class="mk-foot">
+          <span>Ticket médio: R$ 420</span><span>·</span><span>Período: últimos 30 dias</span><span>·</span><span>Fontes: WhatsApp Business + agenda da clínica</span>
+        </div>
       </div>
     </div>
-  </section>
+  </figure>
+</section>
 
-  <!-- COMO A CLINUP RESOLVE -->
-  <section id="como-resolve">
-    <p class="lp-label lp-label--pulse reveal">Como a CLINUP resolve</p>
-    <h2 class="lp-h2 reveal">A gente cuida da jornada inteira — não de um pedaço só</h2>
-    <p class="lp-h2-sub reveal">Do clique no Google até a consulta marcada, cada etapa é um lugar onde o paciente pode escapar. A maioria das clínicas cuida de uma parte e perde nas outras.</p>
-    <div class="jflow reveal">
-      <div class="jflow-track">
-        <div class="jstep">
-          <span class="jstep-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></span>
-          <div class="jstep-txt">
-            <div class="jstep-name">Google</div>
-            <div class="jstep-leak">some se não te acham</div>
-          </div>
-        </div>
-        <span class="jflow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        <div class="jstep">
-          <span class="jstep-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-          <div class="jstep-txt">
-            <div class="jstep-name">Site</div>
-            <div class="jstep-leak">some se não confia</div>
-          </div>
-        </div>
-        <span class="jflow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        <div class="jstep jstep--wa">
-          <span class="jstep-ic"><svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span>
-          <div class="jstep-txt">
-            <div class="jstep-name">WhatsApp</div>
-            <div class="jstep-leak">some na demora</div>
-          </div>
-        </div>
-        <span class="jflow-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-        <div class="jstep jstep--goal">
-          <span class="jstep-ic"><svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 15 2 2 4-4"/></svg></span>
-          <div class="jstep-txt">
-            <div class="jstep-name">Agenda</div>
-            <div class="jstep-win">consulta marcada</div>
-          </div>
-        </div>
-      </div>
-      <div class="jflow-band">
-        <span class="jflow-band-ic"><svg viewBox="0 0 24 24"><path d="M9 17H7A5 5 0 0 1 7 7h2"/><path d="M15 7h2a5 5 0 0 1 0 10h-2"/><path d="M8 12h8"/></svg></span>
-        <span>A CLINUP costura as 4 etapas num <b>caminho só</b> — o paciente para de cair no vão entre elas.</span>
-      </div>
+<!-- ══════════ PILAR 1 · WHATSAPP ══════════ -->
+<section class="sec" id="pilar-whatsapp">
+  <div class="wrap zig">
+    <div class="zig-copy reveal">
+      <span class="kicker">Pilar 1 · Atendimento no WhatsApp</span>
+      <h2>O Cemitério de Leads no seu WhatsApp</h2>
+      <p class="lead">Paciente que chama e não recebe resposta em minutos esfria — e some. Enquanto isso, o valor da consulta que ele pagaria sai da sua receita sem deixar rastro. O diagnóstico mostra onde o atendimento deixa dinheiro parado no chat.</p>
+      <ul class="checks">
+        <li>Os horários em que o WhatsApp da clínica fica no vácuo — almoço, noite e fim de semana</li>
+        <li>Quanto cada conversa que esfriou custa, no seu ticket médio</li>
+        <li>O que automatizar primeiro pra responder em segundos, sem robotizar o atendimento</li>
+      </ul>
+      <a class="linkcta cta-diag" data-origem="whatsapp" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
     </div>
-  </section>
 
-  <!-- O DIAGNÓSTICO (primeiro passo gratuito) -->
-  <section id="diagnostico">
-    <p class="lp-label reveal">O primeiro passo — gratuito</p>
-    <h2 class="lp-h2 reveal">Antes de organizar, a gente mostra onde você perde hoje</h2>
-    <p class="lp-h2-sub reveal">Um diagnóstico de 2 minutos: 5 perguntas e o resultado sai na hora, com os gargalos da sua clínica e o que arrumar primeiro. Sem instalar nada, sem reunião.</p>
-    <div class="lp-flow reveal-group">
-      <div class="lp-flow-row">
-        <div class="lp-step-shot lp-shot--screen" aria-hidden="true" data-play="quiz">
-          <div class="hw-qtop"><span>Pergunta 1 de 5</span><span>20%</span></div>
-          <div class="hw-qbar"><i></i></div>
-          <div class="hw-q">A clínica tem site hoje?</div>
-          <div class="hw-opt"><span class="hw-ic hw-ic--ok">✓</span> Sim, temos um site</div>
-          <div class="hw-opt hw-opt--sel"><span class="hw-ic hw-ic--warn">!</span> Temos, mas é fraco</div>
-          <div class="hw-opt"><span class="hw-ic hw-ic--neg">✕</span> Não temos nada</div>
+    <figure class="zig-mock reveal" aria-label="Demonstração ilustrativa da auditoria de atendimento no WhatsApp, com dados simulados">
+      <div class="mockframe">
+        <div class="mf-bar">
+          <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="mf-title">Auditoria ClinUp — Atendimento no WhatsApp</span>
+          <span class="mf-sim">Simulação · dados ilustrativos</span>
         </div>
-        <div class="lp-flow-text">
-          <div class="lp-step-head">
-            <div class="lp-step-num">1</div>
-            <div class="lp-step-title">Você responde 5 perguntas</div>
+        <div class="mf-body mk" aria-hidden="true">
+          <div class="mk-card">
+            <div class="mk-h">Tempo de resposta por horário</div>
+            <div class="mk-sub">média por faixa de horário e dia da semana</div>
+
+            <div class="mk-hm">
+              <div></div>
+              <div class="mk-hm-cl">Seg</div><div class="mk-hm-cl">Ter</div><div class="mk-hm-cl">Qua</div><div class="mk-hm-cl">Qui</div><div class="mk-hm-cl">Sex</div><div class="mk-hm-cl">Sáb</div><div class="mk-hm-cl">Dom</div>
+
+              <div class="mk-hm-rl num">08–10</div>
+              <div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-dead"></div>
+
+              <div class="mk-hm-rl num">10–12</div>
+              <div class="mk-cell mk-c-fast"></div><div class="mk-cell mk-c-fast"></div><div class="mk-cell mk-c-fast"></div><div class="mk-cell mk-c-fast"></div><div class="mk-cell mk-c-fast"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-dead"></div>
+
+              <div class="mk-hm-rl num">12–14</div>
+              <div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-dead"></div>
+
+              <div class="mk-hm-rl num">14–16</div>
+              <div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-fast"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div>
+
+              <div class="mk-hm-rl num">16–18</div>
+              <div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-mid"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div>
+
+              <div class="mk-hm-rl num">18–20</div>
+              <div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-late"></div><div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div>
+
+              <div class="mk-hm-rl num">20–22</div>
+              <div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div><div class="mk-cell mk-c-dead"></div>
+            </div>
+
+            <div class="mk-hleg">
+              <span><span class="mk-sw" style="background:rgba(43,213,118,.5)"></span>&lt; 5 min</span>
+              <span><span class="mk-sw" style="background:rgba(245,166,35,.5)"></span>5 – 60 min</span>
+              <span><span class="mk-sw" style="background:rgba(244,87,77,.55)"></span>&gt; 1 hora</span>
+              <span><span class="mk-sw" style="background:#080B14;border:1px solid rgba(244,87,77,.5)"></span>nunca respondida</span>
+            </div>
           </div>
-          <div class="lp-step-desc">Menos de 2 minutos sobre o momento da sua clínica: site, como te acham e como você fecha.</div>
-        </div>
-      </div>
-      <div class="lp-flow-row">
-        <div class="lp-step-shot lp-shot--screen" aria-hidden="true" data-play="result">
-          <div class="hw-head">
-            <span class="hw-head-t">Diagnóstico da clínica</span>
-            <span class="hw-eg">exemplo</span>
-          </div>
-          <div class="hw-res">
-            <div class="hw-ring" data-target="58"><b>58%</b></div>
-            <div class="hw-res-side">
-              <span class="hw-badge">Uns pontos soltos</span>
-              <div class="hw-mrow"><span>Site</span><span>62%</span></div>
-              <div class="hw-mtrack"><i style="--w:62%;background:linear-gradient(90deg,#2D9EC9,#5BC4F0)"></i></div>
-              <div class="hw-mrow"><span>WhatsApp</span><span>48%</span></div>
-              <div class="hw-mtrack"><i style="--w:48%;background:linear-gradient(90deg,#d3801c,#E08A1E)"></i></div>
-              <div class="hw-mrow"><span>Atendimento</span><span>74%</span></div>
-              <div class="hw-mtrack"><i style="--w:74%;background:linear-gradient(90deg,#2D9EC9,#5BC4F0)"></i></div>
-              <div class="hw-mrow"><span>Agendamento</span><span>55%</span></div>
-              <div class="hw-mtrack"><i style="--w:55%;background:linear-gradient(90deg,#d3801c,#E08A1E)"></i></div>
+
+          <div class="mk-card" style="margin-top:14px">
+            <div class="mk-h">Perdas recentes</div>
+            <div class="mk-sub" style="margin-bottom:6px">últimas conversas auditadas · valores pelo ticket médio de R$ 420</div>
+
+            <div class="mk-tx">
+              <div class="mk-tx-t num">Ontem · 19:42</div>
+              <div class="mk-tx-m">"Olá, queria saber o valor da consulta com a Dra. Marina…"</div>
+              <span class="mk-badge mk-b-loss">Sem resposta · 2 dias</span>
+              <div class="mk-tx-val mk-vloss num">− R$ 420</div>
+            </div>
+            <div class="mk-tx">
+              <div class="mk-tx-t num">Ter · 12:17</div>
+              <div class="mk-tx-m">"Vocês atendem convênio ou só particular?"</div>
+              <span class="mk-badge mk-b-warn">Respondido após 4h · não converteu</span>
+              <div class="mk-tx-val mk-vloss num">− R$ 420</div>
+            </div>
+            <div class="mk-tx">
+              <div class="mk-tx-t num">Ter · 10:05</div>
+              <div class="mk-tx-m">"Bom dia! Tem horário essa semana à tarde?"</div>
+              <span class="mk-badge mk-b-gain">Respondido em 40s → Agendado</span>
+              <div class="mk-tx-val mk-vgain num">+ R$ 420</div>
+            </div>
+            <div class="mk-tx">
+              <div class="mk-tx-t num">Seg · 21:08</div>
+              <div class="mk-tx-m">"Vi o Instagram de vocês, quero agendar uma limpeza de pele…"</div>
+              <span class="mk-badge mk-b-loss">Sem resposta · fora do horário</span>
+              <div class="mk-tx-val mk-vloss num">− R$ 420</div>
             </div>
           </div>
         </div>
-        <div class="lp-flow-text">
-          <div class="lp-step-head">
-            <div class="lp-step-num">2</div>
-            <div class="lp-step-title">O resultado sai na hora</div>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ══════════ PILAR 2 · AGENDA ══════════ -->
+<section class="sec" id="pilar-agenda" style="padding-top:0">
+  <div class="wrap zig zig--flip">
+    <div class="zig-copy reveal">
+      <span class="kicker">Pilar 2 · Agenda e faltas</span>
+      <h2>O Ralo Financeiro da Cadeira Vazia</h2>
+      <p class="lead">Uma falta não é um imprevisto: é um horário pago que ficou vazio — e horário vago não se revende. Com confirmação inteligente e reocupação automática da agenda, as faltas param de virar prejuízo silencioso todo mês.</p>
+      <ul class="checks">
+        <li>Sua taxa de falta comparada à de clínicas com confirmação automática</li>
+        <li>Quanto os horários vazios custam por ano, no seu ticket médio</li>
+        <li>Confirmação e lista de espera pra reocupar os horários que abrirem</li>
+      </ul>
+      <a class="linkcta cta-diag" data-origem="agenda" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
+    </div>
+
+    <figure class="zig-mock reveal" aria-label="Demonstração ilustrativa da auditoria de faltas e agenda, com dados simulados">
+      <div class="mockframe">
+        <div class="mf-bar">
+          <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="mf-title">Auditoria ClinUp — Faltas e agenda</span>
+          <span class="mf-sim">Simulação · dados ilustrativos</span>
+        </div>
+        <div class="mf-body mk" aria-hidden="true">
+          <div class="mk-card mk-donut-wrap">
+            <div class="mk-h">Taxa de falta</div>
+            <div class="mk-donut">
+              <svg viewBox="0 0 190 190">
+                <circle cx="95" cy="95" r="70" fill="none" stroke="#232B3D" stroke-width="15"/>
+                <circle cx="95" cy="95" r="70" fill="none" stroke="#F4574D" stroke-width="15" stroke-linecap="round"
+                        stroke-dasharray="61.6 378.2" transform="rotate(-90 95 95)"/>
+              </svg>
+              <div class="mk-donut-mid"><div class="v num">14%</div><div class="l">das consultas</div></div>
+            </div>
+            <div class="mk-sub num">19 faltas em 136 consultas no mês</div>
+            <div class="mk-benchbox num">Clínicas com confirmação automática: <b>4%</b></div>
           </div>
-          <div class="lp-step-desc">Você vê onde está perdendo paciente — com os pontos fortes e os gargalos do seu caso.</div>
+
+          <div class="mk-card" style="margin-top:14px">
+            <div class="mk-h">Faltas por dia da semana</div>
+            <div class="mk-sub">total no mês · barras maiores = mais cadeira vazia</div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:13px">
+              <div style="width:34px;font-size:12px;color:var(--ink-2)">Seg</div>
+              <div style="flex:1;height:22px;border-radius:6px;background:var(--raised);overflow:hidden"><div style="height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(244,87,77,.75),rgba(244,87,77,.5));width:100%"></div></div>
+              <div class="num" style="width:20px;font-size:13px;font-weight:650;color:var(--loss);text-align:right">5</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:13px">
+              <div style="width:34px;font-size:12px;color:var(--ink-2)">Ter</div>
+              <div style="flex:1;height:22px;border-radius:6px;background:var(--raised);overflow:hidden"><div style="height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(244,87,77,.75),rgba(244,87,77,.5));width:40%"></div></div>
+              <div class="num" style="width:20px;font-size:13px;font-weight:650;color:var(--loss);text-align:right">2</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:13px">
+              <div style="width:34px;font-size:12px;color:var(--ink-2)">Qua</div>
+              <div style="flex:1;height:22px;border-radius:6px;background:var(--raised);overflow:hidden"><div style="height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(244,87,77,.75),rgba(244,87,77,.5));width:60%"></div></div>
+              <div class="num" style="width:20px;font-size:13px;font-weight:650;color:var(--loss);text-align:right">3</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:13px">
+              <div style="width:34px;font-size:12px;color:var(--ink-2)">Qui</div>
+              <div style="flex:1;height:22px;border-radius:6px;background:var(--raised);overflow:hidden"><div style="height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(244,87,77,.75),rgba(244,87,77,.5));width:40%"></div></div>
+              <div class="num" style="width:20px;font-size:13px;font-weight:650;color:var(--loss);text-align:right">2</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;margin-top:13px">
+              <div style="width:34px;font-size:12px;color:var(--ink-2)">Sex</div>
+              <div style="flex:1;height:22px;border-radius:6px;background:var(--raised);overflow:hidden"><div style="height:100%;border-radius:6px;background:linear-gradient(90deg,rgba(244,87,77,.75),rgba(244,87,77,.5));width:100%"></div></div>
+              <div class="num" style="width:20px;font-size:13px;font-weight:650;color:var(--loss);text-align:right">5</div>
+            </div>
+            <div class="mk-sub" style="margin-top:16px">Segunda e sexta concentram <span style="color:var(--ink);font-weight:600">53% das faltas</span> — consultas marcadas há mais tempo e sem confirmação.</div>
+          </div>
+
+          <div class="mk-proj" style="margin-top:14px">
+            <div class="mk-h">Projeção anual</div>
+            <div class="mk-proj-big num">R$ 95.760 / ano</div>
+            <div class="mk-sub">em horários vazios, mantendo a taxa atual de falta de 14% e o ticket médio de R$ 420. Horário vago não se revende: a receita da vaga das 15h de terça não volta.</div>
+          </div>
         </div>
       </div>
-      <div class="lp-flow-row">
-        <div class="lp-step-shot lp-shot--screen" aria-hidden="true" data-play="priorities">
-          <div class="hw-head">
-            <span class="hw-head-t">Seu plano de ação</span>
-            <span class="hw-eg">exemplo</span>
+    </figure>
+  </div>
+</section>
+
+<!-- ══════════ A TRANSFORMAÇÃO ══════════ -->
+<section class="sec transform" id="transformacao">
+  <div class="wrap transform-head">
+    <span class="kicker">A virada</span>
+    <h2>O que muda quando a ClinUp entra em campo? O lucro volta a ser a sua prioridade.</h2>
+    <p class="lead">Projeção ilustrativa de uma clínica com ticket médio de R$ 420, construída sobre os pilares acima — os números da sua clínica saem do seu diagnóstico.</p>
+  </div>
+
+  <figure class="transform-mock reveal" aria-label="Projeção ilustrativa de crescimento com a ClinUp, dados simulados">
+    <div class="mockframe">
+      <div class="mf-bar">
+        <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="mf-title">Análise de crescimento — antes vs depois</span>
+        <span class="mf-sim">Simulação · dados ilustrativos</span>
+      </div>
+      <div class="mf-body mk" aria-hidden="true">
+        <div class="mk-head">
+          <div>
+            <div class="mk-who">Clínica Exemplo — Dermatologia</div>
+            <div class="mk-whosub">Análise de crescimento · Antes vs depois</div>
           </div>
-          <div class="hw-pitem"><span class="hw-pn">1</span> Primeiro: organizar o WhatsApp</div>
-          <div class="hw-pitem"><span class="hw-pn">2</span> Depois: facilitar o agendamento</div>
-          <div class="hw-pitem is-ok"><span class="hw-pn">✓</span> Site está bem — manter</div>
+          <div class="mk-pill">Últimos 6 meses <span style="font-size:10px">▾</span></div>
         </div>
-        <div class="lp-flow-text">
-          <div class="lp-step-head">
-            <div class="lp-step-num">3</div>
-            <div class="lp-step-title">Você sai com prioridades</div>
+
+        <div class="mk-kpis">
+          <div class="mk-card mk-kpi mk-kpi--hero">
+            <div class="mk-h">Receita recuperada</div>
+            <div class="mk-v num mk-v--gain mk-v--glowgain mk-v--fit">+ R$ 22.640<span class="mk-v-unit">/mês</span></div>
+            <span class="mk-delta mk-delta--good">▲ vs média antes da ClinUp</span>
+            <div class="mk-was" style="margin-top:10px">Leads respondidos na hora + faltas quase zeradas</div>
           </div>
-          <div class="lp-step-desc">O que arrumar primeiro, em ordem. E, se quiser, uma sessão gratuita pra montar seu plano de ação.</div>
-        </div>
-      </div>
-    </div>
-    <div class="lp-center reveal">
-      <a class="lp-btn cta-diag" data-origem="passos" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
-    </div>
-  </section>
-
-  <!-- BENEFÍCIOS -->
-  <section id="beneficios" class="lp-band lp-band--white">
-    <p class="lp-label reveal">O resultado</p>
-    <h2 class="lp-h2 reveal">O que muda quando a jornada trabalha a seu favor</h2>
-    <p class="lp-h2-sub reveal">Menos desperdício, mais consulta marcada — e a paz de saber exatamente onde agir.</p>
-    <div class="lpb-grid reveal-group">
-      <div class="lpb-card lpb-card--dark">
-        <span class="lpb-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
-        <div class="lpb-title">Clareza sobre onde você perde</div>
-        <div class="lpb-desc">Você vê exatamente onde o caminho até a consulta está vazando — sem suposição, sem chute.</div>
-      </div>
-      <div class="lpb-card">
-        <span class="lpb-icon"><svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></span>
-        <div class="lpb-title">Menos paciente escapando</div>
-        <div class="lpb-desc">O interesse que já chega para de se perder no meio do caminho.</div>
-      </div>
-      <div class="lpb-card">
-        <span class="lpb-icon"><svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></span>
-        <div class="lpb-title">Prioridades, não uma lista sem fim</div>
-        <div class="lpb-desc">Você sabe o que fazer primeiro — em ordem, no seu ritmo.</div>
-      </div>
-      <div class="lpb-card lpb-card--accent">
-        <span class="lpb-icon"><svg viewBox="0 0 24 24"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg></span>
-        <div class="lpb-title">Mais consultas do movimento que você já tem</div>
-        <div class="lpb-desc">Antes de gastar mais pra atrair, a CLINUP faz você parar de perder quem já chega.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRANSFORMAÇÃO (antes → depois) -->
-  <section id="transformacao" class="lp-band lp-band--dark">
-    <p class="lp-label lp-label--pulse reveal">Transformação</p>
-    <h2 class="lp-h2 reveal">Quando você enxerga o que trava a conversão, tudo muda</h2>
-    <p class="lp-h2-sub reveal">A mesma clínica, os mesmos pacientes — a diferença é saber onde está o vazamento.</p>
-    <div class="cmp-grid reveal-group">
-      <div class="cmp-card cmp-card--before">
-        <span class="cmp-tag">Antes</span>
-        <div class="cmp-title">No escuro</div>
-        <ul class="cmp-list">
-          <li>Pacientes entram em contato e somem</li>
-          <li>Atendimento sem padrão</li>
-          <li>Site que não ajuda a fechar</li>
-          <li>Marcar consulta dá trabalho</li>
-          <li>Sem saber o que consertar primeiro</li>
-        </ul>
-      </div>
-      <div class="cmp-card cmp-card--after">
-        <span class="cmp-tag">Depois</span>
-        <div class="cmp-title">Com clareza</div>
-        <div class="cmp-shot" data-play="compare">
-          <div class="cmp-shot-head">
-            <span class="cmp-shot-title">Seu plano de ação</span>
-            <span class="cmp-shot-eg">Exemplo</span>
+          <div class="mk-card mk-kpi">
+            <div class="mk-h">Tempo de resposta</div>
+            <div class="mk-v num mk-v--gain">43 seg</div>
+            <div class="mk-was num">▼ antes: <s>3h 47min</s></div>
           </div>
-          <ol class="cmp-shot-list">
-            <li><b>1</b> Primeiro: organizar o WhatsApp</li>
-            <li><b>2</b> Depois: facilitar o agendamento</li>
-            <li class="is-ok"><b>✓</b> Site está bem — manter como está</li>
-          </ol>
+          <div class="mk-card mk-kpi">
+            <div class="mk-h">Taxa de no-show</div>
+            <div class="mk-v num mk-v--gain">3,8%</div>
+            <div class="mk-was num">▼ antes: <s>14%</s></div>
+          </div>
+          <div class="mk-card mk-kpi">
+            <div class="mk-h">Pacientes novos no mês</div>
+            <div class="mk-v num mk-v--gain">31</div>
+            <div class="mk-was num">▲ 158% vs média anterior</div>
+          </div>
         </div>
-        <p class="cmp-shot-cap">Em vez de adivinhar, você age na ordem certa — e a CLINUP põe esse plano de pé com você.</p>
+
+        <div class="mk-row">
+          <div class="mk-card">
+            <div class="mk-chart-head">
+              <div>
+                <div class="mk-h">Receita mensal</div>
+                <div class="mk-sub">realizada vs projeção sem a ClinUp</div>
+              </div>
+              <div class="mk-legend">
+                <span><span class="mk-lswatch" style="border-color:#2BD576"></span>Com ClinUp</span>
+                <span><span class="mk-lswatch" style="border-color:#3A4358;border-top-style:dashed"></span>Sem ClinUp (projeção)</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 640 300" width="100%" style="display:block">
+              <defs>
+                <linearGradient id="gfill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#2BD576" stop-opacity=".22"/>
+                  <stop offset="100%" stop-color="#2BD576" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <g stroke="#E7EAF0" stroke-opacity=".08">
+                <line x1="56" y1="227" x2="628" y2="227"/><line x1="56" y1="161" x2="628" y2="161"/>
+                <line x1="56" y1="96" x2="628" y2="96"/><line x1="56" y1="30" x2="628" y2="30"/>
+              </g>
+              <g fill="#5A6478" font-size="11" font-family="Inter" text-anchor="end">
+                <text x="50" y="231">50k</text><text x="50" y="165">60k</text><text x="50" y="100">70k</text><text x="50" y="34">80k</text>
+              </g>
+
+              <line x1="225" y1="26" x2="225" y2="260" stroke="#4D7CFE" stroke-dasharray="3 5" stroke-width="1.4"/>
+              <rect x="168" y="12" width="114" height="20" rx="6" fill="rgba(77,124,254,.12)"/>
+              <text x="225" y="26" fill="#4D7CFE" font-size="11.5" font-weight="600" font-family="Inter" text-anchor="middle">Início ClinUp</text>
+
+              <path d="M60,220.6 L170,210.7 L280,214 L390,207.4 L500,210.7 L610,206.1"
+                    fill="none" stroke="#3A4358" stroke-width="2.4" stroke-dasharray="7 7" stroke-linecap="round"/>
+
+              <path d="M170,210.7 L280,174.6 L390,122 L500,89.1 L610,59.6 L610,260 L170,260 Z" fill="url(#gfill)"/>
+              <path d="M60,220.6 L170,210.7 L280,174.6 L390,122 L500,89.1 L610,59.6"
+                    fill="none" stroke="#2BD576" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+              <g fill="#2BD576">
+                <circle cx="280" cy="174.6" r="4"/><circle cx="390" cy="122" r="4"/>
+                <circle cx="500" cy="89.1" r="4"/><circle cx="610" cy="59.6" r="4.5"/>
+              </g>
+              <text x="610" y="46" fill="#2BD576" font-size="12.5" font-weight="650" font-family="Inter" text-anchor="end">R$ 75,5k</text>
+
+              <g fill="#8A94A6" font-size="12" font-family="Inter" text-anchor="middle">
+                <text x="60" y="284">Mês 1</text><text x="170" y="284">Mês 2</text><text x="280" y="284">Mês 3</text>
+                <text x="390" y="284">Mês 4</text><text x="500" y="284">Mês 5</text><text x="610" y="284">Mês 6</text>
+              </g>
+            </svg>
+          </div>
+
+          <div class="mk-card">
+            <div class="mk-h">Relatório mensal</div>
+            <div class="mk-sub">enviado todo dia 1º, direto no seu e-mail</div>
+
+            <div class="mk-doc">
+              <div class="mk-doc-dh">
+                <div class="mk-doc-mark">C</div>
+                <div>
+                  <div class="mk-doc-t">Relatório de crescimento — Mês 6</div>
+                  <div class="mk-doc-d">Clínica Exemplo · gerado pela análise ClinUp</div>
+                </div>
+              </div>
+              <div class="mk-dl" style="width:88%"></div>
+              <div class="mk-dl" style="width:70%"></div>
+              <div class="mk-dl" style="width:79%"></div>
+              <div class="mk-dl" style="width:46%;margin-bottom:14px"></div>
+              <svg viewBox="0 0 260 46" width="100%" style="display:block">
+                <path d="M4,38 L46,34 L88,35 L130,26 L172,18 L214,12 L256,6" fill="none" stroke="#2BD576" stroke-width="2.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <div class="mk-btn">
+              <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Baixar relatório do mês
+            </div>
+
+            <div class="mk-sub" style="margin-top:16px">É este número, todo mês, que mostra o que a assinatura está devolvendo.</div>
+          </div>
+        </div>
+
+        <div class="mk-strip">
+          <div class="mk-strip-l">Receita adicional acumulada desde o início (4 meses)</div>
+          <div class="mk-strip-v num">+ R$ 67.920</div>
+        </div>
       </div>
-      <span class="cmp-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </div>
-  </section>
+  </figure>
 
-  <!-- POSICIONAMENTO -->
-  <section id="posicionamento">
-    <p class="lp-label reveal">Por que a CLINUP</p>
-    <div class="lp-position reveal">
-      <p>A CLINUP trabalha <strong>só com clínicas</strong> — e não promete agenda lotada da noite pro dia. O trabalho é tirar sua captação do escuro: <strong>organizar a jornada, medir e melhorar</strong> o que realmente traz paciente. <strong>Quem te garante milagre, desconfie</strong> — a gente prefere te mostrar os números.</p>
-    </div>
-  </section>
+  <div class="transform-cta">
+    <a class="btn cta-diag" data-origem="transformacao" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
+    <p class="cta-note">O diagnóstico mostra o ponto de partida da sua clínica</p>
+  </div>
+</section>
 
-  <!-- FAQ -->
-  <section id="faq" class="lp-band lp-band--white">
-    <div class="lp-faq-grid">
-    <div class="lp-faq-intro">
-      <p class="lp-label reveal">FAQ</p>
-      <h2 class="lp-h2 reveal">Dúvidas frequentes</h2>
-      <p class="lp-h2-sub reveal">Respostas diretas — do mesmo jeito que a gente trabalha.</p>
+<!-- ══════════ COMO FUNCIONA ══════════ -->
+<section class="sec" id="como-funciona">
+  <div class="wrap">
+    <div class="steps-head reveal">
+      <span class="kicker">Como funciona</span>
+      <h2>Do diagnóstico ao plano de ação, em 3 passos</h2>
     </div>
-    <div class="lp-faq reveal">
-      <details>
-        <summary>O que a CLINUP faz, exatamente?</summary>
-        <p>A gente <strong>organiza a jornada digital da sua clínica</strong> — site, presença no Google, WhatsApp e agendamento — pra transformar mais interessados em consultas marcadas. O <strong>diagnóstico gratuito é o primeiro passo</strong>: mostra onde você perde paciente hoje, pra decidir por onde começar.</p>
-      </details>
-      <details>
-        <summary>O diagnóstico é gratuito mesmo?</summary>
-        <p><strong>Sim, sem pegadinha.</strong> O objetivo é te ajudar a identificar gargalos e oportunidades. Se depois você quiser uma sessão pra montar seu plano de ação, ela também é gratuita — e sem compromisso.</p>
-      </details>
-      <details>
-        <summary>Quanto tempo leva?</summary>
-        <p><strong>Menos de 2 minutos.</strong> São 5 perguntas objetivas e o resultado aparece na hora, na mesma tela.</p>
-      </details>
-      <details>
-        <summary>O que será analisado?</summary>
-        <p>Os pontos onde clínicas mais perdem pacientes: <strong>seu site, como os pacientes te encontram, seu WhatsApp/atendimento</strong> e o momento atual da clínica.</p>
-      </details>
-      <details>
-        <summary>Preciso ter site para fazer?</summary>
-        <p><strong>Não.</strong> Se a clínica ainda não tem site, o diagnóstico mostra exatamente o quanto isso está custando — e o que vem primeiro.</p>
-      </details>
-      <details>
-        <summary>Meus dados ficam protegidos?</summary>
-        <p><strong>Sim.</strong> Usamos seu nome e WhatsApp só pra montar o resultado e falar com você. Seus dados não são compartilhados com terceiros — os detalhes estão na nossa <a href="/privacidade" style="color:#1279A3;font-weight:600;">política de privacidade</a>.</p>
-      </details>
-      <details>
-        <summary>O que acontece depois do resultado?</summary>
-        <p><strong>Você decide.</strong> O resultado é seu — dá pra encerrar ali mesmo. Se quiser aprofundar, você agenda uma sessão gratuita pra montar seu plano de ação. A gente pode te mandar uma mensagem no WhatsApp sobre o seu resultado, mas sem insistência: você responde se fizer sentido.</p>
-      </details>
+    <div class="steps reveal">
+      <div class="step">
+        <div class="step-top">
+          <span class="step-n num">01</span>
+          <span class="step-ico"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.35 8.5 8.5 0 0 1-3.4-.7L3 21l1.85-5.6a8.38 8.38 0 0 1-.85-3.9 8.5 8.5 0 0 1 8.5-8.5 8.38 8.38 0 0 1 8.5 8.5z"/></svg></span>
+        </div>
+        <h3>Responder</h3>
+        <p>5 perguntas diretas sobre como sua clínica atende hoje. Dois minutos, sem reunião e sem cadastro de cartão.</p>
+      </div>
+      <div class="step">
+        <div class="step-top">
+          <span class="step-n num">02</span>
+          <span class="step-ico"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
+        </div>
+        <h3>Analisar</h3>
+        <p>Suas respostas viram uma leitura dos 4 pilares de conversão: o que está sólido e por onde o lucro está vazando.</p>
+      </div>
+      <div class="step">
+        <div class="step-top">
+          <span class="step-n num">03</span>
+          <span class="step-ico"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 5.5 4 6.5 6 4.5"/><polyline points="3 11.5 4 12.5 6 10.5"/><polyline points="3 17.5 4 18.5 6 16.5"/></svg></span>
+        </div>
+        <h3>Priorizar</h3>
+        <p>Você sai com a ordem certa do que arrumar primeiro — e uma sessão gratuita pra montar o plano de ação, se quiser.</p>
+      </div>
     </div>
-    </div>
-  </section>
+  </div>
+</section>
 
-  <!-- FECHAMENTO -->
-  <section class="lp-closing lp-band lp-band--dark reveal">
-    <p class="lp-closing-eyebrow">Comece agora</p>
-    <h2>Descubra onde sua clínica está perdendo pacientes</h2>
-    <p>O primeiro passo pra organizar sua captação é enxergar onde ela vaza. Em menos de 2 minutos, você tem os gargalos da sua clínica na tela — e o que arrumar primeiro.</p>
-    <p class="lp-value-lead">No fim, você sai com:</p>
-    <ul class="lp-value" data-play="value">
-      <li><b>A nota da sua clínica</b> — de 0 a 100, com o que puxa pra cima e pra baixo</li>
-      <li><b>Seus pontos fortes e seus gargalos</b>, nomeados um a um</li>
-      <li><b>A ordem do que arrumar primeiro</b> — não tudo de uma vez</li>
-      <li><b>Um resumo pra levar</b> — copiar, guardar ou mandar pro sócio</li>
-      <li><b>Uma sessão gratuita pra montar seu plano de ação</b> — sem compromisso</li>
-    </ul>
-    <a class="lp-btn lp-btn--block cta-diag" data-origem="final" href="/diagnostico">Quero ver meu diagnóstico agora&nbsp;→</a>
-    <p class="lp-cta-note">Rápido, direto e sem compromisso · resultado na hora</p>
-  </section>
+<!-- ══════════ FECHAMENTO ══════════ -->
+<section class="sec" style="padding-top:0">
+  <div class="wrap">
+    <div class="final-card reveal">
+      <h2>Cada semana sem saber onde vaza é lucro que não volta.</h2>
+      <p class="lead">O diagnóstico é gratuito, leva 2 minutos e mostra por onde começar. O resto é conversa de plano de ação — sem compromisso.</p>
+      <a class="btn cta-diag" data-origem="final" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
+      <p class="cta-note">Gratuito · 2 minutos · resultado na hora</p>
+    </div>
+  </div>
+</section>
 
 </main>
 
-<footer class="lp-footer">
-  <div class="lp-footer-brand">
-    <img src="assets/images/logo.png" alt="CLINUP" style="width:32px;height:32px;border-radius:50%;object-fit:contain;border:1.5px solid rgba(91,196,240,0.35);background:#0A1E30;padding:2px;">
-    <div class="logo-text" style="font-size:15px;">CLIN<em>UP</em></div>
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a class="brand" href="/" aria-label="ClinUp — página inicial">
+          <span class="brand-mark" aria-hidden="true">C</span>
+          <span class="brand-name">Clin<b>Up</b></span>
+        </a>
+        <p class="footer-tag">Atendimento, agenda e crescimento da sua clínica puxando na mesma direção.</p>
+      </div>
+      <nav class="footer-links" aria-label="Links do rodapé">
+        <a class="cta-diag" data-origem="footer" href="/diagnostico">Fazer o diagnóstico gratuito</a>
+        <a href="/privacidade">Política de Privacidade</a>
+        <a href="/termos">Termos de Uso</a>
+      </nav>
+    </div>
+    <p class="footer-legal">© 2026 ClinUp. Todos os direitos reservados. As telas exibidas nesta página são simulações com dados ilustrativos — não representam clínicas reais.</p>
   </div>
-  <p class="lp-footer-tag">Site, WhatsApp e atendimento da sua clínica puxando na mesma direção.</p>
-  <nav class="lp-footer-links" aria-label="Links do rodapé">
-    <a class="cta-diag" data-origem="footer" href="/diagnostico">Fazer o diagnóstico gratuito</a>
-    <a href="#faq">Dúvidas frequentes</a>
-    <a href="/privacidade">Política de privacidade</a>
-  </nav>
-  <p>© 2026 CLINUP. Todos os direitos reservados.</p>
 </footer>
 
 <!-- Sticky CTA (mobile) -->
-<div class="lp-sticky" id="lpSticky">
-  <a class="lp-btn cta-diag" data-origem="sticky" href="/diagnostico">Fazer o diagnóstico gratuito&nbsp;→</a>
+<div class="sticky-cta" id="lpSticky">
+  <a class="btn cta-diag" data-origem="sticky" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
 </div>
 
 <script>
-// ── Landing: CTAs, atribuição, antes/depois, reveal, sticky, analytics ──
+// ── Landing: CTAs com atribuição, sticky, nav, reveal ──
 (function () {
   function track(name, data) {
     try { window.va && window.va('event', { name: name, data: data || {} }); } catch (e) {}
-  }
-  function trackPixel(name, data) {
-    try { window.fbq && window.fbq('track', name, data || {}); } catch (e) {}
   }
 
   // CTAs → /diagnostico preservando a query string (UTMs seguem pro funil,
@@ -1209,60 +991,25 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     });
   });
 
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Raio-x do hero: anel + barras animam já no carregamento (nada de esperar
-  // observer — o card é a primeira coisa vista). O contador é por tempo
-  // decorrido: se a aba estiver oculta ou o navegador atrasar frames, o valor
-  // salta pro ponto certo em vez de rastejar. Estado final é garantido sempre.
-  var mock = document.querySelector('.lp-mock');
-  if (mock) {
-    var fills = mock.querySelectorAll('.lp-meter-fill');
-    var ring = mock.querySelector('.lp-ring');
-    var ringIn = mock.querySelector('.lp-ring-in');
-    var TARGET = 58;
-    var paintRing = function (v) {
-      if (ringIn) ringIn.textContent = v + '%';
-      if (ring) ring.style.background = 'conic-gradient(#E08A1E 0 ' + v + '%, #E9EFF4 ' + v + '% 100%)';
-    };
-    if (reduce || document.hidden || !('requestAnimationFrame' in window)) {
-      paintRing(TARGET); // estado final direto — nunca um número errado na tela
-    } else {
-      fills.forEach(function (f) { f.setAttribute('data-w', f.style.width); f.style.width = '0%'; });
-      setTimeout(function () {
-        fills.forEach(function (f) { f.style.width = f.getAttribute('data-w'); });
-        var DUR = 900, t0 = performance.now();
-        var tick = function (now) {
-          var t = Math.min(1, (now - t0) / DUR);
-          var eased = 1 - Math.pow(1 - t, 3);
-          paintRing(Math.round(eased * TARGET));
-          if (t < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      }, 420); // espera só a entrada do card na cascata do hero
-    }
-  }
-
-  // Sticky CTA mobile (desliza de baixo) + sombra da nav ao rolar
+  // Sticky CTA mobile + borda da nav ao rolar
   var sticky = document.getElementById('lpSticky');
-  var nav = document.querySelector('.lp-nav');
+  var nav = document.querySelector('.nav');
   var onScroll = function () {
     var y = window.scrollY || window.pageYOffset || 0;
     if (nav) nav.classList.toggle('is-scrolled', y > 8);
     if (!sticky) return;
-    var nearBottom = (window.innerHeight + y) >= (document.body.scrollHeight - 160);
-    if (y > 560 && !nearBottom) sticky.classList.add('is-visible');
+    var nearBottom = (window.innerHeight + y) >= (document.body.scrollHeight - 200);
+    if (y > 640 && !nearBottom) sticky.classList.add('is-visible');
     else sticky.classList.remove('is-visible');
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   onScroll();
 
-  // Reveal no scroll (uma vez por elemento). rootMargin positivo revela um
-  // pouco ANTES de entrar na tela: mesmo rolando rápido, nunca há área vazia.
-  // Rede de segurança em 1.4s cobre qualquer caso que o observer perca.
-  var els = document.querySelectorAll('.reveal, .reveal-group');
-  if (!('IntersectionObserver' in window) || !document.documentElement.classList.contains('js-anim')) {
+  // Reveal no scroll (uma vez por elemento) + failsafe: nada fica invisível
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.reveal');
+  if (reduce || !('IntersectionObserver' in window) || !document.documentElement.classList.contains('js-anim')) {
     els.forEach(function (el) { el.classList.add('is-visible'); });
   } else {
     var io = new IntersectionObserver(function (entries, obs) {
@@ -1272,43 +1019,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     }, { threshold: 0.05, rootMargin: '0px 0px 18% 0px' });
     els.forEach(function (el) { io.observe(el); });
     setTimeout(function () { els.forEach(function (el) { el.classList.add('is-visible'); }); }, 1400);
-  }
-
-  // ── Mockups se demonstram ao entrar na tela (1×). Failsafe garante estado
-  //    final; reduced-motion / sem IO pinta tudo pronto na hora. ──
-  var plays = document.querySelectorAll('[data-play]');
-  var paintHwRing = function (el, v) {
-    var r = el.querySelector('.hw-ring'); if (!r) return;
-    var b = r.querySelector('b');
-    if (b) b.textContent = v + '%';
-    r.style.background = 'conic-gradient(#E08A1E 0 ' + v + '%, #E9EFF4 ' + v + '% 100%)';
-  };
-  var ringTarget = function (el) {
-    var r = el.querySelector('.hw-ring');
-    return r ? (parseInt(r.getAttribute('data-target'), 10) || 58) : 0;
-  };
-  var playEl = function (el) {
-    if (el.classList.contains('is-played')) return;
-    el.classList.add('is-played');
-    if (el.getAttribute('data-play') === 'result') {
-      var target = ringTarget(el), DUR = 1000, t0 = performance.now();
-      (function tick(now) {
-        var t = Math.min(1, (now - t0) / DUR), e = 1 - Math.pow(1 - t, 3);
-        paintHwRing(el, Math.round(e * target));
-        if (t < 1) requestAnimationFrame(tick); else paintHwRing(el, target);
-      })(performance.now());
-    }
-  };
-  if (reduce || !('IntersectionObserver' in window) || !document.documentElement.classList.contains('js-anim')) {
-    plays.forEach(function (el) { el.classList.add('is-played'); if (el.getAttribute('data-play') === 'result') paintHwRing(el, ringTarget(el)); });
-  } else {
-    // zera o anel do resultado pra um count-up limpo quando entrar
-    plays.forEach(function (el) { if (el.getAttribute('data-play') === 'result') paintHwRing(el, 0); });
-    var pio = new IntersectionObserver(function (entries, obs) {
-      entries.forEach(function (e) { if (e.isIntersecting) { playEl(e.target); obs.unobserve(e.target); } });
-    }, { threshold: 0.25 });
-    plays.forEach(function (el) { pio.observe(el); });
-    setTimeout(function () { plays.forEach(playEl); }, 1600); // failsafe
   }
 }());
 </script>
