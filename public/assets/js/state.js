@@ -102,6 +102,12 @@ function restoreAnswerSelections() {
   Object.keys(answers).forEach(function (k) {
     var n = parseInt(k);
     if (isNaN(n)) return;
+    if (NUMERIC_Q[n]) {
+      var inp = document.querySelector('#q' + n + ' .q-num-input');
+      if (inp && (quizLeadData.motor || {})[MOTOR_FIELD[n]] != null) inp.value = quizLeadData.motor[MOTOR_FIELD[n]];
+      enableNext(n);
+      return;
+    }
     var labelKey   = PERGUNTA_LABELS[n] || ('pergunta_' + n);
     var storedText = (quizLeadData.respostas || {})[labelKey] || '';
     document.querySelectorAll('#opts' + n + ' .opt').forEach(function (o) {
@@ -153,15 +159,15 @@ function resumeSession() {
     var numAnswers = Object.keys(answers).length;
     var hasContact = !!(quizLeadData.nome && quizLeadData.telefone);
 
-    // Concluído (5 respostas + contato): mostra o resultado
-    if (etapa === 'resultado' && numAnswers >= 5 && hasContact) {
+    // Concluído (todas as respostas + contato): mostra o resultado
+    if (etapa === 'resultado' && numAnswers >= TOTAL_PERGUNTAS && hasContact) {
       hideAllScreens();
       showResult();
       return;
     }
 
     // Quiz terminado, contato ainda não dado: volta pro gate
-    if (numAnswers >= 5 && !hasContact) {
+    if (numAnswers >= TOTAL_PERGUNTAS && !hasContact) {
       hideAllScreens();
       prefillLeadForm();
       showLeadScreen();                 // é o gate (dispara trackOnce('view_form'))

@@ -72,6 +72,47 @@ body { position: relative; overflow-x: clip; } /* clip: nada estoura a viewport 
   text-align: center; line-height: 1.5; max-width: 400px;
   margin: 14px auto 0;
 }
+
+/* ── Perguntas numéricas (ticket, consultas, capacidade) ── */
+.q-num {
+  display: flex; align-items: center; gap: 12px; margin-top: 24px;
+  background: rgba(231,234,240,0.04); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 14px 18px;
+}
+.q-num-prefix { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; color: var(--blue); flex-shrink: 0; }
+.q-num-input {
+  flex: 1; min-width: 0; background: transparent; border: none; outline: none;
+  color: var(--white); font-family: 'Sora', sans-serif; font-weight: 800; font-size: 26px;
+  text-align: center; -moz-appearance: textfield;
+}
+.q-num-input::-webkit-outer-spin-button, .q-num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.q-num-suffix { font-size: 13px; color: var(--sub); white-space: nowrap; flex-shrink: 0; }
+
+/* ── Estimativa em R$ somada ao resultado (não substitui a nota) ── */
+.money-card {
+  background: linear-gradient(180deg, rgba(244,87,77,0.08), var(--card));
+  border: 1px solid rgba(244,87,77,0.3); border-radius: 20px; padding: 28px 26px;
+  text-align: center; margin-bottom: 16px; box-shadow: var(--shadow-md);
+}
+.money-chip {
+  display: inline-block; font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--sub); border: 1px solid var(--border);
+  border-radius: 100px; padding: 4px 12px; margin-bottom: 14px;
+}
+.money-label { font-size: 13px; font-weight: 600; color: var(--body); }
+.money-value {
+  font-family: 'Sora', sans-serif; font-weight: 800; font-size: clamp(34px, 9vw, 48px);
+  line-height: 1.05; color: var(--red); text-shadow: 0 0 30px rgba(244,87,77,0.3);
+  margin: 6px 0 4px; font-variant-numeric: tabular-nums;
+}
+.money-year { font-size: 14px; font-weight: 600; color: var(--off); }
+.money-note { font-size: 12.5px; color: var(--sub); line-height: 1.6; margin: 12px auto 0; max-width: 440px; }
+.money-idle {
+  font-size: 12px; color: var(--sub); line-height: 1.55; margin: 12px auto 0;
+  padding-top: 12px; border-top: 1px solid var(--border); max-width: 460px;
+}
+.money-idle strong { color: var(--body); }
+@media (max-width: 640px) { .money-note, .money-idle { text-align: left; } }
 </style>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
@@ -178,7 +219,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <!-- PROGRESS -->
   <div class="progress-wrap" id="progressWrap">
     <div class="progress-label">
-      <span>Pergunta <span id="progressNum">1</span> de <span id="progressTotal">5</span></span>
+      <span>Pergunta <span id="progressNum">1</span> de <span id="progressTotal">9</span></span>
       <span id="progressPct">0%</span>
     </div>
     <div class="progress-track">
@@ -186,62 +227,65 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </div>
   </div>
 
-  <!-- Q1 -->
+  <!-- Q1 — Ticket médio (numérica) -->
   <div class="question-screen" id="q1">
     <div class="q-card">
-      <div class="q-text">A clínica tem site ou página de apresentação hoje?</div>
-      <div class="q-hint">Não conta só ter perfil no Instagram. Toque na opção — o quiz avança sozinho.</div>
-      <div class="options" id="opts1">
-        <button class="opt" data-score="0" data-points="20" onclick="selectOpt(1, 0, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>Sim, temos um site</button>
-        <button class="opt" data-score="2" data-points="8" onclick="selectOpt(1, 2, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg></div>Temos, mas é fraco ou desatualizado</button>
-        <button class="opt" data-score="3" data-points="0" onclick="selectOpt(1, 3, this)"><div class="opt-icon opt-icon--neg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></div>Não temos nada</button>
+      <div class="q-text">Qual o ticket médio de uma consulta particular?</div>
+      <div class="q-hint">O valor cheio que o paciente paga do próprio bolso.</div>
+      <div class="q-num">
+        <span class="q-num-prefix">R$</span>
+        <input class="q-num-input" id="numT" type="number" min="0" max="99999" inputmode="numeric" value="420" oninput="onNumInput(1,'T',this)" aria-label="Ticket médio em reais">
+        <span class="q-num-suffix">por consulta</span>
       </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-next enabled" id="next1" onclick="submitNumeric(1)">Próxima&nbsp;→</button>
     </div>
   </div>
 
-  <!-- Q2 -->
+  <!-- Q2 — Consultas por semana (numérica) -->
   <div class="question-screen" id="q2">
     <div class="q-card">
-      <div class="q-text">Como a maioria dos pacientes novos chega até a clínica hoje?</div>
-      <div class="q-hint">Escolha o lugar que mais traz paciente hoje.</div>
-      <div class="options" id="opts2">
-        <button class="opt" data-score="2" data-points="5" onclick="selectOpt(2, 2, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>Indicação de outros pacientes</button>
-        <button class="opt" data-score="1" data-points="10" onclick="selectOpt(2, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/></svg></div>Redes sociais (Instagram, TikTok)</button>
-        <button class="opt" data-score="1" data-points="15" onclick="selectOpt(2, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>Google (busca ou Maps)</button>
-        <button class="opt" data-score="1" data-points="12" onclick="selectOpt(2, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>Anúncios pagos (Meta ou Google Ads)</button>
-        <button class="opt" data-score="0" data-points="20" onclick="selectOpt(2, 0, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.8-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg></div>Chegam por vários lugares</button>
+      <div class="q-text">Quantas consultas você realiza por semana, em média?</div>
+      <div class="q-hint">Some os atendimentos de uma semana típica.</div>
+      <div class="q-num">
+        <input class="q-num-input" id="numC" type="number" min="0" max="9999" inputmode="numeric" value="40" oninput="onNumInput(2,'C',this)" aria-label="Consultas por semana">
+        <span class="q-num-suffix">por semana</span>
       </div>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="goBack(2)">← Voltar</button>
+      <button class="btn-next enabled" id="next2" onclick="submitNumeric(2)">Próxima&nbsp;→</button>
     </div>
   </div>
 
-  <!-- Q3 -->
+  <!-- Q3 — Capacidade por semana (numérica) -->
   <div class="question-screen" id="q3">
     <div class="q-card">
-      <div class="q-text">Quando alguém pergunta sobre um procedimento no WhatsApp, costuma marcar ou sumir?</div>
-      <div class="q-hint">Seja honesto, isso é importante pro diagnóstico.</div>
-      <div class="options" id="opts3">
-        <button class="opt" data-score="0" data-points="25" onclick="selectOpt(3, 0, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg></div>A maioria marca</button>
-        <button class="opt" data-score="2" data-points="0" onclick="selectOpt(3, 2, this)"><div class="opt-icon opt-icon--neg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="m15 9-6 6M9 9l6 6"/></svg></div>Muita gente some sem responder</button>
-        <button class="opt" data-score="1" data-points="12" onclick="selectOpt(3, 1, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></div>Mais ou menos metade</button>
+      <div class="q-text">Se a agenda lotasse, quantas consultas caberiam por semana?</div>
+      <div class="q-hint">O total de horários que a clínica consegue atender numa semana cheia.</div>
+      <div class="q-num">
+        <input class="q-num-input" id="numK" type="number" min="0" max="9999" inputmode="numeric" value="55" oninput="onNumInput(3,'K',this)" aria-label="Capacidade por semana">
+        <span class="q-num-suffix">por semana</span>
       </div>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="goBack(3)">← Voltar</button>
+      <button class="btn-next enabled" id="next3" onclick="submitNumeric(3)">Próxima&nbsp;→</button>
     </div>
   </div>
 
-  <!-- Q4 -->
+  <!-- Q4 — Volume de contatos -->
   <div class="question-screen" id="q4">
     <div class="q-card">
-      <div class="q-text">Quando você pensa em melhorar a organização da clínica, qual é o seu momento?</div>
-      <div class="q-hint">Isso ajuda a entender o tipo de apoio que faz mais sentido pra você agora.</div>
+      <div class="q-text">Quantos contatos novos a clínica recebe por mês?</div>
+      <div class="q-hint">Somando WhatsApp, telefone, formulário e Direct. Toque na opção — o quiz avança sozinho.</div>
       <div class="options" id="opts4">
-        <button class="opt" data-score="0" data-points="8" onclick="selectOpt(4, 0, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg></div>Preciso resolver logo — estou perdendo pacientes</button>
-        <button class="opt" data-score="1" data-points="15" onclick="selectOpt(4, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></div>Quero melhorar nos próximos 2 a 3 meses</button>
-        <button class="opt" data-score="2" data-points="12" onclick="selectOpt(4, 2, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>Ainda estou avaliando se preciso de ajuda</button>
+        <button class="opt" data-score="0" data-points="4" data-code="ATE_30" onclick="selectOpt(4, 0, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg></div>Até 30</button>
+        <button class="opt" data-score="1" data-points="8" data-code="DE_31_80" onclick="selectOpt(4, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg></div>De 31 a 80</button>
+        <button class="opt" data-score="2" data-points="14" data-code="DE_81_150" onclick="selectOpt(4, 2, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>De 81 a 150</button>
+        <button class="opt" data-score="3" data-points="17" data-code="ACIMA_150" onclick="selectOpt(4, 3, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>Mais de 150</button>
+        <button class="opt" data-score="4" data-points="4" data-code="NAO_SABE" onclick="selectOpt(4, 4, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>Não sei medir</button>
       </div>
     </div>
     <div class="nav-btns">
@@ -249,22 +293,89 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </div>
   </div>
 
-  <!-- Q5 -->
+  <!-- Q5 — Dependência de convênio -->
   <div class="question-screen" id="q5">
     <div class="q-card">
-      <div class="q-text">Qual é o faturamento mensal aproximado da clínica hoje?</div>
-      <div class="q-hint">Não precisa ser exato. Isso ajuda a adaptar melhor a recomendação.</div>
+      <div class="q-text">Quanto da receita depende de convênio hoje?</div>
+      <div class="q-hint">A fatia do faturamento que vem de repasse de plano, não de particular.</div>
       <div class="options" id="opts5">
-        <button class="opt" data-score="3" data-points="5" onclick="selectOpt(5, 3, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M8 17v-3M13 17v-6M18 17v-9"/></svg></div>Até R$ 5.000</button>
-        <button class="opt" data-score="2" data-points="10" onclick="selectOpt(5, 2, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M8 17v-3M13 17v-6M18 17v-9"/></svg></div>Entre R$ 5.000 e R$ 15.000</button>
-        <button class="opt" data-score="1" data-points="15" onclick="selectOpt(5, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M8 17v-3M13 17v-6M18 17v-9"/></svg></div>Entre R$ 15.000 e R$ 40.000</button>
-        <button class="opt" data-score="0" data-points="20" onclick="selectOpt(5, 0, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="M8 17v-3M13 17v-6M18 17v-9"/></svg></div>Acima de R$ 40.000</button>
-        <button class="opt" data-score="0" data-points="10" onclick="selectOpt(5, 0, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12h8"/></svg></div>Prefiro não informar</button>
+        <button class="opt" data-score="0" data-points="17" data-code="ATE_30" onclick="selectOpt(5, 0, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>Até 30%</button>
+        <button class="opt" data-score="1" data-points="12" data-code="DE_31_50" onclick="selectOpt(5, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg></div>De 31% a 50%</button>
+        <button class="opt" data-score="2" data-points="7" data-code="DE_51_70" onclick="selectOpt(5, 2, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg></div>De 51% a 70%</button>
+        <button class="opt" data-score="3" data-points="3" data-code="ACIMA_70" onclick="selectOpt(5, 3, this)"><div class="opt-icon opt-icon--neg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></div>Mais de 70%</button>
       </div>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="goBack(5)">← Voltar</button>
-      <button class="btn-next" id="next5" onclick="goToGate()">Ver meu diagnóstico →</button>
+    </div>
+  </div>
+
+  <!-- Q6 — Taxa de falta -->
+  <div class="question-screen" id="q6">
+    <div class="q-card">
+      <div class="q-text">Qual a taxa de falta (no-show) das consultas?</div>
+      <div class="q-hint">De cada 10 marcadas, quantas não aparecem.</div>
+      <div class="options" id="opts6">
+        <button class="opt" data-score="0" data-points="17" data-code="ATE_5" onclick="selectOpt(6, 0, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>Até 5%</button>
+        <button class="opt" data-score="1" data-points="12" data-code="DE_6_10" onclick="selectOpt(6, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg></div>De 6% a 10%</button>
+        <button class="opt" data-score="2" data-points="6" data-code="DE_11_20" onclick="selectOpt(6, 2, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg></div>De 11% a 20%</button>
+        <button class="opt" data-score="3" data-points="2" data-code="ACIMA_20" onclick="selectOpt(6, 3, this)"><div class="opt-icon opt-icon--neg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></div>Mais de 20%</button>
+        <button class="opt" data-score="4" data-points="4" data-code="NAO_MEDE" onclick="selectOpt(6, 4, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>Não meço isso</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goBack(6)">← Voltar</button>
+    </div>
+  </div>
+
+  <!-- Q7 — Tempo de 1ª resposta no WhatsApp -->
+  <div class="question-screen" id="q7">
+    <div class="q-card">
+      <div class="q-text">Em quanto tempo a clínica dá a 1ª resposta no WhatsApp?</div>
+      <div class="q-hint">O tempo médio entre o paciente chamar e alguém responder.</div>
+      <div class="options" id="opts7">
+        <button class="opt" data-score="0" data-points="17" data-code="ATE_5MIN" onclick="selectOpt(7, 0, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>Até 5 minutos</button>
+        <button class="opt" data-score="1" data-points="11" data-code="DE_5_30MIN" onclick="selectOpt(7, 1, this)"><div class="opt-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/></svg></div>De 5 a 30 minutos</button>
+        <button class="opt" data-score="2" data-points="5" data-code="DE_30MIN_2H" onclick="selectOpt(7, 2, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg></div>De 30 min a 2 horas</button>
+        <button class="opt" data-score="3" data-points="2" data-code="ACIMA_2H" onclick="selectOpt(7, 3, this)"><div class="opt-icon opt-icon--neg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></div>Mais de 2 horas</button>
+        <button class="opt" data-score="4" data-points="6" data-code="VARIA" onclick="selectOpt(7, 4, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>Varia muito</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goBack(7)">← Voltar</button>
+    </div>
+  </div>
+
+  <!-- Q8 — Cobertura fora do horário -->
+  <div class="question-screen" id="q8">
+    <div class="q-card">
+      <div class="q-text">E fora do horário comercial — quem responde?</div>
+      <div class="q-hint">Noite, fim de semana e feriado.</div>
+      <div class="options" id="opts8">
+        <button class="opt" data-score="0" data-points="16" data-code="AUTOMATIZADA" onclick="selectOpt(8, 0, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>Atendimento automatizado responde</button>
+        <button class="opt" data-score="1" data-points="8" data-code="QUANDO_POSSIVEL" onclick="selectOpt(8, 1, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg></div>Alguém responde quando dá</button>
+        <button class="opt" data-score="2" data-points="2" data-code="SO_COMERCIAL" onclick="selectOpt(8, 2, this)"><div class="opt-icon opt-icon--neg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></div>Só no horário comercial</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goBack(8)">← Voltar</button>
+    </div>
+  </div>
+
+  <!-- Q9 — Reposição de vaga -->
+  <div class="question-screen" id="q9">
+    <div class="q-card">
+      <div class="q-text">Quando alguém desmarca, a vaga é reposta?</div>
+      <div class="q-hint">O horário que abriu volta a ser preenchido?</div>
+      <div class="options" id="opts9">
+        <button class="opt" data-score="0" data-points="16" data-code="AUTOMATICA" onclick="selectOpt(9, 0, this)"><div class="opt-icon opt-icon--ok"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg></div>Reposição automática (lista de espera)</button>
+        <button class="opt" data-score="1" data-points="7" data-code="MANUAL" onclick="selectOpt(9, 1, this)"><div class="opt-icon opt-icon--warn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21.7 18-8-14a2 2 0 0 0-3.5 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.7-3Z"/><path d="M12 9v4M12 17h.01"/></svg></div>Manual, caso a caso</button>
+        <button class="opt" data-score="2" data-points="2" data-code="FICA_VAGO" onclick="selectOpt(9, 2, this)"><div class="opt-icon opt-icon--neg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></div>Costuma ficar vago</button>
+      </div>
+    </div>
+    <div class="nav-btns">
+      <button class="btn-back" onclick="goBack(9)">← Voltar</button>
+      <button class="btn-next" id="next9" onclick="goToGate()">Ver meu diagnóstico&nbsp;→</button>
     </div>
   </div>
 
@@ -273,6 +384,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 </main>
 
+<script src="assets/js/motorCalculoVazamento.js"></script>
 <script src="assets/js/config.js"></script>
 <script src="assets/js/utils.js"></script>
 <script src="assets/js/api.js"></script>

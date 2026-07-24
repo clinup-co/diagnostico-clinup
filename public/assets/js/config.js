@@ -9,6 +9,7 @@ const quizLeadData = {
   telefone:        '',
   respostas:       {},
   pontos:          {},
+  motor:           {},   // inputs do motor de cálculo (ticket, faltas, resposta...)
   resultado:       '',
   etapaAtual:      'inicio',
   quizConcluido:   false,
@@ -17,15 +18,29 @@ const quizLeadData = {
   source:          'quiz_clinup'
 };
 
+// 9 perguntas: 3 numéricas (T/C/K) + 6 de operação. Cada uma alimenta o motor.
 const PERGUNTA_LABELS = {
-  1: 'presenca_digital',
-  2: 'canal_captacao',
-  3: 'conversao_whatsapp',
-  4: 'urgencia_decisao',
-  5: 'faturamento_mensal'
+  1: 'ticket_medio',
+  2: 'consultas_semana',
+  3: 'capacidade_semana',
+  4: 'volume_contatos',
+  5: 'dependencia_convenio',
+  6: 'taxa_falta',
+  7: 'tempo_resposta',
+  8: 'cobertura_fora_horario',
+  9: 'reposicao_vaga'
 };
 
-const STATE_VERSION = '4';
+// Mapa pergunta → campo do motor de cálculo (motorCalculoVazamento.js)
+const MOTOR_FIELD = {
+  1: 'T', 2: 'C', 3: 'K',
+  4: 'contatos', 5: 'convenio', 6: 'ausencia',
+  7: 'resposta', 8: 'cobertura', 9: 'reposicao'
+};
+const NUMERIC_Q = { 1: true, 2: true, 3: true };
+const TOTAL_PERGUNTAS = 9;
+
+const STATE_VERSION = '5';
 
 const answers = {};
 
