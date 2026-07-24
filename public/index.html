@@ -32,6 +32,11 @@
   --bg:#0A0E1A; --bg-deep:#050811; --card:#111827; --raised:#1A2233; --line:#232B3D;
   --ink:#E7EAF0; --ink-2:#8A94A6; --ink-3:#5A6478;
   --loss:#F4574D; --warn:#F5A623; --gain:#2BD576; --action:#4D7CFE; --action-soft:#7EA2FF;
+  /* tokens de movimento (Frente 1) — só transform/opacity animam */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-tap: cubic-bezier(0.34, 1.4, 0.64, 1);
+  --t-fast: 140ms; --t-base: 480ms; --t-slow: 700ms;
+  --rise: 20px;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -72,19 +77,25 @@ a{color:inherit}
 
 /* ── Botões ──────────────────────────────────────────────────────── */
 .btn{
+  position:relative;
   display:inline-flex;align-items:center;justify-content:center;gap:8px;
   font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;font-size:16px;color:#fff;
   background:var(--action);border:none;border-radius:12px;padding:16px 30px;
   text-decoration:none;cursor:pointer;white-space:nowrap;
   box-shadow:0 10px 30px rgba(77,124,254,.30);
-  transition:background .18s ease, transform .18s ease, box-shadow .18s ease;
-  animation:btnPulse 3s ease-in-out infinite;
+  transition:background var(--t-fast) ease, transform var(--t-fast) var(--ease-out);
 }
-/* pulso contínuo pausa no hover pra sombra elevada assumir */
-.btn:hover{animation:none;background:#618BFF;transform:translateY(-2px);box-shadow:0 16px 40px rgba(77,124,254,.5)}
-@keyframes btnPulse{
-  0%,100%{box-shadow:0 10px 30px rgba(77,124,254,.30)}
-  50%{box-shadow:0 12px 36px rgba(77,124,254,.55)}
+/* glow em camada própria: só OPACITY anima (lei de performance) */
+.btn::after{
+  content:"";position:absolute;inset:-2px;border-radius:inherit;pointer-events:none;
+  box-shadow:0 0 30px rgba(77,124,254,.55);
+  opacity:.22;animation:btnGlow 3s ease-in-out infinite;
+}
+.btn:hover{background:#618BFF;transform:translateY(-2px)}
+.btn:hover::after{animation:none;opacity:.7}
+@keyframes btnGlow{
+  0%,100%{opacity:.16}
+  50%{opacity:.55}
 }
 .btn--sm{font-size:14px;padding:11px 20px;border-radius:10px;box-shadow:0 6px 18px rgba(77,124,254,.25)}
 .cta-note{font-size:13px;font-weight:500;color:var(--ink-3);margin-top:14px}
@@ -96,7 +107,7 @@ a{color:inherit}
 
 /* ── Seções / tipografia ─────────────────────────────────────────── */
 section{scroll-margin-top:84px}
-.sec{padding:112px 0}
+.sec{padding:112px 0;position:relative}
 .kicker{
   display:block;font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--action-soft);margin-bottom:16px;
@@ -252,16 +263,28 @@ h2{
 .footer-legal{margin-top:44px;padding-top:24px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-3)}
 
 /* ── Sticky CTA (mobile) ─────────────────────────────────────────── */
+/* Docked pill (Frente 1): pílula solta com vidro, some ao rolar pra baixo */
 .sticky-cta{
-  display:none;position:fixed;left:0;right:0;bottom:0;z-index:70;
-  padding:12px 16px calc(12px + env(safe-area-inset-bottom));
-  background:rgba(10,14,26,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border-top:1px solid var(--line);
+  display:none;position:fixed;left:16px;right:16px;
+  bottom:calc(16px + env(safe-area-inset-bottom));
+  height:56px;border-radius:16px;
+  background:rgba(17,24,39,0.85);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1px solid var(--line);
+  box-shadow:0 8px 32px rgba(0,0,0,0.45);
+  transform:translateY(120%);
+  transition:transform 420ms var(--ease-out);
+  z-index:90;overflow:hidden;
 }
-.sticky-cta .btn{width:100%}
+.sticky-cta.is-visible{transform:translateY(0)}
+.sticky-cta .btn{
+  width:100%;height:100%;border-radius:16px;font-size:15px;
+  background:transparent;box-shadow:none;
+}
+.sticky-cta .btn::after{display:none}
+.sticky-cta .btn:hover{transform:none;background:rgba(77,124,254,.14)}
 @media (max-width:768px){
-  .sticky-cta{display:block;transform:translateY(110%);transition:transform .3s ease}
-  .sticky-cta.is-visible{transform:translateY(0)}
+  .sticky-cta{display:block}
 }
 
 /* ── Ritmo mobile ────────────────────────────────────────────────── */
@@ -275,12 +298,81 @@ h2{
   .btn--sm{font-size:13px;padding:10px 14px}
 }
 
+/* ── Fotos editoriais (Human-Tech): derretem no fundo #0A0E1A ────── */
+.has-photo{position:relative}
+.has-photo > *:not(.photo-bg){position:relative;z-index:1}
+.photo-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.photo-bg img{
+  position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  filter:saturate(.65);opacity:.16;
+  transition:opacity var(--t-slow) ease;
+}
+html.js-anim .photo-bg:not(.is-visible) img{opacity:0}
+.photo-bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(180deg, var(--bg) 0%, rgba(10,14,26,.72) 24%, rgba(10,14,26,.58) 58%, var(--bg) 100%);
+}
+.transform .photo-bg::after{
+  background:
+    radial-gradient(60% 40% at 50% 0%, rgba(43,213,118,.09), transparent 70%),
+    linear-gradient(180deg, var(--bg-deep) 0%, rgba(5,8,17,.72) 24%, rgba(5,8,17,.58) 58%, var(--bg-deep) 100%);
+}
+
+/* ── Fio da Receita (SVG na margem, só telas largas) ─────────────── */
+.fio{
+  position:absolute;top:0;bottom:0;width:28px;pointer-events:none;display:none;z-index:0;
+  left:calc(50% - 560px - 44px);
+}
+@media (min-width:1240px){ .fio{display:block} }
+.fio svg{width:100%;height:100%;display:block}
+.fio-line{stroke:var(--action);stroke-opacity:.3;stroke-width:1.5;fill:none}
+.fio--gain .fio-line{stroke:var(--gain);stroke-opacity:.85}
+html.js-anim .fio-line{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 900ms var(--ease-out)}
+html.js-anim .fio.is-visible .fio-line{stroke-dashoffset:0}
+.fio-drip{
+  position:absolute;left:11px;width:16px;height:0;
+  border-top:1.5px dashed var(--loss);transform:rotate(45deg);transform-origin:left center;
+  opacity:.7;
+}
+html.js-anim .fio-drip{opacity:0;transition:opacity var(--t-base) ease}
+html.js-anim .fio.is-visible .fio-drip{opacity:.7}
+html.js-anim .fio.is-visible .fio-drip:nth-of-type(2){transition-delay:180ms}
+html.js-anim .fio.is-visible .fio-drip:nth-of-type(3){transition-delay:360ms}
+.fio-node{
+  position:absolute;left:8px;width:12px;height:12px;border-radius:50%;
+  background:var(--action);box-shadow:0 0 14px rgba(77,124,254,.6);
+  opacity:.9;
+}
+html.js-anim .fio-node{opacity:0;transition:opacity var(--t-base) ease 300ms}
+html.js-anim .fio.is-visible .fio-node{opacity:.9}
+
+/* ── Counter-up "signature": pouso com glow + delta 150ms depois ── */
+html.js-anim .mk-kpi .mk-delta{
+  opacity:0;transform:translateY(4px);
+  transition:opacity var(--t-base) var(--ease-out) 150ms, transform var(--t-base) var(--ease-out) 150ms;
+}
+html.js-anim .mk-kpi.landed .mk-delta{opacity:1;transform:none}
+html.js-anim .mk-kpi:not(.landed) .mk-v--glowloss,
+html.js-anim .mk-kpi:not(.landed) .mk-v--glowgain{text-shadow:none;animation:none}
+
+/* ── Pulso da calculadora (aumento de perda) ─────────────────────── */
+.calc-result{
+  border:1px solid transparent;border-radius:14px;padding:14px 10px 4px;
+  transition:transform 300ms var(--ease-tap), border-color 300ms ease;
+}
+.calc-result.calc-pulse{transform:scale(1.015);border-color:rgba(244,87,77,.5)}
+
 /* ── Reveal on scroll ────────────────────────────────────────────── */
-html.js-anim .reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s cubic-bezier(.16,1,.3,1)}
+html.js-anim .reveal{opacity:0;transform:translateY(var(--rise));transition:opacity var(--t-base) var(--ease-out),transform var(--t-base) var(--ease-out)}
 html.js-anim .reveal.is-visible{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){
   html.js-anim .reveal{opacity:1;transform:none;transition:none}
-  .btn,.mk-v--glowloss,.mf-sim::before{animation:none}
+  html.js-anim .photo-bg:not(.is-visible) img{opacity:.16;transition:none}
+  html.js-anim .fio-line{stroke-dashoffset:0;transition:none}
+  html.js-anim .fio-drip,html.js-anim .fio-node{opacity:.7;transition:none}
+  html.js-anim .mk-kpi .mk-delta{opacity:1;transform:none;transition:none}
+  .btn::after,.mk-v--glowloss,.mf-sim::before{animation:none}
+  .sticky-cta{transition:none}
   .btn:hover,.mockframe:hover,.mk-card:hover,.step:hover,.obj:hover,.brand:hover{transform:none}
 }
 
@@ -358,10 +450,11 @@ html.js-anim .reveal.is-visible{opacity:1;transform:none}
 .mk-kpi .mk-v{font-size:clamp(26px,2.6vw,38px);font-weight:650;letter-spacing:-.02em;margin:10px 0 8px}
 .mk-kpi--hero .mk-v{font-size:clamp(32px,3.4vw,48px)}
 .mk-v--loss{color:var(--loss)} .mk-v--warn{color:var(--warn)} .mk-v--gain{color:var(--gain)}
-.mk-v--glowloss{text-shadow:0 0 28px rgba(244,87,77,.28);animation:lossPulse 3s ease-in-out infinite}
+.mk-v--glowloss{text-shadow:0 0 28px rgba(244,87,77,.35);animation:lossPulse 3s ease-in-out infinite}
+/* pulso por OPACITY (lei de performance: text-shadow fica estático) */
 @keyframes lossPulse{
-  0%,100%{opacity:1;text-shadow:0 0 28px rgba(244,87,77,.28)}
-  50%{opacity:.88;text-shadow:0 0 38px rgba(244,87,77,.5)}
+  0%,100%{opacity:1}
+  50%{opacity:.86}
 }
 .mk-v--glowgain{text-shadow:0 0 28px rgba(43,213,118,.28)}
 .mk-v-unit{font-size:20px;color:var(--ink-2);font-weight:500}
@@ -526,6 +619,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
+  <div class="fio" style="top:58%" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
     <span class="kicker">ClinUp · Diagnóstico de Lucro para clínicas</span>
     <h1>A ClinUp não faz marketing. <span class="hl">Nós recuperamos o lucro</span> que sua clínica está perdendo hoje.</h1>
@@ -555,23 +649,23 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <div class="mk-kpis">
           <div class="mk-card mk-kpi mk-kpi--hero">
             <div class="mk-h">Receita perdida no mês</div>
-            <div class="mk-v num mk-v--loss mk-v--glowloss">R$ 18.450</div>
+            <div class="mk-v num mk-v--loss mk-v--glowloss"><span class="cnt" data-target="18450" data-prefix="R$ ">R$ 18.450</span></div>
             <span class="mk-delta mk-delta--bad">▲ 12% vs mês anterior</span>
             <div class="mk-sub" style="margin-top:10px">Soma de leads não convertidos por demora e horários vazios por falta</div>
           </div>
           <div class="mk-card mk-kpi">
             <div class="mk-h">Leads sem resposta</div>
-            <div class="mk-v num mk-v--loss">34</div>
+            <div class="mk-v num mk-v--loss"><span class="cnt" data-target="34">34</span></div>
             <div class="mk-sub">tempo médio de resposta: <b>3h 47min</b></div>
           </div>
           <div class="mk-card mk-kpi">
             <div class="mk-h">Faltas (no-show)</div>
-            <div class="mk-v num mk-v--loss">19</div>
+            <div class="mk-v num mk-v--loss"><span class="cnt" data-target="19">19</span></div>
             <div class="mk-sub num">R$ 7.980 em horários vazios</div>
           </div>
           <div class="mk-card mk-kpi">
             <div class="mk-h">Conversão de leads</div>
-            <div class="mk-v num mk-v--warn">22%</div>
+            <div class="mk-v num mk-v--warn"><span class="cnt" data-target="22" data-suffix="%">22%</span></div>
             <div class="mk-bench num">clínicas com automação: <em>41%</em></div>
           </div>
         </div>
@@ -661,7 +755,14 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ PILAR 1 · WHATSAPP ══════════ -->
-<section class="sec" id="pilar-whatsapp">
+<section class="sec has-photo" id="pilar-whatsapp">
+  <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_whatsapp_noite.jpg" alt="" loading="lazy"></div>
+  <div class="fio" aria-hidden="true">
+    <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
+    <i class="fio-drip" style="top:26%"></i>
+    <i class="fio-drip" style="top:52%"></i>
+    <i class="fio-drip" style="top:76%"></i>
+  </div>
   <div class="wrap zig">
     <div class="zig-copy reveal">
       <span class="kicker">Pilar 1 · Atendimento no WhatsApp</span>
@@ -757,7 +858,14 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ PILAR 2 · AGENDA ══════════ -->
-<section class="sec" id="pilar-agenda" style="padding-top:0">
+<section class="sec has-photo" id="pilar-agenda" style="padding-top:0">
+  <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_cadeira_vazia.jpg" alt="" loading="lazy"></div>
+  <div class="fio" aria-hidden="true">
+    <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
+    <i class="fio-drip" style="top:22%"></i>
+    <i class="fio-drip" style="top:48%"></i>
+    <i class="fio-drip" style="top:72%"></i>
+  </div>
   <div class="wrap zig zig--flip">
     <div class="zig-copy reveal">
       <span class="kicker">Pilar 2 · Agenda e faltas</span>
@@ -787,7 +895,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
                 <circle cx="95" cy="95" r="70" fill="none" stroke="#F4574D" stroke-width="15" stroke-linecap="round"
                         stroke-dasharray="61.6 378.2" transform="rotate(-90 95 95)"/>
               </svg>
-              <div class="mk-donut-mid"><div class="v num">14%</div><div class="l">das consultas</div></div>
+              <div class="mk-donut-mid"><div class="v num"><span class="cnt" data-target="14" data-suffix="%">14%</span></div><div class="l">das consultas</div></div>
             </div>
             <div class="mk-sub num">19 faltas em 136 consultas no mês</div>
             <div class="mk-benchbox num">Clínicas com confirmação automática: <b>4%</b></div>
@@ -826,7 +934,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
           <div class="mk-proj" style="margin-top:14px">
             <div class="mk-h">Projeção anual</div>
-            <div class="mk-proj-big num">R$ 95.760 / ano</div>
+            <div class="mk-proj-big num"><span class="cnt" data-target="95760" data-prefix="R$ ">R$ 95.760</span> / ano</div>
             <div class="mk-sub">em horários vazios, mantendo a taxa atual de falta de 14% e o ticket médio de R$ 420. Horário vago não se revende: a receita da vaga das 15h de terça não volta.</div>
           </div>
         </div>
@@ -837,6 +945,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ CALCULADORA (SIMULAÇÃO) ══════════ -->
 <section class="sec" id="calculadora" style="padding-top:0">
+  <div class="fio" aria-hidden="true">
+    <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
+    <span class="fio-node" style="top:54%"></span>
+  </div>
   <div class="wrap wrap--narrow">
     <div class="calc-card reveal">
       <span class="kicker">Calculadora · Simulação</span>
@@ -861,7 +973,9 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ A TRANSFORMAÇÃO ══════════ -->
-<section class="sec transform" id="transformacao">
+<section class="sec transform has-photo" id="transformacao">
+  <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_virada_medico.jpg" alt="" loading="lazy"></div>
+  <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap transform-head">
     <span class="kicker">A virada</span>
     <h2>O que muda quando a ClinUp entra em campo? O lucro volta a ser a sua prioridade.</h2>
@@ -887,23 +1001,23 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <div class="mk-kpis">
           <div class="mk-card mk-kpi mk-kpi--hero">
             <div class="mk-h">Receita recuperada</div>
-            <div class="mk-v num mk-v--gain mk-v--glowgain mk-v--fit">+ R$ 22.640<span class="mk-v-unit">/mês</span></div>
+            <div class="mk-v num mk-v--gain mk-v--glowgain mk-v--fit"><span class="cnt" data-target="22640" data-prefix="+ R$ ">+ R$ 22.640</span><span class="mk-v-unit">/mês</span></div>
             <span class="mk-delta mk-delta--good">▲ vs média antes da ClinUp</span>
             <div class="mk-was" style="margin-top:10px">Leads respondidos na hora + faltas quase zeradas</div>
           </div>
           <div class="mk-card mk-kpi">
             <div class="mk-h">Tempo de resposta</div>
-            <div class="mk-v num mk-v--gain">43 seg</div>
+            <div class="mk-v num mk-v--gain"><span class="cnt" data-target="43" data-suffix=" seg">43 seg</span></div>
             <div class="mk-was num">▼ antes: <s>3h 47min</s></div>
           </div>
           <div class="mk-card mk-kpi">
             <div class="mk-h">Taxa de no-show</div>
-            <div class="mk-v num mk-v--gain">3,8%</div>
+            <div class="mk-v num mk-v--gain"><span class="cnt" data-target="3.8" data-decimals="1" data-suffix="%">3,8%</span></div>
             <div class="mk-was num">▼ antes: <s>14%</s></div>
           </div>
           <div class="mk-card mk-kpi">
             <div class="mk-h">Pacientes novos no mês</div>
-            <div class="mk-v num mk-v--gain">31</div>
+            <div class="mk-v num mk-v--gain"><span class="cnt" data-target="31">31</span></div>
             <div class="mk-was num">▲ 158% vs média anterior</div>
           </div>
         </div>
@@ -990,7 +1104,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
         <div class="mk-strip">
           <div class="mk-strip-l">Receita adicional acumulada desde o início (4 meses)</div>
-          <div class="mk-strip-v num">+ R$ 67.920</div>
+          <div class="mk-strip-v num"><span class="cnt" data-target="67920" data-prefix="+ R$ ">+ R$ 67.920</span></div>
         </div>
       </div>
     </div>
@@ -1081,7 +1195,9 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ FECHAMENTO ══════════ -->
-<section class="sec" style="padding-top:0">
+<section class="sec has-photo" id="cta-final" style="padding-top:0">
+  <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_latao_entrada.jpg" alt="" loading="lazy"></div>
+  <div class="fio fio--gain" style="bottom:40%" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
     <div class="final-card reveal">
       <h2>Cada semana sem saber onde vaza é lucro que não volta.</h2>
@@ -1136,16 +1252,48 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     });
   });
 
-  // Calculadora (simulação): perda estimada = consultas/semana × 4 × ticket × 18%
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Formatação pt-BR compartilhada (counters + calculadora)
+  var _fmt = {};
+  var fmtBR = function (n, d) {
+    d = d || 0;
+    _fmt[d] = _fmt[d] || new Intl.NumberFormat('pt-BR', { minimumFractionDigits: d, maximumFractionDigits: d });
+    return _fmt[d].format(n);
+  };
+
+  // Calculadora (simulação): perda = consultas/semana × 4 × ticket × 18%.
+  // Re-contagem viva em 400ms; se a perda AUMENTA, pulso de escala + borda
   var calcTicket = document.getElementById('calcTicket');
   var calcSemana = document.getElementById('calcSemana');
   var calcOut = document.getElementById('calcOut');
+  var calcCur = 12096; // valor inicial já renderizado no HTML
+  var calcRaf = null;
+  var paintCalc = function (v) {
+    calcOut.innerHTML = 'R$ ' + fmtBR(Math.round(v)) + '<span>/mês</span>';
+  };
+  var animateCalc = function (to) {
+    var from = calcCur;
+    calcCur = to;
+    if (reduce || from === to) { paintCalc(to); return; }
+    if (to > from) {
+      var r = document.querySelector('.calc-result');
+      if (r) { r.classList.add('calc-pulse'); setTimeout(function () { r.classList.remove('calc-pulse'); }, 300); }
+    }
+    if (calcRaf) cancelAnimationFrame(calcRaf);
+    var D = 400, t0 = performance.now();
+    (function tick(now) {
+      var p = Math.min(1, (now - t0) / D);
+      var e = 1 - Math.pow(1 - p, 3);
+      paintCalc(from + (to - from) * e);
+      if (p < 1) calcRaf = requestAnimationFrame(tick);
+    })(t0);
+  };
   var recalc = function () {
     if (!calcTicket || !calcSemana || !calcOut) return;
     var t = Math.max(0, parseFloat(calcTicket.value) || 0);
     var c = Math.max(0, parseFloat(calcSemana.value) || 0);
-    var v = Math.round(c * 4 * t * 0.18);
-    calcOut.innerHTML = 'R$ ' + v.toLocaleString('pt-BR') + '<span>/mês</span>';
+    animateCalc(Math.round(c * 4 * t * 0.18));
   };
   if (calcTicket && calcSemana) {
     calcTicket.addEventListener('input', recalc);
@@ -1153,24 +1301,40 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     recalc();
   }
 
-  // Sticky CTA mobile + borda da nav ao rolar
+  // Docked pill: aparece quando o CTA do hero sai por cima; some quando o
+  // CTA final entra; recolhe no scroll pra baixo e volta no scroll pra cima
   var sticky = document.getElementById('lpSticky');
   var nav = document.querySelector('.nav');
+  var pastHero = false, finalVis = false, scrollDown = false;
+  var lastY = window.scrollY || 0;
+  var updSticky = function () {
+    if (!sticky) return;
+    if (pastHero && !finalVis && !scrollDown) sticky.classList.add('is-visible');
+    else sticky.classList.remove('is-visible');
+  };
+  var heroCta = document.querySelector('.hero .btn');
+  var finalSec = document.getElementById('cta-final');
+  if ('IntersectionObserver' in window) {
+    if (heroCta) new IntersectionObserver(function (en) {
+      en.forEach(function (e) { pastHero = !e.isIntersecting && e.boundingClientRect.top < 0; updSticky(); });
+    }, { threshold: 0 }).observe(heroCta);
+    if (finalSec) new IntersectionObserver(function (en) {
+      en.forEach(function (e) { finalVis = e.isIntersecting; updSticky(); });
+    }, { threshold: 0.1 }).observe(finalSec);
+  } else { pastHero = true; }
   var onScroll = function () {
     var y = window.scrollY || window.pageYOffset || 0;
     if (nav) nav.classList.toggle('is-scrolled', y > 8);
-    if (!sticky) return;
-    var nearBottom = (window.innerHeight + y) >= (document.body.scrollHeight - 200);
-    if (y > 640 && !nearBottom) sticky.classList.add('is-visible');
-    else sticky.classList.remove('is-visible');
+    var dy = y - lastY;
+    if (Math.abs(dy) > 6) { scrollDown = dy > 0; lastY = y; updSticky(); }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', onScroll);
   onScroll();
 
-  // Reveal no scroll (uma vez por elemento) + failsafe: nada fica invisível
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var els = document.querySelectorAll('.reveal');
+  // Reveal no scroll (uma vez por elemento) + failsafe: nada fica invisível.
+  // Fotos editoriais (.photo-bg) e o Fio da Receita (.fio) entram no mesmo IO.
+  var els = document.querySelectorAll('.reveal, .photo-bg, .fio');
   if (reduce || !('IntersectionObserver' in window) || !document.documentElement.classList.contains('js-anim')) {
     els.forEach(function (el) { el.classList.add('is-visible'); });
   } else {
@@ -1181,6 +1345,44 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     }, { threshold: 0.05, rootMargin: '0px 0px 18% 0px' });
     els.forEach(function (el) { io.observe(el); });
     setTimeout(function () { els.forEach(function (el) { el.classList.add('is-visible'); }); }, 1400);
+  }
+
+  // ── Counter-up "signature" (KPIs dos mocks): easeOutExpo 1000ms.
+  //    No pouso, .landed acende o glow e o delta entra 150ms depois. ──
+  var cnts = document.querySelectorAll('.cnt');
+  var paintCnt = function (el, v) {
+    var d = parseInt(el.getAttribute('data-decimals') || '0', 10);
+    el.textContent = (el.getAttribute('data-prefix') || '') + fmtBR(v, d) + (el.getAttribute('data-suffix') || '');
+  };
+  var landCnt = function (el) {
+    var k = el.closest('.mk-kpi');
+    if (k) k.classList.add('landed');
+  };
+  var runCnt = function (el) {
+    if (el.getAttribute('data-done')) return;
+    el.setAttribute('data-done', '1');
+    var target = parseFloat(el.getAttribute('data-target')) || 0;
+    var D = 1000, t0 = performance.now();
+    (function tick(now) {
+      var p = Math.min(1, (now - t0) / D);
+      var e = p === 1 ? 1 : 1 - Math.pow(2, -10 * p);
+      paintCnt(el, target * e);
+      if (p < 1) requestAnimationFrame(tick);
+      else { paintCnt(el, target); landCnt(el); }
+    })(t0);
+  };
+  if (cnts.length) {
+    if (reduce || !('IntersectionObserver' in window) || !('requestAnimationFrame' in window) || !document.documentElement.classList.contains('js-anim')) {
+      // sem animação: números finais (já no HTML) + glow/delta visíveis
+      cnts.forEach(landCnt);
+    } else {
+      var cio = new IntersectionObserver(function (entries, obs) {
+        entries.forEach(function (e) {
+          if (e.isIntersecting) { runCnt(e.target); obs.unobserve(e.target); }
+        });
+      }, { threshold: 0.4 });
+      cnts.forEach(function (el) { cio.observe(el); });
+    }
   }
 }());
 </script>
