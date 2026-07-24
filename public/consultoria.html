@@ -33,7 +33,7 @@ header.cons-header {
   width: 100%; max-width: none; margin: 0;
   display: flex; align-items: center; justify-content: flex-start; gap: 10px;
   padding: 12px 24px;
-  background: rgba(242,247,251,0.92);
+  background: rgba(10,14,26,0.92);
   border-bottom: 1px solid var(--border);
   text-align: left;
 }
@@ -58,7 +58,7 @@ header.cons-header {
    caminho (assets/img/quem-atende.jpg) — até lá mostra o "foto em breve" */
 .cons-who { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 16px; }
 .cons-who .cons-sign { margin-top: 0; text-align: left; max-width: 300px; }
-.ph-slot { position: relative; overflow: hidden; background: #E9F1F8; border: 1px dashed rgba(18,121,163,0.4); }
+.ph-slot { position: relative; overflow: hidden; background: #1A2233; border: 1px dashed rgba(126,162,255,0.4); }
 .ph-slot img { display: none; width: 100%; height: 100%; object-fit: cover; }
 .ph-slot.has-img img { display: block; }
 .ph-slot.has-img { border-style: solid; border-color: var(--border); }
@@ -67,8 +67,8 @@ header.cons-header {
   position: absolute; inset: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 3px; text-align: center;
 }
-.ph-fallback svg { width: 20px; height: 20px; stroke: #7E97AA; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
-.ph-fallback em { font-style: normal; font-size: 8.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #7E97AA; }
+.ph-fallback svg { width: 20px; height: 20px; stroke: #8A94A6; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.ph-fallback em { font-style: normal; font-size: 8.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #8A94A6; }
 .ph-slot--avatar { width: 72px; height: 72px; border-radius: 50%; flex-shrink: 0; }
 /* ≤640px: sub de 5-6 linhas centralizado é ilegível — corpo à esquerda, título centrado */
 @media (max-width: 640px) {
@@ -83,14 +83,14 @@ header.cons-header {
 /* Botão de WhatsApp — verde (ação real de WhatsApp, conforme o design system) */
 .cons-cta-wpp {
   display: flex; align-items: center; justify-content: center; gap: 12px;
-  background: var(--green); color: #fff;
+  background: #25D366; color: #052E1B;
   font-family: 'Sora', sans-serif; font-size: 17px; font-weight: 800;
   border: none; border-radius: 12px; padding: 19px 28px;
   text-decoration: none; width: 100%; cursor: pointer; letter-spacing: 0.3px;
-  box-shadow: 0 8px 22px rgba(14,122,72,0.28);
+  box-shadow: 0 8px 22px rgba(37,211,102,0.25);
   transition: transform 0.15s, box-shadow 0.15s;
 }
-.cons-cta-wpp:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(14,122,72,0.42); }
+.cons-cta-wpp:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(37,211,102,0.4); }
 .cons-cta-wpp svg { width: 24px; height: 24px; flex-shrink: 0; fill: currentColor; }
 
 /* Como funciona — passos numerados (espelha o visual dos .finding) */
@@ -102,7 +102,7 @@ header.cons-header {
 }
 .cons-step-num {
   flex-shrink: 0; width: 30px; height: 30px; border-radius: 50%;
-  background: rgba(91,196,240,0.14); color: var(--blue);
+  background: rgba(77,124,254,0.14); color: var(--blue);
   font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
   display: flex; align-items: center; justify-content: center;
 }
@@ -118,7 +118,7 @@ header.cons-header {
 .cons-footer-tag { font-size: 13.5px !important; font-weight: 500; color: var(--body) !important; max-width: 420px; }
 .cons-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; }
 .cons-footer-links a { font-size: 13px; font-weight: 600; color: var(--body); text-decoration: none; }
-.cons-footer-links a:hover { color: #1279A3; }
+.cons-footer-links a:hover { color: #7EA2FF; }
 
 @media (max-width: 480px) {
   .cons-page { padding: 6px 20px 48px; }

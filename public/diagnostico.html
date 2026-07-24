@@ -27,37 +27,37 @@ body { position: relative; overflow-x: clip; } /* clip: nada estoura a viewport 
   position: fixed; inset: 0;
   z-index: 0; pointer-events: none;
   background:
-    radial-gradient(900px 520px at 88% -12%, rgba(91,196,240,0.14), transparent 62%),
-    radial-gradient(720px 440px at -12% 112%, rgba(12,111,152,0.09), transparent 62%);
+    radial-gradient(900px 520px at 88% -12%, rgba(77,124,254,0.12), transparent 62%),
+    radial-gradient(720px 440px at -12% 112%, rgba(77,124,254,0.06), transparent 62%);
 }
 
 /* ── Ícones das opções: SVG no registro da marca (sem emoji) ── */
-.opt-icon { color: #1279A3; }
+.opt-icon { color: #7EA2FF; }
 .opt-icon svg {
   width: 18px; height: 18px; display: block;
   fill: none; stroke: currentColor; stroke-width: 2;
   stroke-linecap: round; stroke-linejoin: round;
 }
-.opt-icon--ok   { color: #1E8E63; background: rgba(30,142,99,0.09);  border-color: rgba(30,142,99,0.25); }
-.opt-icon--warn { color: #B26F0E; background: rgba(224,138,30,0.10); border-color: rgba(224,138,30,0.28); }
-.opt-icon--neg  { color: #B44A4A; background: rgba(180,74,74,0.08);  border-color: rgba(180,74,74,0.25); }
+.opt-icon--ok   { color: #2BD576; background: rgba(43,213,118,0.10); border-color: rgba(43,213,118,0.28); }
+.opt-icon--warn { color: #F5A623; background: rgba(245,166,35,0.10); border-color: rgba(245,166,35,0.28); }
+.opt-icon--neg  { color: #F4574D; background: rgba(244,87,77,0.10);  border-color: rgba(244,87,77,0.28); }
 .opt.selected .opt-icon { color: #fff; }
 
 /* ── Botão desabilitado legível: lê como "aguardando", não como quebrado ── */
 .btn-continue:not(.enabled), .btn-next:not(.enabled) {
-  opacity: 1; background: #DEE8F0; color: #64798A; box-shadow: none;
+  opacity: 1; background: #1A2233; color: #5A6478; box-shadow: none;
 }
 
 /* ── Aviso de retomada de sessão ── */
 .resume-note {
   display: flex; align-items: center; justify-content: space-between; gap: 12px;
-  background: rgba(91,196,240,0.10); border: 1px solid rgba(91,196,240,0.35);
+  background: rgba(77,124,254,0.10); border: 1px solid rgba(77,124,254,0.35);
   border-radius: 10px; padding: 10px 14px; margin-bottom: 14px;
-  font-size: 13px; font-weight: 500; color: var(--body, #3D5568);
+  font-size: 13px; font-weight: 500; color: var(--body, #A7B1C2);
 }
 .resume-note button {
   background: none; border: none; cursor: pointer; padding: 0;
-  font-family: inherit; font-size: 13px; font-weight: 700; color: #1279A3;
+  font-family: inherit; font-size: 13px; font-weight: 700; color: #7EA2FF;
   text-decoration: underline; white-space: nowrap;
 }
 
@@ -106,7 +106,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <main>
 
   <noscript>
-    <div style="max-width:640px;margin:40px auto;padding:0 20px;text-align:center;color:#2F4356;font-family:'Plus Jakarta Sans',sans-serif;">
+    <div style="max-width:640px;margin:40px auto;padding:0 20px;text-align:center;color:#A7B1C2;font-family:'Plus Jakarta Sans',sans-serif;">
       Este diagnóstico funciona com JavaScript. Ative o JavaScript no seu navegador para continuar.
     </div>
   </noscript>
@@ -119,22 +119,22 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       <svg viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;display:block;">
         <defs>
           <linearGradient id="mGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#5BC4F0" stop-opacity="0.55"/>
-            <stop offset="100%" stop-color="#5BC4F0" stop-opacity="0"/>
+            <stop offset="0%" stop-color="#618BFF" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#618BFF" stop-opacity="0"/>
           </linearGradient>
         </defs>
-        <line x1="0" y1="210" x2="640" y2="210" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
-        <line x1="0" y1="160" x2="640" y2="160" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
-        <line x1="0" y1="110" x2="640" y2="110" stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
-        <line x1="0" y1="60"  x2="640" y2="60"  stroke="#5BC4F0" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="210" x2="640" y2="210" stroke="#618BFF" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="160" x2="640" y2="160" stroke="#618BFF" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="110" x2="640" y2="110" stroke="#618BFF" stroke-width="0.8" stroke-dasharray="3 9"/>
+        <line x1="0" y1="60"  x2="640" y2="60"  stroke="#618BFF" stroke-width="0.8" stroke-dasharray="3 9"/>
         <path d="M0 215 C50 205 90 190 130 195 C170 200 195 178 235 170 C275 162 305 182 345 173 C385 164 415 143 455 136 C495 129 525 148 565 139 C605 130 635 108 640 100 L640 250 L0 250 Z" fill="url(#mGrad)"/>
-        <path d="M0 215 C50 205 90 190 130 195 C170 200 195 178 235 170 C275 162 305 182 345 173 C385 164 415 143 455 136 C495 129 525 148 565 139 C605 130 635 108 640 100" fill="none" stroke="#5BC4F0" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="130" cy="195" r="3.5" fill="#5BC4F0"/>
-        <circle cx="235" cy="170" r="3.5" fill="#5BC4F0"/>
-        <circle cx="345" cy="173" r="3"   fill="#5BC4F0" opacity="0.7"/>
-        <circle cx="455" cy="136" r="4"   fill="#5BC4F0"/>
-        <circle cx="565" cy="139" r="3.5" fill="#5BC4F0" opacity="0.7"/>
-        <circle cx="640" cy="100" r="4.5" fill="#5BC4F0"/>
+        <path d="M0 215 C50 205 90 190 130 195 C170 200 195 178 235 170 C275 162 305 182 345 173 C385 164 415 143 455 136 C495 129 525 148 565 139 C605 130 635 108 640 100" fill="none" stroke="#618BFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="130" cy="195" r="3.5" fill="#618BFF"/>
+        <circle cx="235" cy="170" r="3.5" fill="#618BFF"/>
+        <circle cx="345" cy="173" r="3"   fill="#618BFF" opacity="0.7"/>
+        <circle cx="455" cy="136" r="4"   fill="#618BFF"/>
+        <circle cx="565" cy="139" r="3.5" fill="#618BFF" opacity="0.7"/>
+        <circle cx="640" cy="100" r="4.5" fill="#618BFF"/>
       </svg>
     </div>
 

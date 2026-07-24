@@ -79,9 +79,9 @@ function showResult() {
 // ── Círculo de score (donut SVG) — cor interpolada + preenchimento animado ──
 function scoreColor(score) {
   // Vermelho → âmbar → verde por interpolação RGB: progressão contínua, bonita e
-  // visível sobre o card branco (evita o amarelo "barrento"/olive do HSL puro a 42%).
+  // visível sobre o card dark (paleta da landing: loss/warn/gain).
   const v = Math.max(0, Math.min(100, score)) / 100;
-  const red = [211, 58, 44], amber = [224, 138, 30], green = [27, 158, 75];
+  const red = [244, 87, 77], amber = [245, 166, 35], green = [43, 213, 118];
   let c1, c2, t;
   if (v < 0.5) { c1 = red;   c2 = amber; t = v / 0.5; }
   else         { c1 = amber; c2 = green; t = (v - 0.5) / 0.5; }

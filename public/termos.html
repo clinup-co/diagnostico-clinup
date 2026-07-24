@@ -19,14 +19,14 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/main.css">
 <style>
-/* ── Página de termos: mesma pele slim da /privacidade ── */
-body { background: #F2F7FB; }
+/* ── Página de termos: mesma pele slim da /privacidade (dark) ── */
+body { background: var(--bg); }
 
 header.priv-header {
   width: 100%; max-width: none; margin: 0;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   padding: 12px 24px;
-  background: rgba(242,247,251,0.92);
+  background: rgba(10,14,26,0.92);
   border-bottom: 1px solid var(--border);
   text-align: left;
 }
@@ -36,7 +36,7 @@ header.priv-header {
   font-family: 'Plus Jakarta Sans', sans-serif; font-size: 13.5px; font-weight: 600;
   color: var(--body); text-decoration: none; white-space: nowrap;
 }
-.priv-header-back:hover { color: #1279A3; }
+.priv-header-back:hover { color: #7EA2FF; }
 
 .priv-page {
   width: 100%; max-width: 680px; margin: 0 auto;
@@ -58,7 +58,7 @@ header.priv-header {
 .priv-page ul { margin: 0 0 12px; padding-left: 22px; }
 .priv-page li { margin-bottom: 6px; }
 .priv-page strong { color: var(--white); }
-.priv-page a { color: #1279A3; font-weight: 600; }
+.priv-page a { color: #7EA2FF; font-weight: 600; }
 .priv-lead {
   background: var(--card); border: 1px solid var(--border); border-radius: 14px;
   padding: 18px 20px; margin-bottom: 8px; box-shadow: var(--shadow-sm);
@@ -73,7 +73,7 @@ header.priv-header {
 .priv-footer p { font-size: 12px; color: var(--sub); }
 .priv-footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px 22px; }
 .priv-footer-links a { font-size: 13px; font-weight: 600; color: var(--body); text-decoration: none; }
-.priv-footer-links a:hover { color: #1279A3; }
+.priv-footer-links a:hover { color: #7EA2FF; }
 </style>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
 <script defer src="/_vercel/insights/script.js"></script>
