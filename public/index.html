@@ -162,6 +162,55 @@ h2{
 .transform-mock{max-width:1080px;margin:56px auto 0;padding:0 24px}
 .transform-cta{text-align:center;margin-top:48px}
 
+/* ── Calculadora (simulação) ─────────────────────────────────────── */
+.calc-card{
+  background:linear-gradient(180deg,#101728,#0C1220);
+  border:1px solid var(--line);border-radius:22px;padding:52px 40px;text-align:center;
+}
+.calc-card .lead{max-width:540px;margin:14px auto 0}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:580px;margin:30px auto 0;text-align:left}
+.calc-grid label{display:grid;gap:8px;font-size:13.5px;font-weight:600;color:var(--ink-2)}
+.calc-grid input{
+  background:var(--raised);border:1px solid var(--line);border-radius:10px;
+  padding:13px 14px;color:var(--ink);font-family:'Inter',sans-serif;font-size:16px;
+  font-variant-numeric:tabular-nums;width:100%;outline:none;transition:border-color .18s ease;
+}
+.calc-grid input:focus{border-color:var(--action)}
+.calc-result{margin-top:30px}
+.calc-label{font-size:14px;color:var(--ink-2)}
+.calc-value{
+  font-family:'Inter',sans-serif;font-weight:650;font-size:clamp(34px,5vw,48px);
+  letter-spacing:-.02em;color:var(--loss);text-shadow:0 0 32px rgba(244,87,77,.35);margin-top:8px;
+}
+.calc-value span{font-size:.45em;color:var(--ink-2);font-weight:500}
+.calc-note{max-width:540px;margin:14px auto 0;font-size:12.5px;color:var(--ink-3);line-height:1.6}
+.calc-card .btn{margin-top:28px}
+@media (max-width:560px){
+  .calc-grid{grid-template-columns:1fr}
+  .calc-card{padding:38px 20px}
+}
+
+/* ── Objeções ────────────────────────────────────────────────────── */
+.obj-head{max-width:680px;margin:0 auto 44px;text-align:center}
+.objs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.obj{
+  background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 24px;
+  transition:border-color .3s ease, transform .3s cubic-bezier(.16,1,.3,1);
+}
+.obj:hover{border-color:rgba(77,124,254,.5);transform:translateY(-4px)}
+.obj-q{display:flex;gap:10px;align-items:flex-start;font-size:15px;font-weight:600;color:var(--ink);line-height:1.5}
+.obj-a{
+  display:flex;gap:10px;align-items:flex-start;margin-top:14px;padding-top:14px;
+  border-top:1px solid var(--line);font-size:14px;color:var(--ink-2);line-height:1.65;
+}
+.obj-ico{width:22px;height:22px;border-radius:7px;flex-shrink:0;display:grid;place-items:center;margin-top:1px}
+.obj-ico svg{width:12px;height:12px;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.obj-ico--x{background:rgba(244,87,77,.12)}
+.obj-ico--x svg{stroke:var(--loss)}
+.obj-ico--ok{background:rgba(77,124,254,.14)}
+.obj-ico--ok svg{stroke:var(--action-soft)}
+@media (max-width:860px){ .objs{grid-template-columns:1fr} }
+
 /* ── Como funciona ───────────────────────────────────────────────── */
 .steps-head{max-width:680px;margin:0 auto 52px;text-align:center}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -232,7 +281,7 @@ html.js-anim .reveal.is-visible{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){
   html.js-anim .reveal{opacity:1;transform:none;transition:none}
   .btn,.mk-v--glowloss,.mf-sim::before{animation:none}
-  .btn:hover,.mockframe:hover,.mk-card:hover,.step:hover,.brand:hover{transform:none}
+  .btn:hover,.mockframe:hover,.mk-card:hover,.step:hover,.obj:hover,.brand:hover{transform:none}
 }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -480,7 +529,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <div class="wrap">
     <span class="kicker">ClinUp · Diagnóstico de Lucro para clínicas</span>
     <h1>A ClinUp não faz marketing. <span class="hl">Nós recuperamos o lucro</span> que sua clínica está perdendo hoje.</h1>
-    <p class="lead">Faça o diagnóstico gratuito de 2 minutos e veja em qual dos 4 pilares de conversão — resposta no WhatsApp, agendamento, faltas e retorno de pacientes — sua clínica perde dinheiro. Sem dancinha, sem posts inúteis: dados.</p>
+    <p class="lead">Faça o diagnóstico gratuito de 2 minutos e veja em qual dos 4 pilares de conversão sua clínica perde dinheiro. Deixe de depender de glosas e repasses de convênio: recupere a receita das consultas particulares que hoje escorre pelo WhatsApp e pela agenda. Sem dancinha, sem posts inúteis: dados.</p>
     <div class="hero-cta">
       <a class="btn cta-diag" data-origem="hero" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
       <p class="cta-note">Gratuito · 2 minutos · resultado na hora</p>
@@ -786,12 +835,37 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   </div>
 </section>
 
+<!-- ══════════ CALCULADORA (SIMULAÇÃO) ══════════ -->
+<section class="sec" id="calculadora" style="padding-top:0">
+  <div class="wrap wrap--narrow">
+    <div class="calc-card reveal">
+      <span class="kicker">Calculadora · Simulação</span>
+      <h2>Quanto dinheiro está em cima da mesa?</h2>
+      <p class="lead">Dois números da sua rotina e uma estimativa na hora — o valor real sai do diagnóstico.</p>
+      <div class="calc-grid">
+        <label for="calcTicket">Ticket médio da consulta (R$)
+          <input id="calcTicket" type="number" inputmode="numeric" min="0" max="99999" value="420">
+        </label>
+        <label for="calcSemana">Consultas marcadas por semana
+          <input id="calcSemana" type="number" inputmode="numeric" min="0" max="9999" value="40">
+        </label>
+      </div>
+      <div class="calc-result" aria-live="polite">
+        <div class="calc-label">Sua clínica pode estar deixando de faturar até</div>
+        <div class="calc-value num" id="calcOut">R$ 12.096<span>/mês</span></div>
+        <div class="calc-note">Simulação: premissa ilustrativa de 18% da receita potencial do mês perdida em vácuos de WhatsApp e faltas não repostas — não é medição da sua clínica. O número real sai do diagnóstico.</div>
+      </div>
+      <a class="btn cta-diag" data-origem="calculadora" href="/diagnostico">Recuperar esse lucro agora&nbsp;→</a>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════ A TRANSFORMAÇÃO ══════════ -->
 <section class="sec transform" id="transformacao">
   <div class="wrap transform-head">
     <span class="kicker">A virada</span>
     <h2>O que muda quando a ClinUp entra em campo? O lucro volta a ser a sua prioridade.</h2>
-    <p class="lead">Projeção ilustrativa de uma clínica com ticket médio de R$ 420, construída sobre os pilares acima — os números da sua clínica saem do seu diagnóstico.</p>
+    <p class="lead">É a receita das consultas particulares voltando pra agenda — sem depender de repasse de convênio. Projeção ilustrativa de uma clínica com ticket médio de R$ 420, construída sobre os pilares acima; os números da sua clínica saem do seu diagnóstico.</p>
   </div>
 
   <figure class="transform-mock reveal" aria-label="Projeção ilustrativa de crescimento com a ClinUp, dados simulados">
@@ -928,8 +1002,50 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   </div>
 </section>
 
+<!-- ══════════ OBJEÇÕES ══════════ -->
+<section class="sec" id="objecoes">
+  <div class="wrap">
+    <div class="obj-head reveal">
+      <span class="kicker">Sem rodeios</span>
+      <h2>As três objeções que mais escutamos</h2>
+    </div>
+    <div class="objs reveal">
+      <div class="obj">
+        <div class="obj-q">
+          <span class="obj-ico obj-ico--x"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>
+          <span>"Não tenho tempo pra fazer dancinha no Instagram."</span>
+        </div>
+        <div class="obj-a">
+          <span class="obj-ico obj-ico--ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span>Nem precisa. A ClinUp não faz marketing de conteúdo: atua direto no WhatsApp e na agenda, fechando pacientes que já chamaram a clínica.</span>
+        </div>
+      </div>
+      <div class="obj">
+        <div class="obj-q">
+          <span class="obj-ico obj-ico--x"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>
+          <span>"Minha secretária já confirma as consultas."</span>
+        </div>
+        <div class="obj-a">
+          <span class="obj-ico obj-ico--ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span>Humanos esquecem, atrasam e não insistem. A confirmação inteligente cobra resposta no tempo certo e reocupa automaticamente a vaga de quem desmarcou.</span>
+        </div>
+      </div>
+      <div class="obj">
+        <div class="obj-q">
+          <span class="obj-ico obj-ico--x"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>
+          <span>"Já queimei dinheiro com agência de marketing."</span>
+        </div>
+        <div class="obj-a">
+          <span class="obj-ico obj-ico--ok"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></span>
+          <span>Agência cobra por curtida. A ClinUp mede retenção e recuperação de faturamento em reais, num relatório que chega todo mês.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ══════════ COMO FUNCIONA ══════════ -->
-<section class="sec" id="como-funciona">
+<section class="sec" id="como-funciona" style="padding-top:0">
   <div class="wrap">
     <div class="steps-head reveal">
       <span class="kicker">Como funciona</span>
@@ -1019,6 +1135,23 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       track('lp_cta_click', { origem: a.getAttribute('data-origem') || 'desconhecida' });
     });
   });
+
+  // Calculadora (simulação): perda estimada = consultas/semana × 4 × ticket × 18%
+  var calcTicket = document.getElementById('calcTicket');
+  var calcSemana = document.getElementById('calcSemana');
+  var calcOut = document.getElementById('calcOut');
+  var recalc = function () {
+    if (!calcTicket || !calcSemana || !calcOut) return;
+    var t = Math.max(0, parseFloat(calcTicket.value) || 0);
+    var c = Math.max(0, parseFloat(calcSemana.value) || 0);
+    var v = Math.round(c * 4 * t * 0.18);
+    calcOut.innerHTML = 'R$ ' + v.toLocaleString('pt-BR') + '<span>/mês</span>';
+  };
+  if (calcTicket && calcSemana) {
+    calcTicket.addEventListener('input', recalc);
+    calcSemana.addEventListener('input', recalc);
+    recalc();
+  }
 
   // Sticky CTA mobile + borda da nav ao rolar
   var sticky = document.getElementById('lpSticky');
