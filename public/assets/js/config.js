@@ -18,29 +18,31 @@ const quizLeadData = {
   source:          'quiz_clinup'
 };
 
-// 9 perguntas: 3 numéricas (T/C/K) + 6 de operação. Cada uma alimenta o motor.
+// 10 perguntas: 3 numéricas (T/C/K) + 7 de operação. Cada uma alimenta o motor.
+// Ordem da spec §3: contatos, convênio, resposta, cobertura, falta, confirmação, reposição.
 const PERGUNTA_LABELS = {
   1: 'ticket_medio',
   2: 'consultas_semana',
   3: 'capacidade_semana',
   4: 'volume_contatos',
   5: 'dependencia_convenio',
-  6: 'taxa_falta',
-  7: 'tempo_resposta',
-  8: 'cobertura_fora_horario',
-  9: 'reposicao_vaga'
+  6: 'tempo_resposta',
+  7: 'cobertura_fora_horario',
+  8: 'taxa_falta',
+  9: 'protocolo_confirmacao',
+  10: 'reposicao_vaga'
 };
 
 // Mapa pergunta → campo do motor de cálculo (motorCalculoVazamento.js)
 const MOTOR_FIELD = {
   1: 'T', 2: 'C', 3: 'K',
-  4: 'contatos', 5: 'convenio', 6: 'ausencia',
-  7: 'resposta', 8: 'cobertura', 9: 'reposicao'
+  4: 'contatos', 5: 'convenio', 6: 'resposta',
+  7: 'cobertura', 8: 'ausencia', 9: 'confirmacao', 10: 'reposicao'
 };
 const NUMERIC_Q = { 1: true, 2: true, 3: true };
-const TOTAL_PERGUNTAS = 9;
+const TOTAL_PERGUNTAS = 10;
 
-const STATE_VERSION = '5';
+const STATE_VERSION = '6';
 
 const answers = {};
 
