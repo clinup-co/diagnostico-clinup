@@ -29,14 +29,17 @@
    Verde (#2BD576) só como semântica de dado dentro dos mocks.
    ════════════════════════════════════════════════════════════════════ */
 :root{
-  --bg:#0A0E1A; --bg-deep:#050811; --card:#111827; --raised:#1A2233; --line:#232B3D;
+  --bg:#0A0E1A; --bg-alt:#0D121F; --bg-deep:#050811; --card:#111827; --raised:#1A2233; --line:#232B3D;
   --ink:#E7EAF0; --ink-2:#8A94A6; --ink-3:#5A6478;
   --loss:#F4574D; --warn:#F5A623; --gain:#2BD576; --action:#4D7CFE; --action-soft:#7EA2FF;
   /* tokens de movimento (Frente 1) — só transform/opacity animam */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-tap: cubic-bezier(0.34, 1.4, 0.64, 1);
   --t-fast: 140ms; --t-base: 480ms; --t-slow: 700ms;
-  --rise: 20px;
+  --rise: 24px;
+  --stagger: 80ms;
+  /* fotos editoriais: um valor só, usado também no reduced-motion */
+  --photo-op: .34;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -107,7 +110,13 @@ a{color:inherit}
 
 /* ── Seções / tipografia ─────────────────────────────────────────── */
 section{scroll-margin-top:84px}
-.sec{padding:112px 0;position:relative}
+.sec{padding:112px 0;position:relative;--sec-bg:var(--bg);--sec-scrim:rgba(10,14,26,.55)}
+/* ── Ritmo de capítulos: bandas de fundo alternadas ──────────────────
+   Seções com padding-top:0 leem como um bloco contínuo, então a banda
+   é por CAPÍTULO (pilares / objeções+passos), nunca por seção solta. */
+.band-alt{--sec-bg:var(--bg-alt);--sec-scrim:rgba(13,18,31,.55);background:var(--bg-alt)}
+.band-top{border-top:1px solid var(--line)}
+.band-bot{border-bottom:1px solid var(--line)}
 .kicker{
   display:block;font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
   color:var(--action-soft);margin-bottom:16px;
@@ -164,6 +173,7 @@ h2{
 
 /* ── Transformação ───────────────────────────────────────────────── */
 .transform{
+  --sec-bg:var(--bg-deep);--sec-scrim:rgba(5,8,17,.55);
   background:radial-gradient(700px 380px at 50% 0%, rgba(43,213,118,.09), transparent 70%), var(--bg-deep);
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
 }
@@ -304,18 +314,22 @@ h2{
 .photo-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .photo-bg img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  filter:saturate(.65);opacity:.16;
+  filter:saturate(.7);opacity:var(--photo-op);
   transition:opacity var(--t-slow) ease;
 }
 html.js-anim .photo-bg:not(.is-visible) img{opacity:0}
+/* o scrim herda a cor da banda da seção (--sec-bg / --sec-scrim) pra que
+   o fade das bordas case com o fundo, seja ele --bg, --bg-alt ou --bg-deep */
 .photo-bg::after{
   content:"";position:absolute;inset:0;
-  background:linear-gradient(180deg, var(--bg) 0%, rgba(10,14,26,.72) 24%, rgba(10,14,26,.58) 58%, var(--bg) 100%);
+  background:linear-gradient(180deg,
+    var(--sec-bg) 0%, var(--sec-scrim) 26%, var(--sec-scrim) 74%, var(--sec-bg) 100%);
 }
 .transform .photo-bg::after{
   background:
     radial-gradient(60% 40% at 50% 0%, rgba(43,213,118,.09), transparent 70%),
-    linear-gradient(180deg, var(--bg-deep) 0%, rgba(5,8,17,.72) 24%, rgba(5,8,17,.58) 58%, var(--bg-deep) 100%);
+    linear-gradient(180deg,
+      var(--sec-bg) 0%, var(--sec-scrim) 26%, var(--sec-scrim) 74%, var(--sec-bg) 100%);
 }
 
 /* ── Fio da Receita (SVG na margem, só telas largas) ─────────────── */
@@ -326,7 +340,8 @@ html.js-anim .photo-bg:not(.is-visible) img{opacity:0}
 @media (min-width:1240px){ .fio{display:block} }
 .fio svg{width:100%;height:100%;display:block}
 .fio-line{stroke:var(--action);stroke-opacity:.3;stroke-width:1.5;fill:none}
-.fio--gain .fio-line{stroke:var(--gain);stroke-opacity:.85}
+/* depois da Virada o fio engrossa levemente e segue sólido até o fim */
+.fio--gain .fio-line{stroke:var(--gain);stroke-opacity:.85;stroke-width:2}
 html.js-anim .fio-line{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 900ms var(--ease-out)}
 html.js-anim .fio.is-visible .fio-line{stroke-dashoffset:0}
 .fio-drip{
@@ -366,12 +381,13 @@ html.js-anim .mk-kpi:not(.landed) .mk-v--glowgain{text-shadow:none;animation:non
 html.js-anim .reveal{opacity:0;transform:translateY(var(--rise));transition:opacity var(--t-base) var(--ease-out),transform var(--t-base) var(--ease-out)}
 html.js-anim .reveal.is-visible{opacity:1;transform:none}
 @media (prefers-reduced-motion: reduce){
-  html.js-anim .reveal{opacity:1;transform:none;transition:none}
-  html.js-anim .photo-bg:not(.is-visible) img{opacity:.16;transition:none}
+  html.js-anim .reveal{opacity:1;transform:none;transition:none;transition-delay:0s!important}
+  html.js-anim .photo-bg:not(.is-visible) img{opacity:var(--photo-op);transition:none}
   html.js-anim .fio-line{stroke-dashoffset:0;transition:none}
   html.js-anim .fio-drip,html.js-anim .fio-node{opacity:.7;transition:none}
   html.js-anim .mk-kpi .mk-delta{opacity:1;transform:none;transition:none}
-  .btn::after,.mk-v--glowloss,.mf-sim::before{animation:none}
+  .btn::after,.mk-v--glowloss{animation:none}
+  .mf-sim::after{animation:none;opacity:0} /* sem pulso o anel não fica parado em volta do ponto */
   .sticky-cta{transition:none}
   .btn:hover,.mockframe:hover,.mk-card:hover,.step:hover,.obj:hover,.brand:hover{transform:none}
 }
@@ -402,16 +418,24 @@ html.js-anim .reveal.is-visible{opacity:1;transform:none}
   border:1px solid var(--line);border-radius:999px;padding:4px 10px;white-space:nowrap;
   background:rgba(255,255,255,.03);
 }
-/* luz de status azul (verde é só WhatsApp) — sensação de software vivo */
+/* luz de status azul (verde é só WhatsApp) — sensação de software vivo.
+   O anel é um ::after que escala: 4 selos pulsam ao mesmo tempo, então
+   animar box-shadow aqui custava paint em loop infinito. */
+.mf-sim{position:relative}
 .mf-sim::before{
   content:"";width:6px;height:6px;border-radius:50%;flex-shrink:0;
   background:var(--action-soft);
+}
+.mf-sim::after{
+  content:"";position:absolute;left:10px;top:50%;width:6px;height:6px;margin-top:-3px;
+  border-radius:50%;border:1.5px solid rgba(77,124,254,.45);
+  pointer-events:none;transform-origin:center;
   animation:simPing 2.4s ease-out infinite;
 }
 @keyframes simPing{
-  0%{box-shadow:0 0 0 0 rgba(77,124,254,.45)}
-  70%{box-shadow:0 0 0 6px rgba(77,124,254,0)}
-  100%{box-shadow:0 0 0 0 rgba(77,124,254,0)}
+  0%{transform:scale(1);opacity:.9}
+  70%{transform:scale(3);opacity:0}
+  100%{transform:scale(3);opacity:0}
 }
 .mf-body{padding:22px}
 @media (max-width:640px){
@@ -422,7 +446,12 @@ html.js-anim .reveal.is-visible{opacity:1;transform:none}
 /* ════════════════════════════════════════════════════════════════════
    Componentes dos mockups (.mk — fonte Inter, fidelidade aos originais)
    ════════════════════════════════════════════════════════════════════ */
-.mk{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:var(--ink)}
+.mk{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;color:var(--ink);
+  /* tabular-nums na raiz: nenhum counter treme enquanto conta, mesmo os
+     que porventura esqueçam a classe .num */
+  font-variant-numeric:tabular-nums;
+}
 .num{font-variant-numeric:tabular-nums}
 .mk-card{
   background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;
@@ -620,11 +649,11 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
   <div class="fio" style="top:58%" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
-  <div class="wrap">
-    <span class="kicker">ClinUp · Diagnóstico de Lucro para clínicas</span>
-    <h1>A ClinUp não faz marketing. <span class="hl">Nós recuperamos o lucro</span> que sua clínica está perdendo hoje.</h1>
-    <p class="lead">Faça o diagnóstico gratuito de 2 minutos e veja em qual dos 4 pilares de conversão sua clínica perde dinheiro. Deixe de depender de glosas e repasses de convênio: recupere a receita das consultas particulares que hoje escorre pelo WhatsApp e pela agenda. Sem dancinha, sem posts inúteis: dados.</p>
-    <div class="hero-cta">
+  <div class="wrap" data-stagger data-stagger-now>
+    <span class="kicker reveal">ClinUp · Diagnóstico de Lucro para clínicas</span>
+    <h1 class="reveal">A ClinUp não faz marketing. <span class="hl">Nós recuperamos o lucro</span> que sua clínica está perdendo hoje.</h1>
+    <p class="lead reveal">Faça o diagnóstico gratuito de 2 minutos e veja em qual dos 4 pilares de conversão sua clínica perde dinheiro. Deixe de depender de glosas e repasses de convênio: recupere a receita das consultas particulares que hoje escorre pelo WhatsApp e pela agenda. Sem dancinha, sem posts inúteis: dados.</p>
+    <div class="hero-cta reveal">
       <a class="btn cta-diag" data-origem="hero" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
       <p class="cta-note">Gratuito · 2 minutos · resultado na hora</p>
     </div>
@@ -755,7 +784,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ PILAR 1 · WHATSAPP ══════════ -->
-<section class="sec has-photo" id="pilar-whatsapp">
+<section class="sec has-photo band-alt band-top" id="pilar-whatsapp">
   <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_whatsapp_noite.jpg" alt="" loading="lazy"></div>
   <div class="fio" aria-hidden="true">
     <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
@@ -764,16 +793,16 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <i class="fio-drip" style="top:76%"></i>
   </div>
   <div class="wrap zig">
-    <div class="zig-copy reveal">
-      <span class="kicker">Pilar 1 · Atendimento no WhatsApp</span>
-      <h2>O Cemitério de Leads no seu WhatsApp</h2>
-      <p class="lead">Paciente que chama e não recebe resposta em minutos esfria — e some. Enquanto isso, o valor da consulta que ele pagaria sai da sua receita sem deixar rastro. O diagnóstico mostra onde o atendimento deixa dinheiro parado no chat.</p>
-      <ul class="checks">
+    <div class="zig-copy" data-stagger>
+      <span class="kicker reveal">Pilar 1 · Atendimento no WhatsApp</span>
+      <h2 class="reveal">O Cemitério de Leads no seu WhatsApp</h2>
+      <p class="lead reveal">Paciente que chama e não recebe resposta em minutos esfria — e some. Enquanto isso, o valor da consulta que ele pagaria sai da sua receita sem deixar rastro. O diagnóstico mostra onde o atendimento deixa dinheiro parado no chat.</p>
+      <ul class="checks reveal">
         <li>Os horários em que o WhatsApp da clínica fica no vácuo — almoço, noite e fim de semana</li>
         <li>Quanto cada conversa que esfriou custa, no seu ticket médio</li>
         <li>O que automatizar primeiro pra responder em segundos, sem robotizar o atendimento</li>
       </ul>
-      <a class="linkcta cta-diag" data-origem="whatsapp" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
+      <a class="linkcta cta-diag reveal" data-origem="whatsapp" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
     </div>
 
     <figure class="zig-mock reveal" aria-label="Demonstração ilustrativa da auditoria de atendimento no WhatsApp, com dados simulados">
@@ -858,7 +887,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ PILAR 2 · AGENDA ══════════ -->
-<section class="sec has-photo" id="pilar-agenda" style="padding-top:0">
+<section class="sec has-photo band-alt" id="pilar-agenda" style="padding-top:0">
   <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_cadeira_vazia.jpg" alt="" loading="lazy"></div>
   <div class="fio" aria-hidden="true">
     <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
@@ -867,16 +896,16 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <i class="fio-drip" style="top:72%"></i>
   </div>
   <div class="wrap zig zig--flip">
-    <div class="zig-copy reveal">
-      <span class="kicker">Pilar 2 · Agenda e faltas</span>
-      <h2>O Ralo Financeiro da Cadeira Vazia</h2>
-      <p class="lead">Uma falta não é um imprevisto: é um horário pago que ficou vazio — e horário vago não se revende. Com confirmação inteligente e reocupação automática da agenda, as faltas param de virar prejuízo silencioso todo mês.</p>
-      <ul class="checks">
+    <div class="zig-copy" data-stagger>
+      <span class="kicker reveal">Pilar 2 · Agenda e faltas</span>
+      <h2 class="reveal">O Ralo Financeiro da Cadeira Vazia</h2>
+      <p class="lead reveal">Uma falta não é um imprevisto: é um horário pago que ficou vazio — e horário vago não se revende. Com confirmação inteligente e reocupação automática da agenda, as faltas param de virar prejuízo silencioso todo mês.</p>
+      <ul class="checks reveal">
         <li>Sua taxa de falta comparada à de clínicas com confirmação automática</li>
         <li>Quanto os horários vazios custam por ano, no seu ticket médio</li>
         <li>Confirmação e lista de espera pra reocupar os horários que abrirem</li>
       </ul>
-      <a class="linkcta cta-diag" data-origem="agenda" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
+      <a class="linkcta cta-diag reveal" data-origem="agenda" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
     </div>
 
     <figure class="zig-mock reveal" aria-label="Demonstração ilustrativa da auditoria de faltas e agenda, com dados simulados">
@@ -944,7 +973,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ CALCULADORA (SIMULAÇÃO) ══════════ -->
-<section class="sec" id="calculadora" style="padding-top:0">
+<section class="sec band-alt" id="calculadora" style="padding-top:0">
   <div class="fio" aria-hidden="true">
     <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
     <span class="fio-node" style="top:54%"></span>
@@ -976,10 +1005,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <section class="sec transform has-photo" id="transformacao">
   <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_virada_medico.jpg" alt="" loading="lazy"></div>
   <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
-  <div class="wrap transform-head">
-    <span class="kicker">A virada</span>
-    <h2>O que muda quando a ClinUp entra em campo? O lucro volta a ser a sua prioridade.</h2>
-    <p class="lead">É a receita das consultas particulares voltando pra agenda — sem depender de repasse de convênio. Projeção ilustrativa de uma clínica com ticket médio de R$ 420, construída sobre os pilares acima; os números da sua clínica saem do seu diagnóstico.</p>
+  <div class="wrap transform-head" data-stagger>
+    <span class="kicker reveal">A virada</span>
+    <h2 class="reveal">O que muda quando a ClinUp entra em campo? O lucro volta a ser a sua prioridade.</h2>
+    <p class="lead reveal">É a receita das consultas particulares voltando pra agenda — sem depender de repasse de convênio. Projeção ilustrativa de uma clínica com ticket médio de R$ 420, construída sobre os pilares acima; os números da sua clínica saem do seu diagnóstico.</p>
   </div>
 
   <figure class="transform-mock reveal" aria-label="Projeção ilustrativa de crescimento com a ClinUp, dados simulados">
@@ -1117,14 +1146,15 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ OBJEÇÕES ══════════ -->
-<section class="sec" id="objecoes">
+<section class="sec band-alt" id="objecoes">
+  <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
-    <div class="obj-head reveal">
-      <span class="kicker">Sem rodeios</span>
-      <h2>As três objeções que mais escutamos</h2>
+    <div class="obj-head" data-stagger>
+      <span class="kicker reveal">Sem rodeios</span>
+      <h2 class="reveal">As três objeções que mais escutamos</h2>
     </div>
-    <div class="objs reveal">
-      <div class="obj">
+    <div class="objs" data-stagger>
+      <div class="obj reveal">
         <div class="obj-q">
           <span class="obj-ico obj-ico--x"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>
           <span>"Não tenho tempo pra fazer dancinha no Instagram."</span>
@@ -1134,7 +1164,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
           <span>Nem precisa. A ClinUp não faz marketing de conteúdo: atua direto no WhatsApp e na agenda, fechando pacientes que já chamaram a clínica.</span>
         </div>
       </div>
-      <div class="obj">
+      <div class="obj reveal">
         <div class="obj-q">
           <span class="obj-ico obj-ico--x"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>
           <span>"Minha secretária já confirma as consultas."</span>
@@ -1144,7 +1174,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
           <span>Humanos esquecem, atrasam e não insistem. A confirmação inteligente cobra resposta no tempo certo e reocupa automaticamente a vaga de quem desmarcou.</span>
         </div>
       </div>
-      <div class="obj">
+      <div class="obj reveal">
         <div class="obj-q">
           <span class="obj-ico obj-ico--x"><svg viewBox="0 0 24 24"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></span>
           <span>"Já queimei dinheiro com agência de marketing."</span>
@@ -1159,14 +1189,15 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </section>
 
 <!-- ══════════ COMO FUNCIONA ══════════ -->
-<section class="sec" id="como-funciona" style="padding-top:0">
+<section class="sec band-alt band-bot" id="como-funciona" style="padding-top:0">
+  <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
-    <div class="steps-head reveal">
-      <span class="kicker">Como funciona</span>
-      <h2>Do diagnóstico ao plano de ação, em 3 passos</h2>
+    <div class="steps-head" data-stagger>
+      <span class="kicker reveal">Como funciona</span>
+      <h2 class="reveal">Do diagnóstico ao plano de ação, em 3 passos</h2>
     </div>
-    <div class="steps reveal">
-      <div class="step">
+    <div class="steps" data-stagger>
+      <div class="step reveal">
         <div class="step-top">
           <span class="step-n num">01</span>
           <span class="step-ico"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-9 8.35 8.5 8.5 0 0 1-3.4-.7L3 21l1.85-5.6a8.38 8.38 0 0 1-.85-3.9 8.5 8.5 0 0 1 8.5-8.5 8.38 8.38 0 0 1 8.5 8.5z"/></svg></span>
@@ -1174,7 +1205,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <h3>Responder</h3>
         <p>5 perguntas diretas sobre como sua clínica atende hoje. Dois minutos, sem reunião e sem cadastro de cartão.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="step-top">
           <span class="step-n num">02</span>
           <span class="step-ico"><svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg></span>
@@ -1182,7 +1213,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <h3>Analisar</h3>
         <p>Suas respostas viram uma leitura dos 4 pilares de conversão: o que está sólido e por onde o lucro está vazando.</p>
       </div>
-      <div class="step">
+      <div class="step reveal">
         <div class="step-top">
           <span class="step-n num">03</span>
           <span class="step-ico"><svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><polyline points="3 5.5 4 6.5 6 4.5"/><polyline points="3 11.5 4 12.5 6 10.5"/><polyline points="3 17.5 4 18.5 6 16.5"/></svg></span>
@@ -1334,17 +1365,61 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
   // Reveal no scroll (uma vez por elemento) + failsafe: nada fica invisível.
   // Fotos editoriais (.photo-bg) e o Fio da Receita (.fio) entram no mesmo IO.
-  var els = document.querySelectorAll('.reveal, .photo-bg, .fio');
+  //
+  // Cascata: um container com [data-stagger] NÃO anima a si próprio — ele
+  // solta os filhos .reveal em sequência de 80ms, pra o conteúdo "pousar"
+  // headline → subheadline → mock em vez de subir tudo em bloco.
+  // fonte única do passo da cascata: o token --stagger do :root
+  var STAGGER = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--stagger'), 10) || 80;
+  var revealKids = function (group) {
+    var kids = group.querySelectorAll(':scope > .reveal');
+    if (!kids.length) { group.classList.add('is-visible'); return; }
+    for (var i = 0; i < kids.length; i++) {
+      kids[i].style.transitionDelay = (i * STAGGER) + 'ms';
+      kids[i].classList.add('is-visible');
+    }
+  };
+  var showNow = function (el) {
+    if (el.hasAttribute('data-stagger')) revealKids(el);
+    else el.classList.add('is-visible');
+  };
+
+  var groups = document.querySelectorAll('[data-stagger]');
+  // filhos de um grupo não são observados individualmente — quem os solta
+  // é o grupo, senão cada um dispararia sozinho e a cascata some
+  var els = [].filter.call(
+    document.querySelectorAll('.reveal, .photo-bg, .fio'),
+    function (el) { return !el.parentElement || !el.parentElement.closest('[data-stagger]'); }
+  );
+  var watched = [].concat([].slice.call(els), [].slice.call(groups));
+
   if (reduce || !('IntersectionObserver' in window) || !document.documentElement.classList.contains('js-anim')) {
-    els.forEach(function (el) { el.classList.add('is-visible'); });
+    // fallback: tudo visível de uma vez, sem delay nenhum
+    document.querySelectorAll('.reveal, .photo-bg, .fio').forEach(function (el) {
+      el.style.transitionDelay = '';
+      el.classList.add('is-visible');
+    });
   } else {
     var io = new IntersectionObserver(function (entries, obs) {
       entries.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add('is-visible'); obs.unobserve(e.target); }
+        if (e.isIntersecting) { showNow(e.target); obs.unobserve(e.target); }
       });
     }, { threshold: 0.05, rootMargin: '0px 0px 18% 0px' });
-    els.forEach(function (el) { io.observe(el); });
-    setTimeout(function () { els.forEach(function (el) { el.classList.add('is-visible'); }); }, 1400);
+    watched.forEach(function (el) { io.observe(el); });
+
+    // O hero está acima da dobra: cascateia no load, sem depender do IO.
+    document.querySelectorAll('[data-stagger][data-stagger-now]').forEach(function (g) {
+      io.unobserve(g); revealKids(g);
+    });
+
+    // Failsafe: se o IO falhar, nada pode ficar invisível — mas só liberamos
+    // o que já está na dobra. Liberar a página inteira (como antes) matava a
+    // narrativa: o visitante rolava e encontrava tudo já pousado.
+    setTimeout(function () {
+      watched.forEach(function (el) {
+        if (el.getBoundingClientRect().top < window.innerHeight * 1.15) showNow(el);
+      });
+    }, 1400);
   }
 
   // ── Counter-up "signature" (KPIs dos mocks): easeOutExpo 1000ms.
