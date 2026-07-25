@@ -18,31 +18,30 @@ const quizLeadData = {
   source:          'quiz_clinup'
 };
 
-// 10 perguntas: 3 numéricas (T/C/K) + 7 de operação. Cada uma alimenta o motor.
-// Ordem da spec §3: contatos, convênio, resposta, cobertura, falta, confirmação, reposição.
+// 10 perguntas: as 5 ORIGINAIS (qualitativas — nota+achados) + 5 novas
+// financeiras (Q6..Q10) que alimentam a estimativa em R$ do motor.
 const PERGUNTA_LABELS = {
-  1: 'ticket_medio',
-  2: 'consultas_semana',
-  3: 'capacidade_semana',
-  4: 'volume_contatos',
-  5: 'dependencia_convenio',
-  6: 'tempo_resposta',
-  7: 'cobertura_fora_horario',
-  8: 'taxa_falta',
-  9: 'protocolo_confirmacao',
-  10: 'reposicao_vaga'
+  1: 'presenca_digital',
+  2: 'canal_captacao',
+  3: 'conversao_whatsapp',
+  4: 'urgencia_decisao',
+  5: 'faturamento_mensal',
+  6: 'ticket_medio',
+  7: 'consultas_semana',
+  8: 'capacidade_semana',
+  9: 'tempo_resposta',
+  10: 'taxa_falta'
 };
 
-// Mapa pergunta → campo do motor de cálculo (motorCalculoVazamento.js)
+// Mapa pergunta → campo do motor. Só as 5 financeiras (Q6..Q10) alimentam o
+// cálculo; as 5 originais (Q1..Q5) seguem gerando só a nota/achados.
 const MOTOR_FIELD = {
-  1: 'T', 2: 'C', 3: 'K',
-  4: 'contatos', 5: 'convenio', 6: 'resposta',
-  7: 'cobertura', 8: 'ausencia', 9: 'confirmacao', 10: 'reposicao'
+  6: 'T', 7: 'C', 8: 'K', 9: 'resposta', 10: 'ausencia'
 };
-const NUMERIC_Q = { 1: true, 2: true, 3: true };
+const NUMERIC_Q = { 6: true, 7: true, 8: true };
 const TOTAL_PERGUNTAS = 10;
 
-const STATE_VERSION = '6';
+const STATE_VERSION = '7';
 
 const answers = {};
 

@@ -1,221 +1,6 @@
 // ─────────────────────────────────────────────
-// RESULTADO — Laudo de Integridade Operacional (Diagnóstico 2.0)
-// Motor de cálculo + índices IIO + painel de marcadores + comparativo dumbbell.
-// Portado pro visual dark do site (sem Tailwind); reusa motorCalculoVazamento.js.
+// RESULTADOS — renderização e lógica de scoring
 // ─────────────────────────────────────────────
-
-// Formata inteiro em R$ pt-BR (sem centavos)
-function fmtMoney(n) {
-  try { return new Intl.NumberFormat('pt-BR').format(Math.round(n || 0)); }
-  catch (e) { return String(Math.round(n || 0)); }
-}
-
-var STATUS_LABEL = { critico: 'Gargalo Crítico', atencao: 'Atenção', dentro: 'Dentro da Faixa' };
-var STATUS_PESO  = { critico: 0, atencao: 1, dentro: 2 };
-var STATUS_HEX   = { critico: '#F4574D', atencao: '#F5A623', dentro: '#2BD576' };
-
-function clampN(n, mn, mx) { mn = (mn == null ? 0 : mn); mx = (mx == null ? 100 : mx); return Math.min(Math.max(n, mn), mx); }
-function posicao(valor, escala) {
-  var v = clampN(valor, escala.min, escala.max);
-  if (escala.type === 'log') {
-    var lmin = Math.log(escala.min) / Math.LN10, lmax = Math.log(escala.max) / Math.LN10;
-    return ((Math.log(Math.max(v, escala.min)) / Math.LN10 - lmin) / (lmax - lmin)) * 100;
-  }
-  return ((v - escala.min) / (escala.max - escala.min)) * 100;
-}
-
-// Nível pro /consultoria: pior faixa entre os 3 índices IIO
-function iioLevel(iio) {
-  var f = [iio.atracao.status, iio.conversao.status, iio.blindagem.status];
-  if (f.indexOf('critico') >= 0) return 'critical';
-  if (f.indexOf('atencao') >= 0) return 'moderate';
-  return 'good';
-}
-
-// ── Render dos índices IIO ───────────────────────────────────────────────────
-function renderIIO(iio) {
-  var faixaTxt = { critico: 'Crítico', atencao: 'Atenção', dentro: 'Dentro da faixa' };
-  var card = function (nome, ind) {
-    return '<div class="iio-card iio-' + ind.status + '">' +
-      '<div class="iio-name">' + nome + '</div>' +
-      '<div class="iio-val num">' + ind.valor + '</div>' +
-      '<div class="iio-faixa">' + faixaTxt[ind.status] + '</div></div>';
-  };
-  return '<div class="iio-grid">' +
-    card('Atração', iio.atracao) + card('Conversão', iio.conversao) + card('Blindagem', iio.blindagem) +
-    '</div>';
-}
-
-// ── Render do painel de marcadores ───────────────────────────────────────────
-function renderMarcadores(res) {
-  var dados = MotorAuditoria.buildMarcadores(res).slice()
-    .sort(function (a, b) { return STATUS_PESO[a.status] - STATUS_PESO[b.status]; });
-  var out = dados.map(function (m) {
-    var hex = STATUS_HEX[m.status];
-    var ri = posicao(m.refFrom, m.scale), rf = posicao(m.refTo, m.scale);
-    var rw = Math.max(rf - ri, 2);
-    var tick = clampN(posicao(m.value, m.scale), 1.5, 98.5);
-    return '<li class="mk-item">' +
-      '<div class="mk-row-top"><span class="mk-label">' + m.label + '<span class="mk-pilar">Pilar ' + m.pilar + '</span></span>' +
-        '<span class="mk-status" style="color:' + hex + '">' + STATUS_LABEL[m.status] + '</span></div>' +
-      '<div class="mk-track">' +
-        '<div class="mk-ref" style="left:' + ri + '%;width:' + rw + '%"></div>' +
-        '<div class="mk-tick" style="left:' + tick + '%;background:' + hex + ';box-shadow:0 0 0 6px ' + hex + '22"></div>' +
-      '</div>' +
-      '<div class="mk-row-bot"><span class="mk-refl">Referência: <b>' + m.refLabel + '</b></span>' +
-        '<span class="mk-disp" style="color:' + hex + '">' + m.display + '</span></div>' +
-      '</li>';
-  }).join('');
-  return '<ul class="mk-list">' + out + '</ul>';
-}
-
-// ── Render do comparativo dumbbell ───────────────────────────────────────────
-var TRIANGULO = '<svg width="12" height="11" viewBox="0 0 11 10" aria-hidden="true"><path d="M5.5 0 11 10H0z" fill="#F4574D"/></svg>';
-function renderDumbbell(res) {
-  var dados = MotorAuditoria.buildComparativo(res).map(function (d) {
-    return { d: d, gap: Math.abs(posicao(d.value, d.scale) - posicao(d.ref, d.scale)) };
-  }).sort(function (a, b) { return b.gap - a.gap; }).slice(0, 5);
-  var out = dados.map(function (x) {
-    var d = x.d;
-    var pr = clampN(posicao(d.ref, d.scale), 3, 97), pv = clampN(posicao(d.value, d.scale), 3, 97);
-    var esq = Math.min(pr, pv), larg = Math.abs(pv - pr), origem = pv >= pr ? 'left' : 'right';
-    return '<li>' +
-      '<div class="db-top"><span class="db-label">' + d.label + '</span><span class="db-delta">' + d.delta + '</span></div>' +
-      '<div class="db-track">' +
-        '<div class="db-base"></div>' +
-        '<div class="db-line" style="left:' + esq + '%;width:' + larg + '%;--origem:' + origem + '"></div>' +
-        '<div class="db-ref" style="left:' + pr + '%"></div>' +
-        '<div class="db-val" style="left:' + pv + '%">' + TRIANGULO + '</div>' +
-      '</div></li>';
-  }).join('');
-  return '<ul class="db-list">' + out + '</ul>';
-}
-
-// Revela as linhas do dumbbell (escalonado 80ms; imediato se reduced-motion)
-function revealDumbbell() {
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var lines = document.querySelectorAll('#result .db-line');
-  var vals  = document.querySelectorAll('#result .db-val');
-  var on = function (i) {
-    if (lines[i]) lines[i].classList.add('on');
-    if (vals[i]) vals[i].classList.add('on');
-  };
-  for (var i = 0; i < lines.length; i++) {
-    if (reduce) on(i);
-    else (function (idx) { setTimeout(function () { on(idx); }, idx * 80); })(i);
-  }
-}
-
-// ── Pílulas de autoridade (pesquisa EXTERNA, atribuída — não é prova social da CLINUP) ──
-function pillsHTML() {
-  return '<div class="pills">' +
-    '<div class="pill"><span class="pill-src">HBR</span><span class="pill-txt">Estudo da <b>Harvard Business Review</b> ("The Short Life of Online Sales Leads"): responder um lead em até 5 minutos aumenta em <b>~21×</b> a chance de qualificá-lo, contra 30 minutos.</span></div>' +
-    '<div class="pill"><span class="pill-src">MIT</span><span class="pill-txt">Pesquisa do <b>MIT (Lead Response Management)</b>: a chance de contato cai drasticamente a cada minuto — a primeira hora é decisiva pra converter interesse em agendamento.</span></div>' +
-    '<div class="pill"><span class="pill-src">MGMA</span><span class="pill-txt">Benchmarks da <b>MGMA</b> apontam o no-show como uma das maiores fontes de perda de receita em clínicas — cada horário vago não se revende.</span></div>' +
-    '</div>';
-}
-
-// ── Monta o HTML do laudo ────────────────────────────────────────────────────
-function buildLaudoHTML(res, iio, motor) {
-  var clinica = (quizLeadData.nome || '').trim() || 'Sua clínica';
-  var idle = (res.potencial_ocioso_mensal > 0)
-    ? '<p class="money-idle">Fora da conta acima: ~R$ ' + fmtMoney(res.potencial_ocioso_mensal) +
-      '/mês de <strong>capacidade ociosa</strong> — agenda que caberia mais. Oportunidade de crescimento, <strong>não somada</strong> ao vazamento.</p>'
-    : '';
-  var naoMede = (!res.ausencia_mensuravel)
-    ? '<p class="money-idle">Você indicou não medir a taxa de ausência. Sem medição, essa linha <strong>não entra</strong> no total — que sai subdimensionado. O vazamento real tende a ser maior.</p>'
-    : '';
-
-  return '' +
-    '<div class="laudo-head">' +
-      '<div class="laudo-eyebrow">Laudo de Integridade Operacional</div>' +
-      '<div class="laudo-clinica">' + clinica + '</div>' +
-      '<div class="laudo-ref">Ref. ' + quizLeadData.refId + ' · gerado pela análise ClinUp</div>' +
-      '<span class="laudo-chip">Simulação · estimativa</span>' +
-    '</div>' +
-
-    '<div class="money-card">' +
-      '<span class="money-chip">Vazamento estimado</span>' +
-      '<p class="money-label">Quanto sua clínica deixa na mesa por mês</p>' +
-      '<p class="money-value">R$ <span id="laudoMensal">' + fmtMoney(res.vazamento_mensal) + '</span></p>' +
-      '<p class="money-year">≈ R$ <span id="laudoAnual">' + fmtMoney(res.vazamento_anual) + '</span> por ano, no cenário atual.</p>' +
-      '<p class="money-note">Soma do que escapa por resposta lenta no WhatsApp e por faltas não repostas. <span id="laudoOcioso" hidden></span></p>' +
-      idle + naoMede +
-    '</div>' +
-
-    '<div class="laudo-recalc">' +
-      '<div class="laudo-recalc-h">Ajuste com os seus números reais</div>' +
-      '<div class="laudo-recalc-sub">O laudo recalcula na hora conforme você edita.</div>' +
-      '<div class="recalc-grid">' +
-        '<label>Ticket (R$)<input id="reT" type="number" min="1" max="99999" inputmode="numeric" value="' + motor.T + '" oninput="recalcLaudo()"></label>' +
-        '<label>Consultas/sem<input id="reC" type="number" min="1" max="9999" inputmode="numeric" value="' + motor.C + '" oninput="recalcLaudo()"></label>' +
-        '<label>Capacidade/sem<input id="reK" type="number" min="1" max="9999" inputmode="numeric" value="' + motor.K + '" oninput="recalcLaudo()"></label>' +
-      '</div>' +
-    '</div>' +
-
-    '<p class="section-label">Índices de Integridade Operacional (IIO)</p>' +
-    renderIIO(iio) +
-
-    '<p class="section-label">Painel de marcadores</p>' +
-    '<div id="mkPainel">' + renderMarcadores(res) + '</div>' +
-
-    '<p class="section-label">Sua clínica vs. faixa de referência</p>' +
-    '<div id="dbPainel">' + renderDumbbell(res) + '</div>' +
-    '<div class="db-legend"><span><span style="width:9px;height:9px;border-radius:50%;background:#2BD576;display:inline-block"></span>Referência</span>' +
-      '<span>' + TRIANGULO + ' Sua clínica</span></div>' +
-
-    '<p class="section-label">O que a pesquisa mostra</p>' +
-    pillsHTML() +
-    '<p class="laudo-conserv">Cálculo conservador: atribuímos apenas <strong>50% da perda</strong> ao fator tempo de resposta — o número exibido é o mínimo real, defensável.</p>' +
-
-    '<p class="laudo-method"><b>Faixas de referência ClinUp</b>, construídas a partir de padrões de clínicas com atendimento e confirmação automatizados — não são médias de mercado auditadas. Os valores são estimativas a partir do que você informou, posicionadas no piso da faixa: o real tende a ser igual ou pior.</p>' +
-
-    '<div class="cta-section" style="margin-top:22px;">' +
-      '<div class="cta-eyebrow">Próximo passo</div>' +
-      '<h3 class="cta-title">Um plano pra estancar esse vazamento em 30 dias</h3>' +
-      '<p class="cta-desc">Numa conversa gratuita, a gente entrega a <strong>ordem de prioridade</strong> pra tapar os gargalos do seu laudo — começando pelo que mais custa. Sem compromisso.</p>' +
-      '<a class="laudo-cta" href="/consultoria?resultado=' + ({ good: 'bom', moderate: 'mediano', critical: 'critico' }[quizLeadData.resultado] || 'mediano') + '">Receber meu Plano de Recuperação de 30 dias&nbsp;→</a>' +
-      '<button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do laudo</button>' +
-      '<button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>' +
-    '</div>';
-}
-
-// ── Recálculo ao vivo (T/C/K) ────────────────────────────────────────────────
-var _recalcRaf = null, _recalcCur = { mensal: 0, anual: 0 };
-function recalcLaudo() {
-  var motor = quizLeadData.motor || {};
-  var t = parseFloat(document.getElementById('reT').value);
-  var c = parseFloat(document.getElementById('reC').value);
-  var k = parseFloat(document.getElementById('reK').value);
-  if (isFinite(t) && t > 0) motor.T = t;
-  if (isFinite(c) && c > 0) motor.C = c;
-  if (isFinite(k) && k > 0) motor.K = k;
-  quizLeadData.motor = motor;
-  var res = MotorAuditoria.calcularVazamento(motor);
-  quizLeadData.respostas._vazamento = res;
-  persistState();
-
-  // números com tween 400ms (lógica §9)
-  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var target = { mensal: res.vazamento_mensal, anual: res.vazamento_anual };
-  var elM = document.getElementById('laudoMensal'), elA = document.getElementById('laudoAnual');
-  if (reduce) { if (elM) elM.textContent = fmtMoney(target.mensal); if (elA) elA.textContent = fmtMoney(target.anual); _recalcCur = target; }
-  else {
-    var from = { mensal: _recalcCur.mensal, anual: _recalcCur.anual }, t0 = performance.now();
-    if (_recalcRaf) cancelAnimationFrame(_recalcRaf);
-    (function tick(now) {
-      var p = Math.min(1, (now - t0) / 400), e = 1 - Math.pow(1 - p, 3);
-      if (elM) elM.textContent = fmtMoney(from.mensal + (target.mensal - from.mensal) * e);
-      if (elA) elA.textContent = fmtMoney(from.anual + (target.anual - from.anual) * e);
-      if (p < 1) _recalcRaf = requestAnimationFrame(tick); else _recalcCur = target;
-    })(t0);
-  }
-  // marcadores e dumbbell dependem de ocupação (C/K) → re-render (sem re-animar)
-  var mk = document.getElementById('mkPainel'); if (mk) mk.innerHTML = renderMarcadores(res);
-  var db = document.getElementById('dbPainel'); if (db) { db.innerHTML = renderDumbbell(res); document.querySelectorAll('#dbPainel .db-line,#dbPainel .db-val').forEach(function (el) { el.classList.add('on'); }); }
-}
-
-// ── Exibição do resultado ────────────────────────────────────────────────────
 function showResult() {
   if (Object.keys(answers).length < TOTAL_PERGUNTAS) return;
   document.querySelectorAll('.question-screen').forEach(q => q.classList.remove('active'));
@@ -223,70 +8,217 @@ function showResult() {
   const resumeNote = document.getElementById('resumeNote');
   if (resumeNote) resumeNote.remove();
 
-  const motor = quizLeadData.motor || {};
-  const res = MotorAuditoria.calcularVazamento(motor);
-  const iio = MotorAuditoria.calcularIIO(motor);
-  if (!quizLeadData.refId) quizLeadData.refId = 'CU-' + Math.random().toString(16).slice(2, 8).toUpperCase();
-  _recalcCur = { mensal: res.vazamento_mensal, anual: res.vazamento_anual };
-
-  quizLeadData.resultado     = iioLevel(iio);
-  quizLeadData.quizConcluido = true;
-  quizLeadData.etapaAtual    = 'resultado';
-  // motor + vazamento + iio → Supabase dentro de respostas (jsonb)
-  quizLeadData.respostas._motor = motor;
-  quizLeadData.respostas._vazamento = res;
-  quizLeadData.respostas._iio = iio;
-  persistState();
-  saveLeadToSupabase();
-
+  const model  = buildPresentationModel();
+  const vaz    = computeVazamento(); // estimativa em R$ das 5 perguntas financeiras
   const result = document.getElementById('result');
   result.classList.add('show');
-  result.innerHTML = buildLaudoHTML(res, iio, motor);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  revealDumbbell();
+  window.scrollTo({top: 0, behavior: 'smooth'});
 
-  const resultadoPt = ({ good: 'bom', moderate: 'mediano', critical: 'critico' })[quizLeadData.resultado] || quizLeadData.resultado;
+  quizLeadData.resultado     = model.level;
+  quizLeadData.quizConcluido = true;
+  quizLeadData.etapaAtual    = 'resultado';
+  quizLeadData.respostas._motor = quizLeadData.motor || {};
+  if (vaz) quizLeadData.respostas._vazamento = vaz;
+  persistState();
+  saveLeadToSupabase();
+  const resultadoPt = ({ good: 'bom', moderate: 'mediano', critical: 'critico' })[model.level] || model.level;
   trackOnce('result_view', { resultado: resultadoPt });
-  trackPixelOnce('ViewContent', { content_name: 'laudo_' + resultadoPt });
+  trackPixelOnce('ViewContent', { content_name: 'resultado_' + resultadoPt });
+
+  const insightsHTML = model.insights.map(i => `
+    <div class="finding">
+      <div class="finding-icon ${i.type}">${i.icon}</div>
+      <div class="finding-body">
+        <div class="finding-title">${i.title}</div>
+        <div class="finding-desc">${i.desc}</div>
+      </div>
+    </div>
+  `).join('');
+
+  result.innerHTML = `
+    <div class="score-card ${model.level}">
+      <div class="score-ring" id="scoreRing">
+        <svg viewBox="0 0 120 120" aria-hidden="true">
+          <circle class="score-ring-track" cx="60" cy="60" r="52"></circle>
+          <circle class="score-ring-fill" cx="60" cy="60" r="52"></circle>
+        </svg>
+        <div class="score-ring-num"><span id="scoreNum">0</span>%</div>
+      </div>
+      ${model.badge}
+      <h2 class="result-title">${model.title}</h2>
+      <p class="result-sub">${model.subtitle}</p>
+      <p class="result-thesis">${model.thesis}</p>
+      <p class="score-method">Score do seu perfil — captação, canal e conversão de pacientes. Abaixo, a estimativa em reais a partir dos seus números.</p>
+    </div>
+    ${buildMoneyHTML(vaz)}
+    <p class="section-label">${model.sectionLabel}</p>
+    <div class="findings">${insightsHTML}</div>
+    <p class="section-label">Daqui, são dois caminhos</p>
+    <div class="result-paths">
+      <div class="result-path">
+        <div class="result-path-title">Continuar como está</div>
+        <div class="result-path-desc">Cada mês igual: paciente chegando, parte escapando — e você sem saber onde.</div>
+      </div>
+      <div class="result-path result-path--accent">
+        <div class="result-path-title">Organizar tudo</div>
+        <div class="result-path-desc">Site, WhatsApp e atendimento puxando juntos, <strong>pra mais gente marcar consulta</strong>.</div>
+      </div>
+    </div>
+    <div class="cta-section">
+      <div class="cta-eyebrow">Próximo passo</div>
+      <h3 class="cta-title">${model.ctaTitle}</h3>
+      <p class="cta-desc">${model.ctaDesc}</p>
+      <a class="btn-whatsapp"
+         href="/consultoria?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
+        Agendar minha sessão gratuita&nbsp;→
+      </a>
+      <button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do resultado</button>
+      <button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>
+    </div>
+  `;
+
+  animateScoreRing(model.score);
 }
 
-// ── Copiar resumo do laudo (texto puro) ──────────────────────────────────────
+// ── Estimativa em R$ (5 perguntas financeiras + motor de cálculo) ─────────────
+function fmtMoney(n) {
+  try { return new Intl.NumberFormat('pt-BR').format(Math.round(n || 0)); }
+  catch (e) { return String(Math.round(n || 0)); }
+}
+
+// Monta o input do motor: os 5 números informados (T/C/K/resposta/ausencia) +
+// premissas conservadoras nas não-perguntadas (Regra do Desconhecido: as que
+// produzem o MENOR vazamento — mantém o número defensável).
+function computeVazamento() {
+  if (!(window.MotorAuditoria && window.MotorAuditoria.calcularVazamento)) return null;
+  var m = Object.assign(
+    { contatos: 'ATE_30', cobertura: 'AUTOMATIZADA', reposicao: 'AUTOMATICA', convenio: 'ATE_30', confirmacao: 'AUTOMATIZADA' },
+    quizLeadData.motor || {}
+  );
+  return window.MotorAuditoria.calcularVazamento(m);
+}
+
+function buildMoneyHTML(vaz) {
+  if (!vaz || vaz.vazamento_mensal <= 0) return '';
+  var linhas = '';
+  if (vaz.detalhe.resposta > 0 || (vaz.ausencia_mensuravel && vaz.detalhe.ausencia > 0)) {
+    linhas = '<div class="money-lines">' +
+      '<div class="money-line"><span>Resposta lenta no WhatsApp</span><b>R$ ' + fmtMoney(vaz.detalhe.resposta) + '/mês</b></div>' +
+      (vaz.ausencia_mensuravel ? '<div class="money-line"><span>Faltas não repostas</span><b>R$ ' + fmtMoney(vaz.detalhe.ausencia) + '/mês</b></div>' : '') +
+      '</div>';
+  }
+  var idle = (vaz.potencial_ocioso_mensal > 0)
+    ? '<p class="money-idle">Fora da conta: ~R$ ' + fmtMoney(vaz.potencial_ocioso_mensal) + '/mês de <strong>agenda ociosa</strong> (capacidade livre). É oportunidade de crescimento — <strong>não somada</strong> ao vazamento.</p>'
+    : '';
+  var naoMede = (!vaz.ausencia_mensuravel)
+    ? '<p class="money-idle">Você indicou não medir as faltas — essa linha ficou de fora, então o número sai subdimensionado.</p>'
+    : '';
+  return '<p class="section-label">Estimativa de vazamento</p>' +
+    '<div class="money-card">' +
+      '<span class="money-chip">Simulação · estimativa</span>' +
+      '<p class="money-label">Quanto sua clínica deixa na mesa por mês</p>' +
+      '<p class="money-value">R$ ' + fmtMoney(vaz.vazamento_mensal) + '</p>' +
+      '<p class="money-year">≈ R$ ' + fmtMoney(vaz.vazamento_anual) + ' por ano, no cenário atual.</p>' +
+      linhas + idle + naoMede +
+      '<p class="money-note">Estimativa a partir dos seus números, com premissas conservadoras onde faltou dado. O valor exato a gente levanta na conversa.</p>' +
+    '</div>';
+}
+
+// ── Círculo de score (donut SVG) — cor interpolada + preenchimento animado ──
+function scoreColor(score) {
+  // Vermelho → âmbar → verde por interpolação RGB: progressão contínua, bonita e
+  // visível sobre o card dark (paleta da landing: loss/warn/gain).
+  const v = Math.max(0, Math.min(100, score)) / 100;
+  const red = [244, 87, 77], amber = [245, 166, 35], green = [43, 213, 118];
+  let c1, c2, t;
+  if (v < 0.5) { c1 = red;   c2 = amber; t = v / 0.5; }
+  else         { c1 = amber; c2 = green; t = (v - 0.5) / 0.5; }
+  const rgb = c1.map((a, i) => Math.round(a + (c2[i] - a) * t));
+  return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+}
+
+function animateScoreRing(score) {
+  const CIRC = 2 * Math.PI * 52; // ≈ 326.726
+  const fill = document.querySelector('#scoreRing .score-ring-fill');
+  const num  = document.getElementById('scoreNum');
+  if (!fill || !num) return;
+
+  const target  = Math.max(0, Math.min(100, Math.round(score)));
+  const color   = scoreColor(target);
+  const offset  = CIRC * (1 - target / 100);
+  fill.style.stroke = color;
+  num.style.color   = 'var(--white)';
+
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    fill.style.strokeDashoffset = offset;
+    num.textContent = target;
+    return;
+  }
+
+  // anel: dispara a transição CSS (de cheio → alvo) no próximo frame
+  fill.style.strokeDashoffset = CIRC;
+  requestAnimationFrame(() => { fill.style.strokeDashoffset = offset; });
+
+  // número: conta de 0 → target em ~1.2s
+  const DURATION = 1200;
+  const start = performance.now();
+  (function tick(now) {
+    const t = Math.min(1, (now - start) / DURATION);
+    const eased = 1 - Math.pow(1 - t, 3); // easeOutCubic
+    num.textContent = Math.round(eased * target);
+    if (t < 1) requestAnimationFrame(tick);
+    else num.textContent = target;
+  })(start);
+}
+
+// Resumo do resultado em texto puro — o usuário leva o diagnóstico com ele
+// (colar em nota, mandar pro sócio, guardar). Clipboard API com fallback.
 function copyResultSummary(btn) {
   try {
-    var motor = quizLeadData.motor || {};
-    var res = MotorAuditoria.calcularVazamento(motor);
-    var iio = MotorAuditoria.calcularIIO(motor);
-    var faixa = { critico: 'crítico', atencao: 'atenção', dentro: 'ok' };
-    var lines = [
-      'Laudo ClinUp — ' + ((quizLeadData.nome || '').trim() || 'minha clínica') + ' (Ref. ' + quizLeadData.refId + ')',
-      'Vazamento estimado: R$ ' + fmtMoney(res.vazamento_mensal) + '/mês (~R$ ' + fmtMoney(res.vazamento_anual) + '/ano)',
-      'Capacidade ociosa: R$ ' + fmtMoney(res.potencial_ocioso_mensal) + '/mês (separado)',
-      '',
-      'Índices (IIO):',
-      '- Atração: ' + iio.atracao.valor + ' (' + faixa[iio.atracao.status] + ')',
-      '- Conversão: ' + iio.conversao.valor + ' (' + faixa[iio.conversao.status] + ')',
-      '- Blindagem: ' + iio.blindagem.valor + ' (' + faixa[iio.blindagem.status] + ')',
-      '',
-      'Feito em: diagnostico-clinup-lac.vercel.app'
+    const model = buildPresentationModel();
+    const label = {
+      good: 'Boa base', moderate: 'Uns pontos soltos', critical: 'Vários pontos travando'
+    }[model.level] || model.level;
+    const vaz = computeVazamento();
+    const lines = [
+      'Diagnóstico CLINUP — ' + (quizLeadData.nome || 'minha clínica'),
+      'Resultado: ' + model.score + '% · ' + label
     ];
-    var text = lines.join('\n');
-    var done = function () {
-      var original = btn.textContent;
-      btn.textContent = 'Copiado ✓'; btn.disabled = true;
-      setTimeout(function () { btn.textContent = original; btn.disabled = false; }, 2200);
+    if (vaz && vaz.vazamento_mensal > 0) {
+      lines.push('Vazamento estimado: R$ ' + fmtMoney(vaz.vazamento_mensal) + '/mês (~R$ ' + fmtMoney(vaz.vazamento_anual) + '/ano)');
+    }
+    lines.push('', 'Principais pontos:');
+    model.insights.forEach(i => lines.push('- ' + i.title));
+    lines.push('', 'Feito em: diagnostico-clinup-lac.vercel.app');
+    const text = lines.join('\n');
+
+    const confirm = () => {
+      const original = btn.textContent;
+      btn.textContent = 'Copiado ✓';
+      btn.disabled = true;
+      setTimeout(() => { btn.textContent = original; btn.disabled = false; }, 2200);
     };
-    if (navigator.clipboard && navigator.clipboard.writeText)
-      navigator.clipboard.writeText(text).then(done).catch(function () { fallbackCopy(text, done); });
-    else fallbackCopy(text, done);
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(confirm).catch(() => fallbackCopy(text, confirm));
+    } else {
+      fallbackCopy(text, confirm);
+    }
   } catch (e) {}
 }
 
 function fallbackCopy(text, onDone) {
   try {
-    var ta = document.createElement('textarea');
-    ta.value = text; ta.style.position = 'fixed'; ta.style.left = '-9999px';
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-    document.body.removeChild(ta); onDone();
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.position = 'fixed';
+    ta.style.left = '-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    onDone();
   } catch (e) {}
 }
 
@@ -296,11 +228,245 @@ function onWhatsappClick() {
   updateWhatsappClicked();
 }
 
+function buildWhatsAppMessage(level, insights) {
+  const label = {
+    good:     'Boa base',
+    moderate: 'Uns pontos soltos',
+    critical: 'Vários pontos travando'
+  }[level] || level;
+
+  const gargalos = insights.filter(i => i.severity !== 'strength');
+  const pontos   = gargalos.length > 0 ? gargalos.slice(0, 4) : insights.slice(0, 3);
+  const bullets  = pontos.map(i => `- ${i.title}`).join('\n');
+
+  return encodeURIComponent([
+    'Olá, fiz o diagnóstico da CLINUP e quero entender meus resultados.',
+    '',
+    `Resultado: ${label}`,
+    '',
+    'Principais pontos:',
+    bullets,
+    '',
+    'Quero entender o que vocês recomendam para minha clínica.'
+  ].join('\n'));
+}
+
+function personalizeTitle(title) {
+  const fullName = (quizLeadData.nome || '').trim();
+  if (!fullName) return title;
+  const firstRaw = fullName.split(/\s+/)[0];
+  if (!firstRaw) return title;
+  const first = firstRaw.charAt(0).toUpperCase() + firstRaw.slice(1).toLowerCase();
+  return first + ', ' + title.charAt(0).toLowerCase() + title.slice(1);
+}
+
+function buildPresentationModel() {
+  // Score 0–100 das respostas; o nível (e toda a copy dinâmica) deriva das faixas do score.
+  const score = getScore();
+
+  let level;
+  if (score >= 71)      level = 'good';
+  else if (score >= 46) level = 'moderate';
+  else                  level = 'critical';
+
+  let badge, title, subtitle, ctaTitle, ctaDesc, ctaLabel, sectionLabel;
+  if (level === 'good') {
+    badge        = '<div class="result-badge good"><svg viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg>Boa base</div>';
+    title        = 'Sua clínica já vai bem. Agora é só ajustar uns detalhes.';
+    subtitle     = 'As pessoas já te acham, entram em contato e parte marca consulta. Agora a gente vê onde <strong>uns ajustes pequenos fazem você fechar mais</strong>, com regularidade.';
+    ctaTitle     = 'Sua base é boa — dá pra extrair mais dela';
+    ctaDesc      = 'Numa sessão rápida, a gente te mostra os 2 ou 3 ajustes que mais fazem diferença no seu caso — e monta seu plano de ação. <strong>Gratuita e direto ao ponto.</strong>';
+    ctaLabel     = 'Quero ver onde melhorar';
+    sectionLabel = 'O que achamos — e onde dá pra melhorar';
+  } else if (level === 'moderate') {
+    badge        = '<div class="result-badge moderate"><svg viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>Uns pontos soltos</div>';
+    title        = 'Sua clínica atrai gente. Mas perde paciente no meio do caminho.';
+    subtitle     = 'Chega gente interessada, mas <strong>parte some antes de marcar</strong>. Falta seu site, seu WhatsApp e seu atendimento trabalharem juntos.';
+    ctaTitle     = 'Você já atrai — falta parar de perder';
+    ctaDesc      = 'Numa sessão rápida, a gente te mostra onde os pacientes estão escapando e monta com você o plano de ação. <strong>Gratuita e sem compromisso.</strong>';
+    ctaLabel     = 'Quero ver onde estou perdendo';
+    sectionLabel = 'O que achamos na sua clínica';
+  } else {
+    badge        = '<div class="result-badge critical"><svg viewBox="0 0 24 24"><path d="M7.86 2h8.28L22 7.86v8.28L16.14 22H7.86L2 16.14V7.86z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>Vários pontos travando</div>';
+    title        = 'Tem mais de uma coisa travando sua clínica ao mesmo tempo.';
+    subtitle     = 'Quando o site, o jeito de te achar e o WhatsApp falham juntos, você perde muito mais paciente no caminho. <strong>Cada ponto tem conserto — e a ordem de arrumar importa.</strong>';
+    ctaTitle     = 'Cada semana assim custa pacientes';
+    ctaDesc      = 'Quanto antes você tiver seu plano de ação na mão, menos consulta perde. A sessão é <strong>gratuita e direto ao ponto</strong>.';
+    ctaLabel     = 'Quero entender por onde começar';
+    sectionLabel = 'O que está travando sua clínica';
+  }
+
+  const insights = selectInsights(level);
+  title = personalizeTitle(title);
+  return {
+    level, score, badge, title, subtitle,
+    thesis:          buildThesis(),
+    insights,
+    ctaTitle, ctaDesc, ctaLabel, sectionLabel,
+    whatsappPrefill: buildWhatsAppMessage(level, insights)
+  };
+}
+
+function buildThesis() {
+  const a            = answers;
+  const goodSite     = a[1] === 0;
+  const weakSite     = a[1] >= 2;
+  const multiChannel = a[2] === 0;
+  const onlyRef      = a[2] === 2;
+  const goodConv     = a[3] === 0;
+  const badConv      = a[3] === 2;
+
+  if (goodSite && goodConv && multiChannel)
+    return 'Está tudo no lugar: te acham, chega gente e ela marca consulta. <strong>Agora é crescer com calma e controle.</strong>';
+  if (goodSite && goodConv && (onlyRef || a[2] === 1))
+    return 'Quem fala com você acaba marcando. O cuidado é como o paciente te encontra: <strong>depender de um lugar só é arriscado</strong> — se ele cai, some paciente.';
+  if (goodSite && badConv && multiChannel)
+    return 'Chega gente de vários lugares, mas parte some entre o primeiro contato e marcar a consulta. <strong>O problema está no WhatsApp.</strong>';
+  if (goodSite && badConv)
+    return 'As pessoas te acham, mas você perde na hora de fechar. Não falta gente interessada — <strong>falta transformar esse interesse em consulta marcada</strong>.';
+  if (goodSite && a[3] === 1 && multiChannel)
+    return 'Chega gente de vários lugares. Agora é <strong>melhorar a hora de fechar</strong>, pra mais gente marcar consulta.';
+  if (goodSite && a[3] === 1)
+    return 'O básico está no lugar, mas dá pra melhorar como te acham e como você fecha. <strong>São os dois pontos que mais mudam o número de pacientes.</strong>';
+  if (weakSite && goodConv)
+    return 'Quando alguém chega, você fecha bem. O problema é antes: <strong>pouca gente te encontra e te procura</strong>.';
+  if (weakSite && badConv)
+    return 'Tem dois problemas ao mesmo tempo: pouca gente te acha, e quem chega não fecha. <strong>Com os dois fracos, você perde paciente em dobro.</strong>';
+  return 'O teste mostrou pontos certos pra arrumar. <strong>Cada um ajustado ajuda sua clínica a ser achada, atender melhor e marcar mais consultas.</strong>';
+}
+
+function selectInsights(level) {
+  const a    = answers;
+  const pool = [];
+
+  // Q1 — Presença digital
+  if (a[1] === 3) {
+    if (level === 'moderate')
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', type:'orange', severity:'warning',
+        title:'Sem site',
+        desc:'Quem procura sua clínica no Google não acha nada que passe confiança. O paciente desiste antes de falar com você.'});
+    else
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', type:'red',    severity:'warning',
+        title:'Sem site',
+        desc:'Quem procura sua clínica no Google não acha nada que passe confiança. O paciente desiste antes de falar com você.'});
+  } else if (a[1] === 2)
+    pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', type:'orange', severity:'warning',
+      title:'Site fraco',
+      desc:'Site velho ou bagunçado passa impressão de descuido. Às vezes atrapalha mais do que ajuda.'});
+  else
+    pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>', type:'blue',   severity:'strength',
+      title:'Você é achado na internet',
+      desc:'O básico funciona. Agora é fazer ele trazer paciente de verdade, não só existir.'});
+
+  // Q2 — Atração de interessados
+  if (a[2] === 2)
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>', type:'orange', severity:'warning',
+      title:'Depende de indicação',
+      desc:'Indicação é ótimo sinal, mas você não controla. Quando para de vir, para de chegar paciente novo.'});
+  else if (a[2] === 1)
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>', type:'orange', severity:'opportunity',
+      title:'Você depende de um lugar só',
+      desc:'Crescer com um lugar só funciona até certo ponto. Se ele cair, seu paciente novo cai junto — e isso você não controla.'});
+  else
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>', type:'blue',   severity:'strength',
+      title:'O paciente te acha de vários jeitos',
+      desc:'Isso é ótimo. Agora é olhar o que chega de cada lugar e garantir que vire consulta.'});
+
+  // Q3 — Conversão no WhatsApp
+  if (a[3] === 2) {
+    if (level === 'moderate')
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>', type:'orange', severity:'warning',
+        title:'Muita gente some no WhatsApp',
+        desc:'O WhatsApp é onde o paciente decide. Perder gente ali, na maioria das vezes, é falta de organização — não falta de interesse.'});
+    else
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>', type:'red',    severity:'warning',
+        title:'Muita gente some no WhatsApp',
+        desc:'O WhatsApp é onde o paciente decide. Perder gente ali, na maioria das vezes, é falta de organização — não falta de interesse.'});
+  } else if (a[3] === 1)
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>', type:'orange', severity:'opportunity',
+      title:'Dá pra fechar mais no WhatsApp',
+      desc:'Metade fechando é metade escapando. Com o atendimento organizado, esse número sobe sem precisar de mais gente.'});
+  else
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>', type:'blue',   severity:'strength',
+      title:'Você fecha bem no WhatsApp',
+      desc:'Quem fala com você, marca. Agora é trazer mais gente certa até aqui.'});
+
+  // Q4 — Prontidão (level-aware)
+  if (level === 'good') {
+    if (a[4] === 0)
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>', type:'blue',   severity:'opportunity',
+        title:'Pronto pra dar o próximo passo',
+        desc:'Sua clínica está preparada. Um olhar mais de perto mostra os pontos certos pra melhorar e crescer com controle.'});
+    else if (a[4] === 1)
+      pool.push({icon:'<svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>', type:'blue',   severity:'opportunity',
+        title:'Bom momento pra olhar de perto',
+        desc:'Com o básico no lugar, agora é achar o que dá pra melhorar e fazer com calma e plano.'});
+    else
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>', type:'blue',   severity:'opportunity',
+        title:'Boa hora pra planejar o próximo nível',
+        desc:'Avaliar antes de agir é o certo quando a base já está firme. Um olhar organizado mostra o que vale a pena fazer primeiro.'});
+  } else if (level === 'critical') {
+    if (a[4] === 0)
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>', type:'blue',   severity:'opportunity',
+        title:'Você quer agir — agora é definir a ordem',
+        desc:'Ver que precisa agir já é o começo. O teste já achou os problemas — falta decidir por qual começar.'});
+    else if (a[4] === 1)
+      pool.push({icon:'<svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>', type:'orange', severity:'opportunity',
+        title:'Você tem um prazo — mas os problemas seguem',
+        desc:'Ter um prazo é melhor do que nenhum. Cada ponto arrumado destrava uma parte da sua clínica.'});
+    else
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>', type:'orange', severity:'opportunity',
+        title:'Por onde começar — essa é a pergunta certa',
+        desc:'Saber a ordem de arrumar faz toda diferença quando tem vários problemas juntos. O teste já mostrou — falta virar um plano.'});
+  } else {
+    if (a[4] === 0)
+      pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>', type:'blue',   severity:'opportunity',
+        title:'Boa hora pra organizar',
+        desc:'Estar pronto pra agir é uma vantagem. Com os pontos achados, arrumar agora faz você perder menos tempo e menos paciente.'});
+    else if (a[4] === 1)
+      pool.push({icon:'<svg viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>', type:'orange', severity:'opportunity',
+        title:'Dá pra melhorar agora',
+        desc:'Ter um prazo é melhor do que nenhum. Enquanto as pontas seguem soltas, sua clínica rende menos do que podia.'});
+    else
+      pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>', type:'orange', severity:'opportunity',
+        title:'Ainda avaliando? Esse é o próximo passo',
+        desc:'Entender antes de agir faz sentido. Com as pontas soltas, ver as prioridades ajuda a decidir por onde começar.'});
+  }
+
+  // Q5 — Faturamento
+  if (a[5] === 3)
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5.76.76 1.23 1.52 1.41 2.5"/></svg>', type:'orange', severity:'opportunity',
+      title:'Começo de jornada — muito a crescer',
+      desc:'Clínicas nessa fase são as que mais têm espaço pra crescer. Organizar agora como você traz paciente acelera muito o que vem.'});
+  else if (a[5] === 2)
+    pool.push({icon:'<svg viewBox="0 0 24 24"><path d="M16 7h6v6"/><path d="m22 7-8.5 8.5-5-5L2 17"/></svg>', type:'blue',   severity:'strength',
+      title:'Você está crescendo',
+      desc:'Sua clínica está crescendo. Com um jeito mais organizado de trazer paciente, isso acelera e fica mais previsível.'});
+  else if (a[5] === 1)
+    pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>', type:'blue',   severity:'strength',
+      title:'Clínica firme',
+      desc:'Tem paciente e o serviço funciona. O próximo nível é trazer paciente de um jeito que não dependa da sorte.'});
+  else if ((quizLeadData.respostas || {}).faturamento_mensal !== 'Prefiro não informar')
+    pool.push({icon:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>', type:'blue',   severity:'strength',
+      title:'Clínica estabelecida',
+      desc:'O volume alto mostra que dá certo. Agora o desafio é continuar crescendo com organização, não só no esforço.'});
+
+  const warnings      = pool.filter(i => i.severity === 'warning');
+  const strengths     = pool.filter(i => i.severity === 'strength');
+  const opportunities = pool.filter(i => i.severity === 'opportunity');
+
+  if (level === 'critical')
+    return [...warnings.slice(0, 3), ...opportunities.slice(0, 1), ...strengths.slice(0, 1)];
+  if (level === 'moderate')
+    return [...warnings.slice(0, 2), ...opportunities.slice(0, 1), ...strengths.slice(0, 2)];
+  return [...strengths.slice(0, 3), ...opportunities.slice(0, 2)];
+}
+
 function restartQuiz() {
   Object.keys(answers).forEach(k => delete answers[k]);
   Object.assign(quizLeadData, {
     respostas: {}, pontos: {}, motor: {}, resultado: '', etapaAtual: 'formulario',
-    quizConcluido: false, whatsappClicado: false, refId: ''
+    quizConcluido: false, whatsappClicado: false
   });
   _leadSaved = false;
   localStorage.removeItem('clinup_lead');
