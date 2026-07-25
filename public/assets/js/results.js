@@ -255,8 +255,8 @@ function buildLaudoHTML(model, vaz) {
   var pt = ({ good: 'bom', moderate: 'mediano', critical: 'critico' })[model.level] || 'mediano';
 
   // 1 · Cabeçalho do laudo
-  var head = '<div class="laudo-head">' +
-    '<div class="laudo-eyebrow">Laudo de Integridade Operacional</div>' +
+  var head = '<div class="laudo-head m-reveal">' +
+    '<div class="laudo-eyebrow"><span class="live-pulse-dot"></span>Laudo de Integridade Operacional</div>' +
     '<div class="laudo-clinica">' + (nome ? 'Emitido para ' + nome : 'Laudo da sua operação') + '</div>' +
     '<div class="laudo-ref">Ref: ' + (quizLeadData.refId || 'CU-------') + ' · análise ClinUp</div>' +
     '<span class="laudo-chip">Simulação · estimativa</span>' +
@@ -264,13 +264,13 @@ function buildLaudoHTML(model, vaz) {
 
   // 2 · Nota + badge + título + tese + achados (5 perguntas qualitativas)
   var insightsHTML = model.insights.map(function (i) {
-    return '<div class="finding">' +
+    return '<div class="finding m-reveal">' +
       '<div class="finding-icon ' + i.type + '">' + i.icon + '</div>' +
       '<div class="finding-body"><div class="finding-title">' + i.title + '</div>' +
       '<div class="finding-desc">' + i.desc + '</div></div></div>';
   }).join('');
 
-  var scoreCard = '<div class="score-card ' + model.level + '">' +
+  var scoreCard = '<div class="score-card ' + model.level + ' m-reveal">' +
     '<div class="score-ring" id="scoreRing">' +
       '<svg viewBox="0 0 120 120" aria-hidden="true">' +
         '<circle class="score-ring-track" cx="60" cy="60" r="52"></circle>' +
@@ -282,8 +282,8 @@ function buildLaudoHTML(model, vaz) {
     '<p class="result-thesis">' + model.thesis + '</p>' +
     '<p class="score-method">Score do seu perfil — captação, canal e conversão de pacientes. Abaixo, a estimativa em reais a partir dos seus números.</p>' +
   '</div>' +
-  '<p class="section-label">' + model.sectionLabel + '</p>' +
-  '<div class="findings">' + insightsHTML + '</div>';
+  '<p class="section-label m-reveal">' + model.sectionLabel + '</p>' +
+  '<div class="findings m-stagger">' + insightsHTML + '</div>';
 
   // Sem motor disponível: entrega só a leitura qualitativa + CTA simples
   if (!vaz) {
@@ -298,21 +298,21 @@ function buildLaudoHTML(model, vaz) {
   var quem = nome ? nome + ',' : 'Sua operação:';
   var verdict;
   if (n > 0 && hasLeak) {
-    verdict = '<p class="laudo-verdict">' + quem + ' sua operação apresenta um vazamento estimado de ' +
+    verdict = '<p class="laudo-verdict m-reveal">' + quem + ' sua operação apresenta um vazamento estimado de ' +
       '<b class="v-money">R$ ' + fmtMoney(vaz.vazamento_mensal) + '/mês</b>, decorrente de ' +
       '<b>' + n + (n === 1 ? ' gargalo' : ' gargalos') + '</b> identificado' + (n === 1 ? '' : 's') + ' abaixo.</p>';
   } else if (n > 0) {
-    verdict = '<p class="laudo-verdict">' + quem + ' identificamos <b>' + n + (n === 1 ? ' ponto' : ' pontos') +
+    verdict = '<p class="laudo-verdict laudo-verdict--good m-reveal">' + quem + ' identificamos <b>' + n + (n === 1 ? ' ponto' : ' pontos') +
       '</b> fora da faixa de referência — o detalhe de cada um está abaixo.</p>';
   } else {
-    verdict = '<p class="laudo-verdict laudo-verdict--good">' + quem + ' os marcadores medidos estão <b>dentro da faixa de referência</b> — nenhum gargalo crítico no atendimento. Abaixo, o detalhe de cada um.</p>';
+    verdict = '<p class="laudo-verdict laudo-verdict--good m-reveal">' + quem + ' os marcadores medidos estão <b>dentro da faixa de referência</b> — nenhum gargalo crítico no atendimento. Abaixo, o detalhe de cada um.</p>';
   }
 
   var moneyBlock = hasLeak ? buildMoneyCard(vaz) : '';
 
   // 4 · Recálculo ao vivo (só faz sentido quando há vazamento a estancar)
   var recalc = hasLeak ? (
-    '<div class="laudo-recalc">' +
+    '<div class="laudo-recalc m-reveal">' +
       '<div class="laudo-recalc-h">Ajuste com os seus números reais</div>' +
       '<div class="laudo-recalc-sub">O laudo recalcula na hora conforme você edita.</div>' +
       '<div class="recalc-grid">' +
@@ -324,14 +324,14 @@ function buildLaudoHTML(model, vaz) {
   ) : '';
 
   // 5 · Marcadores técnicos explicados (1 card por gargalo medido)
-  var cards = '<p class="section-label">Marcadores técnicos, explicados</p>' +
-    '<div id="gcPainel">' + itens.map(function (item) { return renderOneCard(item, vaz); }).join('') + '</div>';
+  var cards = '<p class="section-label m-reveal">Marcadores técnicos, explicados</p>' +
+    '<div id="gcPainel" class="m-stagger">' + itens.map(function (item) { return renderOneCard(item, vaz); }).join('') + '</div>';
 
   // 6 · Conservadorismo + rodapé de metodologia
   var conserv = (vaz.detalhe.resposta > 0)
-    ? '<p class="laudo-conserv">Cálculo conservador: atribuímos apenas <strong>50% da perda</strong> ao fator tempo de resposta — o número exibido é o mínimo defensável.</p>'
+    ? '<p class="laudo-conserv m-reveal">Cálculo conservador: atribuímos apenas <strong>50% da perda</strong> ao fator tempo de resposta — o número exibido é o mínimo defensável.</p>'
     : '';
-  var method = '<p class="laudo-method"><b>Faixas de referência ClinUp</b>, construídas a partir de padrões de clínicas com atendimento e confirmação automatizados — não são médias de mercado auditadas. Os valores são estimativas a partir do que você informou, posicionadas no piso da faixa: o real tende a ser igual ou pior.</p>';
+  var method = '<p class="laudo-method m-reveal"><b>Faixas de referência ClinUp</b>, construídas a partir de padrões de clínicas com atendimento e confirmação automatizados — não são médias de mercado auditadas. Os valores são estimativas a partir do que você informou, posicionadas no piso da faixa: o real tende a ser igual ou pior.</p>';
 
   return head + scoreCard + verdict + moneyBlock + recalc + cards + conserv + method + buildCTA(model, pt, vaz.vazamento_mensal);
 }
@@ -342,17 +342,58 @@ function buildCTA(model, pt, mensal) {
   var desc = (mensal > 0)
     ? 'A sessão de diagnóstico costuma custar <strong>R$ 500</strong> — pra quem concluiu o laudo, é <strong>gratuita</strong>. Numa conversa, a gente entrega a <strong>ordem de prioridade</strong> pra tapar os gargalos ' + refTxt + ', começando pelos <strong>R$ ' + fmtMoney(mensal) + '/mês</strong> que escapam. Vagas limitadas pela agenda.'
     : 'A sessão de diagnóstico costuma custar <strong>R$ 500</strong> — pra quem concluiu o laudo, é <strong>gratuita</strong>. Numa conversa, a gente aponta os próximos ajustes ' + refTxt + ' pra você crescer com controle. Vagas limitadas pela agenda.';
-  return '<div class="cta-section" style="margin-top:22px;">' +
+  return '<div class="cta-section m-reveal" style="margin-top:22px;">' +
     '<div class="cta-eyebrow">Próximo passo</div>' +
     '<h3 class="cta-title">Um plano pra estancar esse vazamento em 30 dias</h3>' +
     '<p class="cta-desc">' + desc + '</p>' +
-    '<a class="laudo-cta" href="/consultoria?resultado=' + pt + '">Receber meu Plano de Recuperação de 30 dias&nbsp;→</a>' +
+    '<a class="laudo-cta btn-cta-shimmer" href="/consultoria?resultado=' + pt + '">Receber meu Plano de Recuperação de 30 dias&nbsp;→</a>' +
     '<button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do laudo</button>' +
     '<button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>' +
   '</div>';
 }
 
-// ── Exibição do resultado ────────────────────────────────────────────────────
+// ── Exibição do resultado + Scroll Reveal Mobile ────────────────────────────
+function initScrollReveal() {
+  if (typeof IntersectionObserver === 'undefined') {
+    document.querySelectorAll('.m-reveal').forEach(function(el) { el.classList.add('m-revealed'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('m-revealed');
+        if (entry.target.classList.contains('money-card') && !entry.target.dataset.counted) {
+          entry.target.dataset.counted = 'true';
+          animateMoneyNumbers();
+        }
+      }
+    });
+  }, { threshold: 0.10, rootMargin: '0px 0px -30px 0px' });
+
+  document.querySelectorAll('.m-reveal').forEach(function(el) {
+    observer.observe(el);
+  });
+}
+
+function animateMoneyNumbers() {
+  var elM = document.getElementById('laudoMensal');
+  var elA = document.getElementById('laudoAnual');
+  if (!elM || !_recalcCur.mensal) return;
+
+  var targetM = _recalcCur.mensal;
+  var targetA = _recalcCur.anual;
+  var t0 = performance.now();
+  var duration = 900;
+
+  (function tick(now) {
+    var p = Math.min(1, (now - t0) / duration);
+    var e = 1 - Math.pow(1 - p, 3);
+    if (elM) elM.textContent = fmtMoney(targetM * e);
+    if (elA) elA.textContent = fmtMoney(targetA * e);
+    if (p < 1) requestAnimationFrame(tick);
+  })(t0);
+}
+
 function showResult() {
   if (Object.keys(answers).length < TOTAL_PERGUNTAS) return;
   document.querySelectorAll('.question-screen').forEach(q => q.classList.remove('active'));
@@ -361,7 +402,7 @@ function showResult() {
   if (resumeNote) resumeNote.remove();
 
   const model = buildPresentationModel();
-  const vaz   = computeVazamento(); // estimativa em R$ das 5 perguntas financeiras
+  const vaz   = computeVazamento();
   if (!quizLeadData.refId) quizLeadData.refId = 'CU-' + Math.random().toString(16).slice(2, 8).toUpperCase();
   _recalcCur = vaz ? { mensal: vaz.vazamento_mensal, anual: vaz.vazamento_anual } : { mensal: 0, anual: 0 };
 
@@ -382,6 +423,7 @@ function showResult() {
 
   result.innerHTML = buildLaudoHTML(model, vaz);
   animateScoreRing(model.score);
+  initScrollReveal();
 }
 
 // ── Círculo de score (donut SVG) — cor interpolada + preenchimento animado ──

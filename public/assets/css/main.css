@@ -1,4 +1,4 @@
-﻿*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 /* Blindagem de viewport (todas as páginas) — receita testada em produção:
    1) body overflow-x CLIP: nada estoura a lateral (mata a "faixa branca à
@@ -457,3 +457,97 @@ main {
   .intro h1, .lead-headline { letter-spacing: -0.5px; }
   .intro-meta { gap: 16px; }
 }
+
+/* ── Mobile Motion & Scroll Reveal System (60fps) ── */
+.m-reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.m-reveal.m-revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Delay escalonado para elementos irmãos */
+.m-stagger > *:nth-child(1) { transition-delay: 0.04s; }
+.m-stagger > *:nth-child(2) { transition-delay: 0.10s; }
+.m-stagger > *:nth-child(3) { transition-delay: 0.16s; }
+.m-stagger > *:nth-child(4) { transition-delay: 0.22s; }
+.m-stagger > *:nth-child(5) { transition-delay: 0.28s; }
+.m-stagger > *:nth-child(6) { transition-delay: 0.34s; }
+
+/* ── Ponto Pulsante de Sistema Vivo ── */
+.live-pulse-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green, #2BD576);
+  box-shadow: 0 0 0 0 rgba(43, 213, 118, 0.7);
+  animation: pulseGreen 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes pulseGreen {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(43, 213, 118, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 7px rgba(43, 213, 118, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(43, 213, 118, 0); }
+}
+
+/* ── Money Card Ambient Glow & Shimmer ── */
+.money-card {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.money-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+  transform: skewX(-20deg);
+  animation: cardShimmer 6s infinite ease-in-out;
+  pointer-events: none;
+}
+@keyframes cardShimmer {
+  0%, 70% { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ── Marcador / Track Fill Animation ── */
+.mk-track .mk-tick {
+  transition: left 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s ease;
+}
+.gc {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.gc:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.35);
+}
+
+/* ── Shimmering CTA Button ── */
+.cta-button, .btn-continue, .result-cta a {
+  position: relative;
+  overflow: hidden;
+}
+.cta-button::after, .result-cta a::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%; width: 200%; height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 70%
+  );
+  transform: rotate(30deg);
+  animation: ctaShimmer 3.5s infinite ease-in-out;
+  pointer-events: none;
+}
+@keyframes ctaShimmer {
+  0% { transform: translate(-100%, -100%) rotate(30deg); }
+  22%, 100% { transform: translate(100%, 100%) rotate(30deg); }
+}
+
