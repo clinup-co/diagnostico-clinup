@@ -22,5 +22,13 @@ Thumbs.db
 .vercel
 .env*
 
-# Contexto local do Claude (repo publico - nao versionar)
+# Contexto local de IA (repo publico - nao versionar)
 CLAUDE.md
+.agents/
+
+# .claude/: versionamos so as skills do Spec Kit (uteis em qualquer maquina).
+# O resto e local desta maquina e o repo e publico - nao pode vazar.
+.claude/*
+!.claude/skills/
+.claude/settings.local.json
+.claude/worktrees/
