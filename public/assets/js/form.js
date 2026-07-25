@@ -67,7 +67,7 @@ function submitLeadForm() {
   trackOnce('lead_captured');
   trackPixelOnce('Lead');
 
-  // Direto pro resultado — o usuário já respondeu as 5 perguntas
+  // Direto pro resultado — o usuário já respondeu as 10 perguntas
   document.getElementById('leadScreen').classList.add('hidden');
   showResult();
 }

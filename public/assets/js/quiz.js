@@ -1,6 +1,7 @@
 // ─────────────────────────────────────────────
 // QUIZ — navegação e seleção de respostas
-// 9 perguntas: 3 numéricas (Próxima) + 6 de opção (auto-avança, 1 toque).
+// 10 perguntas: 3 numéricas — Q6/Q7/Q8, com botão Próxima — + 7 de opção
+// (auto-avança, 1 toque).
 // Só a última pergunta mantém botão explícito ("Ver meu diagnóstico").
 // ─────────────────────────────────────────────
 let _advanceTimer = null;
@@ -165,8 +166,8 @@ function getTotal() {
   return Object.values(answers).reduce((a, b) => a + b, 0);
 }
 
-// Score 0–100 = soma dos pontos (só as 6 perguntas de operação pontuam; as
-// 3 numéricas contribuem 0 — elas servem ao cálculo em R$, não à nota)
+// Score 0–100 = soma dos pontos (só as 7 de opção pontuam — Q1..Q5 e Q9/Q10;
+// as 3 numéricas contribuem 0 — elas servem ao cálculo em R$, não à nota)
 function getScore() {
   const p = quizLeadData.pontos || {};
   return Object.keys(p).reduce((sum, k) => sum + (parseInt(p[k], 10) || 0), 0);
