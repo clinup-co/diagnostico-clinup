@@ -183,6 +183,35 @@ body { position: relative; overflow-x: clip; } /* clip: nada estoura a viewport 
 .pill-txt { font-size: 13px; color: var(--body); line-height: 1.55; }
 .pill-txt b { color: var(--off); font-weight: 600; }
 
+/* Veredito personalizado */
+.laudo-verdict { font-size: 15px; color: var(--body); line-height: 1.65; margin: 0 0 16px; }
+.laudo-verdict b { color: var(--white); font-weight: 700; }
+.laudo-verdict .v-money { color: #F4574D; }
+.laudo-verdict--good b { color: #2BD576; }
+
+/* Cards de gargalo explicados (1 conceito por card, respirado) */
+#gcPainel { display: flex; flex-direction: column; gap: 16px; }
+.gc { position: relative; background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px 20px 18px 22px; }
+.gc::before { content: ''; position: absolute; left: 0; top: 16px; bottom: 16px; width: 3px; border-radius: 0 3px 3px 0; background: var(--border); }
+.gc-critico::before { background: #F4574D; }
+.gc-atencao::before { background: #F5A623; }
+.gc-dentro::before  { background: #2BD576; }
+.gc-blind { border-style: dashed; }
+.gc-blind::before   { background: #F5A623; opacity: .45; }
+.gc-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.gc-name { font-family: 'Sora', sans-serif; font-size: 15px; font-weight: 700; color: var(--white); line-height: 1.3; }
+.gc-chip { flex-shrink: 0; font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; border: 1px solid var(--border); border-radius: 100px; padding: 3px 10px; }
+.gc .mk-track { margin-top: 14px; }
+.gc .mk-row-bot { margin-top: 8px; }
+.gc-exp { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+.gc-line { display: grid; grid-template-columns: 118px 1fr; gap: 12px; align-items: baseline; }
+.gc-k { font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: var(--sub); }
+.gc-v { font-size: 13.5px; color: var(--body); line-height: 1.55; }
+.gc-v b { color: var(--white); font-weight: 700; }
+.gc-proof { margin-top: 14px; display: grid; gap: 8px; }
+.gc-proof .pill { background: rgba(231,234,240,0.03); }
+@media (max-width: 480px) { .gc-line { grid-template-columns: 1fr; gap: 3px; } }
+
 .laudo-conserv { font-size: 12.5px; color: var(--sub); line-height: 1.6; background: rgba(77,124,254,0.06); border-left: 3px solid #4D7CFE; border-radius: 0 10px 10px 0; padding: 12px 14px; margin-top: 4px; }
 .laudo-method { font-size: 11.5px; color: var(--sub); line-height: 1.6; border-top: 1px solid var(--border); padding-top: 16px; margin-top: 8px; }
 .laudo-method b { color: var(--body); }

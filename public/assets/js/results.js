@@ -1,6 +1,358 @@
 // ─────────────────────────────────────────────
-// RESULTADOS — renderização e lógica de scoring
+// RESULTADO — Laudo de Integridade Operacional
+// Funde a leitura qualitativa (nota 0–100 + achados das 5 perguntas originais)
+// com a estimativa em R$ e um bloco de marcadores técnicos EXPLICADOS: cada
+// gargalo REAL vem com o que é / por que é problema / quanto custa + prova de
+// autoridade. Só rendemos os 3 marcadores medidos de verdade (resposta, no-show,
+// ocupação); os demais dependeriam de campos não perguntados (premissa) e ficam
+// de fora — nada inventado. Motor reusado de motorCalculoVazamento.js.
 // ─────────────────────────────────────────────
+
+var STATUS_LABEL = { critico: 'Gargalo crítico', atencao: 'Atenção', dentro: 'Dentro da faixa' };
+var STATUS_PESO  = { critico: 0, atencao: 1, dentro: 2 };
+var STATUS_HEX   = { critico: '#F4574D', atencao: '#F5A623', dentro: '#2BD576' };
+
+// Formata inteiro em R$ pt-BR (sem centavos)
+function fmtMoney(n) {
+  try { return new Intl.NumberFormat('pt-BR').format(Math.round(n || 0)); }
+  catch (e) { return String(Math.round(n || 0)); }
+}
+
+function clampN(n, mn, mx) { mn = (mn == null ? 0 : mn); mx = (mx == null ? 100 : mx); return Math.min(Math.max(n, mn), mx); }
+
+// Posição 0–100 de um valor na escala (linear ou log) — usada na barra mk-track
+function posicao(valor, escala) {
+  var v = clampN(valor, escala.min, escala.max);
+  if (escala.type === 'log') {
+    var lmin = Math.log(escala.min) / Math.LN10, lmax = Math.log(escala.max) / Math.LN10;
+    return ((Math.log(Math.max(v, escala.min)) / Math.LN10 - lmin) / (lmax - lmin)) * 100;
+  }
+  return ((v - escala.min) / (escala.max - escala.min)) * 100;
+}
+
+// ── Nome do responsável ──────────────────────────────────────────────────────
+// O gate captura 1 nome. Usamos como responsável (Dr(a). Primeiro-nome) e
+// falamos da clínica de forma neutra ("sua operação").
+function drNome() {
+  var full = (quizLeadData.nome || '').trim();
+  if (!full) return '';
+  var first = full.split(/\s+/)[0];
+  if (!first) return '';
+  return 'Dr(a). ' + first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
+}
+
+// ── Estimativa em R$ (5 perguntas financeiras + motor de cálculo) ─────────────
+// Input do motor: os 5 números informados (T/C/K/resposta/ausencia) + premissas
+// conservadoras nas NÃO-perguntadas (as que produzem o MENOR vazamento — mantém
+// o número defensável). ATENÇÃO: passar o motor "cru" ao cálculo zera L1
+// (CONTATOS_POR_FAIXA[undefined]=0), então TODO caminho — render inicial e
+// recálculo — tem que passar por aqui.
+function motorInput(overrides) {
+  return Object.assign(
+    { contatos: 'ATE_30', cobertura: 'AUTOMATIZADA', reposicao: 'AUTOMATICA', convenio: 'ATE_30', confirmacao: 'AUTOMATIZADA' },
+    quizLeadData.motor || {},
+    overrides || {}
+  );
+}
+
+function computeVazamento() {
+  if (!(window.MotorAuditoria && window.MotorAuditoria.calcularVazamento)) return null;
+  return window.MotorAuditoria.calcularVazamento(motorInput());
+}
+
+// ── Marcadores técnicos explicados (núcleo do laudo) ─────────────────────────
+// Cada gargalo REAL vira um card respirado. Só os 3 medidos entram; casamos por
+// label com a saída de buildMarcadores (fonte de valor/escala/status/faixa).
+var GARGALO_SPECS = [
+  {
+    label: 'Tempo mediano de 1ª resposta',
+    nome: 'Tempo de 1ª resposta no WhatsApp',
+    tipo: 'vazamento',
+    custo: function (v) { return v.detalhe.resposta; },
+    oque: 'É quanto tempo, em média, um paciente espera pela primeira resposta quando chama sua clínica.',
+    porque: 'Interesse tem prazo curto de validade. Cada minuto de espera é gente que já resolveu em outro lugar — e some sem avisar.',
+    prova: [
+      { src: 'HBR', txt: 'Estudo da <b>Harvard Business Review</b> ("The Short Life of Online Sales Leads"): responder um contato em até 5 minutos aumenta em <b>~21×</b> a chance de qualificá-lo, contra 30 minutos.' },
+      { src: 'MIT', txt: 'Pesquisa do <b>MIT (Lead Response Management)</b>: a chance de contato cai a cada minuto — a primeira hora é decisiva pra virar interesse em consulta marcada.' }
+    ]
+  },
+  {
+    label: 'Taxa de ausência (no-show)',
+    nome: 'Taxa de faltas (no-show)',
+    tipo: 'vazamento',
+    custo: function (v) { return v.detalhe.ausencia; },
+    oque: 'É a fatia de pacientes agendados que não aparece — e cujo horário fica vago, sem reposição.',
+    porque: 'A hora médica não se revende: quando alguém falta e a vaga não é preenchida, aquela receita do dia não volta mais.',
+    prova: [
+      { src: 'MGMA', txt: 'Benchmarks da <b>MGMA</b> apontam o no-show como uma das maiores fontes de perda de receita em clínicas — cada horário vago não se revende.' }
+    ]
+  },
+  {
+    label: 'Ocupação da capacidade instalada',
+    nome: 'Ocupação da agenda',
+    tipo: 'oportunidade',
+    custo: function (v) { return v.potencial_ocioso_mensal; },
+    oque: 'É quanto da sua capacidade de atendimento está de fato preenchida — consultas feitas vs. consultas que caberiam.',
+    porque: 'Capacidade instalada é estoque perecível: a cadeira parada num horário livre não volta. Agenda folgada é crescimento parado.',
+    prova: [
+      { src: 'Operação', txt: 'Princípio operacional: capacidade ociosa não é perda contábil, mas é <b>receita potencial não capturada</b> — por isso entra separada, como oportunidade, e não somada ao vazamento.' }
+    ]
+  }
+];
+
+// Casa cada spec com o marcador medido; identifica o ponto cego do no-show.
+function gargaloData(res) {
+  if (!res) return [];
+  var mk = MotorAuditoria.buildMarcadores(res);
+  var byLabel = {};
+  mk.forEach(function (m) { byLabel[m.label] = m; });
+  return GARGALO_SPECS.map(function (spec) {
+    var m = byLabel[spec.label];
+    if (!m) return null;
+    var blind = spec.label === 'Taxa de ausência (no-show)' && !res.ausencia_mensuravel;
+    var status = blind ? 'atencao' : m.status;
+    return {
+      spec: spec, m: m, blind: blind, status: status,
+      peso: STATUS_PESO[status],
+      // ponto cego não conta como gargalo quantificado (Regra 1)
+      gargalo: !blind && status !== 'dentro'
+    };
+  }).filter(Boolean).sort(function (a, b) { return a.peso - b.peso; });
+}
+
+// Linha "Quanto custa" — amarra ao R$ real do motor
+function custoLinha(item, res) {
+  var v = item.spec.custo(res) || 0;
+  if (item.spec.tipo === 'oportunidade') {
+    return v > 0
+      ? '~R$ <b>' + fmtMoney(v) + '</b>/mês de agenda que caberia mais — oportunidade de crescimento, não somada ao vazamento.'
+      : 'Sua agenda está praticamente cheia — sem capacidade ociosa relevante.';
+  }
+  if (item.blind) return 'Sem medição, essa linha fica de fora do total — o vazamento real tende a ser maior.';
+  return v > 0
+    ? 'R$ <b>' + fmtMoney(v) + '</b>/mês escapando por aqui, na estimativa conservadora.'
+    : 'Sem perda estimada por aqui — está dentro da faixa de referência.';
+}
+
+function renderOneCard(item, res) {
+  var spec = item.spec, m = item.m, hex = STATUS_HEX[item.status];
+
+  if (item.blind) {
+    return '<div class="gc gc-blind">' +
+      '<div class="gc-head"><span class="gc-name">' + spec.nome + '</span>' +
+        '<span class="gc-chip" style="color:' + STATUS_HEX.atencao + ';border-color:' + STATUS_HEX.atencao + '55">Ponto cego</span></div>' +
+      '<div class="gc-exp">' +
+        '<div class="gc-line"><span class="gc-k">O que é</span><span class="gc-v">' + spec.oque + '</span></div>' +
+        '<div class="gc-line"><span class="gc-k">Por que importa</span><span class="gc-v">Você indicou <b>não medir</b> as faltas. Sem esse número, não dá pra dimensionar a perda — e o total do laudo sai por baixo.</span></div>' +
+        '<div class="gc-line"><span class="gc-k">Quanto custa</span><span class="gc-v">' + custoLinha(item, res) + '</span></div>' +
+      '</div>' +
+      '<div class="gc-proof">' + spec.prova.map(function (p) {
+        return '<div class="pill"><span class="pill-src">' + p.src + '</span><span class="pill-txt">' + p.txt + '</span></div>';
+      }).join('') + '</div>' +
+    '</div>';
+  }
+
+  var ri = posicao(m.refFrom, m.scale), rf = posicao(m.refTo, m.scale);
+  var rw = Math.max(rf - ri, 2);
+  var tick = clampN(posicao(m.value, m.scale), 1.5, 98.5);
+
+  return '<div class="gc gc-' + item.status + '">' +
+    '<div class="gc-head"><span class="gc-name">' + spec.nome + '</span>' +
+      '<span class="gc-chip" style="color:' + hex + ';border-color:' + hex + '55">' + STATUS_LABEL[item.status] + '</span></div>' +
+    '<div class="mk-track">' +
+      '<div class="mk-ref" style="left:' + ri + '%;width:' + rw + '%"></div>' +
+      '<div class="mk-tick" style="left:' + tick + '%;background:' + hex + ';box-shadow:0 0 0 6px ' + hex + '22"></div>' +
+    '</div>' +
+    '<div class="mk-row-bot"><span class="mk-refl">Referência: <b>' + m.refLabel + '</b></span>' +
+      '<span class="mk-disp" style="color:' + hex + '">' + m.display + '</span></div>' +
+    '<div class="gc-exp">' +
+      '<div class="gc-line"><span class="gc-k">O que é</span><span class="gc-v">' + spec.oque + '</span></div>' +
+      '<div class="gc-line"><span class="gc-k">Por que é um problema</span><span class="gc-v">' + spec.porque + '</span></div>' +
+      '<div class="gc-line"><span class="gc-k">Quanto custa</span><span class="gc-v">' + custoLinha(item, res) + '</span></div>' +
+    '</div>' +
+    '<div class="gc-proof">' + spec.prova.map(function (p) {
+      return '<div class="pill"><span class="pill-src">' + p.src + '</span><span class="pill-txt">' + p.txt + '</span></div>';
+    }).join('') + '</div>' +
+  '</div>';
+}
+
+function renderGargaloCards(res) {
+  return gargaloData(res).map(function (item) { return renderOneCard(item, res); }).join('');
+}
+
+// ── Money card (com ids pro recálculo ao vivo) ───────────────────────────────
+function buildMoneyBreak(res) {
+  var linhas = '';
+  var temResp  = res.detalhe.resposta > 0;
+  var temFalta = res.ausencia_mensuravel && res.detalhe.ausencia > 0;
+  if (temResp || temFalta) {
+    linhas = '<div class="money-lines">' +
+      (temResp ? '<div class="money-line"><span>Resposta lenta no WhatsApp</span><b>R$ ' + fmtMoney(res.detalhe.resposta) + '/mês</b></div>' : '') +
+      (temFalta ? '<div class="money-line"><span>Faltas não repostas</span><b>R$ ' + fmtMoney(res.detalhe.ausencia) + '/mês</b></div>' : '') +
+      '</div>';
+  }
+  var idle = (res.potencial_ocioso_mensal > 0)
+    ? '<p class="money-idle">Fora da conta acima: ~R$ ' + fmtMoney(res.potencial_ocioso_mensal) +
+      '/mês de <strong>capacidade ociosa</strong> — agenda que caberia mais. Oportunidade de crescimento, <strong>não somada</strong> ao vazamento.</p>'
+    : '';
+  var naoMede = (!res.ausencia_mensuravel)
+    ? '<p class="money-idle">Você indicou não medir a taxa de ausência. Sem medição, essa linha <strong>não entra</strong> no total — que sai subdimensionado.</p>'
+    : '';
+  return linhas + idle + naoMede;
+}
+
+function buildMoneyCard(res) {
+  return '<div class="money-card">' +
+    '<span class="money-chip">Vazamento estimado</span>' +
+    '<p class="money-label">Quanto sua operação deixa na mesa por mês</p>' +
+    '<p class="money-value">R$ <span id="laudoMensal">' + fmtMoney(res.vazamento_mensal) + '</span></p>' +
+    '<p class="money-year">≈ R$ <span id="laudoAnual">' + fmtMoney(res.vazamento_anual) + '</span> por ano, no cenário atual.</p>' +
+    '<div id="laudoBreak">' + buildMoneyBreak(res) + '</div>' +
+    '<p class="money-note">Soma do que escapa por resposta lenta no WhatsApp e por faltas não repostas, com premissas conservadoras onde faltou dado. O valor exato a gente levanta na conversa.</p>' +
+  '</div>';
+}
+
+// ── Recálculo ao vivo (T/C/K) — tween 400ms nos R$ + re-render dos cards ─────
+var _recalcRaf = null, _recalcCur = { mensal: 0, anual: 0 };
+function recalcLaudo() {
+  var m = quizLeadData.motor || (quizLeadData.motor = {});
+  var t = parseFloat(document.getElementById('reT').value);
+  var c = parseFloat(document.getElementById('reC').value);
+  var k = parseFloat(document.getElementById('reK').value);
+  if (isFinite(t) && t > 0) m.T = t;
+  if (isFinite(c) && c > 0) m.C = c;
+  if (isFinite(k) && k > 0) m.K = k;
+
+  var res = MotorAuditoria.calcularVazamento(motorInput());
+  quizLeadData.respostas._vazamento = res;
+  persistState();
+
+  var target = { mensal: res.vazamento_mensal, anual: res.vazamento_anual };
+  var elM = document.getElementById('laudoMensal'), elA = document.getElementById('laudoAnual');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    if (elM) elM.textContent = fmtMoney(target.mensal);
+    if (elA) elA.textContent = fmtMoney(target.anual);
+    _recalcCur = target;
+  } else {
+    var from = { mensal: _recalcCur.mensal, anual: _recalcCur.anual }, t0 = performance.now();
+    if (_recalcRaf) cancelAnimationFrame(_recalcRaf);
+    (function tick(now) {
+      var p = Math.min(1, (now - t0) / 400), e = 1 - Math.pow(1 - p, 3);
+      if (elM) elM.textContent = fmtMoney(from.mensal + (target.mensal - from.mensal) * e);
+      if (elA) elA.textContent = fmtMoney(from.anual + (target.anual - from.anual) * e);
+      if (p < 1) _recalcRaf = requestAnimationFrame(tick); else _recalcCur = target;
+    })(t0);
+  }
+  // quebra do money-card e cards de gargalo dependem de T/C/K → re-render direto
+  var brk = document.getElementById('laudoBreak'); if (brk) brk.innerHTML = buildMoneyBreak(res);
+  var gc = document.getElementById('gcPainel'); if (gc) gc.innerHTML = renderGargaloCards(res);
+}
+
+// ── Montagem do laudo ────────────────────────────────────────────────────────
+function buildLaudoHTML(model, vaz) {
+  var nome = drNome();
+  var pt = ({ good: 'bom', moderate: 'mediano', critical: 'critico' })[model.level] || 'mediano';
+
+  // 1 · Cabeçalho do laudo
+  var head = '<div class="laudo-head">' +
+    '<div class="laudo-eyebrow">Laudo de Integridade Operacional</div>' +
+    '<div class="laudo-clinica">' + (nome ? 'Emitido para ' + nome : 'Laudo da sua operação') + '</div>' +
+    '<div class="laudo-ref">Ref: ' + (quizLeadData.refId || 'CU-------') + ' · análise ClinUp</div>' +
+    '<span class="laudo-chip">Simulação · estimativa</span>' +
+  '</div>';
+
+  // 2 · Nota + badge + título + tese + achados (5 perguntas qualitativas)
+  var insightsHTML = model.insights.map(function (i) {
+    return '<div class="finding">' +
+      '<div class="finding-icon ' + i.type + '">' + i.icon + '</div>' +
+      '<div class="finding-body"><div class="finding-title">' + i.title + '</div>' +
+      '<div class="finding-desc">' + i.desc + '</div></div></div>';
+  }).join('');
+
+  var scoreCard = '<div class="score-card ' + model.level + '">' +
+    '<div class="score-ring" id="scoreRing">' +
+      '<svg viewBox="0 0 120 120" aria-hidden="true">' +
+        '<circle class="score-ring-track" cx="60" cy="60" r="52"></circle>' +
+        '<circle class="score-ring-fill" cx="60" cy="60" r="52"></circle>' +
+      '</svg><div class="score-ring-num"><span id="scoreNum">0</span>%</div>' +
+    '</div>' + model.badge +
+    '<h2 class="result-title">' + model.title + '</h2>' +
+    '<p class="result-sub">' + model.subtitle + '</p>' +
+    '<p class="result-thesis">' + model.thesis + '</p>' +
+    '<p class="score-method">Score do seu perfil — captação, canal e conversão de pacientes. Abaixo, a estimativa em reais a partir dos seus números.</p>' +
+  '</div>' +
+  '<p class="section-label">' + model.sectionLabel + '</p>' +
+  '<div class="findings">' + insightsHTML + '</div>';
+
+  // Sem motor disponível: entrega só a leitura qualitativa + CTA simples
+  if (!vaz) {
+    return head + scoreCard + buildCTA(model, pt, 0);
+  }
+
+  var itens = gargaloData(vaz);
+  var n = itens.filter(function (x) { return x.gargalo; }).length;
+  var hasLeak = vaz.vazamento_mensal > 0;
+
+  // 3 · Veredito personalizado + money card
+  var quem = nome ? nome + ',' : 'Sua operação:';
+  var verdict;
+  if (n > 0 && hasLeak) {
+    verdict = '<p class="laudo-verdict">' + quem + ' sua operação apresenta um vazamento estimado de ' +
+      '<b class="v-money">R$ ' + fmtMoney(vaz.vazamento_mensal) + '/mês</b>, decorrente de ' +
+      '<b>' + n + (n === 1 ? ' gargalo' : ' gargalos') + '</b> identificado' + (n === 1 ? '' : 's') + ' abaixo.</p>';
+  } else if (n > 0) {
+    verdict = '<p class="laudo-verdict">' + quem + ' identificamos <b>' + n + (n === 1 ? ' ponto' : ' pontos') +
+      '</b> fora da faixa de referência — o detalhe de cada um está abaixo.</p>';
+  } else {
+    verdict = '<p class="laudo-verdict laudo-verdict--good">' + quem + ' os marcadores medidos estão <b>dentro da faixa de referência</b> — nenhum gargalo crítico no atendimento. Abaixo, o detalhe de cada um.</p>';
+  }
+
+  var moneyBlock = hasLeak ? buildMoneyCard(vaz) : '';
+
+  // 4 · Recálculo ao vivo (só faz sentido quando há vazamento a estancar)
+  var recalc = hasLeak ? (
+    '<div class="laudo-recalc">' +
+      '<div class="laudo-recalc-h">Ajuste com os seus números reais</div>' +
+      '<div class="laudo-recalc-sub">O laudo recalcula na hora conforme você edita.</div>' +
+      '<div class="recalc-grid">' +
+        '<label>Ticket (R$)<input id="reT" type="number" min="1" max="99999" inputmode="numeric" value="' + vaz.entrada.T + '" oninput="recalcLaudo()"></label>' +
+        '<label>Consultas/sem<input id="reC" type="number" min="1" max="9999" inputmode="numeric" value="' + vaz.entrada.C + '" oninput="recalcLaudo()"></label>' +
+        '<label>Capacidade/sem<input id="reK" type="number" min="1" max="9999" inputmode="numeric" value="' + vaz.entrada.K + '" oninput="recalcLaudo()"></label>' +
+      '</div>' +
+    '</div>'
+  ) : '';
+
+  // 5 · Marcadores técnicos explicados (1 card por gargalo medido)
+  var cards = '<p class="section-label">Marcadores técnicos, explicados</p>' +
+    '<div id="gcPainel">' + itens.map(function (item) { return renderOneCard(item, vaz); }).join('') + '</div>';
+
+  // 6 · Conservadorismo + rodapé de metodologia
+  var conserv = (vaz.detalhe.resposta > 0)
+    ? '<p class="laudo-conserv">Cálculo conservador: atribuímos apenas <strong>50% da perda</strong> ao fator tempo de resposta — o número exibido é o mínimo defensável.</p>'
+    : '';
+  var method = '<p class="laudo-method"><b>Faixas de referência ClinUp</b>, construídas a partir de padrões de clínicas com atendimento e confirmação automatizados — não são médias de mercado auditadas. Os valores são estimativas a partir do que você informou, posicionadas no piso da faixa: o real tende a ser igual ou pior.</p>';
+
+  return head + scoreCard + verdict + moneyBlock + recalc + cards + conserv + method + buildCTA(model, pt, vaz.vazamento_mensal);
+}
+
+// 7 · CTA de conversão — ancoragem R$ 500 + escassez, quebra de objeção com Ref/R$
+function buildCTA(model, pt, mensal) {
+  var refTxt = quizLeadData.refId ? 'do seu Ref: ' + quizLeadData.refId : 'do seu laudo';
+  var desc = (mensal > 0)
+    ? 'A sessão de diagnóstico costuma custar <strong>R$ 500</strong> — pra quem concluiu o laudo, é <strong>gratuita</strong>. Numa conversa, a gente entrega a <strong>ordem de prioridade</strong> pra tapar os gargalos ' + refTxt + ', começando pelos <strong>R$ ' + fmtMoney(mensal) + '/mês</strong> que escapam. Vagas limitadas pela agenda.'
+    : 'A sessão de diagnóstico costuma custar <strong>R$ 500</strong> — pra quem concluiu o laudo, é <strong>gratuita</strong>. Numa conversa, a gente aponta os próximos ajustes ' + refTxt + ' pra você crescer com controle. Vagas limitadas pela agenda.';
+  return '<div class="cta-section" style="margin-top:22px;">' +
+    '<div class="cta-eyebrow">Próximo passo</div>' +
+    '<h3 class="cta-title">Um plano pra estancar esse vazamento em 30 dias</h3>' +
+    '<p class="cta-desc">' + desc + '</p>' +
+    '<a class="laudo-cta" href="/consultoria?resultado=' + pt + '">Receber meu Plano de Recuperação de 30 dias&nbsp;→</a>' +
+    '<button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do laudo</button>' +
+    '<button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>' +
+  '</div>';
+}
+
+// ── Exibição do resultado ────────────────────────────────────────────────────
 function showResult() {
   if (Object.keys(answers).length < TOTAL_PERGUNTAS) return;
   document.querySelectorAll('.question-screen').forEach(q => q.classList.remove('active'));
@@ -8,11 +360,14 @@ function showResult() {
   const resumeNote = document.getElementById('resumeNote');
   if (resumeNote) resumeNote.remove();
 
-  const model  = buildPresentationModel();
-  const vaz    = computeVazamento(); // estimativa em R$ das 5 perguntas financeiras
+  const model = buildPresentationModel();
+  const vaz   = computeVazamento(); // estimativa em R$ das 5 perguntas financeiras
+  if (!quizLeadData.refId) quizLeadData.refId = 'CU-' + Math.random().toString(16).slice(2, 8).toUpperCase();
+  _recalcCur = vaz ? { mensal: vaz.vazamento_mensal, anual: vaz.vazamento_anual } : { mensal: 0, anual: 0 };
+
   const result = document.getElementById('result');
   result.classList.add('show');
-  window.scrollTo({top: 0, behavior: 'smooth'});
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 
   quizLeadData.resultado     = model.level;
   quizLeadData.quizConcluido = true;
@@ -23,105 +378,10 @@ function showResult() {
   saveLeadToSupabase();
   const resultadoPt = ({ good: 'bom', moderate: 'mediano', critical: 'critico' })[model.level] || model.level;
   trackOnce('result_view', { resultado: resultadoPt });
-  trackPixelOnce('ViewContent', { content_name: 'resultado_' + resultadoPt });
+  trackPixelOnce('ViewContent', { content_name: 'laudo_' + resultadoPt });
 
-  const insightsHTML = model.insights.map(i => `
-    <div class="finding">
-      <div class="finding-icon ${i.type}">${i.icon}</div>
-      <div class="finding-body">
-        <div class="finding-title">${i.title}</div>
-        <div class="finding-desc">${i.desc}</div>
-      </div>
-    </div>
-  `).join('');
-
-  result.innerHTML = `
-    <div class="score-card ${model.level}">
-      <div class="score-ring" id="scoreRing">
-        <svg viewBox="0 0 120 120" aria-hidden="true">
-          <circle class="score-ring-track" cx="60" cy="60" r="52"></circle>
-          <circle class="score-ring-fill" cx="60" cy="60" r="52"></circle>
-        </svg>
-        <div class="score-ring-num"><span id="scoreNum">0</span>%</div>
-      </div>
-      ${model.badge}
-      <h2 class="result-title">${model.title}</h2>
-      <p class="result-sub">${model.subtitle}</p>
-      <p class="result-thesis">${model.thesis}</p>
-      <p class="score-method">Score do seu perfil — captação, canal e conversão de pacientes. Abaixo, a estimativa em reais a partir dos seus números.</p>
-    </div>
-    ${buildMoneyHTML(vaz)}
-    <p class="section-label">${model.sectionLabel}</p>
-    <div class="findings">${insightsHTML}</div>
-    <p class="section-label">Daqui, são dois caminhos</p>
-    <div class="result-paths">
-      <div class="result-path">
-        <div class="result-path-title">Continuar como está</div>
-        <div class="result-path-desc">Cada mês igual: paciente chegando, parte escapando — e você sem saber onde.</div>
-      </div>
-      <div class="result-path result-path--accent">
-        <div class="result-path-title">Organizar tudo</div>
-        <div class="result-path-desc">Site, WhatsApp e atendimento puxando juntos, <strong>pra mais gente marcar consulta</strong>.</div>
-      </div>
-    </div>
-    <div class="cta-section">
-      <div class="cta-eyebrow">Próximo passo</div>
-      <h3 class="cta-title">${model.ctaTitle}</h3>
-      <p class="cta-desc">${model.ctaDesc}</p>
-      <a class="btn-whatsapp"
-         href="/consultoria?resultado=${ {'good':'bom','moderate':'mediano','critical':'critico'}[model.level] || 'mediano' }">
-        Agendar minha sessão gratuita&nbsp;→
-      </a>
-      <button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do resultado</button>
-      <button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>
-    </div>
-  `;
-
+  result.innerHTML = buildLaudoHTML(model, vaz);
   animateScoreRing(model.score);
-}
-
-// ── Estimativa em R$ (5 perguntas financeiras + motor de cálculo) ─────────────
-function fmtMoney(n) {
-  try { return new Intl.NumberFormat('pt-BR').format(Math.round(n || 0)); }
-  catch (e) { return String(Math.round(n || 0)); }
-}
-
-// Monta o input do motor: os 5 números informados (T/C/K/resposta/ausencia) +
-// premissas conservadoras nas não-perguntadas (Regra do Desconhecido: as que
-// produzem o MENOR vazamento — mantém o número defensável).
-function computeVazamento() {
-  if (!(window.MotorAuditoria && window.MotorAuditoria.calcularVazamento)) return null;
-  var m = Object.assign(
-    { contatos: 'ATE_30', cobertura: 'AUTOMATIZADA', reposicao: 'AUTOMATICA', convenio: 'ATE_30', confirmacao: 'AUTOMATIZADA' },
-    quizLeadData.motor || {}
-  );
-  return window.MotorAuditoria.calcularVazamento(m);
-}
-
-function buildMoneyHTML(vaz) {
-  if (!vaz || vaz.vazamento_mensal <= 0) return '';
-  var linhas = '';
-  if (vaz.detalhe.resposta > 0 || (vaz.ausencia_mensuravel && vaz.detalhe.ausencia > 0)) {
-    linhas = '<div class="money-lines">' +
-      '<div class="money-line"><span>Resposta lenta no WhatsApp</span><b>R$ ' + fmtMoney(vaz.detalhe.resposta) + '/mês</b></div>' +
-      (vaz.ausencia_mensuravel ? '<div class="money-line"><span>Faltas não repostas</span><b>R$ ' + fmtMoney(vaz.detalhe.ausencia) + '/mês</b></div>' : '') +
-      '</div>';
-  }
-  var idle = (vaz.potencial_ocioso_mensal > 0)
-    ? '<p class="money-idle">Fora da conta: ~R$ ' + fmtMoney(vaz.potencial_ocioso_mensal) + '/mês de <strong>agenda ociosa</strong> (capacidade livre). É oportunidade de crescimento — <strong>não somada</strong> ao vazamento.</p>'
-    : '';
-  var naoMede = (!vaz.ausencia_mensuravel)
-    ? '<p class="money-idle">Você indicou não medir as faltas — essa linha ficou de fora, então o número sai subdimensionado.</p>'
-    : '';
-  return '<p class="section-label">Estimativa de vazamento</p>' +
-    '<div class="money-card">' +
-      '<span class="money-chip">Simulação · estimativa</span>' +
-      '<p class="money-label">Quanto sua clínica deixa na mesa por mês</p>' +
-      '<p class="money-value">R$ ' + fmtMoney(vaz.vazamento_mensal) + '</p>' +
-      '<p class="money-year">≈ R$ ' + fmtMoney(vaz.vazamento_anual) + ' por ano, no cenário atual.</p>' +
-      linhas + idle + naoMede +
-      '<p class="money-note">Estimativa a partir dos seus números, com premissas conservadoras onde faltou dado. O valor exato a gente levanta na conversa.</p>' +
-    '</div>';
 }
 
 // ── Círculo de score (donut SVG) — cor interpolada + preenchimento animado ──
@@ -172,7 +432,7 @@ function animateScoreRing(score) {
   })(start);
 }
 
-// Resumo do resultado em texto puro — o usuário leva o diagnóstico com ele
+// Resumo do laudo em texto puro — o usuário leva o diagnóstico com ele
 // (colar em nota, mandar pro sócio, guardar). Clipboard API com fallback.
 function copyResultSummary(btn) {
   try {
@@ -182,13 +442,14 @@ function copyResultSummary(btn) {
     }[model.level] || model.level;
     const vaz = computeVazamento();
     const lines = [
-      'Diagnóstico CLINUP — ' + (quizLeadData.nome || 'minha clínica'),
+      'Laudo ClinUp — ' + ((quizLeadData.nome || '').trim() || 'minha clínica') +
+        (quizLeadData.refId ? ' (Ref: ' + quizLeadData.refId + ')' : ''),
       'Resultado: ' + model.score + '% · ' + label
     ];
     if (vaz && vaz.vazamento_mensal > 0) {
       lines.push('Vazamento estimado: R$ ' + fmtMoney(vaz.vazamento_mensal) + '/mês (~R$ ' + fmtMoney(vaz.vazamento_anual) + '/ano)');
     }
-    lines.push('', 'Principais pontos:');
+    lines.push('', 'Principais achados:');
     model.insights.forEach(i => lines.push('- ' + i.title));
     lines.push('', 'Feito em: diagnostico-clinup-lac.vercel.app');
     const text = lines.join('\n');
@@ -465,7 +726,7 @@ function selectInsights(level) {
 function restartQuiz() {
   Object.keys(answers).forEach(k => delete answers[k]);
   Object.assign(quizLeadData, {
-    respostas: {}, pontos: {}, motor: {}, resultado: '', etapaAtual: 'formulario',
+    respostas: {}, pontos: {}, motor: {}, refId: '', resultado: '', etapaAtual: 'formulario',
     quizConcluido: false, whatsappClicado: false
   });
   _leadSaved = false;

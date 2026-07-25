@@ -10,6 +10,7 @@ const quizLeadData = {
   respostas:       {},
   pontos:          {},
   motor:           {},   // inputs do motor de cálculo (ticket, faltas, resposta...)
+  refId:           '',   // referência do laudo (CU-XXXXXX), gerada 1x no resultado
   resultado:       '',
   etapaAtual:      'inicio',
   quizConcluido:   false,
