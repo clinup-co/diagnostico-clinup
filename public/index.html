@@ -38,8 +38,10 @@
   --t-fast: 140ms; --t-base: 480ms; --t-slow: 700ms;
   --rise: 24px;
   --stagger: 80ms;
-  /* fotos editoriais: um valor só, usado também no reduced-motion */
-  --photo-op: .34;
+  /* fotos editoriais: um valor só, usado também no reduced-motion.
+     O contraste do texto NÃO depende mais deste valor — quem segura é o
+     .photo-panel atrás de cada bloco de texto que fica sobre a foto. */
+  --photo-op: .60;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
@@ -110,11 +112,11 @@ a{color:inherit}
 
 /* ── Seções / tipografia ─────────────────────────────────────────── */
 section{scroll-margin-top:84px}
-.sec{padding:112px 0;position:relative;--sec-bg:var(--bg);--sec-scrim:rgba(10,14,26,.55)}
+.sec{padding:112px 0;position:relative;--sec-bg:var(--bg);--sec-scrim:rgba(10,14,26,.30)}
 /* ── Ritmo de capítulos: bandas de fundo alternadas ──────────────────
    Seções com padding-top:0 leem como um bloco contínuo, então a banda
    é por CAPÍTULO (pilares / objeções+passos), nunca por seção solta. */
-.band-alt{--sec-bg:var(--bg-alt);--sec-scrim:rgba(13,18,31,.55);background:var(--bg-alt)}
+.band-alt{--sec-bg:var(--bg-alt);--sec-scrim:rgba(13,18,31,.30);background:var(--bg-alt)}
 .band-top{border-top:1px solid var(--line)}
 .band-bot{border-bottom:1px solid var(--line)}
 .kicker{
@@ -173,7 +175,7 @@ h2{
 
 /* ── Transformação ───────────────────────────────────────────────── */
 .transform{
-  --sec-bg:var(--bg-deep);--sec-scrim:rgba(5,8,17,.55);
+  --sec-bg:var(--bg-deep);--sec-scrim:rgba(5,8,17,.30);
   background:radial-gradient(700px 380px at 50% 0%, rgba(43,213,118,.09), transparent 70%), var(--bg-deep);
   border-top:1px solid var(--line);border-bottom:1px solid var(--line);
 }
@@ -251,7 +253,10 @@ h2{
 /* ── Fechamento ──────────────────────────────────────────────────── */
 .final-card{
   position:relative;max-width:820px;margin:0 auto;text-align:center;
-  background:linear-gradient(180deg,#101728,#0C1220);
+  /* translúcido: a foto da entrada passa a aparecer através do card */
+  background:linear-gradient(180deg,rgba(16,23,40,.74),rgba(12,18,32,.84));
+  backdrop-filter:blur(14px) saturate(1.1);
+  -webkit-backdrop-filter:blur(14px) saturate(1.1);
   border:1px solid var(--line);border-radius:22px;padding:72px 40px;overflow:hidden;
 }
 .final-card::before{
@@ -314,7 +319,7 @@ h2{
 .photo-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
 .photo-bg img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  filter:saturate(.7);opacity:var(--photo-op);
+  filter:saturate(.85);opacity:var(--photo-op);
   transition:opacity var(--t-slow) ease;
 }
 html.js-anim .photo-bg:not(.is-visible) img{opacity:0}
@@ -331,6 +336,35 @@ html.js-anim .photo-bg:not(.is-visible) img{opacity:0}
     linear-gradient(180deg,
       var(--sec-bg) 0%, var(--sec-scrim) 26%, var(--sec-scrim) 74%, var(--sec-bg) 100%);
 }
+
+/* ── Painel fosco: só atrás de bloco de texto que fica SOBRE foto ──
+   A foto respira onde não há texto; o contraste da leitura fica preso
+   ao painel, não ao scrim da seção inteira. */
+.photo-panel{
+  position:relative;border-radius:20px;padding:36px 34px;
+  /* .85 não é estética: é o valor medido que mantém o .lead (--ink-2, um
+     cinza de baixo contraste) acima de 4.5:1 sobre as áreas CLARAS das
+     fotos — a janela do Pilar 2 e o céu da Virada. Não baixar sem remedir:
+     em .76 a Virada caía pra 4.20:1. */
+  background:rgba(13,18,31,.85);
+  backdrop-filter:blur(14px) saturate(1.1);
+  -webkit-backdrop-filter:blur(14px) saturate(1.1);
+  border:1px solid rgba(255,255,255,.07);
+  box-shadow:0 18px 50px rgba(0,0,0,.35);
+}
+/* sem blur o fundo translúcido não segura o texto: fica quase sólido */
+@supports not ((backdrop-filter:blur(2px)) or (-webkit-backdrop-filter:blur(2px))){
+  .photo-panel{background:rgba(13,18,31,.92)}
+  .final-card{background:linear-gradient(180deg,#101728,#0C1220)}
+}
+/* nos pilares o painel cresce pra FORA (pro gap), pra não encurtar a
+   medida do texto com o próprio padding */
+@media (min-width:981px){ .zig .photo-panel{margin-inline:-24px} }
+/* .transform-head é .wrap E painel ao mesmo tempo: o padding do painel come
+   o respiro lateral do .wrap e a seção encosta nas bordas no mobile.
+   O max-width:780px continua mandando no desktop. */
+.transform-head.photo-panel{width:calc(100% - 48px)}
+@media (max-width:640px){ .photo-panel{padding:26px 20px;border-radius:16px} }
 
 /* ── Fio da Receita (SVG na margem, só telas largas) ─────────────── */
 .fio{
@@ -793,7 +827,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <i class="fio-drip" style="top:76%"></i>
   </div>
   <div class="wrap zig">
-    <div class="zig-copy" data-stagger>
+    <div class="zig-copy photo-panel" data-stagger>
       <span class="kicker reveal">Pilar 1 · Atendimento no WhatsApp</span>
       <h2 class="reveal">O Cemitério de Leads no seu WhatsApp</h2>
       <p class="lead reveal">Paciente que chama e não recebe resposta em minutos esfria — e some. Enquanto isso, o valor da consulta que ele pagaria sai da sua receita sem deixar rastro. O diagnóstico mostra onde o atendimento deixa dinheiro parado no chat.</p>
@@ -896,7 +930,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <i class="fio-drip" style="top:72%"></i>
   </div>
   <div class="wrap zig zig--flip">
-    <div class="zig-copy" data-stagger>
+    <div class="zig-copy photo-panel" data-stagger>
       <span class="kicker reveal">Pilar 2 · Agenda e faltas</span>
       <h2 class="reveal">O Ralo Financeiro da Cadeira Vazia</h2>
       <p class="lead reveal">Uma falta não é um imprevisto: é um horário pago que ficou vazio — e horário vago não se revende. Com confirmação inteligente e reocupação automática da agenda, as faltas param de virar prejuízo silencioso todo mês.</p>
@@ -1005,7 +1039,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <section class="sec transform has-photo" id="transformacao">
   <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_virada_medico.jpg" alt="" loading="lazy"></div>
   <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
-  <div class="wrap transform-head" data-stagger>
+  <div class="wrap transform-head photo-panel" data-stagger>
     <span class="kicker reveal">A virada</span>
     <h2 class="reveal">O que muda quando a ClinUp entra em campo? O lucro volta a ser a sua prioridade.</h2>
     <p class="lead reveal">É a receita das consultas particulares voltando pra agenda — sem depender de repasse de convênio. Projeção ilustrativa de uma clínica com ticket médio de R$ 420, construída sobre os pilares acima; os números da sua clínica saem do seu diagnóstico.</p>
