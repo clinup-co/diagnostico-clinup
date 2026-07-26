@@ -814,6 +814,18 @@ body.demo-modal-open { overflow: hidden; }
 .roi-suffix { font-size: 13px; color: var(--sub); font-weight: 500; }
 .roi-out { font-size: 15px; font-weight: 500; color: var(--body); line-height: 1.6; }
 .roi-out strong { color: var(--blue); font-weight: 700; }
+/* ── Banner de contexto do laudo (injetado por JS só quando há vazamento) ── */
+.plans-roi-banner {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  max-width: 720px; margin: 0 auto 24px;
+  background: rgba(77,124,254,0.08);
+  border: 1px solid rgba(77,124,254,0.22);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 14px; font-weight: 500; line-height: 1.55;
+  color: var(--body); text-align: center;
+}
+.plans-roi-banner b { color: var(--white); font-weight: 700; }
 /* ── Faixa de upsell "para redes / alto volume" (substitui o card Escala) ── */
 .plans-enterprise {
   display: flex; align-items: center; justify-content: center; gap: 16px; flex-wrap: wrap;
@@ -1714,6 +1726,16 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   var out = document.getElementById('roiOut');
   if (!val || !pat || !out) return;
   var PLANO = 297; // Essencial (o mais barato)
+
+  // FR-007 · quem veio do diagnóstico já chega com os próprios números aqui.
+  // T = ticket médio, C = consultas/semana (ambos respondidos no quiz).
+  // Os campos continuam editáveis — isto é ponto de partida, não trava.
+  try {
+    var _lead  = JSON.parse(localStorage.getItem('clinup_lead') || '{}') || {};
+    var _motor = _lead.motor || {};
+    if (_motor.T > 0) val.value = Math.round(_motor.T);
+    if (_motor.C > 0) pat.value = Math.max(1, Math.ceil(_motor.C / 5));
+  } catch (e) {}
   function fmt(n) { return Math.round(n).toLocaleString('pt-BR'); }
   function update() {
     var v = Math.min(Math.max(parseFloat(val.value) || 0, 0), 100000);
@@ -1734,6 +1756,52 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   val.addEventListener('input', update);
   pat.addEventListener('input', update);
   update();
+}());
+</script>
+
+<script>
+// FR-003/006 · Banner de contexto financeiro — só existe pra quem trouxe laudo.
+// Visitante direto não vê nada e a página segue idêntica a hoje.
+(function () {
+  var alvo = document.getElementById('planos');
+  if (!alvo || !alvo.parentNode) return;
+
+  var vm = 0;
+  try {
+    var lead = JSON.parse(localStorage.getItem('clinup_lead') || '{}') || {};
+    var vaz  = (lead.respostas || {})._vazamento;
+    if (vaz) vm = Math.round(vaz.vazamento_mensal || 0);
+  } catch (e) {}
+  if (!(vm > 0)) return;
+
+  var PLANO = 297; // plano de entrada, o mesmo da calculadora acima
+  var pct   = Math.round((PLANO / vm) * 100);
+
+  // Acima de 100% a comparação vira absurdo ("custa menos de 140% do vazamento"),
+  // então a cláusula de percentual só entra quando ela ajuda o leitor.
+  var comparativo = (pct > 0 && pct < 100)
+    ? ' O plano de entrada custa cerca de <b>' + pct + '%</b> desse valor.'
+    : '';
+
+  var banner = document.createElement('div');
+  banner.className = 'plans-roi-banner m-reveal';
+  banner.innerHTML =
+    '<span class="live-pulse-dot"></span>' +
+    '<span>Seu laudo estimou <b>R$&nbsp;' + vm.toLocaleString('pt-BR') + '</b>/mês escapando.' + comparativo + '</span>';
+  alvo.parentNode.insertBefore(banner, alvo);
+
+  if (typeof IntersectionObserver !== 'undefined') {
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('m-revealed');
+        obs.unobserve(e.target);
+      });
+    }, { threshold: 0.10 });
+    obs.observe(banner);
+  } else {
+    banner.classList.add('m-revealed');
+  }
 }());
 </script>
 

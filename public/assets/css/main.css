@@ -459,15 +459,28 @@ main {
 }
 
 /* ── Mobile Motion & Scroll Reveal System (60fps) ── */
-.m-reveal {
+/* Trava de JS (mesmo padrão da landing): o opacity:0 só vale quando o script
+   marcou html.js-anim. Sem isso, uma página estática que usasse .m-reveal
+   nasceria em branco pra quem tem JavaScript bloqueado. */
+html.js-anim .m-reveal {
   opacity: 0;
   transform: translateY(22px);
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1), transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   will-change: opacity, transform;
 }
-.m-reveal.m-revealed {
+html.js-anim .m-reveal.m-revealed {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* Quem pediu menos movimento recebe o conteúdo assentado, sem transição */
+@media (prefers-reduced-motion: reduce) {
+  html.js-anim .m-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .m-stagger > * { transition-delay: 0s !important; }
 }
 
 /* Delay escalonado para elementos irmãos */

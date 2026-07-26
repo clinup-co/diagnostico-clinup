@@ -336,17 +336,23 @@ function buildLaudoHTML(model, vaz) {
   return head + scoreCard + verdict + moneyBlock + recalc + cards + conserv + method + buildCTA(model, pt, vaz.vazamento_mensal);
 }
 
-// 7 · CTA de conversão — ancoragem R$ 500 + escassez, quebra de objeção com Ref/R$
+// 7 · CTA de conversão — ancoragem R$ 100 + escassez, quebra de objeção com Ref/R$
+// O valor da sessão é R$ 100 e não um número maior de propósito: âncora alta
+// em cima de autoridade que a página não construiu lê como forçada.
 function buildCTA(model, pt, mensal) {
   var refTxt = quizLeadData.refId ? 'do seu Ref: ' + quizLeadData.refId : 'do seu laudo';
   var desc = (mensal > 0)
-    ? 'A sessão de diagnóstico costuma custar <strong>R$ 500</strong> — pra quem concluiu o laudo, é <strong>gratuita</strong>. Numa conversa, a gente entrega a <strong>ordem de prioridade</strong> pra tapar os gargalos ' + refTxt + ', começando pelos <strong>R$ ' + fmtMoney(mensal) + '/mês</strong> que escapam. Vagas limitadas pela agenda.'
-    : 'A sessão de diagnóstico costuma custar <strong>R$ 500</strong> — pra quem concluiu o laudo, é <strong>gratuita</strong>. Numa conversa, a gente aponta os próximos ajustes ' + refTxt + ' pra você crescer com controle. Vagas limitadas pela agenda.';
+    ? 'A sessão de diagnóstico costuma custar <strong>R$ 100</strong> — pra quem concluiu o laudo, é <strong>gratuita</strong>. Numa conversa, a gente entrega a <strong>ordem de prioridade</strong> pra tapar os gargalos ' + refTxt + ', começando pelos <strong>R$ ' + fmtMoney(mensal) + '/mês</strong> que escapam. Cada implementação é acompanhada de perto, então entram poucas clínicas por mês.'
+    : 'A sessão de diagnóstico costuma custar <strong>R$ 100</strong> — pra quem concluiu o laudo, é <strong>gratuita</strong>. Numa conversa, a gente aponta os próximos ajustes ' + refTxt + ' pra você crescer com controle. Cada implementação é acompanhada de perto, então entram poucas clínicas por mês.';
   return '<div class="cta-section m-reveal" style="margin-top:22px;">' +
     '<div class="cta-eyebrow">Próximo passo</div>' +
     '<h3 class="cta-title">Um plano pra estancar esse vazamento em 30 dias</h3>' +
     '<p class="cta-desc">' + desc + '</p>' +
-    '<a class="laudo-cta btn-cta-shimmer" href="/consultoria?resultado=' + pt + '">Receber meu Plano de Recuperação de 30 dias&nbsp;→</a>' +
+    // FR-001 · o laudo carrega Ref e vazamento pra próxima página. refId já está
+    // preenchido aqui: showResult() gera antes de montar este HTML.
+    '<a class="laudo-cta btn-cta-shimmer" href="/consultoria?resultado=' + pt +
+      '&amp;ref=' + encodeURIComponent(quizLeadData.refId || '') +
+      '&amp;vm=' + Math.round(mensal || 0) + '">Receber meu Plano de Recuperação de 30 dias&nbsp;→</a>' +
     '<button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do laudo</button>' +
     '<button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>' +
   '</div>';
