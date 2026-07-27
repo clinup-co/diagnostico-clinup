@@ -564,3 +564,26 @@ html.js-anim .m-reveal.m-revealed {
   22%, 100% { transform: translate(100%, 100%) rotate(30deg); }
 }
 
+
+/* ── Marca CLINUP: SVG inline, recolorível por CSS ───────────────────
+   Os <path> trazem fill como atributo — é o fallback se o CSS não
+   carregar. As classes abaixo sobrescrevem (classe vence atributo de
+   apresentação) e são o que permite o hover. */
+.brand-mark { display: block; --mk-1: #73D4F5; --mk-2: #49B2D3; --mk-3: #4094C0; }
+.brand-mark .mark-disc   { fill: #162B44; }
+.brand-mark .mark-arc    { transition: fill 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+.brand-mark .mark-arc--1 { fill: var(--mk-1); }
+.brand-mark .mark-arc--2 { fill: var(--mk-2); }
+.brand-mark .mark-arc--3 { fill: var(--mk-3); }
+/* Hover: os três tons deslizam pro azul elétrico juntos, preservando a
+   profundidade dos arcos. Trocar por uma cor só achataria a marca. */
+.brand-mark:hover,
+a:hover .brand-mark { --mk-1: #7EA2FF; --mk-2: #4D7CFE; --mk-3: #3A63D6; }
+@media (prefers-reduced-motion: reduce) { .brand-mark .mark-arc { transition: none; } }
+
+/* Anel das páginas internas — era style inline em cada <img> */
+.brand-mark--ring {
+  width: var(--brand-size, 38px); height: var(--brand-size, 38px);
+  box-sizing: border-box; border-radius: 50%; padding: 2px;
+  border: 1.5px solid rgba(91,196,240,0.35); background: #0A1E30;
+}
