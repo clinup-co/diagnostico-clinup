@@ -1891,5 +1891,49 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 }());
 </script>
 
+<script>
+// Enriquece mensagens de WhatsApp com Ref ID e vazamento do lead.
+// Visitante direto (sem localStorage) mantém as mensagens originais.
+(function () {
+  var lead = {};
+  try { lead = JSON.parse(localStorage.getItem('clinup_lead') || '{}') || {}; } catch (e) {}
+  var ref = (lead && lead.refId) || '';
+  if (!ref) return; // sem ref, não altera nada
+
+  var vm = 0;
+  try {
+    var vaz = (lead.respostas || {})._vazamento;
+    if (vaz) vm = Math.round(vaz.vazamento_mensal || 0);
+  } catch (e) {}
+
+  var nome = (lead.nome || '').trim();
+  var first = nome ? nome.split(/\s+/)[0] : '';
+  if (first) first = first.charAt(0).toUpperCase() + first.slice(1).toLowerCase();
+  function fmtR(n) { try { return Math.round(n).toLocaleString('pt-BR'); } catch(e) { return String(n); } }
+
+  // Sufixo com Ref e R$ para adicionar nas mensagens existentes
+  var ctx = ' (Ref: ' + ref + (vm > 0 ? ', vazamento estimado: R$ ' + fmtR(vm) + '/mês' : '') + ')';
+
+  document.querySelectorAll('a[href*="wa.me"]').forEach(function (a) {
+    var href = a.getAttribute('href') || '';
+    // Decodifica a mensagem existente, insere contexto antes do ponto final da primeira frase
+    try {
+      var url = new URL(href);
+      var text = url.searchParams.get('text') || '';
+      if (!text) return;
+      // Adiciona nome se tiver, e contexto do laudo
+      if (first && text.indexOf(first) === -1) {
+        text = text.replace(/^Olá/, 'Olá! Sou ' + first + '.');
+      }
+      // Insere contexto antes de "e quero" se ainda não tem Ref
+      if (text.indexOf('Ref:') === -1) {
+        text = text.replace('da CLINUP e', 'da CLINUP' + ctx + ' e');
+      }
+      url.searchParams.set('text', text);
+      a.setAttribute('href', url.toString());
+    } catch (e) {}
+  });
+}());
+
 </body>
 </html>
