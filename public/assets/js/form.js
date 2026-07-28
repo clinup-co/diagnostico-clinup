@@ -67,7 +67,56 @@ function submitLeadForm() {
   trackOnce('lead_captured');
   trackPixelOnce('Lead');
 
-  // Direto pro resultado — o usuário já respondeu as 10 perguntas
-  document.getElementById('leadScreen').classList.add('hidden');
-  showResult();
+  revelarResultado();
+}
+
+// Duração total da tela de processamento. O cálculo em si é instantâneo:
+// o tempo existe pra dar peso ao laudo, não porque a conta demora. Mexer
+// aqui é o único ponto a ajustar se ficar longo demais.
+const PROC_MS = 3600;
+
+// Etapas: descrevem trabalho que o motor realmente faz. Nada de "cruzando
+// com benchmark de clínicas" — motorCalculoVazamento.js registra que as
+// saídas NÃO são médias de mercado auditadas.
+// A última etapa cai perto do fim de propósito: barra cheia parada é o
+// momento em que a pessoa acha que travou. Aqui sobra ~450ms entre os
+// 100% e a abertura, o que lê como entrega e não como espera.
+const PROC_ETAPAS = [
+  { t: 0,    pct: '22%',  msg: 'Lendo suas respostas sobre o atendimento…' },
+  { t: 1000, pct: '52%',  msg: 'Estimando a receita presa em cada gargalo…' },
+  { t: 2000, pct: '80%',  msg: 'Ordenando os gargalos por prejuízo…' },
+  { t: 3150, pct: '100%', msg: 'Laudo pronto. Abrindo…' }
+];
+
+function revelarResultado() {
+  const overlay = document.getElementById('procOverlay');
+  const abrir   = function () {
+    document.getElementById('leadScreen').classList.add('hidden');
+    if (overlay) overlay.style.display = 'none';
+    showResult();
+  };
+
+  // Sem overlay, ou pra quem pediu menos movimento: vai direto. A espera é
+  // encenação, e encenação não se impõe a quem desligou animação.
+  const semMovimento = window.matchMedia &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!overlay || semMovimento) { abrir(); return; }
+
+  const barra  = document.getElementById('procBarFill');
+  const status = document.getElementById('procStatus');
+  overlay.style.display = 'flex';
+
+  PROC_ETAPAS.forEach(function (etapa) {
+    setTimeout(function () {
+      if (barra) barra.style.width = etapa.pct;
+      if (!status) return;
+      status.style.opacity = '0';
+      setTimeout(function () {
+        status.textContent = etapa.msg;
+        status.style.opacity = '1';
+      }, 100);
+    }, etapa.t);
+  });
+
+  setTimeout(abrir, PROC_MS);
 }

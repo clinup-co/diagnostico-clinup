@@ -217,6 +217,46 @@ body { position: relative; overflow-x: clip; } /* clip: nada estoura a viewport 
 .laudo-method b { color: var(--body); }
 .laudo-cta { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; background: linear-gradient(135deg, #618BFF, #4D7CFE); color: #fff; font-family: 'Sora', sans-serif; font-weight: 800; font-size: 16px; border: none; border-radius: 12px; padding: 18px 22px; text-decoration: none; box-shadow: 0 10px 30px rgba(77,124,254,.3); transition: transform .15s ease; }
 .laudo-cta:hover { transform: translateY(-2px); }
+
+/* ── Tela de processamento entre o formulário e o laudo ──────────────
+   O cálculo é instantâneo; esta tela existe pra dar peso ao resultado.
+   Por isso ela some inteira em prefers-reduced-motion: quem pediu menos
+   movimento não deve pagar uma espera que só existe por encenação. */
+.proc-overlay {
+  position: fixed; inset: 0; z-index: 9999;
+  background: rgba(10, 14, 26, 0.94);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  display: flex; align-items: center; justify-content: center; padding: 24px;
+}
+.proc-card {
+  background: var(--card); border: 1px solid rgba(77, 124, 254, 0.3);
+  border-radius: 20px; padding: 44px 36px; max-width: 480px; width: 100%;
+  text-align: center; box-shadow: var(--shadow-lg);
+}
+.proc-spinner-wrap { position: relative; width: 64px; height: 64px; margin: 0 auto 22px; }
+.proc-spinner {
+  width: 100%; height: 100%; border-radius: 50%;
+  border: 3px solid rgba(77, 124, 254, 0.15); border-top-color: #4D7CFE;
+  animation: procSpin 1s linear infinite;
+}
+.proc-icon { position: absolute; inset: 0; display: grid; place-items: center; }
+.proc-icon svg {
+  width: 24px; height: 24px; fill: none; stroke: var(--blue);
+  stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+}
+@keyframes procSpin { to { transform: rotate(360deg); } }
+.proc-title { font-family: 'Sora', sans-serif; font-size: 20px; font-weight: 700; color: var(--white); margin-bottom: 20px; }
+.proc-bar { height: 8px; background: rgba(231,234,240,0.08); border-radius: 100px; overflow: hidden; margin-bottom: 16px; }
+.proc-bar-fill {
+  height: 100%; width: 0%; border-radius: 100px;
+  background: linear-gradient(90deg, #4D7CFE, #2BD576);
+  transition: width 300ms ease;
+}
+.proc-status { font-size: 14px; font-weight: 500; color: var(--sub); min-height: 22px; transition: opacity 200ms ease; }
+@media (prefers-reduced-motion: reduce) {
+  .proc-spinner { animation: none; border-top-color: rgba(77,124,254,0.15); }
+  .proc-bar-fill, .proc-status { transition: none; }
+}
 </style>
 <script>document.documentElement.classList.add('js-anim');</script>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -503,6 +543,22 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <div class="result-screen" id="result"></div>
 
 </main>
+
+<!-- Processamento entre o formulário e o laudo. Nasce oculto; o form.js
+     abre e fecha. As mensagens descrevem o que o motor faz de fato —
+     nada de "benchmark de clínicas", que o motorCalculoVazamento.js diz
+     explicitamente não existir. -->
+<div id="procOverlay" class="proc-overlay" style="display:none" role="status" aria-live="polite">
+  <div class="proc-card">
+    <div class="proc-spinner-wrap" aria-hidden="true">
+      <div class="proc-spinner"></div>
+      <span class="proc-icon"><svg viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="m7 15 4-5 3 3 5-7"/></svg></span>
+    </div>
+    <div class="proc-title">Montando o laudo da sua clínica</div>
+    <div class="proc-bar" aria-hidden="true"><div id="procBarFill" class="proc-bar-fill"></div></div>
+    <div id="procStatus" class="proc-status">Lendo suas respostas sobre o atendimento…</div>
+  </div>
+</div>
 
 <script src="assets/js/motorCalculoVazamento.js"></script>
 <script src="assets/js/config.js"></script>
