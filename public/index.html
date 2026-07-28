@@ -267,6 +267,32 @@ h2{
 .step p{font-size:14.5px;color:var(--ink-2);line-height:1.65}
 @media (max-width:860px){ .steps{grid-template-columns:1fr} }
 
+/* ── O que a gente instala ───────────────────────────────────────────
+   Única seção da landing que mostra PRODUTO — o resto mostra problema
+   ou projeção. Reusa .mockframe e .steps; só o slot da imagem é novo. */
+/* o .steps-head padrão tem 680px e nenhum .lead; aqui o título é longo
+   e existe subtítulo, então o cabeçalho respira igual ao da Virada */
+.install-head{max-width:820px}
+.install-head .lead{margin-top:20px}
+.install-mock{max-width:1080px;margin:56px auto 0;padding:0 24px}
+/* sem aspect-ratio e sem object-fit:cover de propósito: a /planos usa
+   4/3 + cover nos thumbs, e isso corta as laterais de um painel largo.
+   Aqui o print entra inteiro. */
+/* o print tem 800px de altura, mas 42% disso é área vazia do quadro.
+   O recorte é feito aqui, por CSS, e não no arquivo: a mesma imagem é
+   usada na /planos dentro de um container 16/10 com object-fit:cover,
+   onde um arquivo mais largo perderia a barra lateral do CRM. */
+.mf-shot{display:block;background:#0A0F1C;aspect-ratio:1280/540;overflow:hidden}
+.mf-shot img{width:100%;height:auto;display:block}
+/* 3 colunas: com 5 tiles o desenho fecha em 3+2, que lê como intencional.
+   Em 4 colunas sobraria um tile órfão na segunda linha. */
+.installs{margin-top:44px;grid-template-columns:repeat(3,1fr)}
+.installs .step{padding:26px 22px}
+.installs .step-top{justify-content:flex-start;margin-bottom:16px}
+.installs .step h3{font-size:17px}
+.installs .step p{font-size:14px}
+@media (max-width:860px){ .installs{grid-template-columns:1fr} }
+
 /* ── Fechamento ──────────────────────────────────────────────────── */
 .final-card{
   position:relative;max-width:820px;margin:0 auto;text-align:center;
@@ -1196,21 +1222,80 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   </div>
 </section>
 
-<!-- ══════════ CLAREZA DO MODELO ══════════ -->
-<section class="sec" style="padding:48px 0 0;">
-  <div class="wrap wrap--narrow">
-    <div style="background:var(--card); border:1px solid rgba(77,124,254,0.25); border-radius:18px; padding:32px 36px; text-align:center; box-shadow:var(--shadow-sm);" class="reveal">
-      <span class="kicker" style="color:var(--action-soft); margin-bottom:8px;">Como a ClinUp entrega</span>
-      <h3 style="font-family:'Sora',sans-serif; font-size:22px; font-weight:800; color:var(--ink); margin-bottom:12px; line-height:1.3;">Não é um software pra você aprender a mexer. Não é consultoria teórica.</h3>
-      <p style="font-size:15px; font-weight:500; color:var(--ink-2); line-height:1.65; max-width:680px; margin:0 auto;">
-        A gente entrega a sua estrutura <strong>pronta, configurada e mantida</strong>: site profissional da clínica, resposta rápida no WhatsApp e Central de Leads organizada. Você e sua equipe não precisam aprender nada técnico.
-      </p>
+<!-- ══════════ O QUE A GENTE INSTALA ══════════
+     Única seção que mostra PRODUTO. Entra depois da Virada (a promessa)
+     e antes das objeções — quem chega em "já queimei dinheiro com
+     agência" já viu a ferramenta. Fica depois do CTA da hero pra não
+     virar ponto de decisão em cima do quiz.
+     Absorveu o bloco "Clareza do modelo": o título vem de lá (mata as
+     duas objeções de uma vez) e o print prova o que ele afirma. -->
+<section class="sec" id="o-que-instala">
+  <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
+  <div class="wrap">
+    <div class="steps-head install-head" data-stagger>
+      <span class="kicker reveal">O que a gente instala</span>
+      <h2 class="reveal">Não é um software pra você aprender a mexer. Não é consultoria teórica.</h2>
+      <p class="lead reveal">A gente instala e mantém a estrutura pronta: o site que traz o paciente e o painel onde ele é atendido, acompanhado e medido. Você abre e vê o que aconteceu na clínica hoje — e ninguém da sua equipe precisa aprender nada técnico.</p>
+    </div>
+
+    <!-- Print real do painel. O selo continua: o PRODUTO é real, os
+         NÚMEROS da tela são ilustrativos — as duas coisas precisam ficar
+         separadas pro visitante. -->
+    <figure class="install-mock reveal" aria-label="Painel da ClinUp: central de leads da clínica, com dados ilustrativos">
+      <div class="mockframe">
+        <div class="mf-bar">
+          <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="mf-title">Painel ClinUp — Central de Leads</span>
+          <span class="mf-sim">Simulação · dados ilustrativos</span>
+        </div>
+        <div class="mf-shot">
+          <img src="assets/img/demo-crm-preview.jpg" alt="Painel da ClinUp com o funil de leads da clínica organizado por etapa" width="1280" height="800" loading="lazy">
+        </div>
+      </div>
+    </figure>
+
+    <div class="steps installs" data-stagger>
+      <div class="step reveal">
+        <div class="step-top">
+          <span class="step-ico"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+        </div>
+        <h3>O site da clínica</h3>
+        <p>Escrito pra sua especialidade, com o botão de marcar consulta na primeira tela do celular — onde o paciente já está olhando.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-top">
+          <span class="step-ico"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01"/><path d="M12 10h.01"/><path d="M16 10h.01"/></svg></span>
+        </div>
+        <h3>Atendimento com IA no WhatsApp</h3>
+        <p>Responde na hora, em linguagem natural, e conduz a conversa até o agendamento. Ninguém mais espera três horas por uma resposta.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-top">
+          <span class="step-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+        </div>
+        <h3>Gestão das redes sociais</h3>
+        <p>Os posts da clínica saem do painel: programados, publicados e acompanhados no mesmo lugar, sem depender de você lembrar.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-top">
+          <span class="step-ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+        </div>
+        <h3>Os números em tempo real</h3>
+        <p>Quantos chamaram, de onde vieram e quantos viraram consulta. Você não espera fechar o mês pra saber o que está funcionando.</p>
+      </div>
+      <div class="step reveal">
+        <div class="step-top">
+          <span class="step-ico"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7"/><polyline points="3 4 3 10 9 10"/></svg></span>
+        </div>
+        <h3>Recuperação de quem sumiu</h3>
+        <p>Quem perguntou o preço e não respondeu mais entra num acompanhamento automático, em vez de virar só mais um contato esquecido.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- ══════════ OBJEÇÕES ══════════ -->
-<section class="sec band-alt" id="objecoes">
+<section class="sec band-alt band-top" id="objecoes">
   <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
     <div class="obj-head" data-stagger>
