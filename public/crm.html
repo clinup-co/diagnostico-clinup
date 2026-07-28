@@ -3,48 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CLINUP CRM — Gestão e Funil de Vendas</title>
+  <title>CLINUP CRM — Enterprise Funil de Vendas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-sidebar: #F3F4F6;
-      --bg-main: #FFFFFF;
-      --bg-card: #F8FAFC;
-      --border-color: #E5E7EB;
-      --border-dark: #CBD5E1;
-      --text-primary: #0F172A;
-      --text-secondary: #4B5563;
+      --bg-app: #F8FAFC;
+      --bg-sidebar: #F1F5F9;
+      --bg-surface: #FFFFFF;
+      --bg-col: #F8FAFC;
+      
+      --border-subtle: #F1F5F9;
+      --border-default: #E2E8F0;
+      --border-strong: #CBD5E1;
+      
+      --text-main: #0F172A;
+      --text-sub: #475569;
       --text-muted: #94A3B8;
-      --primary-dark: #0F172A;
-      --primary-blue: #2563EB;
-      --blue-light: #EFF6FF;
-      --accent-green: #22C55E;
+      
+      --brand-primary: #0F172A;
+      --brand-blue: #2563EB;
+      --brand-blue-hover: #1D4ED8;
+      --brand-blue-light: #EFF6FF;
+      
+      --accent-green: #10B981;
+      --accent-green-bg: #ECFDF5;
+      --accent-amber: #F59E0B;
+      --accent-amber-bg: #FFFBEB;
+      --accent-purple: #8B5CF6;
+      --accent-purple-bg: #F5F3FF;
+      
+      --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+      --shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.06), 0 1px 2px -1px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.05);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      letter-spacing: -0.011em;
       -webkit-font-smoothing: antialiased;
     }
 
     body {
-      background-color: var(--bg-sidebar);
-      color: var(--text-primary);
+      background-color: var(--bg-app);
+      color: var(--text-main);
       height: 100vh;
       display: flex;
       overflow: hidden;
     }
 
-    /* ── SIDEBAR LATERAL ── */
+    /* ── SIDEBAR LATERAL ($1B SAAS LOOK) ── */
     .sidebar {
-      width: 240px;
-      min-width: 240px;
+      width: 250px;
+      min-width: 250px;
       background-color: var(--bg-sidebar);
-      padding: 20px 16px;
+      border-right: 1px solid var(--border-default);
+      padding: 16px 12px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -52,340 +71,456 @@
       user-select: none;
     }
 
-    .sidebar-top {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+    /* Top Logo & Workspace Switcher */
+    .sidebar-header {
+      padding: 4px 8px 16px;
+      border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+      margin-bottom: 12px;
     }
 
-    .sidebar-logo {
-      width: 90px;
-      height: 90px;
-      background-color: #0A1628;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 24px;
-      box-shadow: 0 4px 12px rgba(10, 22, 40, 0.15);
-    }
-
-    .sidebar-logo svg {
-      width: 60px;
-      height: 60px;
-    }
-
-    .sidebar-menu {
-      width: 100%;
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .menu-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 14px;
-      border-radius: 10px;
-      font-size: 13.5px;
-      font-weight: 500;
-      color: var(--text-secondary);
-      cursor: pointer;
-      transition: all 0.15s ease;
-      text-decoration: none;
-    }
-
-    .menu-item:hover {
-      background-color: rgba(229, 231, 235, 0.6);
-      color: var(--text-primary);
-    }
-
-    .menu-item.active {
-      background-color: #E5E7EB;
-      color: var(--text-primary);
-      font-weight: 600;
-    }
-
-    .menu-item svg {
-      width: 18px;
-      height: 18px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .menu-item-arrow {
-      margin-left: auto;
-      font-size: 10px;
-      opacity: 0.6;
-    }
-
-    /* Rodapé da Sidebar */
-    .sidebar-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 12px;
-      background-color: rgba(255, 255, 255, 0.5);
-      border: 1px solid rgba(229, 231, 235, 0.8);
-      border-radius: 12px;
-      cursor: pointer;
-    }
-
-    .user-profile {
+    .brand-box {
       display: flex;
       align-items: center;
       gap: 10px;
     }
 
-    .user-avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background-color: #CBD5E1;
-      color: #334155;
-      font-weight: 700;
-      font-size: 13px;
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background-color: var(--brand-primary);
+      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
+      box-shadow: 0 2px 5px rgba(15, 23, 42, 0.2);
+      flex-shrink: 0;
     }
 
-    .user-info {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 13.5px;
-      font-weight: 600;
-      color: var(--text-primary);
+    .brand-icon svg {
+      width: 22px;
+      height: 22px;
     }
 
-    .bell-icon {
-      width: 18px;
-      height: 18px;
-      stroke: var(--text-secondary);
-      fill: none;
-      stroke-width: 1.8;
-      cursor: pointer;
-    }
-
-    /* ── ÁREA PRINCIPAL DO CRM ── */
-    .main-wrapper {
-      flex: 1;
-      padding: 16px 16px 16px 0;
-      height: 100vh;
-      display: flex;
-    }
-
-    .main-container {
-      flex: 1;
-      background-color: var(--bg-main);
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    .brand-details {
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    /* ── BARRA DE FERRAMENTAS SUPERIOR (TOPBAR) ── */
-    .crm-topbar {
-      padding: 16px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #F1F5F9;
-      gap: 16px;
-      flex-wrap: wrap;
+    .brand-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.1;
+      letter-spacing: -0.3px;
     }
 
-    .topbar-left {
+    .brand-title em {
+      font-style: normal;
+      color: var(--brand-blue);
+    }
+
+    .workspace-sub {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      margin-top: 2px;
+    }
+
+    /* Menu Sections */
+    .menu-group {
+      margin-bottom: 16px;
+    }
+
+    .menu-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      padding: 6px 10px;
+      margin-bottom: 2px;
+    }
+
+    .menu-item {
       display: flex;
       align-items: center;
       gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .btn-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 7px 14px;
-      background-color: #FFFFFF;
-      border: 1px solid #E2E8F0;
+      height: 36px;
+      padding: 0 10px;
       border-radius: 8px;
       font-size: 13px;
       font-weight: 500;
-      color: #334155;
+      color: var(--text-sub);
       cursor: pointer;
-      transition: all 0.15s ease;
-      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+      transition: all 0.12s ease;
+      text-decoration: none;
+      border: 1px solid transparent;
     }
 
-    .btn-pill:hover {
-      background-color: #F8FAFC;
-      border-color: #CBD5E1;
+    .menu-item:hover {
+      background-color: rgba(255, 255, 255, 0.6);
+      color: var(--text-main);
     }
 
-    .btn-pill svg {
-      width: 14px;
-      height: 14px;
+    .menu-item.active {
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      font-weight: 600;
+      border-color: var(--border-default);
+      box-shadow: var(--shadow-xs);
+    }
+
+    .menu-item svg {
+      width: 17px;
+      height: 17px;
       stroke: currentColor;
       fill: none;
-      stroke-width: 2;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      flex-shrink: 0;
     }
 
-    .search-pill {
-      position: relative;
+    .menu-badge {
+      margin-left: auto;
+      font-size: 11px;
+      font-weight: 600;
+      background: var(--border-default);
+      color: var(--text-sub);
+      padding: 1px 6px;
+      border-radius: 9999px;
     }
 
-    .search-pill input {
-      border: 1px solid #E2E8F0;
-      border-radius: 8px;
-      padding: 7px 14px 7px 32px;
-      font-size: 13px;
-      outline: none;
-      width: 120px;
-      transition: width 0.2s ease;
-    }
-
-    .search-pill input:focus {
-      width: 180px;
-      border-color: var(--primary-blue);
-    }
-
-    .search-pill svg {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 14px;
-      height: 14px;
-      stroke: #94A3B8;
-      fill: none;
-      stroke-width: 2;
-    }
-
-    .view-toggle {
+    /* Sidebar Footer User Card */
+    .sidebar-user {
       display: flex;
       align-items: center;
-      background-color: #F1F5F9;
-      padding: 3px;
-      border-radius: 8px;
-      gap: 2px;
+      justify-content: space-between;
+      padding: 8px 10px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 10px;
+      box-shadow: var(--shadow-xs);
+      cursor: pointer;
     }
 
-    .view-btn {
-      padding: 5px 8px;
-      border-radius: 6px;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      color: #64748B;
+    .user-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .user-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #E2E8F0;
+      color: #334155;
+      font-weight: 700;
+      font-size: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .view-btn.active {
-      background-color: #FFFFFF;
-      color: var(--primary-blue);
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    }
-
-    .view-btn svg {
-      width: 15px;
-      height: 15px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-    }
-
-    .topbar-right {
+    .user-meta {
       display: flex;
-      align-items: center;
-      gap: 12px;
+      flex-direction: column;
     }
 
-    .action-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 13px;
+    .user-name {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.2;
+    }
+
+    .user-role {
+      font-size: 10.5px;
+      color: var(--text-muted);
       font-weight: 500;
-      color: #475569;
+    }
+
+    .bell-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
       cursor: pointer;
-      text-decoration: none;
-      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      padding: 4px;
       border-radius: 6px;
     }
 
-    .action-link:hover {
-      background-color: #F1F5F9;
-      color: var(--text-primary);
+    .bell-btn:hover {
+      color: var(--text-main);
+      background-color: var(--bg-sidebar);
     }
 
-    .action-link svg {
-      width: 15px;
-      height: 15px;
+    .bell-btn svg {
+      width: 16px;
+      height: 16px;
       stroke: currentColor;
       fill: none;
       stroke-width: 1.8;
     }
 
-    .btn-add-lead {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background-color: var(--primary-dark);
-      color: #FFFFFF;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 10px;
-      font-size: 13.5px;
-      font-weight: 600;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
-      transition: transform 0.1s ease, background-color 0.15s;
+    /* ── ÁREA PRINCIPAL DO SYSTEM ── */
+    .main-wrapper {
+      flex: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      background-color: var(--bg-app);
     }
 
-    .btn-add-lead:hover {
-      background-color: #1E293B;
-      transform: translateY(-1px);
-    }
-
-    .plus-badge {
-      width: 18px;
-      height: 18px;
-      border-radius: 50%;
-      border: 1.5px solid rgba(255, 255, 255, 0.4);
+    /* ── TOPBAR DA APLICAÇÃO ── */
+    .app-header {
+      height: 58px;
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-default);
+      padding: 0 24px;
       display: flex;
       align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      line-height: 1;
+      justify-content: space-between;
+      gap: 16px;
+      flex-shrink: 0;
     }
 
-    .btn-more {
-      background: transparent;
-      border: none;
-      color: #64748B;
-      font-size: 18px;
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .page-title-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .page-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 16px;
       font-weight: 700;
-      cursor: pointer;
-      padding: 4px 8px;
+      color: var(--text-main);
+    }
+
+    .nav-tabs {
+      display: flex;
+      align-items: center;
+      background-color: var(--bg-sidebar);
+      padding: 3px;
+      border-radius: 8px;
+      gap: 2px;
+      margin-left: 12px;
+    }
+
+    .tab-btn {
+      padding: 5px 12px;
       border-radius: 6px;
+      border: none;
+      background: transparent;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-sub);
+      cursor: pointer;
+      transition: all 0.12s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .btn-more:hover {
-      background-color: #F1F5F9;
+    .tab-btn.active {
+      background-color: var(--bg-surface);
+      color: var(--text-main);
+      font-weight: 600;
+      box-shadow: var(--shadow-xs);
     }
 
-    /* ── QUADRO KANBAN ── */
-    .kanban-board-container {
+    .tab-btn svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* Topbar Right Controls */
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .search-box {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-box input {
+      height: 32px;
+      background-color: var(--bg-app);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      padding: 0 10px 0 30px;
+      font-size: 12.5px;
+      outline: none;
+      width: 160px;
+      transition: width 0.2s ease, border-color 0.15s;
+    }
+
+    .search-box input:focus {
+      width: 210px;
+      border-color: var(--brand-blue);
+      background-color: var(--bg-surface);
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 9px;
+      width: 14px;
+      height: 14px;
+      stroke: var(--text-muted);
+      fill: none;
+      stroke-width: 2;
+      pointer-events: none;
+    }
+
+    .shortcut-kbd {
+      position: absolute;
+      right: 8px;
+      font-size: 10px;
+      font-weight: 600;
+      background: var(--border-default);
+      color: var(--text-sub);
+      padding: 1px 4px;
+      border-radius: 4px;
+      pointer-events: none;
+    }
+
+    .btn-action-sm {
+      height: 32px;
+      padding: 0 12px;
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 500;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.12s ease;
+      box-shadow: var(--shadow-xs);
+    }
+
+    .btn-action-sm:hover {
+      background-color: var(--bg-app);
+      color: var(--text-main);
+      border-color: var(--border-strong);
+    }
+
+    .btn-action-sm svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .btn-primary-sm {
+      height: 32px;
+      padding: 0 14px;
+      background-color: var(--brand-primary);
+      color: #FFFFFF;
+      border: none;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.12s ease;
+    }
+
+    .btn-primary-sm:hover {
+      background-color: #1E293B;
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary-sm svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    /* ── SUB-BARRA DE FILTROS DO FUNIL ── */
+    .filter-bar {
+      padding: 12px 24px;
+      background-color: var(--bg-surface);
+      border-bottom: 1px solid var(--border-default);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-chip {
+      height: 28px;
+      padding: 0 10px;
+      background-color: var(--bg-app);
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-sub);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .filter-chip:hover {
+      background-color: var(--border-subtle);
+      color: var(--text-main);
+    }
+
+    .metrics-summary {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--text-sub);
+    }
+
+    .metric-item strong {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    /* ── QUADRO KANBAN ENTERPRISE ── */
+    .kanban-viewport {
       flex: 1;
       padding: 20px 24px;
       overflow-x: auto;
@@ -400,27 +535,31 @@
       align-items: flex-start;
     }
 
+    /* Estutura da Coluna */
     .kanban-col {
-      width: 270px;
-      min-width: 270px;
-      background-color: #F8FAFC;
-      border-radius: 14px;
-      border: 1px solid #E2E8F0;
+      width: 280px;
+      min-width: 280px;
+      background-color: var(--bg-col);
+      border: 1px solid var(--border-default);
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
       max-height: 100%;
+      box-shadow: var(--shadow-xs);
     }
 
     .col-header {
-      padding: 14px 16px;
-      border-bottom: 1px solid #EDF2F7;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-default);
+      background-color: var(--bg-surface);
+      border-radius: 12px 12px 0 0;
     }
 
     .col-header-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .col-title-wrap {
@@ -429,82 +568,54 @@
       gap: 8px;
     }
 
+    .status-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .status-novo { background-color: var(--brand-blue); }
+    .status-contato { background-color: var(--accent-amber); }
+    .status-apresentacao { background-color: var(--accent-purple); }
+    .status-negociacao { background-color: #3B82F6; }
+    .status-agendado { background-color: var(--accent-green); }
+
     .col-title {
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
-      color: #1E293B;
+      color: var(--text-main);
     }
 
     .col-count {
-      background-color: #CBD5E1;
-      color: #334155;
+      background-color: var(--bg-sidebar);
+      color: var(--text-sub);
       font-size: 11px;
-      font-weight: 700;
+      font-weight: 600;
       padding: 1px 7px;
-      border-radius: 100px;
+      border-radius: 9999px;
+      border: 1px solid var(--border-default);
     }
 
     .col-add-btn {
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      background-color: #EFF6FF;
-      color: #2563EB;
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      background-color: transparent;
+      color: var(--text-muted);
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
-      font-weight: 600;
       cursor: pointer;
-      transition: background-color 0.15s;
+      transition: all 0.12s;
     }
 
     .col-add-btn:hover {
-      background-color: #DBEAFE;
+      background-color: var(--bg-sidebar);
+      color: var(--text-main);
     }
 
-    .col-total {
-      font-size: 12px;
-      font-weight: 500;
-      color: #64748B;
-    }
-
-    .col-body {
-      padding: 12px;
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      flex: 1;
-    }
-
-    /* Placeholder Dashed */
-    .btn-add-card-dashed {
-      width: 100%;
-      padding: 12px;
-      border: 2px dashed #CBD5E1;
-      border-radius: 10px;
-      background: transparent;
-      color: #94A3B8;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.15s ease;
-    }
-
-    .btn-add-card-dashed:hover {
-      border-color: #94A3B8;
-      background-color: rgba(255, 255, 255, 0.6);
-      color: #64748B;
-    }
-
-    .btn-add-card-dashed svg {
+    .col-add-btn svg {
       width: 14px;
       height: 14px;
       stroke: currentColor;
@@ -512,106 +623,148 @@
       stroke-width: 2;
     }
 
-    /* Cards de Leads Populações */
+    .col-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .col-meta strong {
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+
+    /* Corpo da Coluna & Cards */
+    .col-body {
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      flex: 1;
+    }
+
     .lead-card {
-      background-color: #FFFFFF;
-      border: 1px solid #E2E8F0;
-      border-radius: 12px;
-      padding: 14px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      background-color: var(--bg-surface);
+      border: 1px solid var(--border-default);
+      border-radius: 10px;
+      padding: 12px 14px;
+      box-shadow: var(--shadow-sm);
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      transition: all 0.15s ease;
+      position: relative;
     }
 
     .lead-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-      border-color: #CBD5E1;
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-strong);
     }
 
-    .card-top {
+    .card-header {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       justify-content: space-between;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
 
     .card-name {
-      font-size: 13.5px;
-      font-weight: 700;
-      color: #0F172A;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-main);
+      line-height: 1.3;
     }
 
-    .card-tag {
+    .channel-badge {
       font-size: 10px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 100px;
-      text-transform: uppercase;
-      letter-spacing: 0.4px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
 
-    .tag-wpp {
-      background-color: #DCFCE7;
-      color: #15803D;
-    }
-
-    .tag-site {
-      background-color: #E0F2FE;
-      color: #0369A1;
-    }
-
-    .tag-insta {
-      background-color: #FCE7F3;
-      color: #BE185D;
-    }
+    .badge-wpp { background: var(--accent-green-bg); color: #047857; border: 1px solid #A7F3D0; }
+    .badge-site { background: var(--brand-blue-light); color: var(--brand-blue-hover); border: 1px solid #BFDBFE; }
+    .badge-insta { background: #FDF2F8; color: #BE185D; border: 1px solid #FBCFE8; }
 
     .card-proc {
       font-size: 12px;
-      color: #64748B;
+      color: var(--text-sub);
       font-weight: 500;
       margin-bottom: 10px;
     }
 
-    .card-bottom {
+    .card-footer {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding-top: 8px;
-      border-top: 1px solid #F1F5F9;
+      border-top: 1px solid var(--border-subtle);
     }
 
     .card-price {
       font-size: 13px;
-      font-weight: 800;
-      color: var(--primary-blue);
+      font-weight: 700;
+      color: var(--brand-blue);
     }
 
     .card-time {
-      font-size: 11px;
-      color: #94A3B8;
+      font-size: 10.5px;
+      color: var(--text-muted);
       font-weight: 500;
     }
 
-    /* Scrollbar personalizada suave */
-    .kanban-board-container::-webkit-scrollbar,
-    .col-body::-webkit-scrollbar {
-      height: 8px;
-      width: 6px;
-    }
-
-    .kanban-board-container::-webkit-scrollbar-track,
-    .col-body::-webkit-scrollbar-track {
+    /* Botão ADICIONAR tracejado profissional */
+    .btn-add-card-dashed {
+      width: 100%;
+      padding: 9px;
+      border: 1px dashed var(--border-strong);
+      border-radius: 8px;
       background: transparent;
+      color: var(--text-sub);
+      font-size: 11.5px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.12s ease;
     }
 
-    .kanban-board-container::-webkit-scrollbar-thumb,
+    .btn-add-card-dashed:hover {
+      border-color: var(--brand-blue);
+      background-color: var(--bg-surface);
+      color: var(--brand-blue);
+    }
+
+    .btn-add-card-dashed svg {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* Custom Scrollbar */
+    .kanban-viewport::-webkit-scrollbar,
+    .col-body::-webkit-scrollbar {
+      height: 6px;
+      width: 5px;
+    }
+
+    .kanban-viewport::-webkit-scrollbar-thumb,
     .col-body::-webkit-scrollbar-thumb {
-      background: #CBD5E1;
-      border-radius: 100px;
+      background: var(--border-strong);
+      border-radius: 9999px;
     }
 
-    /* MODAL DE ADICIONAR LEAD (MOCKUP) */
+    /* MODAL DE ADICIONAR LEAD */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -623,7 +776,7 @@
       z-index: 100;
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.2s ease;
+      transition: opacity 0.15s ease;
     }
 
     .modal-overlay.active {
@@ -632,14 +785,15 @@
     }
 
     .modal-card {
-      background: #FFFFFF;
+      background: var(--bg-surface);
       width: 100%;
-      max-width: 440px;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
-      transform: translateY(10px);
-      transition: transform 0.2s ease;
+      max-width: 420px;
+      border-radius: 14px;
+      padding: 20px 24px;
+      box-shadow: var(--shadow-lg);
+      transform: translateY(8px);
+      transition: transform 0.15s ease;
+      border: 1px solid var(--border-default);
     }
 
     .modal-overlay.active .modal-card {
@@ -654,53 +808,57 @@
     }
 
     .modal-title {
-      font-size: 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 15px;
       font-weight: 700;
-      color: #0F172A;
+      color: var(--text-main);
     }
 
     .modal-close {
       background: transparent;
       border: none;
-      font-size: 18px;
-      color: #94A3B8;
+      font-size: 16px;
+      color: var(--text-muted);
       cursor: pointer;
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .form-label {
       display: block;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
-      color: #475569;
-      margin-bottom: 6px;
+      color: var(--text-sub);
+      margin-bottom: 5px;
     }
 
     .form-input {
       width: 100%;
-      padding: 9px 12px;
-      border: 1px solid #CBD5E1;
-      border-radius: 8px;
-      font-size: 13.5px;
+      height: 34px;
+      padding: 0 10px;
+      border: 1px solid var(--border-default);
+      border-radius: 6px;
+      font-size: 13px;
       outline: none;
+      background-color: var(--bg-app);
     }
 
     .form-input:focus {
-      border-color: var(--primary-blue);
+      border-color: var(--brand-blue);
+      background-color: var(--bg-surface);
     }
 
     .btn-submit-modal {
       width: 100%;
-      padding: 11px;
-      background: var(--primary-dark);
+      height: 36px;
+      background: var(--brand-primary);
       color: #FFFFFF;
       border: none;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
       cursor: pointer;
       margin-top: 8px;
     }
@@ -708,303 +866,343 @@
 </head>
 <body>
 
-  <!-- ── SIDEBAR LATERAL ── -->
-  aside class="sidebar">
-    <div class="sidebar-top">
-      <!-- Logo ClinUp circular igual ao print -->
-      <div class="sidebar-logo">
-        <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-          <path fill="#162B44" d="M5,272.8 C4.6,267 4.1,261.7 4,256.4 C3.7,230.1 7.3,204.2 14.3,178.9 C18.5,163.9 25.3,149.9 32.2,136 C40,120.2 49.9,105.8 61.3,92.3 C73.2,78.1 86.3,64.9 101.6,54.2 C110.1,48.3 118.4,42 127.2,36.6 C134.5,32.2 142.4,28.7 150.1,25 C156,22.2 162,19.4 168.1,17.2 C174.3,15 180.7,13.4 187.1,11.9 C197.8,9.6 208.6,6.6 219.4,5.7 C234.3,4.5 249.3,4.7 264.3,4.9 C272.7,5 281.1,5.8 289.5,7 C306.4,9.3 322.8,13.8 338.8,19.6 C361.7,28 382.5,40 401.9,54.4 C423.4,70.5 441.5,90.1 456.5,112.2 C470.8,133.3 481.1,156.3 488.6,180.8 C497.2,208.9 500.2,237.5 498.7,266.5 C497.8,283.2 494.7,299.7 490.4,316 C485.5,334.4 478.8,352 469.7,368.4 C461.4,383.3 451.6,397.5 441.2,411 C434.3,419.9 425.2,427.1 417.2,435.2 C405.8,446.7 392.7,456.1 378.7,463.9 C366.1,471 352.9,477.3 339.4,482.6 C327.2,487.3 314.4,490.7 301.6,493.8 C293,495.9 284.2,496.9 275.4,497.4 C262.5,498.3 249.5,499.1 236.6,498.7 C225.4,498.2 214.2,496.5 203.2,494.3 C191,491.8 178.8,488.7 167,484.7 C156.8,481.2 147,476.4 137.4,471.4 C128.6,466.8 119.8,461.8 111.7,456.1 C101.7,448.9 92.1,441.1 82.9,432.9 C74.7,425.6 66.4,418 59.9,409.3 C50,396.2 41.2,382.2 32.9,368.1 C27.4,358.9 22.5,349.1 19.1,339 C14.8,326.6 12,313.8 9.2,301 C7.2,291.9 6.3,282.5 5,272.8 M73.2,355.3 C75.9,359.6 78.6,364 81.5,368.2 C99.4,394.3 122.1,415 149.6,430.6 C184.9,450.5 222.7,459.2 263,457 C302.1,454.7 337.9,442.5 369.8,419.8 C379.3,413 388.2,405.2 397.3,397.8 C392.6,393.1 388.7,389.2 384.8,385.2 C297.8,470.1 176,445.5 116.9,384.2 C48.9,313.6 45.9,210.6 100.1,138 C129.8,98.3 169.7,73.6 218.7,65.5 C282.5,54.8 337.8,73.4 384.9,117.5 C389.2,113.3 393,109.4 397.1,105.4 C379.5,88 359.8,74 337.5,63.9 C305.9,49.4 272.8,43.1 238.1,45.5 C200.3,48 165.6,59.6 134.4,81.3 C107.4,100 86.1,123.6 70.2,152.4 C54.4,180.9 46.2,211.5 45.1,243.9 C43.8,283.3 52.6,320.4 73.2,355.3"/>
-          <path fill="#73D4F5" d="M73,354.9 C52.6,320.4 43.8,283.3 45.1,243.9 C46.2,211.5 54.4,180.9 70.2,152.4 C86.1,123.6 107.4,100 134.4,81.3 C165.6,59.6 200.3,48 238.1,45.5 C272.8,43.1 305.9,49.4 337.5,63.9 C359.8,74 379.5,88 397.1,105.4 C393,109.4 389.2,113.3 384.9,117.5 C337.8,73.4 282.5,54.8 218.7,65.5 C169.7,73.6 129.8,98.3 100.1,138 C45.9,210.6 48.9,313.6 116.9,384.2 C176,445.5 297.8,470.1 384.8,385.2 C388.7,389.2 392.6,393.1 397.3,397.8 C388.2,405.2 379.3,413 369.8,419.8 C337.9,442.5 302.1,454.7 263,457 C222.7,459.2 184.9,450.5 149.6,430.6 C122.1,415 99.4,394.3 81.5,368.2 C78.6,364 75.9,359.6 73,354.9 z"/>
-          <path fill="#49B2D3" d="M275.7,89.9 C241.9,84.9 209.9,89.7 179.6,104.3 C155.9,115.8 135.8,132.1 120.3,153.5 C90.7,194.4 81.4,239.6 92.5,288.8 C101.7,329.6 124.1,362.1 158.2,385.5 C198.9,413.4 244,420.9 292.1,409.1 C320.5,402.2 344.6,387.8 365.6,367.9 C365.9,367.6 366.4,367.4 366.7,367.1 C369.9,370.1 373,373 376.9,376.7 C368.4,383.5 360.8,390.5 352.3,396.2 C298.7,432.1 241.7,438.5 181.9,413.9 C149.5,400.6 123.7,378.8 104.2,349.6 C83,317.8 72.7,282.7 74,244.5 C74.8,220.8 80.7,198.2 90.8,176.6 C107.1,141.6 132.2,114.8 165.7,96.2 C194.4,80.3 225.4,72.6 258.3,74 C282.8,75.1 306.1,81.4 328.4,91.9 C341.1,98 352.5,105.9 363.5,114.5 C365,115.6 366.5,116.7 367.7,118 C374.7,125.7 377.8,126.3 366.7,135.4 C341.2,111 311.4,95.2 275.7,89.9 z"/>
-          <path fill="#4094C0" d="M237.5,383.7 C279.6,387.3 315.1,373.8 345.7,345.3 C347.7,347.3 349.7,349.4 351.6,351.4 C330.1,377.8 277,402.7 222,391 C159.5,377.7 114.5,325.6 109.1,264.9 C103.3,199.2 139.8,140.2 201.3,117.3 C259.3,95.8 318.4,114.8 351.9,150.7 C349.7,152.7 347.5,154.6 345.4,156.5 C340,152.1 334.7,147.5 329.1,143.5 C309.4,129.2 287.4,120.8 263.1,118.6 C235.9,116.1 210.6,122 186.7,135 C166.2,146 149.6,161.4 138,181.2 C112.4,225 110.8,270.1 134.8,315.4 C145.6,335.8 161.1,351.9 180.4,364 C197.7,374.7 216.6,381.7 237.5,383.7 z"/>
-        </svg>
+  <!-- ── SIDEBAR LATERAL ($1B DESIGN SYSTEM) ── -->
+  <aside class="sidebar">
+    <div>
+      <!-- Header da Marca -->
+      <div class="sidebar-header">
+        <div class="brand-box">
+          <div class="brand-icon">
+            <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+              <path fill="#162B44" d="M5,272.8 C4.6,267 4.1,261.7 4,256.4 C3.7,230.1 7.3,204.2 14.3,178.9 C18.5,163.9 25.3,149.9 32.2,136 C40,120.2 49.9,105.8 61.3,92.3 C73.2,78.1 86.3,64.9 101.6,54.2 C110.1,48.3 118.4,42 127.2,36.6 C134.5,32.2 142.4,28.7 150.1,25 C156,22.2 162,19.4 168.1,17.2 C174.3,15 180.7,13.4 187.1,11.9 C197.8,9.6 208.6,6.6 219.4,5.7 C234.3,4.5 249.3,4.7 264.3,4.9 C272.7,5 281.1,5.8 289.5,7 C306.4,9.3 322.8,13.8 338.8,19.6 C361.7,28 382.5,40 401.9,54.4 C423.4,70.5 441.5,90.1 456.5,112.2 C470.8,133.3 481.1,156.3 488.6,180.8 C497.2,208.9 500.2,237.5 498.7,266.5 C497.8,283.2 494.7,299.7 490.4,316 C485.5,334.4 478.8,352 469.7,368.4 C461.4,383.3 451.6,397.5 441.2,411 C434.3,419.9 425.2,427.1 417.2,435.2 C405.8,446.7 392.7,456.1 378.7,463.9 C366.1,471 352.9,477.3 339.4,482.6 C327.2,487.3 314.4,490.7 301.6,493.8 C293,495.9 284.2,496.9 275.4,497.4 C262.5,498.3 249.5,499.1 236.6,498.7 C225.4,498.2 214.2,496.5 203.2,494.3 C191,491.8 178.8,488.7 167,484.7 C156.8,481.2 147,476.4 137.4,471.4 C128.6,466.8 119.8,461.8 111.7,456.1 C101.7,448.9 92.1,441.1 82.9,432.9 C74.7,425.6 66.4,418 59.9,409.3 C50,396.2 41.2,382.2 32.9,368.1 C27.4,358.9 22.5,349.1 19.1,339 C14.8,326.6 12,313.8 9.2,301 C7.2,291.9 6.3,282.5 5,272.8 M73.2,355.3 C75.9,359.6 78.6,364 81.5,368.2 C99.4,394.3 122.1,415 149.6,430.6 C184.9,450.5 222.7,459.2 263,457 C302.1,454.7 337.9,442.5 369.8,419.8 C379.3,413 388.2,405.2 397.3,397.8 C392.6,393.1 388.7,389.2 384.8,385.2 C297.8,470.1 176,445.5 116.9,384.2 C48.9,313.6 45.9,210.6 100.1,138 C129.8,98.3 169.7,73.6 218.7,65.5 C282.5,54.8 337.8,73.4 384.9,117.5 C389.2,113.3 393,109.4 397.1,105.4 C379.5,88 359.8,74 337.5,63.9 C305.9,49.4 272.8,43.1 238.1,45.5 C200.3,48 165.6,59.6 134.4,81.3 C107.4,100 86.1,123.6 70.2,152.4 C54.4,180.9 46.2,211.5 45.1,243.9 C43.8,283.3 52.6,320.4 73.2,355.3"/>
+              <path fill="#73D4F5" d="M73,354.9 C52.6,320.4 43.8,283.3 45.1,243.9 C46.2,211.5 54.4,180.9 70.2,152.4 C86.1,123.6 107.4,100 134.4,81.3 C165.6,59.6 200.3,48 238.1,45.5 C272.8,43.1 305.9,49.4 337.5,63.9 C359.8,74 379.5,88 397.1,105.4 C393,109.4 389.2,113.3 384.9,117.5 C337.8,73.4 282.5,54.8 218.7,65.5 C169.7,73.6 129.8,98.3 100.1,138 C45.9,210.6 48.9,313.6 116.9,384.2 C176,445.5 297.8,470.1 384.8,385.2 C388.7,389.2 392.6,393.1 397.3,397.8 C388.2,405.2 379.3,413 369.8,419.8 C337.9,442.5 302.1,454.7 263,457 C222.7,459.2 184.9,450.5 149.6,430.6 C122.1,415 99.4,394.3 81.5,368.2 C78.6,364 75.9,359.6 73,354.9 z"/>
+              <path fill="#49B2D3" d="M275.7,89.9 C241.9,84.9 209.9,89.7 179.6,104.3 C155.9,115.8 135.8,132.1 120.3,153.5 C90.7,194.4 81.4,239.6 92.5,288.8 C101.7,329.6 124.1,362.1 158.2,385.5 C198.9,413.4 244,420.9 292.1,409.1 C320.5,402.2 344.6,387.8 365.6,367.9 C365.9,367.6 366.4,367.4 366.7,367.1 C369.9,370.1 373,373 376.9,376.7 C368.4,383.5 360.8,390.5 352.3,396.2 C298.7,432.1 241.7,438.5 181.9,413.9 C149.5,400.6 123.7,378.8 104.2,349.6 C83,317.8 72.7,282.7 74,244.5 C74.8,220.8 80.7,198.2 90.8,176.6 C107.1,141.6 132.2,114.8 165.7,96.2 C194.4,80.3 225.4,72.6 258.3,74 C282.8,75.1 306.1,81.4 328.4,91.9 C341.1,98 352.5,105.9 363.5,114.5 C365,115.6 366.5,116.7 367.7,118 C374.7,125.7 377.8,126.3 366.7,135.4 C341.2,111 311.4,95.2 275.7,89.9 z"/>
+              <path fill="#4094C0" d="M237.5,383.7 C279.6,387.3 315.1,373.8 345.7,345.3 C347.7,347.3 349.7,349.4 351.6,351.4 C330.1,377.8 277,402.7 222,391 C159.5,377.7 114.5,325.6 109.1,264.9 C103.3,199.2 139.8,140.2 201.3,117.3 C259.3,95.8 318.4,114.8 351.9,150.7 C349.7,152.7 347.5,154.6 345.4,156.5 C340,152.1 334.7,147.5 329.1,143.5 C309.4,129.2 287.4,120.8 263.1,118.6 C235.9,116.1 210.6,122 186.7,135 C166.2,146 149.6,161.4 138,181.2 C112.4,225 110.8,270.1 134.8,315.4 C145.6,335.8 161.1,351.9 180.4,364 C197.7,374.7 216.6,381.7 237.5,383.7 z"/>
+            </svg>
+          </div>
+          <div class="brand-details">
+            <span class="brand-title">CLIN<em>UP</em></span>
+            <span class="workspace-sub">Clínica Matriz ▾</span>
+          </div>
+        </div>
       </div>
 
-      <!-- Menu Principal -->
-      <nav class="sidebar-menu">
+      <!-- Grupos do Menu -->
+      <div class="menu-group">
+        <div class="menu-label">Canais & Chat</div>
         <a href="#" class="menu-item">
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          WhatsApp
+          WhatsApp Central
+          <span class="menu-badge">3</span>
         </a>
         <a href="#" class="menu-item">
-          <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
-          Conversões
+          <svg viewBox="0 0 24 24"><rect width="18" height="12" x="3" y="6" rx="2"/><path d="M9 18v2M15 18v2M8 12h.01M12 12h.01M16 12h.01M12 2v4"/></svg>
+          Agente IA Chat
         </a>
         <a href="#" class="menu-item">
           <svg viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
           Redes Sociais
         </a>
-        <a href="#" class="menu-item">
-          <svg viewBox="0 0 24 24"><rect width="18" height="12" x="3" y="6" rx="2"/><path d="M9 18v2M15 18v2M8 12h.01M12 12h.01M16 12h.01M12 2v4"/></svg>
-          Agente de chat
-        </a>
-        <a href="#" class="menu-item">
-          <svg viewBox="0 0 24 24"><path d="m7.5 4.27 9 5.15M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5M12 22V12"/></svg>
-          Produtos
-        </a>
-        <a href="#" class="menu-item">
-          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          Tarefas
-        </a>
+      </div>
+
+      <div class="menu-group">
+        <div class="menu-label">Vendas & Gestão</div>
         <a href="#" class="menu-item active">
           <svg viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
           Funil de vendas
         </a>
         <a href="#" class="menu-item">
+          <svg viewBox="0 0 24 24"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+          Conversões & ROI
+        </a>
+        <a href="#" class="menu-item">
           <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-          Contatos
+          Pacientes / Leads
+        </a>
+        <a href="#" class="menu-item">
+          <svg viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          Tarefas Clínicas
         </a>
         <a href="#" class="menu-item">
           <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
           Configurações
-          <span class="menu-item-arrow">▼</span>
         </a>
-      </nav>
+      </div>
     </div>
 
     <!-- Usuário Rodapé -->
-    <div class="sidebar-footer">
-      <div class="user-profile">
+    <div class="sidebar-user">
+      <div class="user-left">
         <div class="user-avatar">RB</div>
-        <div class="user-info">
-          Roberto
-          <span style="font-size:9px; opacity:0.6;">▼</span>
+        <div class="user-meta">
+          <span class="user-name">Roberto</span>
+          <span class="user-role">Administrador</span>
         </div>
       </div>
-      <svg class="bell-icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <button class="bell-btn" title="Notificações">
+        <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      </button>
     </div>
   </aside>
 
-  <!-- ── ÁREA PRINCIPAL DO CRM ── -->
+  <!-- ── ÁREA PRINCIPAL DO SYSTEM ── -->
   <div class="main-wrapper">
-    <main class="main-container">
-      
-      <!-- Topbar de Ferramentas -->
-      <header class="crm-topbar">
-        <div class="topbar-left">
-          <button class="btn-pill">
-            <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-            Filtro
-          </button>
-          
-          <div class="search-pill">
-            <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            <input type="text" placeholder="Buscar">
-          </div>
-
-          <div class="view-toggle">
-            <button class="view-btn active" title="Visualização em Quadro">
-              <svg viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
-            </button>
-            <button class="view-btn" title="Visualização em Lista">
-              <svg viewBox="0 0 24 24"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
-            </button>
-          </div>
-
-          <button class="btn-pill">
-            Data de criação
-            <span style="font-size:9px; opacity:0.6; margin-left:4px;">▼</span>
-          </button>
-
-          <button class="btn-pill">
-            Desc
-            <span style="font-size:9px; opacity:0.6; margin-left:4px;">▼</span>
-          </button>
+    
+    <!-- Topbar Superior -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="page-title-wrap">
+          <h1 class="page-title">Funil de Vendas</h1>
         </div>
 
-        <div class="topbar-right">
-          <a href="#" class="action-link">
-            <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
-            Relatório
-          </a>
-
-          <a href="#" class="action-link">
-            <svg viewBox="0 0 24 24"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.51a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-            Configurar
-          </a>
-
-          <button class="btn-add-lead" onclick="openAddLeadModal()">
-            <span class="plus-badge">+</span>
-            Adicionar
+        <nav class="nav-tabs">
+          <button class="tab-btn active">
+            <svg viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></svg>
+            Quadro Kanban
           </button>
-
-          <button class="btn-more">•••</button>
-        </div>
-      </header>
-
-      <!-- Quadro Kanban (Funil de Vendas) -->
-      <div class="kanban-board-container">
-        <div class="kanban-board" id="kanbanBoard">
-          
-          <!-- Coluna 1: Novo contato -->
-          <div class="kanban-col">
-            <div class="col-header">
-              <div class="col-header-top">
-                <div class="col-title-wrap">
-                  <span class="col-title">Novo contato</span>
-                  <span class="col-count" id="count-novo">2</span>
-                </div>
-                <button class="col-add-btn" onclick="openAddLeadModal('novo')">+</button>
-              </div>
-              <div class="col-total" id="total-novo">R$ 2.300,00</div>
-            </div>
-            <div class="col-body" id="col-novo">
-              <!-- Lead Card 1 -->
-              <div class="lead-card">
-                <div class="card-top">
-                  <span class="card-name">Dra. Juliana Mendes</span>
-                  <span class="card-tag tag-wpp">WhatsApp</span>
-                </div>
-                <div class="card-proc">Harmonização Facial · Consulta</div>
-                <div class="card-bottom">
-                  <span class="card-price">R$ 1.500,00</span>
-                  <span class="card-time">Hoje 14:20</span>
-                </div>
-              </div>
-
-              <!-- Lead Card 2 -->
-              <div class="lead-card">
-                <div class="card-top">
-                  <span class="card-name">Lucas Oliveira</span>
-                  <span class="card-tag tag-site">Site</span>
-                </div>
-                <div class="card-proc">Botox Preventivo</div>
-                <div class="card-bottom">
-                  <span class="card-price">R$ 800,00</span>
-                  <span class="card-time">Hoje 11:05</span>
-                </div>
-              </div>
-
-              <button class="btn-add-card-dashed" onclick="openAddLeadModal('novo')">
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                ADICIONAR
-              </button>
-            </div>
-          </div>
-
-          <!-- Coluna 2: Em contato -->
-          <div class="kanban-col">
-            <div class="col-header">
-              <div class="col-header-top">
-                <div class="col-title-wrap">
-                  <span class="col-title">Em contato</span>
-                  <span class="col-count" id="count-contato">1</span>
-                </div>
-                <button class="col-add-btn" onclick="openAddLeadModal('contato')">+</button>
-              </div>
-              <div class="col-total" id="total-contato">R$ 3.500,00</div>
-            </div>
-            <div class="col-body" id="col-contato">
-              <!-- Lead Card -->
-              <div class="lead-card">
-                <div class="card-top">
-                  <span class="card-name">Mariana Costa</span>
-                  <span class="card-tag tag-insta">Instagram</span>
-                </div>
-                <div class="card-proc">Preenchimento Labial + Menta</div>
-                <div class="card-bottom">
-                  <span class="card-price">R$ 3.500,00</span>
-                  <span class="card-time">Ontem 18:45</span>
-                </div>
-              </div>
-
-              <button class="btn-add-card-dashed" onclick="openAddLeadModal('contato')">
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                ADICIONAR
-              </button>
-            </div>
-          </div>
-
-          <!-- Coluna 3: Apresentação -->
-          <div class="kanban-col">
-            <div class="col-header">
-              <div class="col-header-top">
-                <div class="col-title-wrap">
-                  <span class="col-title">Apresentação</span>
-                  <span class="col-count" id="count-apresentacao">0</span>
-                </div>
-                <button class="col-add-btn" onclick="openAddLeadModal('apresentacao')">+</button>
-              </div>
-              <div class="col-total" id="total-apresentacao">R$ 0,00</div>
-            </div>
-            <div class="col-body" id="col-apresentacao">
-              <button class="btn-add-card-dashed" onclick="openAddLeadModal('apresentacao')">
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                ADICIONAR
-              </button>
-            </div>
-          </div>
-
-          <!-- Coluna 4: Negociação -->
-          <div class="kanban-col">
-            <div class="col-header">
-              <div class="col-header-top">
-                <div class="col-title-wrap">
-                  <span class="col-title">Negociação</span>
-                  <span class="col-count" id="count-negociacao">1</span>
-                </div>
-                <button class="col-add-btn" onclick="openAddLeadModal('negociacao')">+</button>
-              </div>
-              <div class="col-total" id="total-negociacao">R$ 4.200,00</div>
-            </div>
-            <div class="col-body" id="col-negociacao">
-              <!-- Lead Card -->
-              <div class="lead-card">
-                <div class="card-top">
-                  <span class="card-name">Dr. Fernando Rocha</span>
-                  <span class="card-tag tag-wpp">WhatsApp</span>
-                </div>
-                <div class="card-proc">Bioestimulador de Colágeno</div>
-                <div class="card-bottom">
-                  <span class="card-price">R$ 4.200,00</span>
-                  <span class="card-time">25/07 16:30</span>
-                </div>
-              </div>
-
-              <button class="btn-add-card-dashed" onclick="openAddLeadModal('negociacao')">
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                ADICIONAR
-              </button>
-            </div>
-          </div>
-
-          <!-- Coluna 5: Agendado -->
-          <div class="kanban-col">
-            <div class="col-header">
-              <div class="col-header-top">
-                <div class="col-title-wrap">
-                  <span class="col-title">Agendado</span>
-                  <span class="col-count" id="count-agendado">1</span>
-                </div>
-                <button class="col-add-btn" onclick="openAddLeadModal('agendado')">+</button>
-              </div>
-              <div class="col-total" id="total-agendado">R$ 2.800,00</div>
-            </div>
-            <div class="col-body" id="col-agendado">
-              <div class="lead-card">
-                <div class="card-top">
-                  <span class="card-name">Camila Vasconcelos</span>
-                  <span class="card-tag tag-site">Site</span>
-                </div>
-                <div class="card-proc">Lifting Temporal</div>
-                <div class="card-bottom">
-                  <span class="card-price">R$ 2.800,00</span>
-                  <span class="card-time">Amanhã 10:00</span>
-                </div>
-              </div>
-
-              <button class="btn-add-card-dashed" onclick="openAddLeadModal('agendado')">
-                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-                ADICIONAR
-              </button>
-            </div>
-          </div>
-
-        </div>
+          <button class="tab-btn">
+            <svg viewBox="0 0 24 24"><line x1="8" x2="21" y1="6" y2="6"/><line x1="8" x2="21" y1="12" y2="12"/><line x1="8" x2="21" y1="18" y2="18"/><line x1="3" x2="3.01" y1="6" y2="6"/><line x1="3" x2="3.01" y1="12" y2="12"/><line x1="3" x2="3.01" y1="18" y2="18"/></svg>
+            Lista de Leads
+          </button>
+        </nav>
       </div>
 
-    </main>
+      <div class="header-right">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input type="text" placeholder="Buscar no funil...">
+          <span class="shortcut-kbd">⌘K</span>
+        </div>
+
+        <button class="btn-action-sm">
+          <svg viewBox="0 0 24 24"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+          Relatório
+        </button>
+
+        <button class="btn-primary-sm" onclick="openAddLeadModal()">
+          <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Adicionar Lead
+        </button>
+      </div>
+    </header>
+
+    <!-- Sub-Barra de Filtros & Métricas -->
+    <div class="filter-bar">
+      <div class="filter-group">
+        <button class="filter-chip">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+          + Filtro
+        </button>
+        <button class="filter-chip">Data de criação ▾</button>
+        <button class="filter-chip">Origem: Todas ▾</button>
+        <button class="filter-chip">Ordenação: Desc ▾</button>
+      </div>
+
+      <div class="metrics-summary">
+        <span class="metric-item">Leads ativos: <strong>5</strong></span>
+        <span class="metric-item">Pipeline total: <strong>R$ 12.800,00</strong></span>
+      </div>
+    </div>
+
+    <!-- Quadro Kanban Viewport -->
+    <div class="kanban-viewport">
+      <div class="kanban-board" id="kanbanBoard">
+        
+        <!-- Coluna 1: Novo contato -->
+        <div class="kanban-col">
+          <div class="col-header">
+            <div class="col-header-top">
+              <div class="col-title-wrap">
+                <span class="status-indicator status-novo"></span>
+                <span class="col-title">Novo contato</span>
+                <span class="col-count" id="count-novo">2</span>
+              </div>
+              <button class="col-add-btn" onclick="openAddLeadModal('novo')" title="Adicionar lead nesta coluna">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <div class="col-meta">
+              <span>Total: <strong id="total-novo">R$ 2.300,00</strong></span>
+            </div>
+          </div>
+          
+          <div class="col-body" id="col-novo">
+            <!-- Lead Card 1 -->
+            <div class="lead-card">
+              <div class="card-header">
+                <span class="card-name">Dra. Juliana Mendes</span>
+                <span class="channel-badge badge-wpp">WhatsApp</span>
+              </div>
+              <div class="card-proc">Harmonização Facial · Consulta</div>
+              <div class="card-footer">
+                <span class="card-price">R$ 1.500,00</span>
+                <span class="card-time">Hoje 14:20</span>
+              </div>
+            </div>
+
+            <!-- Lead Card 2 -->
+            <div class="lead-card">
+              <div class="card-header">
+                <span class="card-name">Lucas Oliveira</span>
+                <span class="channel-badge badge-site">Site ClinUp</span>
+              </div>
+              <div class="card-proc">Botox Preventivo</div>
+              <div class="card-footer">
+                <span class="card-price">R$ 800,00</span>
+                <span class="card-time">Hoje 11:05</span>
+              </div>
+            </div>
+
+            <button class="btn-add-card-dashed" onclick="openAddLeadModal('novo')">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              ADICIONAR
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna 2: Em contato -->
+        <div class="kanban-col">
+          <div class="col-header">
+            <div class="col-header-top">
+              <div class="col-title-wrap">
+                <span class="status-indicator status-contato"></span>
+                <span class="col-title">Em contato</span>
+                <span class="col-count" id="count-contato">1</span>
+              </div>
+              <button class="col-add-btn" onclick="openAddLeadModal('contato')">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <div class="col-meta">
+              <span>Total: <strong id="total-contato">R$ 3.500,00</strong></span>
+            </div>
+          </div>
+          
+          <div class="col-body" id="col-contato">
+            <div class="lead-card">
+              <div class="card-header">
+                <span class="card-name">Mariana Costa</span>
+                <span class="channel-badge badge-insta">Instagram</span>
+              </div>
+              <div class="card-proc">Preenchimento Labial + Mentoniano</div>
+              <div class="card-footer">
+                <span class="card-price">R$ 3.500,00</span>
+                <span class="card-time">Ontem 18:45</span>
+              </div>
+            </div>
+
+            <button class="btn-add-card-dashed" onclick="openAddLeadModal('contato')">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              ADICIONAR
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna 3: Apresentação -->
+        <div class="kanban-col">
+          <div class="col-header">
+            <div class="col-header-top">
+              <div class="col-title-wrap">
+                <span class="status-indicator status-apresentacao"></span>
+                <span class="col-title">Apresentação</span>
+                <span class="col-count" id="count-apresentacao">0</span>
+              </div>
+              <button class="col-add-btn" onclick="openAddLeadModal('apresentacao')">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <div class="col-meta">
+              <span>Total: <strong id="total-apresentacao">R$ 0,00</strong></span>
+            </div>
+          </div>
+          
+          <div class="col-body" id="col-apresentacao">
+            <button class="btn-add-card-dashed" onclick="openAddLeadModal('apresentacao')">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              ADICIONAR
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna 4: Negociação -->
+        <div class="kanban-col">
+          <div class="col-header">
+            <div class="col-header-top">
+              <div class="col-title-wrap">
+                <span class="status-indicator status-negociacao"></span>
+                <span class="col-title">Negociação</span>
+                <span class="col-count" id="count-negociacao">1</span>
+              </div>
+              <button class="col-add-btn" onclick="openAddLeadModal('negociacao')">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <div class="col-meta">
+              <span>Total: <strong id="total-negociacao">R$ 4.200,00</strong></span>
+            </div>
+          </div>
+          
+          <div class="col-body" id="col-negociacao">
+            <div class="lead-card">
+              <div class="card-header">
+                <span class="card-name">Dr. Fernando Rocha</span>
+                <span class="channel-badge badge-wpp">WhatsApp</span>
+              </div>
+              <div class="card-proc">Bioestimulador de Colágeno</div>
+              <div class="card-footer">
+                <span class="card-price">R$ 4.200,00</span>
+                <span class="card-time">25/07 16:30</span>
+              </div>
+            </div>
+
+            <button class="btn-add-card-dashed" onclick="openAddLeadModal('negociacao')">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              ADICIONAR
+            </button>
+          </div>
+        </div>
+
+        <!-- Coluna 5: Agendado -->
+        <div class="kanban-col">
+          <div class="col-header">
+            <div class="col-header-top">
+              <div class="col-title-wrap">
+                <span class="status-indicator status-agendado"></span>
+                <span class="col-title">Agendado</span>
+                <span class="col-count" id="count-agendado">1</span>
+              </div>
+              <button class="col-add-btn" onclick="openAddLeadModal('agendado')">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              </button>
+            </div>
+            <div class="col-meta">
+              <span>Total: <strong id="total-agendado">R$ 2.800,00</strong></span>
+            </div>
+          </div>
+          
+          <div class="col-body" id="col-agendado">
+            <div class="lead-card">
+              <div class="card-header">
+                <span class="card-name">Camila Vasconcelos</span>
+                <span class="channel-badge badge-site">Site ClinUp</span>
+              </div>
+              <div class="card-proc">Lifting Temporal</div>
+              <div class="card-footer">
+                <span class="card-price">R$ 2.800,00</span>
+                <span class="card-time">Amanhã 10:00</span>
+              </div>
+            </div>
+
+            <button class="btn-add-card-dashed" onclick="openAddLeadModal('agendado')">
+              <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+              ADICIONAR
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   <!-- ── MODAL DE ADICIONAR LEAD ── -->
@@ -1031,7 +1229,7 @@
           <label class="form-label">Canal de Entrada</label>
           <select class="form-input" id="leadChannel">
             <option value="WhatsApp">WhatsApp</option>
-            <option value="Site">Site</option>
+            <option value="Site ClinUp">Site ClinUp</option>
             <option value="Instagram">Instagram</option>
           </select>
         </div>
@@ -1051,7 +1249,7 @@
   </div>
 
   <script>
-    // Interatividade Simulada da Sidebar
+    // Interatividade Simulada
     document.querySelectorAll('.menu-item').forEach(item => {
       item.addEventListener('click', (e) => {
         e.preventDefault();
@@ -1060,7 +1258,6 @@
       });
     });
 
-    // Abrir/Fechar Modal
     let targetStage = 'novo';
 
     function openAddLeadModal(stage = 'novo') {
@@ -1079,7 +1276,6 @@
       }
     }
 
-    // Adicionar Lead Dinamicamente ao Kanban
     function handleAddLeadSubmit(e) {
       e.preventDefault();
       const name = document.getElementById('leadName').value;
@@ -1088,7 +1284,7 @@
       const channel = document.getElementById('leadChannel').value;
       const stage = document.getElementById('leadStage').value;
 
-      const tagClass = channel === 'WhatsApp' ? 'tag-wpp' : (channel === 'Site' ? 'tag-site' : 'tag-insta');
+      const tagClass = channel === 'WhatsApp' ? 'badge-wpp' : (channel === 'Instagram' ? 'badge-insta' : 'badge-site');
       const valFmt = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
 
       const colBody = document.getElementById(`col-${stage}`);
@@ -1097,12 +1293,12 @@
       const card = document.createElement('div');
       card.className = 'lead-card';
       card.innerHTML = `
-        <div class="card-top">
+        <div class="card-header">
           <span class="card-name">${name}</span>
-          <span class="card-tag ${tagClass}">${channel}</span>
+          <span class="channel-badge ${tagClass}">${channel}</span>
         </div>
         <div class="card-proc">${proc}</div>
-        <div class="card-bottom">
+        <div class="card-footer">
           <span class="card-price">${valFmt}</span>
           <span class="card-time">Agora</span>
         </div>
@@ -1111,13 +1307,11 @@
       colBody.insertBefore(card, btnAdd);
       closeAddLeadModal();
 
-      // Atualizar contadores
       const countEl = document.getElementById(`count-${stage}`);
       if (countEl) {
         countEl.textContent = parseInt(countEl.textContent || '0') + 1;
       }
 
-      // Limpar formulário
       e.target.reset();
     }
   </script>
