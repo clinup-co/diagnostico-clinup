@@ -30,7 +30,12 @@
    ════════════════════════════════════════════════════════════════════ */
 :root{
   --bg:#0A0E1A; --bg-alt:#0D121F; --bg-deep:#050811; --card:#111827; --raised:#1A2233; --line:#232B3D;
-  --ink:#E7EAF0; --ink-2:#8A94A6; --ink-3:#5A6478;
+  /* --ink-3 é o tom mais apagado da escala e carrega texto de 13px
+     (.cta-note, rodapés dos mocks). O valor antigo (#5A6478) dava 3,47:1
+     sobre o --bg — abaixo do mínimo de 4,5:1 da WCAG AA para texto normal.
+     #78839C sobe pra 5,07:1 sobre --bg e 4,67:1 sobre --card, que é o
+     fundo mais claro em que ele aparece. */
+  --ink:#E7EAF0; --ink-2:#8A94A6; --ink-3:#78839C;
   --loss:#F4574D; --warn:#F5A623; --gain:#2BD576; --action:#4D7CFE; --action-soft:#7EA2FF;
   /* tokens de movimento (Frente 1) — só transform/opacity animam */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
@@ -111,6 +116,9 @@ a:hover .brand-mark{--mk-1:var(--action-soft);--mk-2:var(--action);--mk-3:#3A63D
   opacity:.22;animation:btnGlow 3s ease-in-out infinite;
 }
 .btn:hover{background:#618BFF;transform:translateY(-2px)}
+/* afunda no toque: sem isso o botão não devolve nada no celular, onde não
+   existe hover. Só transform anima. */
+.btn:active{transform:translateY(0) scale(.975);transition-duration:80ms}
 .btn:hover::after{animation:none;opacity:.7}
 @keyframes btnGlow{
   0%,100%{opacity:.16}
@@ -150,6 +158,10 @@ h2{
   font-size:clamp(26px,3.6vw,40px);line-height:1.16;letter-spacing:-.015em;
 }
 .lead{font-size:17.5px;color:var(--ink-2);line-height:1.7}
+/* Nenhum parágrafo passa de 3 linhas: os blocos longos foram QUEBRADOS em
+   .lead consecutivos (nada de corte de argumento). Este é o respiro entre
+   eles — menor que o de um bloco novo, porque continuam a mesma ideia. */
+.lead + .lead{margin-top:15px}
 .checks{list-style:none;margin-top:26px;display:grid;gap:14px}
 .checks li{
   position:relative;padding-left:32px;font-size:15.5px;font-weight:500;color:var(--ink-2);line-height:1.55;
@@ -467,6 +479,7 @@ html.js-anim .reveal.is-visible{opacity:1;transform:none}
   .mf-sim::after{animation:none;opacity:0} /* sem pulso o anel não fica parado em volta do ponto */
   .sticky-cta{transition:none}
   .btn:hover,.mockframe:hover,.mk-card:hover,.step:hover,.obj:hover,.brand:hover{transform:none}
+  .btn:active{transform:none}
 }
 
 /* ════════════════════════════════════════════════════════════════════
@@ -729,7 +742,8 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <div class="wrap" data-stagger data-stagger-now>
     <span class="kicker reveal">ClinUp · Diagnóstico de Lucro para clínicas</span>
     <h1 class="reveal">Você investe na clínica, o perfil cresce, mas a agenda continua <span class="hl">dependendo de convênio</span>.</h1>
-    <p class="lead reveal">Sabe para onde vão os pacientes particulares que chamam a sua clínica? Eles estão esfriando no vácuo do seu WhatsApp agora mesmo. A <strong>CLINUP</strong> fecha o ralo por onde sua receita de consultas particulares escorre — sem dancinhas e sem enrolação.</p>
+    <p class="lead reveal">Sabe para onde vão os pacientes particulares que chamam a sua clínica? Eles estão <strong>esfriando no vácuo do seu WhatsApp</strong> agora mesmo.</p>
+    <p class="lead reveal">A <strong>CLINUP</strong> fecha o ralo por onde essa receita escorre — sem dancinhas e sem enrolação.</p>
     <div class="hero-cta reveal">
       <a class="btn cta-diag" data-origem="hero" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
       <p class="cta-note">✓ Diagnóstico gratuito de 5 minutos · 10 perguntas simples sobre sua recepção · resultado na hora</p>
@@ -873,7 +887,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <div class="zig-copy photo-panel" data-stagger>
       <span class="kicker reveal">Pilar 1 · Atendimento no WhatsApp</span>
       <h2 class="reveal">O Cemitério de Leads no seu WhatsApp</h2>
-      <p class="lead reveal"><strong>Imagine a cena:</strong> um paciente querendo um procedimento de R$ 500 encontra sua clínica às 20h30. Ele clica no WhatsApp pronto pra agendar. Sua recepção já foi embora. Esse paciente não vai esperar até amanhã às 8h — ele chama o concorrente que respondeu na hora. O diagnóstico mostra onde essas consultas estão sumindo no chat.</p>
+      <p class="lead reveal"><strong>Imagine a cena:</strong> um paciente querendo um procedimento de R$ 500 encontra sua clínica às 20h30.</p>
+      <p class="lead reveal">Ele clica no WhatsApp pronto pra agendar.</p>
+      <p class="lead reveal">Sua recepção já foi embora. Ele não vai esperar até amanhã às 8h — <strong>chama o concorrente que respondeu na hora.</strong></p>
+      <p class="lead reveal">O diagnóstico mostra onde essas consultas estão sumindo no chat.</p>
       <ul class="checks reveal">
         <li>Os horários em que o WhatsApp da clínica fica no vácuo — almoço, noite e fim de semana</li>
         <li>Quanto cada conversa que esfriou custa, no seu ticket médio</li>
@@ -976,7 +993,9 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <div class="zig-copy photo-panel" data-stagger>
       <span class="kicker reveal">Pilar 2 · Agenda e faltas</span>
       <h2 class="reveal">O Ralo Financeiro da Cadeira Vazia</h2>
-      <p class="lead reveal"><strong>Uma falta às 15h de terça não é um imprevisto:</strong> é uma hora de consultório paga que ficou vazia — e horário vago não se revende. Quando sua equipe precisa ligar uma por uma pra confirmar, pessoas esquecem. A confirmação inteligente cobra no tempo certo e reocupa a vaga na hora se alguém desmarcar.</p>
+      <p class="lead reveal"><strong>Uma falta às 15h de terça não é um imprevisto:</strong> é uma hora de consultório paga que ficou vazia — e <strong>horário vago não se revende.</strong></p>
+      <p class="lead reveal">Quando sua equipe precisa ligar uma por uma pra confirmar, pessoas esquecem.</p>
+      <p class="lead reveal">A confirmação inteligente cobra no tempo certo e reocupa a vaga na hora se alguém desmarcar.</p>
       <ul class="checks reveal">
         <li>Sua taxa de falta comparada à de clínicas com confirmação automática</li>
         <li>Quanto os horários vazios custam por ano, no seu ticket médio</li>
@@ -1085,7 +1104,11 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <div class="wrap transform-head photo-panel" data-stagger>
     <span class="kicker reveal">A virada</span>
     <h2 class="reveal">O que muda quando a ClinUp entra em campo? O lucro volta a ser a sua prioridade.</h2>
-    <p class="lead reveal">É a receita das consultas particulares voltando pra agenda — sem depender de repasse de convênio. Projeção ilustrativa de uma clínica com ticket médio de R$ 420, construída sobre os pilares acima; os números da sua clínica saem do seu diagnóstico.</p>
+    <p class="lead reveal">É a receita das consultas particulares voltando pra agenda — <strong>sem depender de repasse de convênio.</strong></p>
+    <!-- a ressalva continua no mesmo tamanho e na mesma cor do parágrafo
+         acima: separar por quebra é organização, encolher seria esconder. -->
+    <p class="lead reveal">Projeção ilustrativa de uma clínica com ticket médio de R$ 420, construída sobre os pilares acima.</p>
+    <p class="lead reveal">Os números da sua clínica saem do seu diagnóstico.</p>
   </div>
 
   <figure class="transform-mock reveal" aria-label="Projeção ilustrativa de crescimento com a ClinUp, dados simulados">
@@ -1235,7 +1258,8 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <div class="steps-head install-head" data-stagger>
       <span class="kicker reveal">O que a gente instala</span>
       <h2 class="reveal">Não é um software pra você aprender a mexer. Não é consultoria teórica.</h2>
-      <p class="lead reveal">A gente instala e mantém a estrutura pronta: o site que traz o paciente e o painel onde ele é atendido, acompanhado e medido. Você abre e vê o que aconteceu na clínica hoje — e ninguém da sua equipe precisa aprender nada técnico.</p>
+      <p class="lead reveal">A gente instala e mantém a estrutura pronta: <strong>o site que traz o paciente</strong> e <strong>o painel onde ele é atendido</strong>, acompanhado e medido.</p>
+      <p class="lead reveal">Você abre e vê o que aconteceu na clínica hoje — e ninguém da sua equipe precisa aprender nada técnico.</p>
     </div>
 
     <!-- Print real do painel. O selo continua: o PRODUTO é real, os
@@ -1381,7 +1405,8 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <div class="wrap">
     <div class="final-card reveal">
       <h2>Cada semana sem saber onde vaza é lucro que não volta.</h2>
-      <p class="lead">O diagnóstico é gratuito, leva 5 minutos e mostra por onde começar. O resto é conversa de plano de ação — sem compromisso.</p>
+      <p class="lead">O diagnóstico é gratuito, leva 5 minutos e mostra por onde começar.</p>
+      <p class="lead">O resto é conversa de plano de ação — sem compromisso.</p>
       <a class="btn cta-diag" data-origem="final" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
       <p class="cta-note">Gratuito · 5 minutos · resultado na hora</p>
     </div>
