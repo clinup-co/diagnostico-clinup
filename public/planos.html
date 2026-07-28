@@ -46,7 +46,7 @@ header.plans-header {
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
-  padding: 48px 24px 80px;
+  padding: 64px 24px 100px;
 }
 
 /* ── Fundo de topo — imagem de clínica ── */
@@ -219,7 +219,8 @@ header.plans-header {
   letter-spacing: 3px;
   text-transform: uppercase;
   color: var(--sub);
-  margin-bottom: 20px;
+  margin-top: 56px;
+  margin-bottom: 24px;
 }
 /* ── Assinatura visual: marca "pulse-up" (saúde + crescimento) antes de cada eyebrow ── */
 .plans-section-label::before {
@@ -276,13 +277,18 @@ header.plans-header {
 .demo-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
-  max-width: 920px;
-  margin: 0 auto 8px;
+  gap: 24px;
+  max-width: 960px;
+  margin: 0 auto 16px;
 }
-@media (min-width: 768px) { .demo-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 768px) { .demo-grid { grid-template-columns: repeat(3, 1fr); } }
 .demo-live { display: block; text-decoration: none; }
 .mockup-demo { box-shadow: var(--shadow-lg); }
+
+/* Mockup estático (apenas para visualização, sem clique) */
+.demo-static { display: block; }
+.demo-static .mockup-screen--demo { cursor: default; }
+
 .mockup-url {
   flex: 1; min-width: 0; margin-left: 6px;
   font-family: 'Plus Jakarta Sans', sans-serif;
@@ -296,7 +302,6 @@ header.plans-header {
   aspect-ratio: 16 / 10;
   position: relative;
   overflow: hidden;
-  cursor: pointer;
 }
 .demo-thumb {
   position: absolute; inset: 0;
@@ -316,6 +321,89 @@ header.plans-header {
   opacity: 0.92;
 }
 .demo-live:hover .demo-overlay { opacity: 1; }
+
+/* ── Entregáveis (WhatsApp & Posts Grids — Estilizados) ── */
+.deliv-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  max-width: 960px;
+  margin: 40px auto 64px;
+}
+@media (min-width: 768px) { .deliv-row { grid-template-columns: 1fr 1fr; } }
+
+.deliv-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.phone-mockup {
+  background: #0D141F;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.phone-head {
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px; margin-bottom: 12px;
+}
+.phone-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--blue2); color: #fff;
+  font-weight: 800; font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
+.phone-name { font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 700; color: var(--white); }
+.phone-status { font-size: 11px; color: var(--green); font-weight: 500; }
+.phone-chat { display: flex; flex-direction: column; gap: 8px; font-size: 12.5px; line-height: 1.4; }
+.wa-msg { padding: 9px 12px; border-radius: 10px; max-width: 88%; word-break: break-word; }
+.wa-in { background: #1E293B; color: var(--white); align-self: flex-start; border-bottom-left-radius: 2px; }
+.wa-out { background: #054C26; color: #DCFCE7; align-self: flex-end; border-bottom-right-radius: 2px; }
+
+/* Posts Grid (3 Cards Visualmente Polidos) */
+.posts-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.post-mini {
+  background: linear-gradient(135deg, rgba(77,124,254,0.12) 0%, rgba(17,24,39,0.9) 100%);
+  border: 1px solid rgba(77,124,254,0.25);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: var(--shadow-sm);
+}
+.post-mini-tag {
+  font-family: 'Sora', sans-serif;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.post-mini-text {
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.4;
+}
+.post-mini-text em {
+  color: var(--blue);
+  font-style: normal;
+  font-weight: 700;
+}
 
 /* ── Modal do demo (lightbox navegável) ── */
 .demo-modal { position: fixed; inset: 0; z-index: 1000; display: none; }
@@ -1327,20 +1415,19 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       </div>
       <p class="deliverable-cap">Cada site é único · feito para a sua especialidade</p>
     </a>
-    <a class="demo-live" href="/crm" target="_blank" rel="noopener noreferrer" aria-label="Abrir a Central de Leads e CRM ClinUp ao vivo">
-      <div class="mockup mockup-demo">
+    <div class="demo-static">
+      <div class="mockup mockup-demo" style="pointer-events:none;">
         <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">crm.clinup.com.br</span></div>
         <div class="mockup-screen mockup-screen--demo">
-          <img class="demo-thumb" src="/assets/img/demo-crm-preview.jpg" alt="Central de Leads e CRM ClinUp" width="1280" height="800" loading="lazy" onerror="this.src='/assets/img/demo-aura.jpg'">
-          <span class="demo-overlay">Testar o CRM ao vivo →</span>
+          <img class="demo-thumb" src="/assets/img/demo-crm-preview.jpg" alt="Central de Leads e CRM ClinUp" width="1280" height="800" loading="lazy">
         </div>
       </div>
       <p class="deliverable-cap">Central de Leads da clínica · integrada ao seu WhatsApp</p>
-    </a>
+    </div>
   </div>
 
   <!-- Bloco de explicação humanizada da Central de Leads -->
-  <div class="crm-explain-card reveal" style="max-width:780px; margin:28px auto 36px; background:var(--card); border:1px solid rgba(77,124,254,0.22); border-radius:16px; padding:24px 28px; box-shadow:var(--shadow-sm);">
+  <div class="crm-explain-card reveal" style="max-width:780px; margin:36px auto 48px; background:var(--card); border:1px solid rgba(77,124,254,0.22); border-radius:16px; padding:28px 32px; box-shadow:var(--shadow-sm);">
     <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
       <span style="font-family:'Sora',sans-serif; font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:#7EA2FF; background:rgba(77,124,254,0.12); border:1px solid rgba(77,124,254,0.35); border-radius:100px; padding:3px 10px;">Sistema incluso no Plano Profissional</span>
     </div>
@@ -1376,9 +1463,18 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </div>
     <div class="deliv-card">
       <div class="posts-grid" aria-hidden="true">
-        <div class="post-mini post-mini--a"><span><em>Mito ou verdade:</em> limpeza de pele mancha?</span></div>
-        <div class="post-mini post-mini--b"><span><em>5 sinais</em> de que sua pele pede ajuda profissional</span></div>
-        <div class="post-mini post-mini--c"><span><em>Primeira consulta:</em> o que levar e o que esperar</span></div>
+        <div class="post-mini">
+          <span class="post-mini-tag">Post para Instagram · Conteúdo 1</span>
+          <span class="post-mini-text"><em>Mito ou verdade:</em> limpeza de pele profunda mancha o rosto?</span>
+        </div>
+        <div class="post-mini">
+          <span class="post-mini-tag">Post para Instagram · Conteúdo 2</span>
+          <span class="post-mini-text"><em>5 sinais claros</em> de que sua pele pede ajuda profissional</span>
+        </div>
+        <div class="post-mini">
+          <span class="post-mini-tag">Post para Instagram · Conteúdo 3</span>
+          <span class="post-mini-text"><em>Primeira consulta na clínica:</em> o que levar e o que esperar</span>
+        </div>
       </div>
       <p class="deliverable-cap">10 posts por mês prontos para postar · no plano Profissional</p>
     </div>
