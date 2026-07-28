@@ -1391,9 +1391,78 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <main class="plans-page">
 
-  <!-- Seção — O que você recebe (demos ao vivo navegáveis) -->
-  <p class="plans-section-label reveal">O que você recebe</p>
-  <p class="plans-howto-sub reveal">Não é promessa — é isto aqui, funcionando. Clique e navegue à vontade:</p>
+  <!-- Seção 1 — Cards de planos (Imediato para Fechamento Pós-Reunião) -->
+  <p class="plans-scarcity reveal"><span class="scarcity-dot" aria-hidden="true"></span> Atendemos poucas clínicas por mês pra cuidar de cada uma de perto.</p>
+  <p class="plans-section-label reveal" id="planos">Escolha o plano da sua clínica</p>
+  
+  <div class="plans-grid reveal-group">
+
+    <!-- Plano Essencial -->
+    <div class="plan-card" id="card-essencial">
+      <div class="plan-badge" id="badge-essencial"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Recomendado para a maioria</div>
+      <div class="plan-rectag" id="rectag-essencial">Recomendado pro seu caso</div>
+      <div class="plan-name">Essencial</div>
+      <div class="plan-price">R$ 297<span class="plan-price-unit">/mês</span></div>
+      <div class="plan-subtitle">Pra clínica que precisa de um site profissional rápido</div>
+      <ul class="plan-bullets">
+        <li><span>Site completo da sua clínica — início, serviços, sobre e agendamento — <strong>a maioria no ar em 2 a 3 dias úteis</strong></span></li>
+        <li><span>No celular, o botão de marcar consulta aparece <strong>na primeira tela</strong></span></li>
+        <li><span>Textos escritos para a sua especialidade — <strong>você aprova tudo</strong> antes de publicar</span></li>
+        <li><span>Hospedagem e manutenção inclusas + <strong>1 rodada de ajustes</strong></span></li>
+      </ul>
+      <a class="plan-btn plan-btn-secondary"
+         href="https://wa.me/5511951438583?text=Ol%C3%A1%20Gabriel%2C%20assisti%20nossa%20reuni%C3%A3o%20e%20quero%20confirmar%20o%20Plano%20Essencial%20(R%24%20297%2Fm%C3%AAs)%20para%20minha%20cl%C3%ADnica."
+         target="_blank" rel="noopener noreferrer"
+         aria-label="Confirmar Plano Essencial com Gabriel">
+        Confirmar Plano Essencial&nbsp;→
+      </a>
+      <p class="plan-trust"><span>✓</span> Sem fidelidade · você decide quando parar</p>
+    </div>
+
+    <!-- Plano Profissional -->
+    <div class="plan-card" id="card-profissional">
+      <div class="plan-badge" id="badge-profissional"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Recomendado para a maioria</div>
+      <div class="plan-rectag" id="rectag-profissional">Recomendado pro seu caso</div>
+      <div class="plan-name">Profissional</div>
+      <div class="plan-price">R$ 997<span class="plan-price-unit">/mês</span></div>
+      <div class="plan-subtitle">Pra clínica que quer organizar o atendimento e fechar mais</div>
+      <ul class="plan-bullets">
+        <li><span>Tudo do Essencial</span></li>
+        <li><span><strong>Central de Leads / CRM ClinUp</strong> configurada e pronta pra uso da secretária</span></li>
+        <li><span>Auditoria do seu Perfil do Google e do Instagram — <strong>com as correções já aplicadas</strong></span></li>
+        <li><span>WhatsApp configurado com mensagens prontas e <strong>resposta automática de primeira linha</strong> (ferramenta grátis por 7 dias)</span></li>
+        <li><span>1 rodada de ajustes por entrega</span></li>
+      </ul>
+      <p class="plan-note"><span>✓</span> Transparência total: a ferramenta de WhatsApp é grátis por 7 dias. Depois, R$59,90/mês pagos direto à plataforma — separado do plano e no seu controle.</p>
+      <a class="plan-btn plan-btn-secondary"
+         href="https://wa.me/5511951438583?text=Ol%C3%A1%20Gabriel%2C%20assisti%20nossa%20reuni%C3%A3o%20e%20quero%20confirmar%20o%20Plano%20Profissional%20(R%24%20997%2Fm%C3%AAs)%20para%20minha%20cl%C3%ADnica."
+         target="_blank" rel="noopener noreferrer"
+         aria-label="Confirmar Plano Profissional com Gabriel">
+        Confirmar Plano Profissional&nbsp;→
+      </a>
+      <p class="plan-trust"><span>✓</span> Garantia de devolução · sem fidelidade</p>
+    </div>
+
+  </div>
+
+  <!-- Faixa de upsell: redes / alto volume -->
+  <a class="plans-enterprise reveal" href="https://wa.me/5511951438583?text=Ol%C3%A1%20Gabriel%2C%20assisti%20nossa%20reuni%C3%A3o%20e%20tenho%20uma%20rede%20ou%20alto%20volume.%20Quero%20uma%20proposta%20sob%20medida." target="_blank" rel="noopener noreferrer" aria-label="Falar sobre proposta sob medida para redes ou alto volume">
+    <span class="plans-enterprise-txt"><strong>Rede de clínicas ou alto volume?</strong> A gente monta uma proposta sob medida pra você.</span>
+    <span class="plans-enterprise-cta">Falar com Gabriel&nbsp;→</span>
+  </a>
+
+  <!-- Seção — Garantia (risco zero) -->
+  <div class="plans-guarantee reveal">
+    <div class="plans-guarantee-icon" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+    </div>
+    <div class="plans-guarantee-title">Risco zero para você</div>
+    <p>A gente entrega no prazo, você vê tudo antes de publicar e tem direito a um ajuste. Se não fizer sentido pra você, <strong>devolvemos seu dinheiro</strong>.</p>
+  </div>
+
+  <!-- Seção — Apoio Visual dos Entregáveis -->
+  <p class="plans-section-label reveal">O que está incluso</p>
+  <p class="plans-howto-sub reveal">Exemplos reais funcionando — veja como sua clínica vai se apresentar:</p>
   <div class="demo-grid reveal-group">
     <a class="demo-live" href="/demos/aura-estetica/" target="_blank" rel="noopener noreferrer" aria-label="Abrir site de clínica (exemplo 1) ao vivo">
       <div class="mockup mockup-demo">
@@ -1461,87 +1530,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       </div>
       <p class="deliverable-cap">WhatsApp organizado · nenhuma mensagem fica sem resposta</p>
     </div>
-  </div>
-
-  <!-- Seção 7 — Garantia (risco zero), logo acima dos planos -->
-  <div class="plans-guarantee reveal">
-    <div class="plans-guarantee-icon" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
-    </div>
-    <div class="plans-guarantee-title">Risco zero para você</div>
-    <p>A gente entrega no prazo, você vê tudo antes de publicar e tem direito a um ajuste. Se não fizer sentido pra você, <strong>devolvemos seu dinheiro</strong>.</p>
-  </div>
-
-  <!-- Seção 8 — Âncora de valor (simulação declarada: estimativa, não promessa) -->
-  <div class="roi-box reveal">
-    <p class="roi-lead"><span class="roi-sim" aria-label="Esta conta é uma simulação">Simulação</span>Faça a conta com os <strong>seus números</strong>:</p>
-    <div class="roi-inputs">
-      <div class="roi-calc">
-        <span class="roi-prefix">R$</span>
-        <input type="number" id="roiValue" class="roi-input" inputmode="numeric" value="400" min="0" max="100000" step="10" aria-label="Valor de uma consulta">
-        <span class="roi-suffix">por consulta</span>
-      </div>
-      <div class="roi-calc">
-        <input type="number" id="roiPatients" class="roi-input roi-input--sm" inputmode="numeric" value="2" min="0" max="50" step="1" aria-label="Pacientes recuperados por semana">
-        <span class="roi-suffix">paciente(s)/semana</span>
-      </div>
-    </div>
-    <p class="roi-out" id="roiOut"></p>
-  </div>
-
-  <!-- Seção 9 — Cards de planos -->
-  <div class="offer-summary reveal"><strong>Em resumo:</strong> a CLINUP monta e mantém o site e o WhatsApp da sua clínica — prontos em dias, por assinatura mensal <strong>sem fidelidade</strong> e com <strong>devolução garantida</strong> se não fizer sentido pra você.</div>
-
-  <p class="plans-scarcity reveal"><span class="scarcity-dot" aria-hidden="true"></span> Atendemos poucas clínicas por mês pra cuidar de cada uma de perto.</p>
-  <p class="plans-section-label reveal" id="planos">Conheça os planos</p>
-  <div class="plans-grid reveal-group">
-
-    <!-- Plano Essencial -->
-    <div class="plan-card" id="card-essencial">
-      <div class="plan-badge" id="badge-essencial"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Recomendado para a maioria</div>
-      <div class="plan-rectag" id="rectag-essencial">Recomendado pro seu caso</div>
-      <div class="plan-name">Essencial</div>
-      <div class="plan-price">R$ 297<span class="plan-price-unit">/mês</span></div>
-      <div class="plan-subtitle">Pra clínica que precisa de um site profissional</div>
-      <ul class="plan-bullets">
-        <li><span>Site completo da sua clínica — início, serviços, sobre e agendamento — <strong>a maioria no ar em 2 a 3 dias úteis</strong></span></li>
-        <li><span>No celular, o botão de marcar consulta aparece <strong>na primeira tela</strong></span></li>
-        <li><span>Textos escritos para a sua especialidade — <strong>você aprova tudo</strong> antes de publicar</span></li>
-        <li><span>Hospedagem e manutenção inclusas + <strong>1 rodada de ajustes</strong></span></li>
-      </ul>
-      <a class="plan-btn plan-btn-secondary"
-         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20uma%20conversa%20sobre%20o%20Plano%20Essencial%20(R%24%20297%2Fm%C3%AAs)."
-         target="_blank" rel="noopener noreferrer"
-         aria-label="Agendar conversa sobre o Plano Essencial">
-        Agendar conversa sobre o Essencial&nbsp;→
-      </a>
-      <p class="plan-trust"><span>✓</span> Conversa grátis · sem compromisso</p>
-    </div>
-
-    <!-- Plano Profissional -->
-    <div class="plan-card" id="card-profissional">
-      <div class="plan-badge" id="badge-profissional"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Recomendado para a maioria</div>
-      <div class="plan-rectag" id="rectag-profissional">Recomendado pro seu caso</div>
-      <div class="plan-name">Profissional</div>
-      <div class="plan-price">R$ 997<span class="plan-price-unit">/mês</span></div>
-      <div class="plan-subtitle">Pra clínica que quer atender e fechar melhor</div>
-      <ul class="plan-bullets">
-        <li><span>Tudo do Essencial</span></li>
-        <li><span>Auditoria do seu Perfil do Google e do Instagram — <strong>com as correções já aplicadas</strong></span></li>
-        <li><span>WhatsApp configurado com mensagens prontas e <strong>resposta automática de primeira linha</strong> (ferramenta grátis por 7 dias)</span></li>
-        <li><span><strong>10 posts por mês</strong> prontos para postar, feitos para a sua especialidade</span></li>
-        <li><span>1 rodada de ajustes por entrega</span></li>
-      </ul>
-      <p class="plan-note"><span>✓</span> Transparência total: a ferramenta de WhatsApp é grátis por 7 dias. Depois, R$59,90/mês pagos direto à plataforma — separado do plano e no seu controle.</p>
-      <a class="plan-btn plan-btn-secondary"
-         href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20agendar%20uma%20conversa%20sobre%20o%20Plano%20Profissional%20(R%24%20997%2Fm%C3%AAs)."
-         target="_blank" rel="noopener noreferrer"
-         aria-label="Agendar conversa sobre o Plano Profissional">
-        Quero agendar sobre o Profissional&nbsp;→
-      </a>
-      <p class="plan-trust"><span>✓</span> Garantia de devolução · sem fidelidade</p>
-    </div>
-
   </div>
 
   <!-- Faixa de upsell: redes / alto volume (o antigo "Escala" virou proposta sob medida) -->
@@ -1723,18 +1711,18 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
   var COPY = {
     bom: {
-      h:     'Sua clínica já vai bem. A CLINUP melhora seu site e seu atendimento pra você <span class="hl-accent">fechar mais</span>.',
-      sub:   'Você já atrai e fecha — mas ainda escapa gente no caminho. A gente tapa esses furos pra você não deixar consulta na mesa.',
+      h:     'Como combinamos na nossa conversa, escolha o plano ideal pra sua clínica <span class="hl-accent">avançar</span>.',
+      sub:   'Sua clínica já tem boa base. A CLINUP estrutura seu site, WhatsApp e atendimento pra você fechar mais consultas e não deixar dinheiro na mesa.',
       badge: 'essencial'
     },
     mediano: {
-      h:     'Sua clínica atrai gente, mas <span class="hl-accent">perde paciente</span> no atendimento.',
-      sub:   'Cada paciente que te chama e não marca é uma consulta que foi embora. A CLINUP fecha esse buraco: site, WhatsApp e atendimento puxando o interesse até a agenda.',
+      h:     'Como combinamos na nossa conversa, escolha o plano ideal pra <span class="hl-accent">organizar seu atendimento</span>.',
+      sub:   'Estruturamos cada etapa do seu funil: site profissional, WhatsApp com respostas prontas e Central de Leads pra sua recepção fechar mais.',
       badge: 'profissional'
     },
     critico: {
-      h:     'Chega paciente todo dia — e some antes de marcar. Tem <span class="hl-accent">dinheiro saindo</span> da sua clínica em cada etapa.',
-      sub:   'Não é falta de paciente: é paciente que chega e escapa. A CLINUP organiza seu site, seu WhatsApp e o atendimento pra transformar contato em consulta marcada.',
+      h:     'Como combinamos na nossa conversa, aqui está seu <span class="hl-accent">Plano de Recuperação em 30 dias</span>.',
+      sub:   'Organizamos seu site, seu WhatsApp e seu atendimento pra transformar cada contato que chega na sua clínica em consulta marcada.',
       badge: 'profissional'
     }
   };
