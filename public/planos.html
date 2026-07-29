@@ -298,6 +298,30 @@ header.plans-header {
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   max-width: 260px;
 }
+/* ── Selo de simulação ────────────────────────────────────────────────
+   O print do CRM é do produto REAL, mas os números na tela (pipeline,
+   leads, valores) são ilustrativos. Todo mock do site carrega este selo;
+   este era o único que não carregava. Mesma linguagem do .mf-sim da
+   landing, sem o pulso — aqui não existe esse sistema de animação. */
+.mockup-sim {
+  margin-left: auto; flex-shrink: 0;
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px; font-weight: 500; color: var(--sub);
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 3px 10px; white-space: nowrap;
+  background: rgba(255,255,255,0.03);
+}
+.mockup-sim::before {
+  content: ""; width: 6px; height: 6px; border-radius: 50%;
+  flex-shrink: 0; background: #7EA2FF;
+}
+/* no celular a barra tem 30px e não cabem URL + selo: a URL sai, porque
+   é decoração — o selo é a informação que o visitante precisa ter.
+   Modificador na barra em vez de :has() pra não depender de suporte. */
+@media (max-width: 640px) {
+  .mockup-bar--sim .mockup-url { display: none; }
+}
 .mockup-screen--demo {
   aspect-ratio: 16 / 10;
   position: relative;
@@ -1069,6 +1093,15 @@ body.demo-modal-open { overflow: hidden; }
   margin: 0 auto;
   padding-bottom: 48px;
 }
+/* ── Respiro entre parágrafos quebrados ───────────────────────────────
+   Blocos que passavam de 8–10 linhas no celular foram QUEBRADOS em
+   parágrafos consecutivos (nenhum argumento foi cortado). Estas classes
+   não tinham margem entre si — sem isto os pedaços colariam. */
+.plans-tagline + .plans-tagline,
+.plans-team-text + .plans-team-text,
+.plans-closing + .plans-closing { margin-top: 14px; }
+.plans-tagline + .plans-tagline { padding-bottom: 48px; }
+.plans-tagline:not(:last-of-type) { padding-bottom: 0; }
 
 /* CTA âncora discreto no hero → pula pros planos (acima da dobra) */
 .plans-anchor-cta {
@@ -1384,7 +1417,8 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   </section>
 
   <!-- Seção 3 — Tagline de diferenciação (movida pra logo abaixo do hero) -->
-  <p class="plans-tagline reveal">A CLINUP não é agência de anúncios nem social media. A gente resolve pra você: rápido, simples e sem enrolação.</p>
+  <p class="plans-tagline reveal">A CLINUP não é agência de anúncios nem social media.</p>
+  <p class="plans-tagline reveal">A gente resolve pra você: rápido, simples e sem enrolação.</p>
 
 </div><!-- /.plans-top-inner -->
 </div><!-- /.plans-top-bg -->
@@ -1433,7 +1467,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <li><span>WhatsApp configurado com mensagens prontas e <strong>resposta automática de primeira linha</strong> (ferramenta grátis por 7 dias)</span></li>
         <li><span>1 rodada de ajustes por entrega</span></li>
       </ul>
-      <p class="plan-note"><span>✓</span> Transparência total: a ferramenta de WhatsApp é grátis por 7 dias. Depois, R$59,90/mês pagos direto à plataforma — separado do plano e no seu controle.</p>
+      <!-- Nota de transparência: fica num parágrafo só de propósito (fragmentar
+     uma ressalva de cobrança dá aparência de letra miúda). O que muda é o
+     negrito nos dois fatos que importam — prazo e valor. -->
+<p class="plan-note"><span>✓</span> Transparência total: a ferramenta de WhatsApp é <strong>grátis por 7 dias</strong>. Depois, <strong>R$ 59,90/mês</strong> pagos direto à plataforma — separado do plano e no seu controle.</p>
       <a class="plan-btn plan-btn-secondary"
          href="https://wa.me/5511951438583?text=Ol%C3%A1%20Gabriel%2C%20assisti%20nossa%20reuni%C3%A3o%20e%20quero%20confirmar%20o%20Plano%20Profissional%20(R%24%20997%2Fm%C3%AAs)%20para%20minha%20cl%C3%ADnica."
          target="_blank" rel="noopener noreferrer"
@@ -1486,9 +1523,9 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </a>
     <div class="demo-static">
       <div class="mockup mockup-demo" style="pointer-events:none;">
-        <div class="mockup-bar"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">crm.clinup.com.br</span></div>
+        <div class="mockup-bar mockup-bar--sim"><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-dot"></span><span class="mockup-url">crm.clinup.com.br</span><span class="mockup-sim">Simulação · dados ilustrativos</span></div>
         <div class="mockup-screen mockup-screen--demo">
-          <img class="demo-thumb" src="/assets/img/demo-crm-preview.jpg" alt="Central de Leads e CRM ClinUp" width="1280" height="800" loading="lazy">
+          <img class="demo-thumb" src="/assets/img/demo-crm-preview.jpg" alt="Central de Leads da ClinUp: exemplo do painel com dados ilustrativos" width="1280" height="800" loading="lazy">
         </div>
       </div>
       <p class="deliverable-cap">Central de Leads da clínica · integrada ao seu WhatsApp</p>
@@ -1502,7 +1539,16 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </div>
     <h3 style="font-family:'Sora',sans-serif; font-size:19px; font-weight:800; color:var(--white); margin-bottom:10px; line-height:1.3;">Sua Central de Leads organizada — sem complicação pra você ou sua equipe.</h3>
     <p style="font-size:14.5px; font-weight:500; color:var(--body); line-height:1.65; margin-bottom:16px;">
-      Você não precisa aprender a configurar software. A gente entrega a sua <strong>Central de Leads pronta</strong>, já conectada ao seu site e ao WhatsApp da clínica. Quando um paciente chama, ele vira um card na tela. Sua secretária bate o olho, sabe quem já respondeu, quem agendou e quem precisa de retorno — sem nenhuma conversa esquecida.
+      Você não precisa aprender a configurar software.
+    </p>
+    <p style="font-size:14.5px; font-weight:500; color:var(--body); line-height:1.65; margin-bottom:16px;">
+      A gente entrega a sua <strong>Central de Leads pronta</strong>, já conectada ao seu site e ao WhatsApp da clínica.
+    </p>
+    <p style="font-size:14.5px; font-weight:500; color:var(--body); line-height:1.65; margin-bottom:16px;">
+      Quando um paciente chama, ele vira um card na tela.
+    </p>
+    <p style="font-size:14.5px; font-weight:500; color:var(--body); line-height:1.65; margin-bottom:16px;">
+      Sua secretária bate o olho, sabe quem já respondeu, quem agendou e quem precisa de retorno — <strong>sem nenhuma conversa esquecida.</strong>
     </p>
     <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px; margin-top:16px; border-top:1px solid var(--border); padding-top:16px;">
       <div style="font-size:13px; color:var(--body); font-weight:500;"><strong style="color:var(--white);">✓ Entrada Automática:</strong> Entrou no site ou no WhatsApp ➔ vira card na tela na hora.</div>
@@ -1621,7 +1667,8 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <section class="plans-closing-cta plans-closing-cta--dark reveal">
     <p class="plans-closing-eyebrow">Por que a CLINUP</p>
     <p class="plans-closing-anchor">Você não vira mais um número numa agência.</p>
-    <p class="plans-closing">Você fala direto com quem faz, aprova tudo antes de publicar e só continua se estiver vendo resultado. Ainda na dúvida de qual plano faz sentido? Fala com a gente — sem compromisso.</p>
+    <p class="plans-closing">Você fala direto com quem faz, aprova tudo antes de publicar e só continua se estiver vendo resultado.</p>
+    <p class="plans-closing">Ainda na dúvida de qual plano faz sentido? Fala com a gente — sem compromisso.</p>
     <a class="plan-btn plan-btn-secondary plans-closing-btn"
        href="https://wa.me/5511951438583?text=Ol%C3%A1%2C%20fiz%20o%20diagn%C3%B3stico%20da%20CLINUP%20e%20quero%20conversar%20sobre%20os%20planos."
        target="_blank" rel="noopener noreferrer"
@@ -1642,7 +1689,9 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <em>imagem em breve</em>
       </span>
     </figure>
-    <p class="plans-team-text">A CLINUP existe por uma ideia simples: <strong>clínica boa não pode perder paciente por estar desorganizada na internet.</strong> Por isso a gente trabalha só com clínicas e faz tudo aqui dentro — a ideia, a parte técnica e a execução — por quem realmente sabe programar, sem template pronto revendido.</p>
+    <p class="plans-team-text">A CLINUP existe por uma ideia simples: <strong>clínica boa não pode perder paciente por estar desorganizada na internet.</strong></p>
+      <p class="plans-team-text">Por isso a gente trabalha só com clínicas e faz tudo aqui dentro — a ideia, a parte técnica e a execução.</p>
+      <p class="plans-team-text">Tudo por quem realmente sabe programar, <strong>sem template pronto revendido.</strong></p>
     <p class="plans-team-text">E é tudo direto e na transparência: você fala com quem faz, aprova cada detalhe antes de publicar e só continua se fizer sentido pra você.</p>
   </section>
 
