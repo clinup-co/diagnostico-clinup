@@ -257,6 +257,40 @@ body { position: relative; overflow-x: clip; } /* clip: nada estoura a viewport 
   .proc-spinner { animation: none; border-top-color: rgba(77,124,254,0.15); }
   .proc-bar-fill, .proc-status { transition: none; }
 }
+
+/* ── CTA fixo do laudo (mobile) ──────────────────────────────────────
+   O laudo tem ~6 telas no celular e o botão real fica na última. Entre
+   ler "R$ X/mês escapando" e ter onde clicar havia meia dúzia de
+   rolagens — e era o momento de maior intenção do funil inteiro.
+
+   A barra repete o MESMO destino do botão do fim (o href é copiado dele
+   em runtime, então Ref e vazamento vão junto) e some quando aquele
+   botão entra em cena: dois CTAs idênticos na mesma tela confundem.
+   Mesma linguagem visual do CTA fixo da landing. */
+.laudo-sticky {
+  display: none; position: fixed; left: 16px; right: 16px;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  z-index: 900; border-radius: 16px; overflow: hidden;
+  background: rgba(17,24,39,0.85);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  transform: translateY(140%);
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.laudo-sticky.is-visible { transform: translateY(0); }
+.laudo-sticky a {
+  display: flex; align-items: center; justify-content: center;
+  min-height: 56px; padding: 10px 18px;
+  font-family: 'Sora', sans-serif; font-weight: 800; font-size: 15px;
+  color: #fff; text-decoration: none; text-align: center;
+  background: linear-gradient(135deg, #618BFF, #4D7CFE);
+}
+/* só no celular, e só depois que o laudo existe (is-armed vem do JS) */
+@media (max-width: 768px) {
+  .laudo-sticky.is-armed { display: block; }
+}
+@media (prefers-reduced-motion: reduce) { .laudo-sticky { transition: none; } }
 </style>
 <script>document.documentElement.classList.add('js-anim');</script>
 <script>window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };</script>
@@ -558,6 +592,12 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <div class="proc-bar" aria-hidden="true"><div id="procBarFill" class="proc-bar-fill"></div></div>
     <div id="procStatus" class="proc-status">Lendo suas respostas sobre o atendimento…</div>
   </div>
+</div>
+
+<!-- CTA fixo do laudo. Nasce sem is-armed: só passa a existir depois que o
+     laudo é montado, e o href é copiado do botão real (leva Ref e vazamento). -->
+<div class="laudo-sticky" id="laudoSticky">
+  <a href="/consultoria" id="laudoStickyLink">Agendar minha sessão gratuita&nbsp;→</a>
 </div>
 
 <script src="assets/js/motorCalculoVazamento.js"></script>

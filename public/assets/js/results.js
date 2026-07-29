@@ -352,7 +352,11 @@ function buildCTA(model, pt, mensal) {
     // preenchido aqui: showResult() gera antes de montar este HTML.
     '<a class="laudo-cta btn-cta-shimmer" href="/consultoria?resultado=' + pt +
       '&amp;ref=' + encodeURIComponent(quizLeadData.refId || '') +
-      '&amp;vm=' + Math.round(mensal || 0) + '">Receber meu Plano de Recuperação de 30 dias&nbsp;→</a>' +
+      // O botão nomeia o que ACONTECE ao clicar (agendar), não o que se recebe:
+      // a /consultoria abre pedindo uma sessão, e o botão dela diz exatamente
+      // esta frase. Quem clica esperando um PDF sentia que mudou o combinado.
+      // O plano de 30 dias continua prometido — no h3 logo acima e no texto.
+      '&amp;vm=' + Math.round(mensal || 0) + '">Agendar minha sessão gratuita&nbsp;→</a>' +
     '<button class="btn-restart" onclick="copyResultSummary(this)">Copiar resumo do laudo</button>' +
     '<button class="btn-restart" onclick="restartQuiz()">Refazer o diagnóstico</button>' +
   '</div>';
@@ -430,6 +434,79 @@ function showResult() {
   result.innerHTML = buildLaudoHTML(model, vaz);
   animateScoreRing(model.score);
   initScrollReveal();
+  initLaudoSticky();
+}
+
+// ── CTA fixo do laudo (mobile) ─────────────────────────────────────────────
+// O laudo tem ~6 telas no celular e o botão real fica na última: o momento de
+// maior intenção do funil ficava meia dúzia de rolagens longe de um clique.
+// A barra oferece o MESMO caminho em qualquer altura da leitura.
+//
+// Duas condições pra aparecer, e as duas importam:
+//   · a pessoa já rolou além da primeira dobra — deixa ela ver o score antes;
+//   · o botão real não está à vista — dois CTAs iguais na tela confundem.
+var _stickyPassouDobra = false;   // rolou além da primeira dobra
+var _stickyBotaoReal   = false;   // o botão do fim está à vista
+var _stickyObserver    = null;
+
+function _stickyAtualiza() {
+  var bar = document.getElementById('laudoSticky');
+  if (!bar) return;
+  bar.classList.toggle('is-visible', _stickyPassouDobra && !_stickyBotaoReal);
+}
+
+function initLaudoSticky() {
+  var bar  = document.getElementById('laudoSticky');
+  var link = document.getElementById('laudoStickyLink');
+  var real = document.querySelector('.laudo-cta');
+  if (!bar || !link || !real) return;
+
+  // mesmo destino do botão do fim: a query já carrega resultado, Ref e vazamento
+  link.setAttribute('href', real.getAttribute('href'));
+  bar.classList.add('is-armed');
+
+  // o botão do fim é um elemento NOVO a cada laudo (o innerHTML é remontado),
+  // então rastreio e observer precisam ser religados nele toda vez.
+  // Sem o rastreio, o laudo ganharia um segundo caminho de conversão que
+  // ninguém consegue separar do primeiro no Analytics.
+  real.addEventListener('click', function () {
+    track('laudo_cta_click', { origem: 'laudo_fim' });
+  });
+
+  if ('IntersectionObserver' in window) {
+    if (_stickyObserver) _stickyObserver.disconnect();
+    _stickyObserver = new IntersectionObserver(function (entries) {
+      _stickyBotaoReal = entries[0].isIntersecting;
+      _stickyAtualiza();
+    }, { rootMargin: '0px 0px -60px 0px' });
+    _stickyObserver.observe(real);
+  }
+
+  // a barra em si é fixa no HTML: listener de scroll e clique só uma vez,
+  // senão refazer o diagnóstico empilharia um par novo a cada laudo
+  if (bar.dataset.pronto !== '1') {
+    bar.dataset.pronto = '1';
+    link.addEventListener('click', function () {
+      track('laudo_cta_click', { origem: 'laudo_sticky' });
+    });
+    window.addEventListener('scroll', function () {
+      var v = (window.scrollY || window.pageYOffset || 0) > 420;
+      if (v !== _stickyPassouDobra) { _stickyPassouDobra = v; _stickyAtualiza(); }
+    }, { passive: true });
+  }
+
+  _stickyPassouDobra = (window.scrollY || window.pageYOffset || 0) > 420;
+  _stickyAtualiza();
+}
+
+// Refazer o diagnóstico desmonta o laudo: a barra tem que sair junto, senão
+// fica flutuando por cima do quiz apontando pra um laudo que não existe mais.
+function hideLaudoSticky() {
+  var bar = document.getElementById('laudoSticky');
+  if (!bar) return;
+  if (_stickyObserver) { _stickyObserver.disconnect(); _stickyObserver = null; }
+  _stickyBotaoReal = false;
+  bar.classList.remove('is-armed', 'is-visible');
 }
 
 // ── Círculo de score (donut SVG) — cor interpolada + preenchimento animado ──
@@ -785,6 +862,7 @@ function restartQuiz() {
   document.querySelectorAll('.btn-next').forEach(b => b.classList.remove('enabled'));
   document.getElementById('result').classList.remove('show');
   document.getElementById('result').innerHTML = '';
+  hideLaudoSticky();
   document.getElementById('progressWrap').style.display = '';
   document.getElementById('progressWrap').classList.add('show');
   showQuestion(1);
