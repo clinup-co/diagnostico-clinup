@@ -419,7 +419,7 @@ function animateMoneyNumbers() {
   var targetM = _recalcCur.mensal;
   var targetA = _recalcCur.anual;
   var t0 = performance.now();
-  var duration = 1800; // 1.8 segundos de contagem dramática
+  var duration = 3200; // 3.2 segundos de contagem progressiva e cadenciada
   var parentVal = elM.closest('.money-value');
 
   (function tick(now) {
