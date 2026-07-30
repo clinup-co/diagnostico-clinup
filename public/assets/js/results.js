@@ -202,11 +202,11 @@ function buildMoneyBreak(res) {
 }
 
 function buildMoneyCard(res) {
-  return '<div class="money-card">' +
+  return '<div class="money-card m-reveal">' +
     '<span class="money-chip">Vazamento estimado</span>' +
     '<p class="money-label">Quanto sua operação deixa na mesa por mês</p>' +
-    '<p class="money-value">R$ <span id="laudoMensal">' + fmtMoney(res.vazamento_mensal) + '</span></p>' +
-    '<p class="money-year">≈ R$ <span id="laudoAnual">' + fmtMoney(res.vazamento_anual) + '</span> por ano, no cenário atual.</p>' +
+    '<p class="money-value">R$ <span id="laudoMensal">0</span></p>' +
+    '<p class="money-year">≈ R$ <span id="laudoAnual">0</span> por ano, no cenário atual.</p>' +
     '<div id="laudoBreak">' + buildMoneyBreak(res) + '</div>' +
     '<p class="money-note">Soma do que escapa por resposta lenta no WhatsApp e por faltas não repostas, com premissas conservadoras onde faltou dado. O valor exato a gente levanta na conversa.</p>' +
   '</div>';
@@ -482,6 +482,7 @@ function showResult() {
   animateScoreRing(model.score);
   initScrollReveal();
   initLaudoSticky();
+  setTimeout(animateMoneyNumbers, 150);
 }
 
 // ── CTA fixo do laudo (mobile) ─────────────────────────────────────────────
