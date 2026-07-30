@@ -237,10 +237,18 @@ function recalcLaudo() {
   } else {
     var from = { mensal: _recalcCur.mensal, anual: _recalcCur.anual }, t0 = performance.now();
     if (_recalcRaf) cancelAnimationFrame(_recalcRaf);
+    var parentVal = elM ? elM.closest('.money-value') : null;
     (function tick(now) {
       var p = Math.min(1, (now - t0) / 400), e = 1 - Math.pow(1 - p, 3);
       if (elM) elM.textContent = fmtMoney(from.mensal + (target.mensal - from.mensal) * e);
       if (elA) elA.textContent = fmtMoney(from.anual + (target.anual - from.anual) * e);
+
+      // Aplica cor viva durante o recálculo
+      var col = getHeatmapColor(e);
+      if (parentVal) {
+        parentVal.style.color = col;
+        parentVal.style.textShadow = '0 0 ' + (e * 28).toFixed(1) + 'px ' + col.replace('rgb', 'rgba').replace(')', ', 0.6)');
+      }
       if (p < 1) _recalcRaf = requestAnimationFrame(tick); else _recalcCur = target;
     })(t0);
   }
@@ -385,22 +393,61 @@ function initScrollReveal() {
   });
 }
 
+// Interpolação gradual de cor conforme o valor é contado (0% -> 10% -> 50% -> 100%)
+// 10%: Verde (#2BD576), 50%: Amarelo (#F5A623), 100%: Vermelhão (#F4574D)
+function getHeatmapColor(p) {
+  var r, g, b;
+  if (p < 0.5) {
+    var t = p / 0.5;
+    r = Math.round(43 + (245 - 43) * t);
+    g = Math.round(213 + (166 - 213) * t);
+    b = Math.round(118 + (35 - 118) * t);
+  } else {
+    var t = (p - 0.5) / 0.5;
+    r = Math.round(245 + (244 - 245) * t);
+    g = Math.round(166 + (87 - 166) * t);
+    b = Math.round(35 + (77 - 35) * t);
+  }
+  return 'rgb(' + r + ',' + g + ',' + b + ')';
+}
+
 function animateMoneyNumbers() {
   var elM = document.getElementById('laudoMensal');
   var elA = document.getElementById('laudoAnual');
-  if (!elM || !_recalcCur.mensal) return;
+  if (!elM || !_recalcCur || !_recalcCur.mensal) return;
 
   var targetM = _recalcCur.mensal;
   var targetA = _recalcCur.anual;
   var t0 = performance.now();
-  var duration = 900;
+  var duration = 1800; // 1.8 segundos de contagem dramática
+  var parentVal = elM.closest('.money-value');
 
   (function tick(now) {
     var p = Math.min(1, (now - t0) / duration);
-    var e = 1 - Math.pow(1 - p, 3);
-    if (elM) elM.textContent = fmtMoney(targetM * e);
-    if (elA) elA.textContent = fmtMoney(targetA * e);
-    if (p < 1) requestAnimationFrame(tick);
+    var e = 1 - Math.pow(1 - p, 3); // easeOutCubic
+    var currentValM = Math.round(targetM * e);
+    var currentValA = Math.round(targetA * e);
+
+    if (elM) elM.textContent = fmtMoney(currentValM);
+    if (elA) elA.textContent = fmtMoney(currentValA);
+
+    // Interpolação gradual de cor: 10% (Verde) -> 50% (Amarelo) -> 100% (Vermelhão)
+    var col = getHeatmapColor(e);
+    if (parentVal) {
+      parentVal.style.color = col;
+      parentVal.style.textShadow = '0 0 ' + (e * 28).toFixed(1) + 'px ' + col.replace('rgb', 'rgba').replace(')', ', 0.6)');
+    } else if (elM) {
+      elM.style.color = col;
+    }
+
+    if (p < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      if (parentVal) {
+        parentVal.style.color = '#F4574D';
+        parentVal.style.textShadow = '0 0 28px rgba(244, 87, 77, 0.65)';
+      }
+    }
   })(t0);
 }
 
