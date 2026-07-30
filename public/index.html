@@ -479,6 +479,43 @@ html.js-anim .mk-kpi:not(.landed) .mk-v--glowgain{text-shadow:none;animation:non
 }
 .calc-result.calc-pulse{transform:scale(1.015);border-color:rgba(244,87,77,.5)}
 
+/* ── Mobile Motion System v4.1 (Touch & Viewport Focus Architecture) ── */
+#scrollProgress {
+  position: fixed; top: 0; left: 0; height: 3px; width: 0%;
+  background: linear-gradient(90deg, var(--action) 0%, var(--gain) 100%);
+  z-index: 100; pointer-events: none; transition: width 100ms ease-out;
+  box-shadow: 0 0 10px rgba(77, 124, 254, 0.6);
+}
+
+@keyframes stickyPillGlow {
+  0%, 100% { box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(77,124,254,0.3); }
+  50% { box-shadow: 0 10px 40px rgba(77,124,254,0.35), inset 0 0 0 1.5px rgba(43,213,118,0.5); }
+}
+.sticky-cta.is-visible {
+  animation: stickyPillGlow 4s ease-in-out infinite;
+}
+
+/* Efeito de destaque automático em mobile quando o card atinge o centro da tela */
+.mobile-focus-card {
+  border-color: rgba(77, 124, 254, 0.5) !important;
+  box-shadow: 0 12px 36px rgba(77, 124, 254, 0.18) !important;
+  transform: translateY(-3px) scale(1.01) !important;
+}
+
+/* Resposta tátil ao toque (Touch Active State) */
+.mockframe:active, .mk-card:active, .step:active, .obj:active {
+  transform: scale(0.975) !important;
+  border-color: rgba(77, 124, 254, 0.6) !important;
+  transition: transform 120ms ease, border-color 120ms ease !important;
+}
+
+@media (max-width: 768px) {
+  /* Em celulares, garantir que os cards de gargalos e passos flutuem suavemente */
+  .step, .obj, .mk-card {
+    transition: transform 240ms cubic-bezier(0.2, 0, 0.2, 1), border-color 240ms ease, box-shadow 240ms ease;
+  }
+}
+
 /* ── Motion System v4.0 (Pyramid Motion Architecture) ────────────── */
 @keyframes floatCard {
   0%, 100% { transform: translate3d(0, 0, 0); }
@@ -780,6 +817,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 </head>
 
 <body>
+<div id="scrollProgress"></div>
 
 <header class="nav">
   <a class="brand" href="/" aria-label="ClinUp — página inicial">
@@ -1695,25 +1733,66 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     }
   }
 
-  // ── Micro-Interações & 3D Tilt Responsivo ao Cursor ──────────────
-  if (!reduce && window.matchMedia && window.matchMedia('(min-width: 992px)').matches) {
-    var tiltCards = document.querySelectorAll('.mockframe, .mk-card, .step, .obj');
-    tiltCards.forEach(function (card) {
-      card.classList.add('tilt-card');
-      card.addEventListener('mousemove', function (e) {
-        var rect = card.getBoundingClientRect();
-        var x = e.clientX - rect.left;
-        var y = e.clientY - rect.top;
-        var cx = rect.width / 2;
-        var cy = rect.height / 2;
-        var rx = ((y - cy) / cy) * -4; // rotação suave máx 4deg
-        var ry = ((x - cx) / cx) * 4;
-        card.style.transform = 'perspective(1000px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateY(-4px)';
+  // ── Mobile Motion System v4.1 (Touch, Scroll Progress & Viewport Focus) ──
+  var scrollBar = document.getElementById('scrollProgress');
+  window.addEventListener('scroll', function () {
+    var total = document.documentElement.scrollHeight - window.innerHeight;
+    if (total > 0 && scrollBar) {
+      var pct = (window.scrollY / total) * 100;
+      scrollBar.style.width = Math.min(100, Math.max(0, pct)).toFixed(1) + '%';
+    }
+  }, { passive: true });
+
+  if (!reduce && window.matchMedia) {
+    var isDesktop = window.matchMedia('(min-width: 992px)').matches;
+    var allCards = document.querySelectorAll('.mockframe, .mk-card, .step, .obj');
+
+    if (isDesktop) {
+      // ── Desktop: 3D Tilt Responsivo ao Cursor ──────────────
+      allCards.forEach(function (card) {
+        card.classList.add('tilt-card');
+        card.addEventListener('mousemove', function (e) {
+          var rect = card.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+          var cx = rect.width / 2;
+          var cy = rect.height / 2;
+          var rx = ((y - cy) / cy) * -4;
+          var ry = ((x - cx) / cx) * 4;
+          card.style.transform = 'perspective(1000px) rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateY(-4px)';
+        });
+        card.addEventListener('mouseleave', function () {
+          card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+        });
       });
-      card.addEventListener('mouseleave', function () {
-        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0)';
+    } else {
+      // ── Mobile: Touch-Tilt no Dedo & Destaque de Foco ao Rolar ──────
+      allCards.forEach(function (card) {
+        card.addEventListener('touchstart', function (e) {
+          if (e.touches && e.touches[0]) {
+            card.style.transform = 'scale(0.975) translateY(-2px)';
+          }
+        }, { passive: true });
+        card.addEventListener('touchend', function () {
+          card.style.transform = 'scale(1) translateY(0)';
+        }, { passive: true });
       });
-    });
+
+      // Mobile Center-Screen Focus Observer: acende o card exatamente quando passa no centro da tela do celular
+      if ('IntersectionObserver' in window) {
+        var mobileFocusIo = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('mobile-focus-card');
+            } else {
+              entry.target.classList.remove('mobile-focus-card');
+            }
+          });
+        }, { threshold: 0.5, rootMargin: '-15% 0px -15% 0px' });
+
+        allCards.forEach(function (card) { mobileFocusIo.observe(card); });
+      }
+    }
   }
 }());
 </script>
