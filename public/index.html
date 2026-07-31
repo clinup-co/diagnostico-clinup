@@ -40,8 +40,13 @@
   /* tokens de movimento (Frente 1) — só transform/opacity animam */
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-tap: cubic-bezier(0.34, 1.4, 0.64, 1);
-  --t-fast: 140ms; --t-base: 480ms; --t-slow: 700ms;
-  --rise: 24px;
+  --t-fast: 140ms; --t-base: 560ms; --t-slow: 700ms;
+  /* duração da camada 2 (dados se montando): mais lenta que a entrada de
+     propósito — gráfico que cresce rápido demais não lê como medição */
+  --t-data: 1100ms;
+  --rise: 40px;      /* era 24px: quase imperceptível, o olho não registrava */
+  --rise-far: 64px;  /* molduras grandes entram de mais longe */
+  --shift: 44px;     /* deslocamento lateral dos blocos em zig-zag */
   --stagger: 80ms;
   /* fotos editoriais: um valor só, usado também no reduced-motion.
      O contraste do texto NÃO depende mais deste valor — quem segura é o
@@ -55,6 +60,10 @@ body{
   background:var(--bg); color:var(--ink);
   font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
   font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+  /* rede de segurança: elemento entrando pela lateral não pode criar scroll
+     horizontal. clip em vez de hidden — hidden quebraria o position:sticky
+     da nav. */
+  overflow-x:clip;
 }
 ::selection{background:rgba(77,124,254,.35)}
 img,svg{max-width:100%}
@@ -489,25 +498,33 @@ html.js-anim .mk-kpi:not(.landed) .mk-v--glowgain{text-shadow:none;animation:non
   box-shadow: 0 0 10px rgba(77, 124, 254, 0.6);
 }
 
-@keyframes stickyPillGlow {
-  0%, 100% { box-shadow: 0 8px 32px rgba(0,0,0,0.45), inset 0 0 0 1px rgba(77,124,254,0.3); }
-  50% { box-shadow: 0 10px 40px rgba(77,124,254,0.45), inset 0 0 0 1.5px rgba(43,213,118,0.6); }
+/* O brilho da pílula fixa mora numa camada própria e só a OPACITY dela anima.
+   Animar box-shadow direto repinta o elemento a cada frame, pra sempre — é a
+   mesma razão pela qual o .btn::after já existe logo acima. */
+/* A pílula tem overflow:hidden (pra recortar o botão nos cantos arredondados),
+   então sombra pra FORA seria cortada — o pulso é um anel interno. */
+.sticky-cta::before{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 0 0 1.5px rgba(126,162,255,.75), inset 0 0 22px rgba(77,124,254,.45);
+  opacity:0;
 }
-.sticky-cta.is-visible {
-  animation: stickyPillGlow 3.5s ease-in-out infinite;
+.sticky-cta.is-visible::before{animation:stickyPillGlow 3.5s ease-in-out infinite}
+@keyframes stickyPillGlow{
+  0%,100%{opacity:0}
+  50%{opacity:1}
 }
 
-/* Animação para elementos SVG (Gráficos e Barras) */
-@keyframes svgGainBarPulse {
-  0%, 100% { fill-opacity: .82; }
-  50% { fill-opacity: 1; filter: drop-shadow(0 0 8px rgba(43,213,118,0.5)); }
+/* Pulso das barras do gráfico: só OPACITY.
+   A versão anterior animava `filter: drop-shadow(...)` em 8 barras ao mesmo
+   tempo — filter força repaint a cada frame, e num loop infinito isso é
+   consumo permanente de CPU/bateria no celular. O halo virou uma cópia da
+   barra atrás dela, borrada uma vez só, cuja opacidade pulsa. */
+@keyframes svgBarPulse{
+  0%,100%{opacity:.82}
+  50%{opacity:1}
 }
-@keyframes svgLossHatchPulse {
-  0%, 100% { opacity: .7; }
-  50% { opacity: 1; filter: drop-shadow(0 0 10px rgba(244,87,77,0.6)); }
-}
-svg rect[fill="#2BD576"] { animation: svgGainBarPulse 3s ease-in-out infinite; }
-svg rect[fill="url(#hatch)"] { animation: svgLossHatchPulse 2.5s ease-in-out infinite; }
+svg rect[fill="#2BD576"]{animation:svgBarPulse 3s ease-in-out infinite}
+svg rect[fill="url(#hatch)"]{animation:svgBarPulse 2.5s ease-in-out infinite}
 
 /* ── Motion System v4.0 (Pyramid Motion Architecture) ────────────── */
 @keyframes floatCard {
@@ -547,16 +564,11 @@ svg rect[fill="url(#hatch)"] { animation: svgLossHatchPulse 2.5s ease-in-out inf
 }
 
 /* Aplicação de barras de gráfico com pulso contínuo de dados */
-.mk-bar {
-  background-size: 200% 100% !important;
-  background-image: linear-gradient(90deg, rgba(77,124,254,.24) 0%, rgba(126,162,255,.55) 50%, rgba(77,124,254,.24) 100%) !important;
-  animation: chartBarStream 3.5s linear infinite !important;
-}
-.mk-bar--gain {
-  background-size: 200% 100% !important;
-  background-image: linear-gradient(90deg, rgba(43,213,118,.25) 0%, rgba(43,213,118,.65) 50%, rgba(43,213,118,.25) 100%) !important;
-  animation: chartBarStream 3.5s linear infinite !important;
-}
+/* As 4 barras do funil apontavam pra `animation: chartBarStream`, que nunca
+   foi definida em lugar nenhum — o brilho corrente jamais rodou, e o
+   background-size:200% que existia pra ele deixava as barras com um degradê
+   cortado pela metade. Referência morta removida: quem dá vida às barras
+   agora é o crescimento de largura ao entrarem na tela (data-grow="w"). */
 .mk-b-loss { animation: lossBadgePulse 3.5s ease-in-out infinite; }
 
 /* Cards com suporte a 3D Tilt Responsivo */
@@ -569,6 +581,68 @@ svg rect[fill="url(#hatch)"] { animation: svgLossHatchPulse 2.5s ease-in-out inf
 /* ── Reveal on scroll ────────────────────────────────────────────── */
 html.js-anim .reveal{opacity:0;transform:translateY(var(--rise));transition:opacity var(--t-base) var(--ease-out),transform var(--t-base) var(--ease-out)}
 html.js-anim .reveal.is-visible{opacity:1;transform:none}
+
+/* ════════════════════════════════════════════════════════════════════
+   CAMADA 2 · DADOS VIVOS — os dashboards se constroem
+   ────────────────────────────────────────────────────────────────────
+   Era o buraco real: os números subiam, mas o gráfico embaixo deles já
+   nascia pronto, e o conjunto lia como print de tela.
+
+   Só entra em cena quando o JS marca .dv-on no <html>. Sem JS, sem
+   IntersectionObserver ou com reduced-motion a classe nunca aparece e
+   todo dado fica no estado final — que é o que está escrito no HTML.
+   ════════════════════════════════════════════════════════════════════ */
+html.dv-on [data-grow="h"]{
+  transform:scaleY(0);
+  transform-box:fill-box;transform-origin:bottom;
+  transition:transform var(--t-data) var(--ease-out);
+}
+html.dv-on [data-grow="w"]{
+  /* exceção documentada à regra "só transform": scaleX achataria o
+     border-radius de 8px durante a animação. São 4 barras, uma vez, dentro
+     de um card — o custo de layout é irrelevante e o visual fica correto. */
+  width:0!important;
+  transition:width var(--t-data) var(--ease-out);
+}
+html.dv-on [data-draw]{
+  transition:stroke-dashoffset var(--t-data) cubic-bezier(.33,.7,.4,1);
+}
+html.dv-on [data-after]{
+  opacity:0;transform:translateY(8px);
+  transition:opacity 420ms var(--ease-out), transform 420ms var(--ease-out);
+}
+html.dv-on [data-cascade] > *{
+  opacity:0;transform:scale(.82);
+  transition:opacity 380ms var(--ease-out), transform 380ms var(--ease-out);
+}
+/* Dentro de SVG, transform sem fill-box usa a origem do viewBox — os pontos
+   do gráfico sairiam voando do canto em vez de crescer no lugar. */
+html.dv-on [data-cascade] > circle,
+html.dv-on [data-after]{transform-box:fill-box;transform-origin:center}
+html.dv-on [data-after]:not(svg *){transform-box:border-box}
+/* .dv-go é o que o motor acende quando o bloco entra na tela */
+html.dv-on [data-grow="h"].dv-go{transform:scaleY(1)}
+html.dv-on [data-draw].dv-go{stroke-dashoffset:0!important}
+html.dv-on [data-after].dv-go{opacity:1;transform:none}
+html.dv-on [data-cascade] > .dv-go{opacity:1;transform:none}
+
+/* ── Variantes de entrada ────────────────────────────────────────────
+   Antes tudo fazia o mesmo movimento, e uniformidade é o que faz o olho
+   parar de registrar que houve movimento. Cada variante tem um trabalho:
+   --left/--right dão direção aos blocos em zig-zag (o texto entra do lado
+   em que ele vive), --pop dá peso às molduras e cards. */
+html.js-anim .reveal--left{transform:translate3d(calc(var(--shift) * -1), var(--rise), 0)}
+html.js-anim .reveal--right{transform:translate3d(var(--shift), var(--rise), 0)}
+html.js-anim .reveal--pop{transform:translate3d(0, var(--rise-far), 0) scale(.955)}
+html.js-anim .reveal--left.is-visible,
+html.js-anim .reveal--right.is-visible,
+html.js-anim .reveal--pop.is-visible{transform:none}
+/* Abaixo de 980px o zig-zag já é coluna única: deslocar na horizontal aqui
+   só criaria risco de scroll lateral sem ganhar narrativa nenhuma. */
+@media (max-width:980px){
+  html.js-anim .reveal--left,
+  html.js-anim .reveal--right{transform:translate3d(0, var(--rise), 0)}
+}
 @media (prefers-reduced-motion: reduce){
   html.js-anim .reveal{opacity:1;transform:none;transition:none;transition-delay:0s!important}
   html.js-anim .photo-bg:not(.is-visible) img{opacity:var(--photo-op);transition:none}
@@ -576,6 +650,15 @@ html.js-anim .reveal.is-visible{opacity:1;transform:none}
   html.js-anim .fio-drip,html.js-anim .fio-node{opacity:.7;transition:none}
   html.js-anim .mk-kpi .mk-delta{opacity:1;transform:none;transition:none}
   .btn::after,.mk-v--glowloss,.motion-float,.motion-float-subtle,.mk-bar,.mk-b-loss{animation:none!important}
+  /* o motor de dados vivos nem liga o .dv-on quando reduced-motion está
+     ativo; estas regras são o cinto de segurança caso a classe entre por
+     outro caminho — nada pode ficar encolhido ou invisível. */
+  html.dv-on [data-grow="h"]{transform:none!important;transition:none!important}
+  html.dv-on [data-grow="w"]{width:auto!important;transition:none!important}
+  html.dv-on [data-draw]{stroke-dashoffset:0!important;transition:none!important}
+  html.dv-on [data-after],html.dv-on [data-cascade] > *{opacity:1!important;transform:none!important;transition:none!important}
+  .sticky-cta.is-visible::before{animation:none;opacity:0}
+  svg rect[fill="#2BD576"],svg rect[fill="url(#hatch)"]{animation:none}
   .mf-sim::after{animation:none;opacity:0} /* sem pulso o anel não fica parado em volta do ponto */
   .sticky-cta{transition:none}
   .btn:hover,.mockframe:hover,.mk-card:hover,.step:hover,.obj:hover,.brand:hover{transform:none}
@@ -851,7 +934,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </div>
   </div>
 
-  <figure class="hero-mock reveal" aria-label="Demonstração ilustrativa de uma auditoria ClinUp, com dados simulados de uma clínica de exemplo">
+  <figure class="hero-mock reveal reveal--pop" aria-label="Demonstração ilustrativa de uma auditoria ClinUp, com dados simulados de uma clínica de exemplo">
     <div class="mockframe motion-float">
       <div class="mf-bar">
         <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -917,19 +1000,19 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
               <g fill="#5A6478" font-size="11" font-family="Inter" text-anchor="end">
                 <text x="46" y="254">0</text><text x="46" y="196">4k</text><text x="46" y="139">8k</text><text x="46" y="81">12k</text><text x="46" y="24">16k</text>
               </g>
-              <rect x="106" y="46"  width="44" height="204" rx="4" fill="#2BD576" fill-opacity=".85"/>
-              <rect x="160" y="194" width="44" height="56"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7"/>
-              <rect x="246" y="66"  width="44" height="184" rx="4" fill="#2BD576" fill-opacity=".85"/>
-              <rect x="300" y="184" width="44" height="66"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7"/>
-              <rect x="386" y="33"  width="44" height="217" rx="4" fill="#2BD576" fill-opacity=".85"/>
-              <rect x="440" y="190" width="44" height="60"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7"/>
-              <rect x="526" y="55"  width="44" height="195" rx="4" fill="#2BD576" fill-opacity=".85"/>
-              <rect x="580" y="167" width="44" height="83"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7"/>
+              <rect x="106" y="46"  width="44" height="204" rx="4" fill="#2BD576" fill-opacity=".85" data-grow="h" data-delay="0"/>
+              <rect x="160" y="194" width="44" height="56"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7" data-grow="h" data-delay="340"/>
+              <rect x="246" y="66"  width="44" height="184" rx="4" fill="#2BD576" fill-opacity=".85" data-grow="h" data-delay="70"/>
+              <rect x="300" y="184" width="44" height="66"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7" data-grow="h" data-delay="410"/>
+              <rect x="386" y="33"  width="44" height="217" rx="4" fill="#2BD576" fill-opacity=".85" data-grow="h" data-delay="140"/>
+              <rect x="440" y="190" width="44" height="60"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7" data-grow="h" data-delay="480"/>
+              <rect x="526" y="55"  width="44" height="195" rx="4" fill="#2BD576" fill-opacity=".85" data-grow="h" data-delay="210"/>
+              <rect x="580" y="167" width="44" height="83"  rx="4" fill="url(#hatch)" stroke="#F4574D" stroke-opacity=".7" data-grow="h" data-delay="550"/>
               <g fill="#8A94A6" font-size="12" font-family="Inter" text-anchor="middle">
                 <text x="155" y="274">Semana 1</text><text x="295" y="274">Semana 2</text>
                 <text x="435" y="274">Semana 3</text><text x="575" y="274">Semana 4</text>
               </g>
-              <g fill="#F4574D" font-size="11.5" font-weight="600" font-family="Inter" text-anchor="middle">
+              <g fill="#F4574D" font-size="11.5" font-weight="600" font-family="Inter" text-anchor="middle" data-after="780">
                 <text x="182" y="186">−3,9k</text><text x="322" y="176">−4,6k</text>
                 <text x="462" y="182">−4,2k</text><text x="602" y="159">−5,7k</text>
               </g>
@@ -942,25 +1025,25 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
             <div class="mk-stage">
               <div class="mk-lbl"><span>Leads recebidos</span><span class="num">152</span></div>
-              <div class="mk-bar" style="width:100%"></div>
+              <div class="mk-bar" data-grow="w" data-delay="0" style="width:100%"></div>
             </div>
-            <div class="mk-leak"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−34 · sem resposta</span></div>
+            <div class="mk-leak" data-after="240"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−34 · sem resposta</span></div>
 
             <div class="mk-stage" style="margin-top:2px">
               <div class="mk-lbl"><span>Respondidos</span><span class="num">118</span></div>
-              <div class="mk-bar" style="width:78%"></div>
+              <div class="mk-bar" data-grow="w" data-delay="160" style="width:78%"></div>
             </div>
-            <div class="mk-leak"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−57 · não agendaram</span></div>
+            <div class="mk-leak" data-after="400"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−57 · não agendaram</span></div>
 
             <div class="mk-stage" style="margin-top:2px">
               <div class="mk-lbl"><span>Agendados</span><span class="num">61</span></div>
-              <div class="mk-bar" style="width:40%"></div>
+              <div class="mk-bar" data-grow="w" data-delay="320" style="width:40%"></div>
             </div>
-            <div class="mk-leak"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−19 · faltaram</span></div>
+            <div class="mk-leak" data-after="560"><span><svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 8v9h-9"/></svg>−19 · faltaram</span></div>
 
             <div class="mk-stage" style="margin-top:2px">
               <div class="mk-lbl"><span>Compareceram</span><span class="num" style="color:var(--gain)">42</span></div>
-              <div class="mk-bar mk-bar--gain" style="width:28%"></div>
+              <div class="mk-bar mk-bar--gain" data-grow="w" data-delay="480" style="width:28%"></div>
             </div>
 
             <div class="mk-foot" style="margin-top:22px"><span>De cada 10 pessoas que chamam a clínica, <span style="color:var(--ink);font-weight:600">7 se perdem no caminho.</span></span></div>
@@ -986,21 +1069,21 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   </div>
   <div class="wrap zig">
     <div class="zig-copy photo-panel" data-stagger>
-      <span class="kicker reveal">Pilar 1 · Atendimento no WhatsApp</span>
+      <span class="kicker reveal reveal--left">Pilar 1 · Atendimento no WhatsApp</span>
       <h2 class="reveal">O Cemitério de Leads no seu WhatsApp</h2>
-      <p class="lead reveal"><strong>Imagine a cena:</strong> um paciente querendo um procedimento de R$ 500 encontra sua clínica às 20h30.</p>
-      <p class="lead reveal">Ele clica no WhatsApp pronto pra agendar.</p>
-      <p class="lead reveal">Sua recepção já foi embora. Ele não vai esperar até amanhã às 8h — <strong>chama o concorrente que respondeu na hora.</strong></p>
-      <p class="lead reveal">O diagnóstico mostra onde essas consultas estão sumindo no chat.</p>
-      <ul class="checks reveal">
+      <p class="lead reveal reveal--left"><strong>Imagine a cena:</strong> um paciente querendo um procedimento de R$ 500 encontra sua clínica às 20h30.</p>
+      <p class="lead reveal reveal--left">Ele clica no WhatsApp pronto pra agendar.</p>
+      <p class="lead reveal reveal--left">Sua recepção já foi embora. Ele não vai esperar até amanhã às 8h — <strong>chama o concorrente que respondeu na hora.</strong></p>
+      <p class="lead reveal reveal--left">O diagnóstico mostra onde essas consultas estão sumindo no chat.</p>
+      <ul class="checks reveal reveal--left">
         <li>Os horários em que o WhatsApp da clínica fica no vácuo — almoço, noite e fim de semana</li>
         <li>Quanto cada conversa que esfriou custa, no seu ticket médio</li>
         <li>O que automatizar primeiro pra responder em segundos, sem robotizar o atendimento</li>
       </ul>
-      <a class="linkcta cta-diag reveal" data-origem="whatsapp" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
+      <a class="linkcta cta-diag reveal reveal--left" data-origem="whatsapp" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
     </div>
 
-    <figure class="zig-mock reveal" aria-label="Demonstração ilustrativa da auditoria de atendimento no WhatsApp, com dados simulados">
+    <figure class="zig-mock reveal reveal--pop" aria-label="Demonstração ilustrativa da auditoria de atendimento no WhatsApp, com dados simulados">
       <div class="mockframe motion-float-subtle">
         <div class="mf-bar">
           <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -1012,7 +1095,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
             <div class="mk-h">Tempo de resposta por horário</div>
             <div class="mk-sub">média por faixa de horário e dia da semana</div>
 
-            <div class="mk-hm">
+            <div class="mk-hm" data-cascade="cells" data-step="26">
               <div></div>
               <div class="mk-hm-cl">Seg</div><div class="mk-hm-cl">Ter</div><div class="mk-hm-cl">Qua</div><div class="mk-hm-cl">Qui</div><div class="mk-hm-cl">Sex</div><div class="mk-hm-cl">Sáb</div><div class="mk-hm-cl">Dom</div>
 
@@ -1092,20 +1175,20 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   </div>
   <div class="wrap zig zig--flip">
     <div class="zig-copy photo-panel" data-stagger>
-      <span class="kicker reveal">Pilar 2 · Agenda e faltas</span>
+      <span class="kicker reveal reveal--right">Pilar 2 · Agenda e faltas</span>
       <h2 class="reveal">O Ralo Financeiro da Cadeira Vazia</h2>
-      <p class="lead reveal"><strong>Uma falta às 15h de terça não é um imprevisto:</strong> é uma hora de consultório paga que ficou vazia — e <strong>horário vago não se revende.</strong></p>
-      <p class="lead reveal">Quando sua equipe precisa ligar uma por uma pra confirmar, pessoas esquecem.</p>
-      <p class="lead reveal">A confirmação inteligente cobra no tempo certo e reocupa a vaga na hora se alguém desmarcar.</p>
-      <ul class="checks reveal">
+      <p class="lead reveal reveal--right"><strong>Uma falta às 15h de terça não é um imprevisto:</strong> é uma hora de consultório paga que ficou vazia — e <strong>horário vago não se revende.</strong></p>
+      <p class="lead reveal reveal--right">Quando sua equipe precisa ligar uma por uma pra confirmar, pessoas esquecem.</p>
+      <p class="lead reveal reveal--right">A confirmação inteligente cobra no tempo certo e reocupa a vaga na hora se alguém desmarcar.</p>
+      <ul class="checks reveal reveal--right">
         <li>Sua taxa de falta comparada à de clínicas com confirmação automática</li>
         <li>Quanto os horários vazios custam por ano, no seu ticket médio</li>
         <li>Confirmação e lista de espera pra reocupar os horários que abrirem</li>
       </ul>
-      <a class="linkcta cta-diag reveal" data-origem="agenda" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
+      <a class="linkcta cta-diag reveal reveal--right" data-origem="agenda" href="/diagnostico">Ver esse pilar no meu diagnóstico&nbsp;→</a>
     </div>
 
-    <figure class="zig-mock reveal" aria-label="Demonstração ilustrativa da auditoria de faltas e agenda, com dados simulados">
+    <figure class="zig-mock reveal reveal--pop" aria-label="Demonstração ilustrativa da auditoria de faltas e agenda, com dados simulados">
       <div class="mockframe">
         <div class="mf-bar">
           <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -1212,7 +1295,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <p class="lead reveal">Os números da sua clínica saem do seu diagnóstico.</p>
   </div>
 
-  <figure class="transform-mock reveal" aria-label="Projeção ilustrativa de crescimento com a ClinUp, dados simulados">
+  <figure class="transform-mock reveal reveal--pop" aria-label="Projeção ilustrativa de crescimento com a ClinUp, dados simulados">
     <div class="mockframe">
       <div class="mf-bar">
         <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -1284,16 +1367,18 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
               <text x="225" y="26" fill="#4D7CFE" font-size="11.5" font-weight="600" font-family="Inter" text-anchor="middle">Início ClinUp</text>
 
               <path d="M60,220.6 L170,210.7 L280,214 L390,207.4 L500,210.7 L610,206.1"
-                    fill="none" stroke="#3A4358" stroke-width="2.4" stroke-dasharray="7 7" stroke-linecap="round"/>
+                    fill="none" stroke="#3A4358" stroke-width="2.4" stroke-dasharray="7 7" stroke-linecap="round"
+                    data-draw data-dur="700"/>
 
-              <path d="M170,210.7 L280,174.6 L390,122 L500,89.1 L610,59.6 L610,260 L170,260 Z" fill="url(#gfill)"/>
+              <path d="M170,210.7 L280,174.6 L390,122 L500,89.1 L610,59.6 L610,260 L170,260 Z" fill="url(#gfill)" data-after="900"/>
               <path d="M60,220.6 L170,210.7 L280,174.6 L390,122 L500,89.1 L610,59.6"
-                    fill="none" stroke="#2BD576" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-              <g fill="#2BD576">
+                    fill="none" stroke="#2BD576" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                    data-draw data-delay="620" data-dur="1100"/>
+              <g fill="#2BD576" data-cascade="dots" data-after="900" data-step="190">
                 <circle cx="280" cy="174.6" r="4"/><circle cx="390" cy="122" r="4"/>
                 <circle cx="500" cy="89.1" r="4"/><circle cx="610" cy="59.6" r="4.5"/>
               </g>
-              <text x="610" y="46" fill="#2BD576" font-size="12.5" font-weight="650" font-family="Inter" text-anchor="end">R$ 75,5k</text>
+              <text x="610" y="46" fill="#2BD576" font-size="12.5" font-weight="650" font-family="Inter" text-anchor="end" data-after="1780">R$ 75,5k</text>
 
               <g fill="#8A94A6" font-size="12" font-family="Inter" text-anchor="middle">
                 <text x="60" y="284">Mês 1</text><text x="170" y="284">Mês 2</text><text x="280" y="284">Mês 3</text>
@@ -1366,7 +1451,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <!-- Print real do painel. O selo continua: o PRODUTO é real, os
          NÚMEROS da tela são ilustrativos — as duas coisas precisam ficar
          separadas pro visitante. -->
-    <figure class="install-mock reveal" aria-label="Painel da ClinUp: central de leads da clínica, com dados ilustrativos">
+    <figure class="install-mock reveal reveal--pop" aria-label="Painel da ClinUp: central de leads da clínica, com dados ilustrativos">
       <div class="mockframe">
         <div class="mf-bar">
           <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
@@ -1380,14 +1465,14 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     </figure>
 
     <div class="steps installs" data-stagger>
-      <div class="step reveal motion-float-subtle">
+      <div class="step reveal">
         <div class="step-top">
           <span class="step-ico"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
         </div>
         <h3>O site da clínica</h3>
         <p>Escrito pra sua especialidade, com o botão de marcar consulta na primeira tela do celular — onde o paciente já está olhando.</p>
       </div>
-      <div class="step reveal motion-float-subtle motion-float-delay-1">
+      <div class="step reveal">
         <div class="step-top">
           <span class="step-ico"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><path d="M8 10h.01"/><path d="M12 10h.01"/><path d="M16 10h.01"/></svg></span>
         </div>
@@ -1399,7 +1484,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
            entregavel de agencia de social media — justamente o que a /planos diz
            que a CLINUP nao e. Com 4 tiles a grade virou 2 colunas (2x2); em 3
            colunas sobraria um orfao na segunda linha. -->
-      <div class="step reveal motion-float-subtle motion-float-delay-3">
+      <div class="step reveal">
         <div class="step-top">
           <span class="step-ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
         </div>
@@ -1794,6 +1879,124 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
       }
     }
   }
+}());
+</script>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════
+   MOTOR DE DADOS VIVOS — os dashboards se montam ao entrar na tela
+   ────────────────────────────────────────────────────────────────────
+   PRINCÍPIO: o HTML contém sempre o estado FINAL. Este motor pinta o
+   estado inicial em runtime, e só quando vai de fato animar. Se o JS não
+   rodar, se não houver IntersectionObserver ou se a pessoa pediu menos
+   movimento, nada aqui acontece e o visitante vê o dashboard completo —
+   nunca um gráfico vazio.
+
+   Atributos no markup:
+     data-grow="h"   <rect> cresce do eixo
+     data-grow="w"   .mk-bar preenche da esquerda
+     data-draw       <path> se desenha
+     data-after=N    entra N ms depois (rótulos, vazamentos)
+     data-cascade    filhos entram em sequência
+     data-delay=N    atraso próprio
+     data-dur=N      duração própria
+     data-step=N     passo da cascata (padrão 60ms)
+   ════════════════════════════════════════════════════════════════════ */
+(function () {
+  var root = document.documentElement;
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce || !('IntersectionObserver' in window) || !root.classList.contains('js-anim')) return;
+
+  var alvos = document.querySelectorAll('[data-grow],[data-draw],[data-after],[data-cascade]');
+  if (!alvos.length) return;
+
+  // A classe é o interruptor: só a partir daqui o CSS esconde/encolhe algo.
+  root.classList.add('dv-on');
+
+  // Linha que se desenha: dasharray/offset são calculados aqui e nunca
+  // escritos no HTML — assim, sem JS, a linha aparece inteira.
+  document.querySelectorAll('[data-draw]').forEach(function (el) {
+    var len;
+    try { len = el.getTotalLength(); } catch (e) { len = 0; }
+    if (!len) return;
+    el.dataset.len = len;
+    // preserva o tracejado original da linha "sem ClinUp"
+    if (!el.getAttribute('data-dash-orig')) {
+      el.setAttribute('data-dash-orig', el.getAttribute('stroke-dasharray') || '');
+    }
+    el.style.strokeDasharray = len + ' ' + len;
+    el.style.strokeDashoffset = len;
+  });
+
+  var num = function (el, attr, padrao) {
+    var v = parseInt(el.getAttribute(attr), 10);
+    return isNaN(v) ? padrao : v;
+  };
+
+  var acender = function (el) {
+    if (el.dataset.dvDone) return;
+    el.dataset.dvDone = '1';
+
+    var atraso = num(el, 'data-delay', 0) || num(el, 'data-after', 0);
+    var dur = num(el, 'data-dur', 0);
+
+    setTimeout(function () {
+      if (dur) el.style.transitionDuration = dur + 'ms';
+
+      if (el.hasAttribute('data-grow') && el.getAttribute('data-grow') === 'w') {
+        // a largura final vive no style inline do próprio elemento
+        var alvo = el.style.width;
+        el.style.setProperty('width', alvo, 'important');
+      }
+
+      if (el.hasAttribute('data-cascade')) {
+        var passo = num(el, 'data-step', 60);
+        var filhos = el.children;
+        for (var i = 0; i < filhos.length; i++) {
+          (function (f, d) { setTimeout(function () { f.classList.add('dv-go'); }, d); })(filhos[i], i * passo);
+        }
+        el.classList.add('dv-go');
+        return;
+      }
+
+      el.classList.add('dv-go');
+
+      // devolve o tracejado original depois que a linha terminou de se desenhar
+      if (el.hasAttribute('data-draw')) {
+        var orig = el.getAttribute('data-dash-orig');
+        if (orig) setTimeout(function () { el.style.strokeDasharray = orig; }, (dur || 1100) + 60);
+      }
+    }, atraso);
+  };
+
+  // O gatilho é o CARD, não cada barra: se cada uma disparasse sozinha, a
+  // sequência (verdes → hachuradas → rótulos) se perderia conforme a rolagem.
+  var blocos = [];
+  alvos.forEach(function (el) {
+    var b = el.closest('.mk-card, .mockframe, .mk-hm') || el;
+    if (blocos.indexOf(b) === -1) blocos.push(b);
+  });
+
+  var io = new IntersectionObserver(function (entries, obs) {
+    entries.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      obs.unobserve(e.target);
+      e.target.querySelectorAll('[data-grow],[data-draw],[data-after],[data-cascade]').forEach(acender);
+      if (e.target.matches('[data-grow],[data-draw],[data-after],[data-cascade]')) acender(e.target);
+    });
+  }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
+
+  blocos.forEach(function (b) { io.observe(b); });
+
+  // Failsafe: se o IO não disparar em 2,5s, o que já está na dobra acende.
+  // Dashboard pela metade é pior do que dashboard sem animação.
+  setTimeout(function () {
+    blocos.forEach(function (b) {
+      if (b.getBoundingClientRect().top < window.innerHeight * 1.2) {
+        b.querySelectorAll('[data-grow],[data-draw],[data-after],[data-cascade]').forEach(acender);
+      }
+    });
+  }, 2500);
 }());
 </script>
 </body>
