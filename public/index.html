@@ -305,7 +305,9 @@ h2{
 .mf-shot img{width:100%;height:auto;display:block}
 /* 3 colunas: com 5 tiles o desenho fecha em 3+2, que lê como intencional.
    Em 4 colunas sobraria um tile órfão na segunda linha. */
-.installs{margin-top:44px;grid-template-columns:repeat(3,1fr)}
+/* 4 tiles em 2 colunas (2x2). Em 3 colunas o quarto ficaria orfao sozinho
+   na segunda linha, que le como "faltou um". */
+.installs{margin-top:44px;grid-template-columns:repeat(2,1fr)}
 .installs .step{padding:26px 22px}
 .installs .step-top{justify-content:flex-start;margin-bottom:16px}
 .installs .step h3{font-size:17px}
@@ -1392,13 +1394,11 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
         <h3>Atendimento com IA no WhatsApp</h3>
         <p>Responde na hora, em linguagem natural, e conduz a conversa até o agendamento. Ninguém mais espera três horas por uma resposta.</p>
       </div>
-      <div class="step reveal motion-float-subtle motion-float-delay-2">
-        <div class="step-top">
-          <span class="step-ico"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
-        </div>
-        <h3>Gestão das redes sociais</h3>
-        <p>Os posts da clínica saem do painel: programados, publicados e acompanhados no mesmo lugar, sem depender de você lembrar.</p>
-      </div>
+      <!-- O tile "Gestao das redes sociais" saiu: a CLINUP nao entrega conteudo
+           de redes. Ele prometia "os posts da clinica saem do painel", que e
+           entregavel de agencia de social media — justamente o que a /planos diz
+           que a CLINUP nao e. Com 4 tiles a grade virou 2 colunas (2x2); em 3
+           colunas sobraria um orfao na segunda linha. -->
       <div class="step reveal motion-float-subtle motion-float-delay-3">
         <div class="step-top">
           <span class="step-ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
