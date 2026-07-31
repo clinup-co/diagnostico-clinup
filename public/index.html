@@ -1060,7 +1060,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ PILAR 1 · WHATSAPP ══════════ -->
 <section class="sec has-photo band-alt band-top" id="pilar-whatsapp">
-  <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_whatsapp_noite.jpg" alt="" loading="lazy"></div>
+  <div class="photo-bg" aria-hidden="true"><picture><source srcset="assets/images/foto_whatsapp_noite.webp" type="image/webp"><img src="assets/images/foto_whatsapp_noite.jpg" alt="" loading="lazy" width="1376" height="768"></picture></div>
   <div class="fio" aria-hidden="true">
     <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
     <i class="fio-drip" style="top:26%"></i>
@@ -1166,7 +1166,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ PILAR 2 · AGENDA ══════════ -->
 <section class="sec has-photo band-alt" id="pilar-agenda" style="padding-top:0">
-  <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_cadeira_vazia.jpg" alt="" loading="lazy"></div>
+  <div class="photo-bg" aria-hidden="true"><picture><source srcset="assets/images/foto_cadeira_vazia.webp" type="image/webp"><img src="assets/images/foto_cadeira_vazia.jpg" alt="" loading="lazy" width="1376" height="768"></picture></div>
   <div class="fio" aria-hidden="true">
     <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
     <i class="fio-drip" style="top:22%"></i>
@@ -1283,7 +1283,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ A TRANSFORMAÇÃO ══════════ -->
 <section class="sec transform has-photo" id="transformacao">
-  <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_virada_medico.jpg" alt="" loading="lazy"></div>
+  <div class="photo-bg" aria-hidden="true"><picture><source srcset="assets/images/foto_virada_medico.webp" type="image/webp"><img src="assets/images/foto_virada_medico.jpg" alt="" loading="lazy" width="1376" height="768"></picture></div>
   <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap transform-head photo-panel" data-stagger>
     <span class="kicker reveal">A virada</span>
@@ -1584,7 +1584,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ FECHAMENTO ══════════ -->
 <section class="sec has-photo" id="cta-final" style="padding-top:0">
-  <div class="photo-bg" aria-hidden="true"><img src="assets/images/foto_latao_entrada.jpg" alt="" loading="lazy"></div>
+  <div class="photo-bg" aria-hidden="true"><picture><source srcset="assets/images/foto_latao_entrada.webp" type="image/webp"><img src="assets/images/foto_latao_entrada.jpg" alt="" loading="lazy" width="1376" height="768"></picture></div>
   <div class="fio fio--gain" style="bottom:40%" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
     <div class="final-card reveal">
@@ -1977,26 +1977,37 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     if (blocos.indexOf(b) === -1) blocos.push(b);
   });
 
+  var algumDisparou = false;
+  var soltar = function (bloco) {
+    bloco.querySelectorAll('[data-grow],[data-draw],[data-after],[data-cascade]').forEach(acender);
+    if (bloco.matches('[data-grow],[data-draw],[data-after],[data-cascade]')) acender(bloco);
+  };
+
   var io = new IntersectionObserver(function (entries, obs) {
     entries.forEach(function (e) {
       if (!e.isIntersecting) return;
       obs.unobserve(e.target);
-      e.target.querySelectorAll('[data-grow],[data-draw],[data-after],[data-cascade]').forEach(acender);
-      if (e.target.matches('[data-grow],[data-draw],[data-after],[data-cascade]')) acender(e.target);
+      algumDisparou = true;
+      soltar(e.target);
     });
   }, { threshold: 0.18, rootMargin: '0px 0px -40px 0px' });
 
   blocos.forEach(function (b) { io.observe(b); });
 
-  // Failsafe: se o IO não disparar em 2,5s, o que já está na dobra acende.
-  // Dashboard pela metade é pior do que dashboard sem animação.
+  // Duas redes de segurança, porque gráfico invisível parece página quebrada —
+  // custo de falha bem maior que o de um texto que não apareceu.
   setTimeout(function () {
+    if (!algumDisparou) {
+      // o observer não entregou NADA em 3s: trate como quebrado e mostre tudo
+      blocos.forEach(soltar);
+      return;
+    }
+    // caso normal: só libera o que já está na dobra, pra não queimar a
+    // narrativa de quem ainda vai rolar até lá
     blocos.forEach(function (b) {
-      if (b.getBoundingClientRect().top < window.innerHeight * 1.2) {
-        b.querySelectorAll('[data-grow],[data-draw],[data-after],[data-cascade]').forEach(acender);
-      }
+      if (b.getBoundingClientRect().top < window.innerHeight * 1.2) soltar(b);
     });
-  }, 2500);
+  }, 3000);
 }());
 </script>
 </body>
