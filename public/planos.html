@@ -1218,6 +1218,15 @@ body.demo-modal-open { overflow: hidden; }
   .plans-hero {
     padding: 40px 0 36px;
   }
+  /* Cabeçalho estourava 8px num Galaxy S8+ (360px): marca (147) + link (181)
+     + gap (16) + padding (48) = 392px de necessidade pra 360 de tela. O link
+     tem white-space:nowrap, então nada cedia.
+     Os 32px que faltavam saem de folga, não de texto — a fonte e o rótulo
+     "Falar no WhatsApp →" continuam inteiros.
+     O seletor precisa ser header.plans-header (elemento + classe) pra bater
+     a especificidade da regra original — só a classe perde e não aplica. */
+  header.plans-header { padding: 12px 14px; gap: 10px; }
+  .plans-header-link { padding: 9px 12px; }
 }
 @media (max-width: 390px) {
   .plans-hero h1 { font-size: clamp(22px, 6vw, 28px); }
