@@ -200,8 +200,55 @@ h2{
 .hero>.wrap{position:relative}
 .hero h1{max-width:900px;margin:0 auto}
 .hero .lead{max-width:720px;margin:24px auto 0}
-.hero-cta{margin-top:36px}
+.hero-cta{margin-top:28px}
 .hero-mock{max-width:1080px;margin:64px auto 0;padding:0 24px}
+
+/* ── Prévia do painel na primeira tela ────────────────────────────────
+   Existe por um motivo de celular: sem ela, a primeira tela do S8+ é
+   texto puro e o primeiro visual só chega uma tela abaixo. Altura presa
+   pra caber junto com título, frase e botão dentro de 740px. */
+.hero-peek{max-width:440px;margin:24px auto 0;text-align:left}
+.peek-body{padding:16px 18px 14px}
+.peek-h{
+  font-family:'Inter',sans-serif;font-size:11.5px;font-weight:500;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);
+}
+.peek-v{
+  font-family:'Inter',sans-serif;font-weight:700;font-size:34px;line-height:1.1;
+  color:var(--loss);margin-top:4px;font-variant-numeric:tabular-nums;
+  text-shadow:0 0 28px rgba(244,87,77,.32);
+}
+.peek-sub{font-size:12.5px;color:var(--ink-3);margin-top:6px;line-height:1.45}
+/* barra estreita e alta: larga demais vira tijolo, não gráfico */
+.peek-bars{display:flex;align-items:flex-end;gap:7px;height:54px;margin-top:14px}
+.peek-bars i{
+  flex:0 1 26px;border-radius:3px 3px 0 0;
+  background:linear-gradient(180deg,rgba(244,87,77,.62),rgba(244,87,77,.16));
+  transform-origin:bottom;
+}
+@media (max-width:640px){
+  /* Orçamento da primeira tela num Galaxy S8+ (740px de altura):
+     nav 69 + título + frase + painel + botão têm que caber. Cada corte
+     aqui é de espaço vazio ou de redundância, nunca de conteúdo. */
+  .hero{padding:28px 0 72px}
+  /* o kicker repete "ClinUp" logo abaixo do logo da nav e ocupa 2 linhas;
+     no celular ele é o item mais dispensável da pilha */
+  .hero .kicker{display:none}
+  .hero .lead{margin-top:18px}
+  .hero-peek{max-width:none;margin-top:20px}
+  .hero-cta{margin-top:20px}
+  .peek-body{padding:14px 16px 12px}
+  .peek-v{font-size:29px}
+  .peek-sub{font-size:12px;margin-top:5px}
+  .peek-bars{height:44px;margin-top:12px;gap:6px}
+  .peek-bars i{flex:0 1 22px}
+}
+/* Tela curta (SE antigo, 640px de altura): não cabem título + frase +
+   painel + botão. O painel é o item sacrificável — o botão não é.
+   Critério é ALTURA, não largura: um 360x640 sofre o mesmo. */
+@media (max-height:680px){
+  .hero-peek{display:none}
+}
 
 /* ── Zig-zag (pilares) ───────────────────────────────────────────── */
 .zig{
@@ -414,25 +461,47 @@ h2{
 /* ── Fotos editoriais (Human-Tech): derretem no fundo #0A0E1A ────── */
 .has-photo{position:relative}
 .has-photo > *:not(.photo-bg){position:relative;z-index:1}
-.photo-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+/* ── A foto é uma FAIXA, não o fundo da seção inteira ──────────────────
+   Antes era inset:0 numa seção de 2,8 a 3,6 telas de altura. Com
+   object-fit:cover, uma foto de 1376x768 (paisagem, 1,79:1) era ampliada
+   até 2,45× pra preencher isso — e o corte central mostrava só 37% da
+   largura. Era a "baixa resolução" e o "mal posicionada" ao mesmo tempo.
+
+   Agora a altura é limitada e presa ao topo da seção: a foto nunca passa
+   do tamanho nativo, e aparece inteira. */
+.photo-bg{
+  position:absolute;top:0;left:0;right:0;
+  height:min(62vh, 460px);
+  overflow:hidden;pointer-events:none;z-index:0;
+}
 .photo-bg img{
   position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center;
   filter:saturate(.85);opacity:var(--photo-op);
   transition:opacity var(--t-slow) ease;
+}
+/* Enquadramento por assunto: onde o que importa não está no centro. */
+#pilar-agenda .photo-bg img{object-position:62% center}   /* a cadeira vive à direita */
+#cta-final    .photo-bg img{object-position:center 42%}   /* a placa fica acima do meio */
+@media (max-width:640px){
+  .photo-bg{height:min(46vh, 320px)}
 }
 html.js-anim .photo-bg:not(.is-visible) img{opacity:0}
 /* o scrim herda a cor da banda da seção (--sec-bg / --sec-scrim) pra que
    o fade das bordas case com o fundo, seja ele --bg, --bg-alt ou --bg-deep */
+/* Como a foto virou faixa, o scrim tem outro trabalho: dissolver o RODAPÉ
+   dela no fundo da seção, senão fica uma aresta horizontal onde ela acaba.
+   Por isso o gradiente é assimétrico — leve no topo, completo embaixo. */
 .photo-bg::after{
   content:"";position:absolute;inset:0;
   background:linear-gradient(180deg,
-    var(--sec-bg) 0%, var(--sec-scrim) 26%, var(--sec-scrim) 74%, var(--sec-bg) 100%);
+    var(--sec-bg) 0%, var(--sec-scrim) 18%, var(--sec-scrim) 52%, var(--sec-bg) 96%);
 }
 .transform .photo-bg::after{
   background:
-    radial-gradient(60% 40% at 50% 0%, rgba(43,213,118,.09), transparent 70%),
+    radial-gradient(60% 50% at 50% 0%, rgba(43,213,118,.09), transparent 70%),
     linear-gradient(180deg,
-      var(--sec-bg) 0%, var(--sec-scrim) 26%, var(--sec-scrim) 74%, var(--sec-bg) 100%);
+      var(--sec-bg) 0%, var(--sec-scrim) 18%, var(--sec-scrim) 52%, var(--sec-bg) 96%);
 }
 
 /* ── Painel fosco: só atrás de bloco de texto que fica SOBRE foto ──
@@ -944,9 +1013,38 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <div class="fio" style="top:58%" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap" data-stagger data-stagger-now>
     <span class="kicker reveal">ClinUp · Diagnóstico de Lucro para clínicas</span>
-    <h1 class="reveal">Você investe na clínica, o perfil cresce, mas a agenda continua <span class="hl">dependendo de convênio</span>.</h1>
-    <p class="lead reveal">Sabe para onde vão os pacientes particulares que chamam a sua clínica? Eles estão <strong>esfriando no vácuo do seu WhatsApp</strong> agora mesmo.</p>
-    <p class="lead reveal">A <strong>CLINUP</strong> fecha o ralo por onde essa receita escorre — sem dancinhas e sem enrolação.</p>
+    <!-- Título curto por necessidade de celular: o anterior tinha 87
+         caracteres e ocupava 6 linhas num Galaxy S8+, empurrando o botão
+         78px pra baixo da dobra. Este tem 51 e cabe em 3. -->
+    <h1 class="reveal">O paciente particular chega. E <span class="hl">some no seu WhatsApp</span>.</h1>
+    <p class="lead reveal">Pergunta o preço às 20h30. Ninguém responde. Amanhã ele marca em outro lugar.</p>
+
+    <!-- Prévia do painel: a primeira tela do celular passa a mostrar o
+         PRODUTO, não só texto. O dashboard completo continua mais abaixo —
+         este aqui é aperitivo. O selo de simulação vale aqui igual. -->
+    <figure class="hero-peek reveal reveal--pop" aria-label="Prévia do painel ClinUp, com dados simulados">
+      <div class="mockframe">
+        <div class="mf-bar">
+          <span class="mf-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="mf-title">Painel ClinUp — Clínica Exemplo</span>
+          <span class="mf-sim">Simulação · dados ilustrativos</span>
+        </div>
+        <div class="peek-body mk" aria-hidden="true">
+          <div class="peek-h">Receita perdida no mês</div>
+          <div class="peek-v num"><span class="cnt" data-target="18450" data-prefix="R$ ">R$ 18.450</span></div>
+          <div class="peek-sub">34 pessoas chamaram e não foram respondidas · 19 faltaram</div>
+          <div class="peek-bars">
+            <i style="height:34%" data-grow="h" data-delay="0"></i>
+            <i style="height:52%" data-grow="h" data-delay="60"></i>
+            <i style="height:41%" data-grow="h" data-delay="120"></i>
+            <i style="height:68%" data-grow="h" data-delay="180"></i>
+            <i style="height:57%" data-grow="h" data-delay="240"></i>
+            <i style="height:81%" data-grow="h" data-delay="300"></i>
+          </div>
+        </div>
+      </div>
+    </figure>
+
     <div class="hero-cta reveal">
       <a class="btn cta-diag" data-origem="hero" href="/diagnostico">Gerar meu Diagnóstico de Lucro&nbsp;→</a>
       <p class="cta-note">✓ Gratuito · 5 minutos · a conta fica aberta na tela, e você refaz com os seus números</p>
@@ -1306,7 +1404,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap transform-head photo-panel" data-stagger>
     <span class="kicker reveal">A virada</span>
-    <h2 class="reveal">O que muda quando a ClinUp entra em campo? O lucro volta a ser a sua prioridade.</h2>
+    <h2 class="reveal">O que muda quando ninguém mais fica sem resposta.</h2>
     <p class="lead reveal">É a receita das consultas particulares voltando pra agenda — <strong>sem depender de repasse de convênio.</strong></p>
     <!-- a ressalva continua no mesmo tamanho e na mesma cor do parágrafo
          acima: separar por quebra é organização, encolher seria esconder. -->
@@ -1527,7 +1625,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   <div class="wrap">
     <div class="obj-head" data-stagger>
       <span class="kicker reveal">Sem rodeios</span>
-      <h2 class="reveal">As três objeções que mais escutamos</h2>
+      <h2 class="reveal">Três coisas que você deve estar pensando agora</h2>
     </div>
     <div class="objs" data-stagger>
       <div class="obj reveal">
