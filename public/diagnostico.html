@@ -78,12 +78,21 @@ body { position: relative; overflow-x: clip; } /* clip: nada estoura a viewport 
   display: flex; align-items: center; gap: 12px; margin-top: 24px;
   background: rgba(231,234,240,0.04); border: 1.5px solid var(--border);
   border-radius: 12px; padding: 14px 18px;
+  cursor: text;                    /* a caixa toda e o campo */
+  transition: border-color 180ms ease, background 180ms ease;
+}
+/* o campo com foco precisa se anunciar: sem isso o teclado abre e nada
+   muda na tela */
+.q-num:focus-within {
+  border-color: rgba(77,124,254,0.6);
+  background: rgba(77,124,254,0.06);
 }
 .q-num-prefix { font-family: 'Sora', sans-serif; font-weight: 800; font-size: 20px; color: var(--blue); flex-shrink: 0; }
 .q-num-input {
   flex: 1; min-width: 0; background: transparent; border: none; outline: none;
   color: var(--white); font-family: 'Sora', sans-serif; font-weight: 800; font-size: 26px;
   text-align: center; -moz-appearance: textfield;
+  min-height: 44px;                /* area de toque minima (WCAG 2.5.5) */
 }
 .q-num-input::-webkit-outer-spin-button, .q-num-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .q-num-suffix { font-size: 13px; color: var(--sub); white-space: nowrap; flex-shrink: 0; }
@@ -523,11 +532,11 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <div class="q-card">
       <div class="q-text">Qual o valor médio da sua consulta particular hoje?</div>
       <div class="q-hint">O valor cheio que o paciente paga do próprio bolso.</div>
-      <div class="q-num">
+      <label class="q-num">
         <span class="q-num-prefix">R$</span>
         <input class="q-num-input" id="numT" type="number" min="0" max="99999" inputmode="numeric" value="420" oninput="onNumInput(6,'T',this)" aria-label="Ticket médio em reais">
         <span class="q-num-suffix">por consulta</span>
-      </div>
+      </label>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="goBack(6)">← Voltar</button>
@@ -540,10 +549,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <div class="q-card">
       <div class="q-text">Quantas consultas a clínica realiza por semana hoje?</div>
       <div class="q-hint">Some os atendimentos de uma semana típica.</div>
-      <div class="q-num">
+      <label class="q-num">
         <input class="q-num-input" id="numC" type="number" min="0" max="9999" inputmode="numeric" value="40" oninput="onNumInput(7,'C',this)" aria-label="Consultas por semana">
         <span class="q-num-suffix">por semana</span>
-      </div>
+      </label>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="goBack(7)">← Voltar</button>
@@ -556,10 +565,10 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
     <div class="q-card">
       <div class="q-text">Quantos atendimentos sua agenda suportaria por semana, se lotasse?</div>
       <div class="q-hint">O total de horários que a clínica consegue atender numa semana cheia.</div>
-      <div class="q-num">
+      <label class="q-num">
         <input class="q-num-input" id="numK" type="number" min="0" max="9999" inputmode="numeric" value="55" oninput="onNumInput(8,'K',this)" aria-label="Capacidade por semana">
         <span class="q-num-suffix">por semana</span>
-      </div>
+      </label>
     </div>
     <div class="nav-btns">
       <button class="btn-back" onclick="goBack(8)">← Voltar</button>
