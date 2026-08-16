@@ -534,34 +534,6 @@ html.js-anim .photo-bg:not(.is-visible) img{opacity:0}
 .transform-head.photo-panel{width:calc(100% - 48px)}
 @media (max-width:640px){ .photo-panel{padding:26px 20px;border-radius:16px} }
 
-/* ── Fio da Receita (SVG na margem, só telas largas) ─────────────── */
-.fio{
-  position:absolute;top:0;bottom:0;width:28px;pointer-events:none;display:none;z-index:0;
-  left:calc(50% - 560px - 44px);
-}
-@media (min-width:1240px){ .fio{display:block} }
-.fio svg{width:100%;height:100%;display:block}
-.fio-line{stroke:var(--action);stroke-opacity:.3;stroke-width:1.5;fill:none}
-/* depois da Virada o fio engrossa levemente e segue sólido até o fim */
-.fio--gain .fio-line{stroke:var(--gain);stroke-opacity:.85;stroke-width:2}
-html.js-anim .fio-line{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 900ms var(--ease-out)}
-html.js-anim .fio.is-visible .fio-line{stroke-dashoffset:0}
-.fio-drip{
-  position:absolute;left:11px;width:16px;height:0;
-  border-top:1.5px dashed var(--loss);transform:rotate(45deg);transform-origin:left center;
-  opacity:.7;
-}
-html.js-anim .fio-drip{opacity:0;transition:opacity var(--t-base) ease}
-html.js-anim .fio.is-visible .fio-drip{opacity:.7}
-html.js-anim .fio.is-visible .fio-drip:nth-of-type(2){transition-delay:180ms}
-html.js-anim .fio.is-visible .fio-drip:nth-of-type(3){transition-delay:360ms}
-.fio-node{
-  position:absolute;left:8px;width:12px;height:12px;border-radius:50%;
-  background:var(--action);box-shadow:0 0 14px rgba(77,124,254,.6);
-  opacity:.9;
-}
-html.js-anim .fio-node{opacity:0;transition:opacity var(--t-base) ease 300ms}
-html.js-anim .fio.is-visible .fio-node{opacity:.9}
 
 /* ── Counter-up "signature": pouso com glow + delta 150ms depois ── */
 html.js-anim .mk-kpi .mk-delta{
@@ -735,8 +707,6 @@ html.js-anim .reveal--pop.is-visible{transform:none}
 @media (prefers-reduced-motion: reduce){
   html.js-anim .reveal{opacity:1;transform:none;transition:none;transition-delay:0s!important}
   html.js-anim .photo-bg:not(.is-visible) img{opacity:var(--photo-op);transition:none}
-  html.js-anim .fio-line{stroke-dashoffset:0;transition:none}
-  html.js-anim .fio-drip,html.js-anim .fio-node{opacity:.7;transition:none}
   html.js-anim .mk-kpi .mk-delta{opacity:1;transform:none;transition:none}
   .btn::after,.mk-v--glowloss,.motion-float,.motion-float-subtle,.mk-bar,.mk-b-loss{animation:none!important}
   /* o motor de dados vivos nem liga o .dv-on quando reduced-motion está
@@ -1011,7 +981,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ HERO ══════════ -->
 <section class="hero">
-  <div class="fio" style="top:58%" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap" data-stagger data-stagger-now>
     <span class="kicker reveal">ClinUp · Diagnóstico de Lucro para clínicas</span>
     <!-- Título curto por necessidade de celular: o anterior tinha 87
@@ -1179,12 +1148,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <!-- ══════════ PILAR 1 · WHATSAPP ══════════ -->
 <section class="sec has-photo band-alt band-top" id="pilar-whatsapp">
   <div class="photo-bg" aria-hidden="true"><picture><source srcset="assets/images/foto_whatsapp_noite.webp" type="image/webp"><img src="assets/images/foto_whatsapp_noite.jpg" alt="" loading="lazy" width="1376" height="768"></picture></div>
-  <div class="fio" aria-hidden="true">
-    <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
-    <i class="fio-drip" style="top:26%"></i>
-    <i class="fio-drip" style="top:52%"></i>
-    <i class="fio-drip" style="top:76%"></i>
-  </div>
   <div class="wrap zig">
     <div class="zig-copy photo-panel" data-stagger>
       <span class="kicker reveal reveal--left">Pilar 1 · Atendimento no WhatsApp</span>
@@ -1285,12 +1248,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <!-- ══════════ PILAR 2 · AGENDA ══════════ -->
 <section class="sec has-photo band-alt" id="pilar-agenda" style="padding-top:0">
   <div class="photo-bg" aria-hidden="true"><picture><source srcset="assets/images/foto_cadeira_vazia.webp" type="image/webp"><img src="assets/images/foto_cadeira_vazia.jpg" alt="" loading="lazy" width="1376" height="768"></picture></div>
-  <div class="fio" aria-hidden="true">
-    <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
-    <i class="fio-drip" style="top:22%"></i>
-    <i class="fio-drip" style="top:48%"></i>
-    <i class="fio-drip" style="top:72%"></i>
-  </div>
   <div class="wrap zig zig--flip">
     <div class="zig-copy photo-panel" data-stagger>
       <span class="kicker reveal reveal--right">Pilar 2 · Agenda e faltas</span>
@@ -1372,10 +1329,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ CALCULADORA (SIMULAÇÃO) ══════════ -->
 <section class="sec band-alt" id="calculadora" style="padding-top:0">
-  <div class="fio" aria-hidden="true">
-    <svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg>
-    <span class="fio-node" style="top:54%"></span>
-  </div>
   <div class="wrap wrap--narrow">
     <div class="calc-card reveal">
       <span class="kicker">Calculadora · Simulação</span>
@@ -1402,7 +1355,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <!-- ══════════ A TRANSFORMAÇÃO ══════════ -->
 <section class="sec transform has-photo" id="transformacao">
   <div class="photo-bg" aria-hidden="true"><picture><source srcset="assets/images/foto_virada_recepcao.webp" type="image/webp"><img src="assets/images/foto_virada_recepcao.jpg" alt="" loading="lazy" width="2400" height="1340"></picture></div>
-  <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap transform-head photo-panel" data-stagger>
     <span class="kicker reveal">A virada</span>
     <h2 class="reveal">O que muda quando ninguém mais fica sem resposta.</h2>
@@ -1557,7 +1509,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
      Absorveu o bloco "Clareza do modelo": o título vem de lá (mata as
      duas objeções de uma vez) e o print prova o que ele afirma. -->
 <section class="sec" id="o-que-instala">
-  <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
     <div class="steps-head install-head" data-stagger>
       <span class="kicker reveal">O que a gente instala</span>
@@ -1622,7 +1573,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ OBJEÇÕES ══════════ -->
 <section class="sec band-alt band-top" id="objecoes">
-  <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
     <div class="obj-head" data-stagger>
       <span class="kicker reveal">Sem rodeios</span>
@@ -1665,7 +1615,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 
 <!-- ══════════ COMO FUNCIONA ══════════ -->
 <section class="sec band-alt band-bot" id="como-funciona" style="padding-top:0">
-  <div class="fio fio--gain" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
     <div class="steps-head" data-stagger>
       <span class="kicker reveal">Como funciona</span>
@@ -1703,7 +1652,6 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 <!-- ══════════ FECHAMENTO ══════════ -->
 <section class="sec has-photo" id="cta-final" style="padding-top:0">
   <div class="photo-bg" aria-hidden="true"><picture><source srcset="assets/images/foto_latao_entrada.webp" type="image/webp"><img src="assets/images/foto_latao_entrada.jpg" alt="" loading="lazy" width="1376" height="768"></picture></div>
-  <div class="fio fio--gain" style="bottom:40%" aria-hidden="true"><svg viewBox="0 0 28 100" preserveAspectRatio="none"><line class="fio-line" x1="14" y1="0" x2="14" y2="100" pathLength="1"/></svg></div>
   <div class="wrap">
     <div class="final-card reveal">
       <h2>Cada semana sem saber onde vaza é lucro que não volta.</h2>
@@ -1840,7 +1788,7 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   onScroll();
 
   // Reveal no scroll (uma vez por elemento) + failsafe: nada fica invisível.
-  // Fotos editoriais (.photo-bg) e o Fio da Receita (.fio) entram no mesmo IO.
+  // As fotos editoriais (.photo-bg) entram no mesmo IO do reveal.
   //
   // Cascata: um container com [data-stagger] NÃO anima a si próprio — ele
   // solta os filhos .reveal em sequência de 80ms, pra o conteúdo "pousar"
@@ -1864,14 +1812,14 @@ src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
   // filhos de um grupo não são observados individualmente — quem os solta
   // é o grupo, senão cada um dispararia sozinho e a cascata some
   var els = [].filter.call(
-    document.querySelectorAll('.reveal, .photo-bg, .fio'),
+    document.querySelectorAll('.reveal, .photo-bg'),
     function (el) { return !el.parentElement || !el.parentElement.closest('[data-stagger]'); }
   );
   var watched = [].concat([].slice.call(els), [].slice.call(groups));
 
   if (reduce || !('IntersectionObserver' in window) || !document.documentElement.classList.contains('js-anim')) {
     // fallback: tudo visível de uma vez, sem delay nenhum
-    document.querySelectorAll('.reveal, .photo-bg, .fio').forEach(function (el) {
+    document.querySelectorAll('.reveal, .photo-bg').forEach(function (el) {
       el.style.transitionDelay = '';
       el.classList.add('is-visible');
     });
