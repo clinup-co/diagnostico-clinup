@@ -587,3 +587,25 @@ a:hover .brand-mark { --mk-1: #7EA2FF; --mk-2: #4D7CFE; --mk-3: #3A63D6; }
   box-sizing: border-box; border-radius: 50%; padding: 2px;
   border: 1.5px solid rgba(91,196,240,0.35); background: #0A1E30;
 }
+
+/* ── Quiz: a pergunta inteira cabe numa tela ──────────────────────────
+   As quatro perguntas de 5 opcoes (Q2, Q5, Q9, Q10) deixavam a ultima
+   opcao 31px abaixo da dobra num Galaxy S8+ (360x740). Quem nao rola
+   escolhe sem ter visto todas as alternativas — e a resposta alimenta o
+   calculo do laudo.
+
+   Vem no fim do arquivo de proposito: existem duas regras mobile pro
+   .opt (480px e 768px) e a de 768 estava vencendo a de 480 por ordem,
+   deixando o padding MAIOR na tela menor. Esta fecha o assunto.
+
+   O criterio inclui altura porque o problema e vertical: um 414x736
+   sofre igual a um 360x740. */
+@media (max-width: 768px) and (max-height: 820px) {
+  .q-card  { padding: 22px 18px; }
+  .q-text  { margin-bottom: 4px; }
+  .q-hint  { margin-bottom: 18px; }
+  .options { gap: 8px; }
+  /* 11px de padding ainda deixa a opcao com ~58px de altura, bem acima
+     dos 44px minimos de area de toque */
+  .opt     { padding: 11px 14px; }
+}
