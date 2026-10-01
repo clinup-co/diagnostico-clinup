@@ -76,7 +76,54 @@ async function captureLead(payload, res) {
     return res.status(result.status).json({ error: 'failed_to_capture_lead', details: result.text });
   }
 
+  await notifyNewLead(payload);
   return res.status(200).json({ ok: true });
+}
+
+// Aviso de lead novo por e-mail (Resend). Só roda se RESEND_API_KEY e
+// NOTIFY_EMAIL estiverem configurados na Vercel. Falha aqui nunca derruba
+// a captura: o lead já foi salvo antes desta chamada.
+function escapeHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, (c) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
+  ));
+}
+
+async function notifyNewLead(payload) {
+  const apiKey = process.env.RESEND_API_KEY;
+  const to = process.env.NOTIFY_EMAIL;
+  if (!apiKey || !to) return;
+
+  const nome = escapeHtml(payload.nome || 'Sem nome');
+  const telefone = escapeHtml(payload.telefone || '');
+  const digits = String(payload.telefone || '').replace(/\D/g, '');
+  const email = String(payload.email || '');
+  const emailLinha = email && !email.endsWith('@nao-informado.com')
+    ? `<p><b>E-mail:</b> ${escapeHtml(email)}</p>`
+    : '';
+  const wpp = digits ? `<p><a href="https://wa.me/55${digits}">Abrir conversa no WhatsApp →</a></p>` : '';
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 4000);
+  try {
+    const r = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${apiKey}` },
+      body: JSON.stringify({
+        from: process.env.NOTIFY_FROM || 'ClinUp <onboarding@resend.dev>',
+        to: [to],
+        subject: `Novo lead no diagnóstico: ${payload.nome || 'sem nome'}`,
+        html: `<p><b>Nome:</b> ${nome}</p><p><b>WhatsApp:</b> ${telefone}</p>${emailLinha}${wpp}` +
+              '<p>As respostas completas do quiz ficam na tabela <code>leads</code> do Supabase.</p>'
+      }),
+      signal: controller.signal
+    });
+    if (!r.ok) console.warn('[CLINUP] Aviso de lead falhou:', r.status, await r.text());
+  } catch (err) {
+    console.warn('[CLINUP] Aviso de lead falhou:', String((err && err.message) || err));
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 async function markWhatsapp(email, source, res) {
