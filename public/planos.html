@@ -302,20 +302,22 @@ header.plans-header {
    O print do CRM é do produto REAL, mas os números na tela (pipeline,
    leads, valores) são ilustrativos. Todo mock do site carrega este selo;
    este era o único que não carregava. Mesma linguagem do .mf-sim da
-   landing, sem o pulso — aqui não existe esse sistema de animação. */
+   landing (âmbar = atenção, faixa no topo da janela), sem o pulso — aqui
+   não existe esse sistema de animação. */
 .mockup-sim {
   margin-left: auto; flex-shrink: 0;
   display: inline-flex; align-items: center; gap: 6px;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 11px; font-weight: 500; color: var(--sub);
-  border: 1px solid var(--border); border-radius: 999px;
+  font-size: 11.5px; font-weight: 600; color: #F5A623;
+  border: 1px solid rgba(245,166,35,0.55); border-radius: 999px;
   padding: 3px 10px; white-space: nowrap;
-  background: rgba(255,255,255,0.03);
+  background: rgba(245,166,35,0.12);
 }
 .mockup-sim::before {
   content: ""; width: 6px; height: 6px; border-radius: 50%;
-  flex-shrink: 0; background: #7EA2FF;
+  flex-shrink: 0; background: #F5A623;
 }
+.mockup-bar--sim { box-shadow: inset 0 2px 0 rgba(245,166,35,0.85); }
 /* no celular a barra tem 30px e não cabem URL + selo: a URL sai, porque
    é decoração — o selo é a informação que o visitante precisa ter.
    Modificador na barra em vez de :has() pra não depender de suporte. */
@@ -1377,7 +1379,7 @@ s.parentNode.insertBefore(t,s)}(window,document,'script',
 fbq('init', '1568791558372631');
 fbq('track', 'PageView');
 </script>
-<noscript><img height="1" width="1" style="display:none"
+<noscript><img height="1" width="1" style="display:none" alt=""
 src="https://www.facebook.com/tr?id=1568791558372631&ev=PageView&noscript=1"
 /></noscript>
 </head>
